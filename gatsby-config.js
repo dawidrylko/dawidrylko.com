@@ -24,6 +24,7 @@ module.exports = {
   },
   plugins: [
     `gatsby-plugin-sitemap`,
+    'gatsby-plugin-eslint',
     `gatsby-plugin-image`,
     {
       resolve: `gatsby-source-filesystem`,
