@@ -9,13 +9,13 @@
  */
 module.exports = {
   siteMetadata: {
+    siteUrl: `https://dawidrylko.com/`,
     title: `68 97 119 105 100 32 82 121 108 107 111`,
     description: `Dawid Ryłko - Software Engineer`,
     author: {
       name: `Dawid Ryłko`,
       summary: `is a developer with several years of experience, an enthusiast of optimization and unconventional solutions. He is a lover of movies and games, constantly focusing on self-improvement and learning new technologies.`,
     },
-    siteUrl: `https://dawidrylko.com/`,
     social: {
       twitter: `dawidrylko`,
       github: `dawidrylko`,
@@ -23,6 +23,7 @@ module.exports = {
     },
   },
   plugins: [
+    `gatsby-plugin-sitemap`,
     `gatsby-plugin-image`,
     {
       resolve: `gatsby-source-filesystem`,
