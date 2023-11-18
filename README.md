@@ -8,4 +8,5 @@ My personal website.
 - analytics
 - i18n
 - dark mode
+- eslint
 - import legacy posts
