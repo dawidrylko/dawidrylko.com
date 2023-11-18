@@ -26,22 +26,27 @@ const Seo = ({ description, title, children }) => {
   );
 
   const metaDescription = description || site.siteMetadata.description;
-  const defaultTitle = site.siteMetadata?.title;
+  const metaTitle = [title, site.siteMetadata?.title]
+    .filter(Boolean)
+    .join(' | ');
 
   return (
     <>
-      <title>{defaultTitle ? `${title} | ${defaultTitle}` : title}</title>
+      <title>{metaTitle}</title>
       <meta name="description" content={metaDescription} />
-      <meta property="og:title" content={title} />
+
+      <meta property="og:title" content={metaTitle} />
       <meta property="og:description" content={metaDescription} />
       <meta property="og:type" content="website" />
+
       <meta name="twitter:card" content="summary" />
       <meta
         name="twitter:creator"
         content={site.siteMetadata?.social?.twitter || ``}
       />
-      <meta name="twitter:title" content={title} />
+      <meta name="twitter:title" content={metaTitle} />
       <meta name="twitter:description" content={metaDescription} />
+
       {children}
     </>
   );
