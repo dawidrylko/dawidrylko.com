@@ -22,7 +22,7 @@ Dobrą wiadomościa dla ludzi zagubionych w czeluściach JavaScriptu jest fakt, 
 
 Metoda `includes()` sprawdza czy tablica zawiera zadany element.
 
-```js
+```javascript
 Array.prototype.includes(value);
 ```
 

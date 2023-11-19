@@ -10,7 +10,7 @@ Koniec wakacji, czas brać się do roboty 🙂 W tym wpisie postaram się krótk
 
 **Zakres zmiennych** w JavaScript, to temat nieco skomplikowany. Programista, który dopiero zaczyna swoją przygodę z JSem, może być w niemałym szoku próbując okiełznać tajniki sztuki.
 
-```js
+```javascript
 for (var a = 0; a < 5; a++) {}
 console.log(a); // 5
 ```
@@ -25,7 +25,7 @@ W standardzie **ECMAScript 2015** (ES6) wprowadzone zostały nowe słowa klucz
 
 > let is the new var.
 
-```js
+```javascript
 for (let a = 0; a < 5; a++) {}
 console.log(a); // Uncaught ReferenceError: a is not defined
 ```
@@ -38,21 +38,21 @@ Jak się ma do tego `const`?
 
 Nie możemy ponownie przypisać wartości do `const`:
 
-```js
+```javascript
 const a = 7;
 a = 5; // Uncaught TypeError: Assignment to constant variable.
 ```
 
 Nie możemy też ponownie zadeklarować stałej:
 
-```js
+```javascript
 const a = 7;
 const a = 5; // Uncaught SyntaxError: Identifier 'a' has already been declared
 ```
 
 JS ma jednak swoje wymagania, a `const` może sporadycznie piszących w tym języku wprowadzić w błąd.
 
-```js
+```javascript
 const a = [];
 console.log(a); // []
 a.push(2);
@@ -71,7 +71,7 @@ Temat hoistingu jest często poruszany, zarówno na branżowych spotkaniach jak 
 
 Hoisting, spolszczona nazwa windowanie, to mechanizm pozwalający na przeniesienie deklaracji zmiennych oraz metod na początek funkcji.
 
-```js
+```javascript
 a = 5;
 var a;
 console.log(a); // 5
@@ -79,7 +79,7 @@ console.log(a); // 5
 
 i
 
-```js
+```javascript
 simpleFunction(); // hoisting
 
 function simpleFunction() {
@@ -91,7 +91,7 @@ W przykładzie pierwszym do zmiennej `a` przypisujemy `5`, następnie ją dek
 
 Przy deklaracji zmiennych za pomocą słowa kluczowego `let`, hoisting zachowuje się bardziej przewidywalnie.
 
-```js
+```javascript
 a = 5;
 let a; // ReferenceError: a is not defined
 ```

@@ -100,7 +100,7 @@ if __name__ == "__main__":
 
 Wynik w konsoli:
 
-```console
+```vim
 Number of variables = 2
 Number of constraints = 3
 Solving with Clp 1.17.7
