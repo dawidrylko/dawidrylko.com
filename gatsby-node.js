@@ -22,6 +22,9 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
       allMarkdownRemark(sort: { frontmatter: { date: ASC } }, limit: 1000) {
         nodes {
           id
+          frontmatter {
+            draft
+          }
           fields {
             slug
           }
@@ -45,21 +48,23 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   // `context` is available in the template as a prop and as a variable in GraphQL
 
   if (posts.length > 0) {
-    posts.forEach((post, index) => {
-      const previousPostId = index === 0 ? null : posts[index - 1].id;
-      const nextPostId =
-        index === posts.length - 1 ? null : posts[index + 1].id;
+    posts
+      .filter(({ frontmatter: { draft } }) => !draft)
+      .forEach((post, index) => {
+        const previousPostId = index === 0 ? null : posts[index - 1].id;
+        const nextPostId =
+          index === posts.length - 1 ? null : posts[index + 1].id;
 
-      createPage({
-        path: post.fields.slug,
-        component: blogPost,
-        context: {
-          id: post.id,
-          previousPostId,
-          nextPostId,
-        },
+        createPage({
+          path: post.fields.slug,
+          component: blogPost,
+          context: {
+            id: post.id,
+            previousPostId,
+            nextPostId,
+          },
+        });
       });
-    });
   }
 };
 
@@ -118,6 +123,7 @@ exports.createSchemaCustomization = ({ actions }) => {
       title: String
       description: String
       date: Date @dateformat
+      draft: Boolean
     }
 
     type Fields {
