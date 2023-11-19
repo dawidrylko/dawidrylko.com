@@ -1,6 +1,6 @@
 ---
 title: Nie pisz w kółko tych samych funkcji, wykorzystaj moc Lodasha
-date: '2016-04-16T13:31:30.000Z'
+date: '2016-04-16'
 description: Ciągłe pisanie tych samych funkcji jest uciążliwe i frustrujące. Poznaj bibliotekę Lodash i przestań bezmyślnie powielać trywialny kod.
 ---
 

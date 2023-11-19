@@ -1,6 +1,6 @@
 ---
 title: ECMAScript 2016 – ES7 – zaczynamy!
-date: '2016-09-19T16:50:40.000Z'
+date: '2016-09-19'
 description: ECMAScript to standard programistyczny i wyrocznia dla wielu języków skryptowych (m.in. JavaScriptu). Ukończony w czerwcu tego roku ECMAScript 2016 (ES7) jest najnowszą wersją owych standardów. Póki co pozostaje tylko ciekawostką i punktem zaczepnym dla geeków programowania.
 ---
 

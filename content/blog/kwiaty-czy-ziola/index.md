@@ -1,6 +1,6 @@
 ---
 title: Kwiaty czy zioła?
-date: '2023-11-17T21:00:00.000Z'
+date: '2023-11-17'
 description: Problem programowania liniowego z maksymalizacją liniowej funkcji celu.
 ---
 

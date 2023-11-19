@@ -1,6 +1,6 @@
 ---
 title: Zakres zmiennych, hoisting – co warto wiedzieć?
-date: '2017-09-04T17:45:24.000Z'
+date: '2017-09-04'
 description: Koniec wakacji, czas brać się do roboty 🙂 W tym wpisie postaram się krótko i treściwie omówić zakres zmiennych i hoisting w JavaScript.
 ---
 
