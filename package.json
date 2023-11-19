@@ -17,12 +17,13 @@
     "build": "gatsby build",
     "develop": "gatsby develop",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
-    "eslint": "eslint .",
-    "start": "npm run develop",
+    "lint": "eslint .",
     "serve": "gatsby serve",
     "clean": "gatsby clean",
     "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1",
-    "deploy": "gatsby clean && gatsby build && gh-pages -d public"
+    "public": "gh-pages -d public",
+    "start": "npm run clean && npm run develop",
+    "deploy": "npm run clean && npm run build && npm run public"
   },
   "dependencies": {
     "@fontsource-variable/montserrat": "^5.0.16",

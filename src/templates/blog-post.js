@@ -7,10 +7,10 @@ import Seo from '../components/seo';
 
 import 'katex/dist/katex.min.css';
 
-const BlogPostTemplate = ({
+const BlogPostTemplate = function ({
   data: { previous, next, site, markdownRemark: post },
   location,
-}) => {
+}) {
   const siteTitle = site.siteMetadata?.title || `Title`;
 
   return (
@@ -63,7 +63,7 @@ const BlogPostTemplate = ({
   );
 };
 
-export const Head = ({ data: { markdownRemark: post } }) => {
+export const Head = function ({ data: { markdownRemark: post } }) {
   return (
     <Seo
       title={post.frontmatter.title}

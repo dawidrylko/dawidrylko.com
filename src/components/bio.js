@@ -9,7 +9,7 @@ import React from 'react';
 import { useStaticQuery, graphql } from 'gatsby';
 import { StaticImage } from 'gatsby-plugin-image';
 
-const Bio = () => {
+const Bio = function () {
   const data = useStaticQuery(graphql`
     query BioQuery {
       site {
