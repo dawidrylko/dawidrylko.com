@@ -1,2 +1,7 @@
+User-agent: Googlebot
+Disallow: /metadata/
+
 User-agent: *
-Disallow:
+Allow: /
+
+Sitemap: https://dawidrylko.com/sitemap-index.xml
