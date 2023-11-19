@@ -1,5 +1,11 @@
 {
   "parser": "@babel/eslint-parser",
+  "parserOptions": {
+    "requireConfigFile": false,
+    "babelOptions": {
+      "presets": ["@babel/preset-react"]
+   }
+  },
   "extends": ["airbnb", "plugin:react/recommended", "prettier"],
   "plugins": ["jest", "react-hooks"],
   "env": {
