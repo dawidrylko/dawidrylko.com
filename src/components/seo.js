@@ -16,17 +16,21 @@ const Seo = function ({ description, title, children }) {
           title
           description
           social {
-            twitter
+            name
+            url
           }
         }
       }
     }
   `);
 
-  const metaDescription = description || site.siteMetadata.description;
+  const metaDescription = description || site.siteMetadata?.description;
   const metaTitle = [title, site.siteMetadata?.title]
     .filter(Boolean)
     .join(' | ');
+  const twitterHandle =
+    site.siteMetadata?.social?.find(({ name }) => name === 'twitter')?.url ||
+    '';
 
   return (
     <>
@@ -38,10 +42,7 @@ const Seo = function ({ description, title, children }) {
       <meta property="og:type" content="website" />
 
       <meta name="twitter:card" content="summary" />
-      <meta
-        name="twitter:creator"
-        content={site.siteMetadata?.social?.twitter || ``}
-      />
+      <meta name="twitter:creator" content={twitterHandle} />
       <meta name="twitter:title" content={metaTitle} />
       <meta name="twitter:description" content={metaDescription} />
 

@@ -6,6 +6,7 @@ My personal website.
 
 - auto deploy gh-pages
 - analytics
+- mdx
 - i18n
 - dark mode
 - import legacy posts

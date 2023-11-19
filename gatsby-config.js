@@ -16,15 +16,24 @@ module.exports = {
       name: `Dawid Ryłko`,
       summary: `is a developer with several years of experience, an enthusiast of optimization and unconventional solutions. He is a lover of movies and games, constantly focusing on self-improvement and learning new technologies.`,
     },
-    social: {
-      twitter: `dawidrylko`,
-      github: `dawidrylko`,
-      linkedin: `dawidrylko`,
-    },
+    social: [
+      {
+        name: `twitter`,
+        url: `https://twitter.com/dawidrylko`,
+      },
+      {
+        name: `github`,
+        url: `https://github.com/dawidrylko`,
+      },
+      {
+        name: `linkedin`,
+        url: `https://www.linkedin.com/in/dawidrylko`,
+      },
+    ],
   },
   plugins: [
+    `gatsby-plugin-eslint`,
     `gatsby-plugin-sitemap`,
-    'gatsby-plugin-eslint',
     `gatsby-plugin-image`,
     {
       resolve: `gatsby-source-filesystem`,
@@ -113,8 +122,8 @@ module.exports = {
                 }
               }
             }`,
-            output: '/rss.xml',
-            title: 'Dawid Ryłko - Software Engineer Blog RSS Feed',
+            output: `/rss.xml`,
+            title: `Dawid Ryłko - Software Engineer Blog RSS Feed`,
           },
         ],
       },

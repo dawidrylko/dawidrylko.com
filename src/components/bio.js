@@ -10,7 +10,7 @@ import { useStaticQuery, graphql } from 'gatsby';
 import { StaticImage } from 'gatsby-plugin-image';
 
 const Bio = function () {
-  const data = useStaticQuery(graphql`
+  const { site } = useStaticQuery(graphql`
     query BioQuery {
       site {
         siteMetadata {
@@ -19,9 +19,8 @@ const Bio = function () {
             summary
           }
           social {
-            twitter
-            github
-            linkedin
+            name
+            url
           }
         }
       }
@@ -29,8 +28,8 @@ const Bio = function () {
   `);
 
   // Set these values by editing "siteMetadata" in gatsby-config.js
-  const author = data.site.siteMetadata?.author;
-  const social = data.site.siteMetadata?.social;
+  const author = site.siteMetadata?.author;
+  const social = site.siteMetadata?.social || [];
 
   return (
     <div className="bio">
@@ -47,30 +46,15 @@ const Bio = function () {
       {author?.name && (
         <p>
           <strong>{author.name}</strong> {author?.summary || null}
-          {` `}
-          <a
-            href={`https://twitter.com/${social?.twitter || ``}`}
-            target="_blank"
-            rel="noreferrer"
-          >
-            Twitter
-          </a>
-          {` `}
-          <a
-            href={`https://github.com/${social?.github || ``}`}
-            target="_blank"
-            rel="noreferrer"
-          >
-            Gtihub
-          </a>
-          {` `}
-          <a
-            href={`https://www.linkedin.com/in/${social?.linkedin || ``}`}
-            target="_blank"
-            rel="noreferrer"
-          >
-            Linkedin
-          </a>
+          <br />
+          {social.map(({ name, url }, index) => (
+            <React.Fragment key={name}>
+              <a href={url} target="_blank" rel="noreferrer">
+                {name.charAt(0).toUpperCase() + name.slice(1)}
+              </a>
+              {index < social.length - 1 && ' | '}
+            </React.Fragment>
+          ))}
         </p>
       )}
     </div>
