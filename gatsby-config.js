@@ -18,12 +18,12 @@ module.exports = {
     },
     social: [
       {
-        name: `twitter`,
-        url: `https://twitter.com/dawidrylko`,
-      },
-      {
         name: `github`,
         url: `https://github.com/dawidrylko`,
+      },
+      {
+        name: `twitter`,
+        url: `https://twitter.com/dawidrylko`,
       },
       {
         name: `linkedin`,
