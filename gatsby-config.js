@@ -96,21 +96,22 @@ module.exports = {
         feeds: [
           {
             serialize: ({ query: { site, allMarkdownRemark } }) => {
-              return allMarkdownRemark.nodes
-                .filter(({ frontmatter: { draft } }) => !draft)
-                .map(node => {
-                  return {
-                    ...node.frontmatter,
-                    description: node.excerpt,
-                    date: node.frontmatter.date,
-                    url: site.siteMetadata.siteUrl + node.fields.slug,
-                    guid: site.siteMetadata.siteUrl + node.fields.slug,
-                    custom_elements: [{ 'content:encoded': node.html }],
-                  };
-                });
+              return allMarkdownRemark.nodes.map(node => {
+                return {
+                  ...node.frontmatter,
+                  description: node.excerpt,
+                  date: node.frontmatter.date,
+                  url: site.siteMetadata.siteUrl + node.fields.slug,
+                  guid: site.siteMetadata.siteUrl + node.fields.slug,
+                  custom_elements: [{ 'content:encoded': node.html }],
+                };
+              });
             },
             query: `{
-              allMarkdownRemark(sort: {frontmatter: {date: DESC}}) {
+              allMarkdownRemark(
+                sort: { frontmatter: { date: DESC } }
+                filter: { frontmatter: { draft: { ne: true } } }
+              ) {
                 nodes {
                   excerpt
                   html
@@ -120,7 +121,6 @@ module.exports = {
                   frontmatter {
                     title
                     date
-                    draft
                   }
                 }
               }
