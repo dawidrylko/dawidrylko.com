@@ -10,11 +10,10 @@
 module.exports = {
   siteMetadata: {
     siteUrl: `https://dawidrylko.com/`,
-    title: `68 97 119 105 100 32 82 121 108 107 111`,
-    description: `Dawid Ryłko - Software Engineer`,
+    title: `Dawid Ryłko - dawidrylko.com`,
+    description: `Dawid Ryłko - dawidrylko.com. Moja osobista strona internetowa i blog. 68 97 119 105 100 32 82 121 108 107 111`,
     author: {
       name: `Dawid Ryłko`,
-      summary: `is a developer with several years of experience, an enthusiast of optimization and unconventional solutions. He is a lover of movies and games, constantly focusing on self-improvement and learning new technologies.`,
     },
     social: [
       {
@@ -126,7 +125,7 @@ module.exports = {
               }
             }`,
             output: `/rss.xml`,
-            title: `Dawid Ryłko - Software Engineer Blog RSS Feed`,
+            title: `Dawid Ryłko - dawidrylko.com blog RSS Feed`,
           },
         ],
       },
@@ -134,8 +133,8 @@ module.exports = {
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
-        name: `68 97 119 105 100 32 82 121 108 107 111`,
-        short_name: `Dawid Ryłko - Software Engineer`,
+        name: `Dawid Ryłko - dawidrylko.com`,
+        short_name: `Dawid Ryłko`,
         start_url: `/`,
         background_color: `#ffffff`,
         // This will impact how browsers show your PWA/website

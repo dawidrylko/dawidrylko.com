@@ -6,14 +6,15 @@ import Layout from '../components/layout';
 import Seo from '../components/seo';
 
 const BlogIndex = function ({ data, location }) {
-  const siteTitle = data.site.siteMetadata?.title || `Title`;
+  const siteTitle =
+    data.site.siteMetadata?.title || '68 97 119 105 100 32 82 121 108 107 111';
   const posts = data.allMarkdownRemark.nodes;
 
   if (posts.length === 0) {
     return (
       <Layout location={location} title={siteTitle}>
         <Bio />
-        <p>No blog posts found.</p>
+        <p>Nie znaleziono wpisów.</p>
       </Layout>
     );
   }
@@ -65,7 +66,7 @@ export default BlogIndex;
  * See: https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-head/
  */
 export const Head = function () {
-  return <Seo title="Beep..." />;
+  return <Seo title="Home" />;
 };
 
 export const pageQuery = graphql`

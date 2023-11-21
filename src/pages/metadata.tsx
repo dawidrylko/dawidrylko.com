@@ -41,14 +41,25 @@ const createMetadataArray = ({
   { key: 'Build time', value: buildTime },
 ];
 
-const Metadata: React.FC<PageProps<DataProps>> = ({ data, location }) => (
-  <Layout title="Metadata" location={location}>
-    <Table data={createMetadataArray(data.site)} />
-    <Link to="/">Go back to the homepage</Link>
-  </Layout>
-);
+const Metadata: React.FC<PageProps<DataProps>> = ({ data, location }) => {
+  const siteTitle =
+    data.site.siteMetadata?.title || '68 97 119 105 100 32 82 121 108 107 111';
 
-export const Head: HeadFC<DataProps> = () => <Seo title="Metadata" />;
+  return (
+    <Layout location={location} title={siteTitle}>
+      <h1>Metadata</h1>
+      <Table data={createMetadataArray(data.site)} />
+      <Link to="/">Wróć na stronę główną</Link>
+    </Layout>
+  );
+};
+
+export const Head: HeadFC<DataProps> = () => (
+  <Seo
+    title="Metadata 🤖"
+    description="Ta strona jest do użytku wewnętrznego. Jeżeli już tu trafiłeś to musisz się bardzo nudzić."
+  />
+);
 
 export default Metadata;
 

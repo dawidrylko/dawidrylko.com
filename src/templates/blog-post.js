@@ -11,7 +11,8 @@ const BlogPostTemplate = function ({
   data: { previous, next, site, markdownRemark: post },
   location,
 }) {
-  const siteTitle = site.siteMetadata?.title || `Title`;
+  const siteTitle =
+    site.siteMetadata?.title || '68 97 119 105 100 32 82 121 108 107 111';
 
   return (
     <Layout location={location} title={siteTitle}>

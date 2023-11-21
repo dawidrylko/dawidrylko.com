@@ -16,7 +16,6 @@ const Bio = function () {
         siteMetadata {
           author {
             name
-            summary
           }
           social {
             name
@@ -45,7 +44,7 @@ const Bio = function () {
       />
       {author?.name && (
         <p>
-          <strong>{author.name}</strong> {author?.summary || null}
+          <strong>{author.name}</strong>
           <br />
           {social.map(({ name, url }, index) => (
             <React.Fragment key={name}>
