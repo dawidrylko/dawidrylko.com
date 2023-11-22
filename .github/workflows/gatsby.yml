@@ -52,9 +52,12 @@ jobs:
             exit 1
           fi
       - name: Setup Node
+        id: setup-node
+        run: echo "::set-output name=node_version::$(cat .nvmrc | sed 's/v//')"
+      - name: Use Node ${{ steps.setup-node.outputs.node_version }}
         uses: actions/setup-node@v3
         with:
-          node-version: $(cat .nvmrc | sed 's/v//')
+          node-version: ${{ steps.setup-node.outputs.node_version }}
           cache: ${{ steps.detect-package-manager.outputs.manager }}
       - name: Setup Pages
         id: pages
