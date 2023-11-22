@@ -74,7 +74,12 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gatsby-build-
       - name: Install dependencies
-        run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
+        run: |
+          if [ "${{ steps.detect-package-manager.outputs.manager }}" = "npm" ]; then
+            ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }} --legacy-peer-deps
+          else
+            ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
+          fi
       - name: Build with Gatsby
         env:
           PREFIX_PATHS: 'true'
