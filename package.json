@@ -65,7 +65,7 @@
     "prettier": "^3.1.0"
   },
   "optionalDependencies": {
-    "@parcel/watcher-linux-x64-glibc": "2.2.0",
+    "@parcel/watcher-linux-x64-glibc": "2.3.0",
     "lightningcss-linux-x64-gnu": "1.22.1"
   }
 }
