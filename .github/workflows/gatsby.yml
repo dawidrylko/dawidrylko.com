@@ -53,7 +53,7 @@ jobs:
           fi
       - name: Setup Node
         id: setup-node
-        run: echo "::set-output name=node_version::$(cat .nvmrc | sed 's/v//')"
+        run: echo "{name}={value}" >> $GITHUB_OUTPUT
       - name: Use Node ${{ steps.setup-node.outputs.node_version }}
         uses: actions/setup-node@v3
         with:
