@@ -334,6 +334,12 @@ a:focus {
 
 /* Media queries */
 
+@media screen and (max-width: 600px) {
+  .post-list-item section .gatsby-image-wrapper {
+    display: none;
+  }
+}
+
 @media (max-width: 42rem) {
   blockquote {
     padding: var(--spacing-0) var(--spacing-0) var(--spacing-0) var(--spacing-4);
