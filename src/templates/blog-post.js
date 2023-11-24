@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, graphql } from 'gatsby';
+import { GatsbyImage, getImage } from 'gatsby-plugin-image';
 
 import Bio from '../components/bio';
 import Layout from '../components/layout';
@@ -13,6 +14,10 @@ const BlogPostTemplate = function ({
 }) {
   const siteTitle =
     site.siteMetadata?.title || '68 97 119 105 100 32 82 121 108 107 111';
+
+  const img = getImage(
+    post.frontmatter.featuredImg?.childImageSharp?.gatsbyImageData,
+  );
 
   return (
     <Layout location={location} title={siteTitle}>
@@ -42,6 +47,13 @@ const BlogPostTemplate = function ({
             </span>
           </small>
         </header>
+        {img && (
+          <GatsbyImage
+            itemProp="image"
+            image={img}
+            alt={post.frontmatter.featuredImgAlt || ''}
+          />
+        )}
         <section
           dangerouslySetInnerHTML={{ __html: post.html }}
           itemProp="articleBody"
@@ -115,6 +127,12 @@ export const pageQuery = graphql`
         description
         dateOriginal: date
         dateFormatted: date(formatString: "DD MMMM YYYY", locale: "pl")
+        featuredImg {
+          childImageSharp {
+            gatsbyImageData(layout: FULL_WIDTH)
+          }
+        }
+        featuredImgAlt
       }
     }
     previous: markdownRemark(id: { eq: $previousPostId }) {
