@@ -320,6 +320,10 @@ a:focus {
   font-family: var(--font-heading);
 }
 
+.blog-post .gatsby-image-wrapper {
+  margin-bottom: var(--spacing-8);
+}
+
 .blog-post-nav ul {
   margin: var(--spacing-0);
 }

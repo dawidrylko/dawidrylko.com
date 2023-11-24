@@ -2,6 +2,8 @@
 title: Kwiaty czy zioła?
 date: '2023-11-17T00:00:00+00:00'
 description: Rozwiązanie problemu programowania liniowego z maksymalizacją liniowej funkcji celu w kontekście uprawy kwiatów i ziół. Przedstawiiono kroki pozwalające na rozwiązanie zadania, wykorzystując matematyczną optymalizację. Problem został rozwiązany przy użyciu narzędzia CLP z pakietu OR-Tools od Google.
+featuredImg: ./kwiaty-czy-ziola.jpg
+featuredImgAlt: Fotografia przedstawiająca zioła w misce, która stoi na stole obsypanym kwiatami różnych roślin.
 ---
 
 Problem programowania liniowego z maksymalizacją liniowej funkcji celu jest matematycznym zadaniem optymalizacyjnym, w którym celem jest znalezienie optymalnych wartości zmiennych decyzyjnych, tak aby zwiększyć lub osiągnąć maksymalną wartość określonej liniowej funkcji celu. W tym kontekście, optymalizuje się alokację zasobów, by osiągnąć najlepsze możliwe wyniki, jednocześnie spełniając liniowe ograniczenia związane z danym problemem.

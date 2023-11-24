@@ -2,6 +2,8 @@
 title: ECMAScript 2016 – ES7 – zaczynamy!
 date: '2016-09-19T00:00:00+00:00'
 description: Odkryj najnowszą odsłonę ECMAScript 2016 (ES7) - standardu języków skryptowych, w tym JavaScript. Dowiedz się, jakie praktyczne zmiany wprowadza ES7, takie jak `Array.prototype.includes()` i exponentation operator (`**`). Sprawdź, jak te nowości mogą ułatwić codzienną pracę programistyczną. Zapoznaj się również z aktualnym stanem wsparcia przeglądarek dla najnowszych standardów ECMAScript.
+featuredImg: ./es2016-ecmascript-logo.png
+featuredImgAlt: Logo EcmaScript 2016 - ES7 - Standard języka skryptowego JavaScript wprowadzony w roku 2016
 ---
 
 **ECMAScript to standard programistyczny** i wyrocznia dla wielu języków skryptowych (m.in. JavaScriptu). Ukończony w czerwcu tego roku **ECMAScript 2016** (ES7) jest najnowszą wersją owych standardów. Póki co pozostaje tylko ciekawostką i punktem zaczepnym dla geeków programowania.
