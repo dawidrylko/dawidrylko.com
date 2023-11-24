@@ -1,6 +1,6 @@
 ---
 title: Nie pisz w kółko tych samych funkcji, wykorzystaj moc Lodasha
-date: '2016-04-16'
+date: '2016-04-16T00:00:00+00:00'
 description: Odkryj możliwości biblioteki Lodash, aby przerwać monotonię ciągłego pisania tych samych funkcji w JavaScript. Lodash, niskopoziomowa biblioteka, oferuje zwięzłe metody, które znacząco ułatwiają operacje na tablicach, obiektach i łańcuchach znaków. Sprawdź, jak zaoszczędzić czas i uniknąć powielania trywialnego kodu dzięki funkcjom takim jak `_.random`, `_.sample`, `_.times`, `_.difference` czy `_.merge`. Doświadcz korzyści programowania funkcyjnego i zwiększ przejrzystość swojego kodu. Lodash - narzędzie, które sprawi, że pisanie JavaScript stanie się bardziej efektywne i przyjemne.
 ---
 

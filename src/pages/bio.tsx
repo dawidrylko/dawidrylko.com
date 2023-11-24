@@ -1,13 +1,9 @@
 import React from 'react';
 import { PageProps, Link, graphql, HeadFC } from 'gatsby';
 
+import Bio from '../components/bio';
 import Layout from '../components/layout';
 import Seo from '../components/seo';
-
-type MetadataItem = {
-  key: string;
-  value: string;
-};
 
 type DataProps = {
   site: {
@@ -15,34 +11,10 @@ type DataProps = {
       title: string;
       description: string;
     };
-    buildTime: string;
   };
 };
 
-const Table: React.FC<{ data: MetadataItem[] }> = ({ data }) => (
-  <table>
-    <tbody>
-      {data.map((item, index) => (
-        <tr key={index}>
-          <td>{item.key}</td>
-          <td>{item.value}</td>
-        </tr>
-      ))}
-    </tbody>
-  </table>
-);
-
-const createMetadataArray = ({
-  siteMetadata,
-  buildTime,
-}: DataProps['site']) => [
-  { key: 'Title', value: siteMetadata.title },
-  { key: 'Description', value: siteMetadata.description },
-  { key: 'Build time', value: buildTime },
-];
-
-const Title = 'Metadata 🤖';
-
+const Title = 'Bio';
 const Metadata: React.FC<PageProps<DataProps>> = ({ data, location }) => {
   const siteTitle =
     data.site.siteMetadata?.title || '68 97 119 105 100 32 82 121 108 107 111';
@@ -50,7 +22,7 @@ const Metadata: React.FC<PageProps<DataProps>> = ({ data, location }) => {
   return (
     <Layout location={location} title={siteTitle}>
       <h1>{Title}</h1>
-      <Table data={createMetadataArray(data.site)} />
+      <Bio />
       <Link to="/">Wróć na stronę główną</Link>
     </Layout>
   );
@@ -59,7 +31,7 @@ const Metadata: React.FC<PageProps<DataProps>> = ({ data, location }) => {
 export const Head: HeadFC<DataProps> = () => (
   <Seo
     title={Title}
-    description="Ta strona jest do użytku wewnętrznego. Jeżeli już tu trafiłeś to musisz się bardzo nudzić."
+    description="Wszystko trzeba wymyślać od nowa, ponieważ dni nie mogą przepadać w przeszłości, wypełnione jedynie pejzażem, nieruchomą, niezmienną materią, która w końcu strząśnie nas ze swojego cielska, strzepnie jak te wszystkie drobne incydenty, te twarze oraz istnienia nie dłuższe niż jedno spojrzenie."
   />
 );
 
@@ -72,7 +44,6 @@ export const query = graphql`
         title
         description
       }
-      buildTime(formatString: "YYYY-MM-DD hh:mm a z")
     }
   }
 `;

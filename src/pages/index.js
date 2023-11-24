@@ -13,15 +13,14 @@ const BlogIndex = function ({ data, location }) {
   if (posts.length === 0) {
     return (
       <Layout location={location} title={siteTitle}>
-        <Bio />
         <p>Nie znaleziono wpisów.</p>
+        <Bio />
       </Layout>
     );
   }
 
   return (
     <Layout location={location} title={siteTitle}>
-      <Bio />
       <ol style={{ listStyle: `none` }}>
         {posts.map(post => {
           const title = post.frontmatter.title || post.fields.slug;
@@ -39,7 +38,26 @@ const BlogIndex = function ({ data, location }) {
                       <span itemProp="headline">{title}</span>
                     </Link>
                   </h2>
-                  <small>{post.frontmatter.date}</small>
+                  <small>
+                    <span
+                      itemProp="datePublished"
+                      content={post.frontmatter.dateOriginal}
+                    >
+                      {post.frontmatter.dateFormatted}
+                    </span>
+                    &nbsp;|&nbsp;
+                    <span
+                      itemProp="author"
+                      itemScope
+                      itemType="https://schema.org/Person"
+                    >
+                      <Link itemProp="url" to="/bio">
+                        <span itemProp="name">
+                          {data.site.siteMetadata?.author?.name}
+                        </span>
+                      </Link>
+                    </span>
+                  </small>
                 </header>
                 <section>
                   <p
@@ -54,6 +72,7 @@ const BlogIndex = function ({ data, location }) {
           );
         })}
       </ol>
+      <Bio />
     </Layout>
   );
 };
@@ -74,6 +93,9 @@ export const pageQuery = graphql`
     site {
       siteMetadata {
         title
+        author {
+          name
+        }
       }
     }
     allMarkdownRemark(
@@ -86,7 +108,8 @@ export const pageQuery = graphql`
           slug
         }
         frontmatter {
-          date(formatString: "DD MMMM YYYY", locale: "pl")
+          dateOriginal: date
+          dateFormatted: date(formatString: "DD MMMM YYYY", locale: "pl")
           title
           description
         }

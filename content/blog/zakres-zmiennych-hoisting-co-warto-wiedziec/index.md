@@ -1,6 +1,6 @@
 ---
 title: Zakres zmiennych, hoisting – co warto wiedzieć?
-date: '2017-09-04'
+date: '2017-09-04T00:00:00+00:00'
 description: W tym artykule omówimy pojęcia zakresu zmiennych i hoistingu. Dlaczego zmienne zadeklarowane przez `var` zachowują swoją wartość poza pętlą? Jak `let` i `const` zmieniły podejście do zakresu zmiennych? Odkryjemy również, jak hoisting wpływa na porządek deklaracji zmiennych i funkcji. Sprawdzimy, jakie dodatkowe zabezpieczenia wprowadza tryb ścisły (`strict mode`). Zobacz przykłady i zyskaj pewność w korzystaniu z tych kluczowych elementów JavaScript.
 ---
 

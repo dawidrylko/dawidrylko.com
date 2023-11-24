@@ -23,7 +23,24 @@ const BlogPostTemplate = function ({
       >
         <header>
           <h1 itemProp="headline">{post.frontmatter.title}</h1>
-          <p>{post.frontmatter.date}</p>
+          <small>
+            <span
+              itemProp="datePublished"
+              content={post.frontmatter.dateOriginal}
+            >
+              {post.frontmatter.dateFormatted}
+            </span>
+            &nbsp;|&nbsp;
+            <span
+              itemProp="author"
+              itemScope
+              itemType="https://schema.org/Person"
+            >
+              <Link itemProp="url" to="/bio">
+                <span itemProp="name">{site.siteMetadata?.author?.name}</span>
+              </Link>
+            </span>
+          </small>
         </header>
         <section
           dangerouslySetInnerHTML={{ __html: post.html }}
@@ -84,6 +101,9 @@ export const pageQuery = graphql`
     site {
       siteMetadata {
         title
+        author {
+          name
+        }
       }
     }
     markdownRemark(id: { eq: $id }) {
@@ -92,8 +112,9 @@ export const pageQuery = graphql`
       html
       frontmatter {
         title
-        date(formatString: "DD MMMM YYYY", locale: "pl")
         description
+        dateOriginal: date
+        dateFormatted: date(formatString: "DD MMMM YYYY", locale: "pl")
       }
     }
     previous: markdownRemark(id: { eq: $previousPostId }) {
