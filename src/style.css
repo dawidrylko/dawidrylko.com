@@ -181,6 +181,10 @@ ol li {
   margin-bottom: calc(var(--spacing-8) / 2);
 }
 
+ol li + li {
+  border-top: 1px solid var(--color-accent);
+}
+
 li > p {
   margin-bottom: calc(var(--spacing-8) / 2);
 }
@@ -254,8 +258,8 @@ a:focus {
 }
 
 .post-list-item {
-  margin-bottom: var(--spacing-8);
-  margin-top: var(--spacing-8);
+  margin-bottom: var(--spacing-8) !important;
+  margin-top: var(--spacing-8) !important;
 }
 
 .post-list-item p {
