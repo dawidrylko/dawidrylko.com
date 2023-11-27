@@ -10,8 +10,8 @@
 module.exports = {
   siteMetadata: {
     siteUrl: `https://dawidrylko.com/`,
-    title: `Dawid Ryłko - dawidrylko.com`,
-    description: `Dawid Ryłko - dawidrylko.com. Moja osobista strona internetowa i blog. 68 97 119 105 100 32 82 121 108 107 111`,
+    title: `Dawid Ryłko`,
+    description: `Dawid Ryłko. Moja osobista strona internetowa i blog. 68 97 119 105 100 32 82 121 108 107 111`,
     author: {
       name: `Dawid Ryłko`,
     },
@@ -125,7 +125,7 @@ module.exports = {
               }
             }`,
             output: `/rss.xml`,
-            title: `Dawid Ryłko - dawidrylko.com blog RSS Feed`,
+            title: `Dawid Ryłko blog RSS Feed`,
           },
         ],
       },
