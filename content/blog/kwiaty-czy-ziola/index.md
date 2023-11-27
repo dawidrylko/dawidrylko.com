@@ -1,6 +1,6 @@
 ---
 title: Kwiaty czy zioła?
-date: '2023-11-17T00:00:00+00:00'
+date: 2023-11-17T00:00:00+00:00
 description: Rozwiązanie problemu programowania liniowego z maksymalizacją liniowej funkcji celu w kontekście uprawy kwiatów i ziół. Przedstawiiono kroki pozwalające na rozwiązanie zadania, wykorzystując matematyczną optymalizację. Problem został rozwiązany przy użyciu narzędzia CLP z pakietu OR-Tools od Google.
 featuredImg: ./kwiaty-czy-ziola.jpg
 featuredImgAlt: Fotografia przedstawiająca zioła w misce, która stoi na stole obsypanym kwiatami różnych roślin.
