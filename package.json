@@ -21,14 +21,12 @@
     "serve": "gatsby serve",
     "clean": "gatsby clean",
     "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1",
-    "public": "gh-pages -d public",
-    "start": "npm run clean && npm run develop",
-    "deploy": "npm run clean && npm run build && npm run public"
+    "start": "npm run clean && npm run develop"
   },
   "dependencies": {
     "@fontsource-variable/montserrat": "^5.0.16",
     "@fontsource/merriweather": "^5.0.8",
-    "gatsby": "^5.12.9",
+    "gatsby": "^5.12.11",
     "gatsby-plugin-feed": "^5.12.3",
     "gatsby-plugin-image": "^3.12.3",
     "gatsby-plugin-manifest": "^5.12.3",
@@ -61,7 +59,6 @@
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "gatsby-plugin-eslint": "^4.0.4",
-    "gh-pages": "^6.0.0",
     "prettier": "^3.1.0"
   },
   "optionalDependencies": {
