@@ -28,25 +28,29 @@ Metoda `includes()` sprawdza czy tablica zawiera zadany element.
 Array.prototype.includes(value);
 ```
 
-<iframe
-  src="//jsfiddle.net/dawidrylko/51npf041/embedded/js/dark/"
-  width="100%"
-  height="300"
-  frameborder="0"
-  allowfullscreen="allowfullscreen"
-></iframe>
+```javascript
+[1, 2, 3].includes(2); // true
+[1, 2, 3].includes(4); // false
+[1, 2, 3].includes(3, 3); // false
+[1, 2, 3].includes(3, -1); // true
+[1, 2, NaN].includes(NaN); // true
+```
 
 ### Exponentiation operator (`**`)
 
 **Exponentation operator** zwraca taki sam wynik jak znana wszystkim metoda `Math.pow(x, y)`. Pierwszy argument zostaje podniesiony do potęgi, która jest zadeklarowana w drugim argumencie.
 
-<iframe
-  src="//jsfiddle.net/dawidrylko/vmrxpsz2/embedded/js/dark/"
-  width="100%"
-  height="300"
-  frameborder="0"
-  allowfullscreen="allowfullscreen"
-></iframe>
+```javascript
+2 ** 3; // 8
+3 ** 2; // 9
+3 ** 2.5; // 15.588457268119896
+10 ** -1; // 0.1
+NaN ** 2; // NaN
+
+2 ** (3 ** 2); // 512
+2 ** (3 ** 2); // 512
+(2 ** 3) ** 2; // 64
+```
 
 ## Dokąd zmierzamy
 
