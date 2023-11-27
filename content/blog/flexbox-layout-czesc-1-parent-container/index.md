@@ -4,6 +4,7 @@ date: 2016-05-14T13:28:13.200Z
 description: Odkryj Flexbox. Część 1 tej serii skupia się na roli rodzica (kontenera) w Flexbox. Dowiedz się, jak właściwości takie jak `display`, `flex-direction`, `flex-wrap`, i `flex-flow` wpływają na elastyczne rozmieszczanie elementów. Ten wpis pomoże ci zrozumieć, jak skutecznie zarządzać wyrównaniem i przestrzenią w kontenerze, sprawiając, że projektowanie responsywnych stron stanie się łatwiejsze i efektywniejsze.
 featuredImg: ./boxes.jpg
 featuredImgAlt: Zdjęcie niezgrabnie ustawionych pudełek, ktore zaraz się przewrócą, na tle fioletowych drzwi.
+tags: [css]
 ---
 
 **Witryny i strony internetowe** oparte na statycznych elementach blokowych powoli przechodzą do lamusa. Czy to koniec deklarowania kontenerów z właściwością `float` oraz `clear`? Częściowo tak, **CSS3** wprowadza **Flexbox Layout**, który wspomaga lepsze zarządzanie elementami i łatwiejsze konstruowanie stron.
