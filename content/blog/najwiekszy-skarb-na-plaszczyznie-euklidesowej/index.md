@@ -218,13 +218,6 @@ function findLargestDistanceSubset(points, k) {
 
 Do uruchomienia potrzebujemy funkcji `main`, która pełni rolę wejścia do programu.
 
-Jest odpowiedzialna za
-- pobranie argumentów z linii komend,
-- przetworzenie argumentów i ustawienie opcji,
-- obsługę błędów,
-- odczytanie danych z pliku i przetworzenie danych,
-- **wywołanie algorytmu** oraz **wyświetlanie wyników**.
-
 ```javascript
 function main() {
   const args = process.argv.slice(2);
@@ -265,6 +258,16 @@ function main() {
   console.log(result.selectedIndexes.join(', '));
 }
 ```
+
+Jest odpowiedzialna za:
+
+- pobranie argumentów z linii komend,
+- przetworzenie argumentów i ustawienie opcji,
+- obsługę błędów,
+- odczytanie danych z pliku,
+- przetworzenie danych,
+- **wywołanie algorytmu**,
+- **wyświetlanie wyników**.
 
 Cały program można znaleźć
 [tu](https://raw.githubusercontent.com/dawidrylko/dawidrylko.com/master/content/blog/najwiekszy-skarb-na-plaszczyznie-euklidesowej/code/prog.js),
