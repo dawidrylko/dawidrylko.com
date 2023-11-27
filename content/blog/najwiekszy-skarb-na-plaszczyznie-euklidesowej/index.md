@@ -21,7 +21,7 @@ $
 Q^* = \underset{Q \subseteq P, |Q| = k}{\arg\max} \sum_{\{u,v\} \subseteq Q} d(u, v)
 $
 
-gdzie $d(u, v)$ to odległość euklidesowa między punktami $u$ i $v$.
+gdzie $d(u, v)$ to odległość między punktami $u$ i $v$.
 
 ## Algorytm
 
@@ -29,13 +29,13 @@ Opisany powyżej problem zostanie rozwiązany za pomocą programu napisanego w j
 
 ### Odległość między dwoma punktami
 
-Pierwszym elementem składowym jest funkcja obliczająca odległość euklidesową między dwoma punktami na płaszczyźnie. Łatwiej można to zrozumieć, wyobrażając sobie długość odcinka pomiędzy tymi punktami. Formalnie, odległość euklidesowa między punktem $P_1(x_1, y_1)$, a punktem $P_2(x_2, y_2)$ możemy wyrazić wzorem:
+Pierwszym elementem składowym jest funkcja obliczająca odległość między dwoma punktami na płaszczyźnie euklidesowej. Łatwiej można to zrozumieć, wyobrażając sobie długość odcinka pomiędzy tymi punktami. Formalnie, odległość między punktem $P_1(x_1, y_1)$, a punktem $P_2(x_2, y_2)$ możemy wyrazić wzorem:
 
 $
 d(P_1, P_2) = \sqrt{(x_1 - x_2)^2 + (y_1 - y_2)^2}
 $
 
-Funkcja `calculateDistance` jest implementacją tego wzoru w języku JavaScript. Przyjmując punkty $P_1$ o współrzędnych $(x_1, y_1)$ i $P_2$ o współrzędnych $(x_2, y_2)$, odległość euklidesowa między nimi to pierwiastek kwadratowy z sumy kwadratów różnic współrzędnych.
+Funkcja `calculateDistance` to implementacja powyższego wzoru w języku JavaScript. Przyjmując punkty $P_1$ o współrzędnych $(x_1, y_1)$ i $P_2$ o współrzędnych $(x_2, y_2)$, odległość euklidesowa między punktami to pierwiastek kwadratowy z sumy kwadratów różnic współrzędnych.
 
 ```javascript
 function calculateDistance(point1, point2) {
@@ -126,7 +126,7 @@ $
 \text{{increase}} = \sum_{j=0}^{k-1} \left( \text{{distances}}[i] - d(\text{{points}}[i], \text{{points}}[Q[j]]) \right)
 $
 
-Jeśli `increase` jest większe od dotychczasowego `maxIncrease`, aktualizujemy `maxIncrease` i `bestPoint`.
+Jeśli `increase` jest większe od `maxIncrease`, wtedy aktualizujemy `maxIncrease` i `bestPoint`.
 
 ```javascript
 for (let i = 0; i < n; i++) {
@@ -216,7 +216,14 @@ function findLargestDistanceSubset(points, k) {
 
 ## Uruchomienie
 
-Do uruchomienia potrzebujemy funkcji `main`, która pełni funkcję wejścia do programu. Jest odpowiedzialna za pobranie argumentów z linii komend, przetworzenie argumentów i ustawienie opcji, obsługę błędów, odczytanie danych z pliku i przetworzenie danych, **wywołanie algorytmu** oraz **wyświetlanie wyników**.
+Do uruchomienia potrzebujemy funkcji `main`, która pełni rolę wejścia do programu.
+
+Jest odpowiedzialna za
+- pobranie argumentów z linii komend,
+- przetworzenie argumentów i ustawienie opcji,
+- obsługę błędów,
+- odczytanie danych z pliku i przetworzenie danych,
+- **wywołanie algorytmu** oraz **wyświetlanie wyników**.
 
 ```javascript
 function main() {
@@ -270,13 +277,13 @@ Aby skorzystać z programu, należy go uruchomić z odpowiednimi parametrami, na
 node prog.js -f points.txt -k 4
 ```
 
-- `node prog.js` - uruchamia program napisany w języku JavaScript, który znajduje się w pliku `prog.js`.
-- `-f points.txt` - określa, że następny argument to nazwa pliku, w którym znajdują się dane punktów. W tym przypadku plik nosi nazwę `points.txt`.
-- `-k 4` - określa, że następny argument to liczba `k`, czyli rozmiar poszukiwanego podzbioru punktów. W tym przypadku program będzie szukał 4-elementowego podzbioru.
+- `node prog.js` - uruchamia program napisany w języku JavaScript. Wymagany **NodeJS**.
+- `-f points.txt` - określa plik, w którym znajdują się dane z punktami.
+- `-k 4` - określa rozmiar poszukiwanego podzbioru punktów.
 
 ## Wynik
 
-Program wypisuje na konsolę sumę odległości między punktami w wybranym podzbiorze oraz indeksy tych punktów. Przykładowy wynik może wyglądać tak:
+Program wypisuje sumę odległości między punktami w wybranym podzbiorze oraz indeksy tych punktów. Przykład dla danych testowych z `points.txt`:
 
 ```bash
 59.82
