@@ -111,7 +111,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-    
+
       - name: Notify Bing via URL Submission API
         env:
           BING_API_KEY: ${{ secrets.BING_API_KEY }}
