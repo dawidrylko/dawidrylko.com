@@ -112,6 +112,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Notify Google via Indexing API
+        env:
+          GOOGLE_JSON_KEY_FILE: ${{ secrets.GOOGLE_JSON_KEY_FILE }}
+        working-directory: '.github/scripts'
+        shell: bash
+        run: ./google.sh
+
       - name: Notify Bing via URL Submission API
         env:
           BING_API_KEY: ${{ secrets.BING_API_KEY }}
