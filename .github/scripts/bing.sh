@@ -73,6 +73,6 @@ check_api_key
 submit_to_bing
 
 end_time=$(date +%s.%3N)
-duration=$(echo "scale=3; ($end_time - $start_time) * 1000" | bc)
+duration=$(echo "scale=0; ($end_time - $start_time) * 1000 / 1" | bc)
 echo "---------------------------------"
 echo "Script completed in $duration milliseconds."
