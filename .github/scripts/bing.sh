@@ -35,14 +35,14 @@ construct_json_body() {
   json_content="${json_content%,}]}"
 
   echo "Constructed JSON Body:"
-  echo "$json_content" > "$JSON_FILE"
+  echo "$json_content" | jq '.' > "$JSON_FILE"
   cat "$JSON_FILE"
   echo
 }
 
-handle_api_key() {
+check_api_key() {
   if [ -z "${BING_API_KEY:-}" ]; then
-    echo "BING_API_KEY is not set or is empty. Exiting."
+    echo "Error: BING_API_KEY is not set or is empty. Please set the API key and run the script again."
     exit 1
   fi
 }
@@ -59,7 +59,8 @@ submit_to_bing() {
   body=${response::-3}
   
   echo "HTTP Response Code: $http_code"
-  echo "API Response Body: $body"
+  echo "API Response Body:"
+  echo "$body" | jq '.'
   echo
 }
 
@@ -68,10 +69,10 @@ create_temp_directory
 cd "$TMP_DIR" || exit 1
 
 construct_json_body
-handle_api_key
+check_api_key
 submit_to_bing
 
 end_time=$(date +%s.%3N)
-duration=$(echo "($end_time - $start_time) * 1000" | bc)
+duration=$(echo "scale=3; ($end_time - $start_time) * 1000" | bc)
 echo "---------------------------------"
-echo "Process completed in $duration milliseconds."
+echo "Script completed in $duration milliseconds."
