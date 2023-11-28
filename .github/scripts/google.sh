@@ -90,7 +90,7 @@ echo ""URL_UPDATED","${BASE_URL}/"" >> $URL_FILE; # Add root URL
 BLOGS=($(ls $BLOG_DIR));
 for BLOG in "${BLOGS[@]}"
 do
-  echo ""URL_UPDATED","${BASE_URL}/blog/${BLOG}/"" >> $URL_FILE;
+  echo ""URL_UPDATED","${BASE_URL}/${BLOG}/"" >> $URL_FILE;
 done
 # URLs CSV file creation complete
 
