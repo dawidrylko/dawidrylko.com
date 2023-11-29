@@ -44,16 +44,18 @@ copy_credentials_file() {
 
 # Construct submission payload
 construct_submission_payload() {
-  echo '{"notification_type":"url"}' > "$TMP_FILE"
-  echo '{"URL_UPDATED":"'${BASE_URL}'/"}' >> "$TMP_FILE"
+  echo "\"notification_type\",\"url\"" >> $TMP_FILE
+  echo "\"URL_UPDATED\",\"${BASE_URL}/\"" >> $TMP_FILE
 
-  BLOGS=($(ls "$BLOG_DIR"))
-  for BLOG in "${BLOGS[@]}"; do
-    echo "\"URL_UPDATED\",\"${BASE_URL}/${BLOG}/\"" >> $TMP_FILE;
-  done
+  if [ -d "$BLOG_DIR" ]; then
+    BLOGS=("$BLOG_DIR"/*/)
+    for ((i=0; i<${#BLOGS[@]}; i++)); do
+      echo "\"URL_UPDATED\",\"$BASE_URL${BLOGS[i]:${#BLOG_DIR}}\"" >> $TMP_FILE
+    done
+  fi
 
   echo "Constructed CSV file contents:"
-  cat "$TMP_FILE" | jq '.'
+  cat "$TMP_FILE"
   echo
 }
 
