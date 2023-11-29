@@ -3,7 +3,7 @@ title: Flexbox Layout – część 1 – parent container
 date: 2016-05-14T13:28:13.200Z
 description: Odkryj Flexbox. Część pierwsza tej serii skupia się na roli rodzica (kontenera) w Flexbox Layout. Dowiedz się, jak właściwości takie jak `display`, `flex-direction`, `flex-wrap`, i `flex-flow` wpływają na elastyczne rozmieszczanie elementów. Ten wpis pomoże ci zrozumieć, jak skutecznie zarządzać wyrównaniem i przestrzenią w kontenerze.
 featuredImg: ./boxes.jpg
-featuredImgAlt: Zdjęcie niezgrabnie ustawionych pudełek, które zaraz się przewrócą, na tle fioletowych drzwi.
+featuredImgAlt: Zdjęcie niezgrabnie ustawionych pudełek, które zaraz się przewrócą, na tle fioletowych drzwi. Photo by Curology on Unsplash.
 tags: [css]
 ---
 
