@@ -18,7 +18,7 @@ Dany jest zbiór $P$ zawierający punkty na płaszczyźnie euklidesowej. Celem j
 Zdefiniowany problem możemy zapisać za pomocą wzoru:
 
 $
-Q^* = \underset{Q \subseteq P, |Q| = k}{\arg\max} \sum_{\{u,v\} \subseteq Q} d(u, v)
+Q^* = \underset{Q \subseteq P, |Q| = k}{\arg\max} \sum_{\lbrace u,v \rbrace \subseteq Q} d(u, v)
 $
 
 gdzie $d(u, v)$ to odległość między punktami $u$ i $v$.
@@ -79,7 +79,7 @@ Algorytm zwraca obiekt zawierający sumę odległości (`distanceSum`) oraz inde
 Dla każdego punktu $i$ w zbiorze $P$, obliczamy sumę odległości od wszystkich innych punktów. Wartość ta zostaje zapisana w tablicy `distances[i]`.
 
 $
-\text{{distances}}[i] = \sum_{j=0}^{n-1} d(\text{{points}}[i], \text{{points}}[j])
+\text{distances}[i] = \sum_{j=0}^{n-1} d(\text{points}[i], \text{points}[j])
 $
 
 gdzie $d(P_1, P_2)$ to odległość euklidesowa między punktami $P_1$ i $P_2$, co jest obliczane za pomocą funkcji `calculateDistance`.
@@ -103,7 +103,7 @@ while (Q.length < k) {
   let maxIncrease = -1;
   let bestPoint = null;
 
-  // Wzrost sumy odgległości...
+  // Wzrost sumy odległości...
 
   if (bestPoint !== null) {
     Q.push(bestPoint);
@@ -118,12 +118,12 @@ W powyższym kodzie:
 - `maxIncrease` - zmienna przechowująca dotychczasowy maksymalny wzrost sumy odległości.
 - `bestPoint` - indeks punktu, który jest najlepszym kandydatem do dodania do $Q$.
 
-##### Wzrost sumy odgległości
+##### Wzrost sumy odległości
 
 Dla każdego punktu $i$ spoza $Q$, obliczamy wzrost sumy odległości, jaki byłby uzyskany po dodaniu punktu $i$ do $Q$.
 
 $
-\text{{increase}} = \sum_{j=0}^{k-1} \left( \text{{distances}}[i] - d(\text{{points}}[i], \text{{points}}[Q[j]]) \right)
+\text{increase} = \sum_{j=0}^{k-1} \left( \text{distances}[i] - d(\text{points}[i], \text{points}[Q[j]]) \right)
 $
 
 Jeśli `increase` jest większe od `maxIncrease`, wtedy aktualizujemy `maxIncrease` i `bestPoint`.
@@ -150,7 +150,7 @@ for (let i = 0; i < n; i++) {
 Po wybraniu $k$ punktów, obliczamy sumę odległości między każdą parą punktów w $Q$.
 
 $
-\text{{distanceSum}} = \sum*{i=0}^{k-1} \sum*{j=i+1}^{k-1} d(\text{{points}}[Q[i]], \text{{points}}[Q[j]])
+\text{distanceSum} = \sum*{i=0}^{k-1} \sum*{j=i+1}^{k-1} d(\text{points}[Q[i]], \text{points}[Q[j]])
 $
 
 ```javascript
