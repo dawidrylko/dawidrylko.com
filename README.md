@@ -1,12 +1,6 @@
 # dawidrylko.com
 
-My personal website.
+[![Deploy Gatsby site to Pages](https://github.com/dawidrylko/dawidrylko.com/actions/workflows/gatsby.yml/badge.svg)](https://github.com/dawidrylko/dawidrylko.com/actions/workflows/gatsby.yml)
+[![CodeQL](https://github.com/dawidrylko/dawidrylko.com/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/dawidrylko/dawidrylko.com/actions/workflows/github-code-scanning/codeql)
 
-## TODO
-
-- analytics
-- mdx
-- i18n
-- dark mode
-- import legacy posts
-- tags
+My personal website based on [React](https://react.dev) and [Gatsby](https://www.gatsbyjs.com).
