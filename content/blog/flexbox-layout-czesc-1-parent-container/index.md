@@ -1,21 +1,21 @@
 ---
 title: Flexbox Layout – część 1 – parent container
 date: 2016-05-14T13:28:13.200Z
-description: Odkryj Flexbox. Część 1 tej serii skupia się na roli rodzica (kontenera) w Flexbox. Dowiedz się, jak właściwości takie jak `display`, `flex-direction`, `flex-wrap`, i `flex-flow` wpływają na elastyczne rozmieszczanie elementów. Ten wpis pomoże ci zrozumieć, jak skutecznie zarządzać wyrównaniem i przestrzenią w kontenerze, sprawiając, że projektowanie responsywnych stron stanie się łatwiejsze i efektywniejsze.
+description: Odkryj Flexbox. Część pierwsza tej serii skupia się na roli rodzica (kontenera) w Flexbox Layout. Dowiedz się, jak właściwości takie jak `display`, `flex-direction`, `flex-wrap`, i `flex-flow` wpływają na elastyczne rozmieszczanie elementów. Ten wpis pomoże ci zrozumieć, jak skutecznie zarządzać wyrównaniem i przestrzenią w kontenerze.
 featuredImg: ./boxes.jpg
-featuredImgAlt: Zdjęcie niezgrabnie ustawionych pudełek, ktore zaraz się przewrócą, na tle fioletowych drzwi.
+featuredImgAlt: Zdjęcie niezgrabnie ustawionych pudełek, które zaraz się przewrócą, na tle fioletowych drzwi.
 tags: [css]
 ---
 
-**Witryny i strony internetowe** oparte na statycznych elementach blokowych powoli przechodzą do lamusa. Czy to koniec deklarowania kontenerów z właściwością `float` oraz `clear`? Częściowo tak, **CSS3** wprowadza **Flexbox Layout**, który wspomaga lepsze zarządzanie elementami i łatwiejsze konstruowanie stron.
+**Witryny i strony internetowe** oparte na statycznych elementach blokowych powoli przechodzą do lamusa. Czy to koniec deklarowania kontenerów z właściwością `float` oraz `clear`? Częściowo tak, **CSS3** wprowadza **Flexbox Layout**, który wspomaga lepsze zarządzanie elementami i łatwiejsze konstruowanie stron.
 
-**Flexbox Layout** (Flexible Box wg [W3C recommendation](https://www.w3.org/TR/css-flexbox-1/), z 1 marca 2016 roku) to moduł, który zapewnia efektywniejszy, a co za tym idzie skuteczniejszy sposób na zarządzanie wyrównaniem, rozkładem elementów wewnątrz kontenerów, przestrzenią wokół nich oraz samymi kontenerami. Przydatne jest to zwłaszcza wtedy, gdy wielkość elementu jest nieznana lub generowana jest w sposób dynamiczny.
+**Flexbox Layout** (Flexible Box wg [W3C recommendation](https://www.w3.org/TR/css-flexbox-1/), z 1 marca 2016 roku) to moduł, który zapewnia efektywniejszy, a co za tym idzie skuteczniejszy sposób na zarządzanie wyrównaniem, rozkładem elementów wewnątrz kontenerów, przestrzenią wokół nich oraz samymi kontenerami. Przydatne jest to zwłaszcza wtedy, gdy wielkość elementu jest nieznana lub generowana jest w sposób dynamiczny.
 
-Głównym założeniem układu **flex** jest nadanie elementom możliwości zmiany szerokości, wysokości oraz rozmieszczenia w różnych konfiguracjach. Wszystkie te operacje wykonywane są w celu najlepszego zagospodarowania dostępnej przestrzeni, co ma poprawić widoczność oraz dostępność potrzebnych części na różnych rozdzielczościach ekranu.
+Głównym założeniem układu **flex** jest nadanie elementom możliwości zmiany szerokości, wysokości oraz rozmieszczenia w różnych konfiguracjach. Wszystkie te operacje wykonywane są w celu najlepszego zagospodarowania dostępnej przestrzeni, co ma poprawić widoczność oraz dostępność potrzebnych części na różnych rozdzielczościach ekranu.
 
 ## Właściwości rodzica (kontener)
 
-![Flex container - kontener nadrzędny z kontenerami w środku.](./flex-container.png)
+![Flex container - kontener nadrzędny z kontenerami w środku. Czerwony tekst 'Kontener', z którego wychodzi czerwona strzałka skierowana na kontener nadrzędny.](./flex-container.png)
 
 ### Flexbox Layout - Display
 
@@ -25,9 +25,7 @@ Głównym założeniem układu **flex** jest nadanie elementom możliwości zmia
 }
 ```
 
-W ten sposób definiujemy elastyczny kontener (inline lub block) w zależności
-od podanej wartości. Wszystkie dzieci mogą odziedziczyć zadeklarowaną
-wartość `flex`.
+W ten sposób definiujemy elastyczny kontener (inline lub block) w zależności od podanej wartości. Wszystkie dzieci mogą odziedziczyć zadeklarowaną wartość `flex`.
 
 ### Flexbox Layout - Flex direction
 
@@ -37,7 +35,7 @@ wartość `flex`.
 }
 ```
 
-Właściwość `flex-direction` deklaruje **kierunek rozmieszczenia elementów** w pojemniku. W anglojęzycznej nomenklaturze używa się określenia **main-axis** (główna oś).
+Właściwość `flex-direction` deklaruje **kierunek rozmieszczenia elementów** w pojemniku. W anglojęzycznej nomenklaturze używa się określenia **main-axis** (główna oś).
 
 Właściwość może przyjąć następujące wartości (przy `direction: ltr`):
 
