@@ -1,111 +1,94 @@
 #!/usr/bin/env bash
+set -o errexit
+set -o nounset
 
-# Configurable variables used in IndexNow call and URL construction
-HOST="dawidrylko.com";
-BASE_URL="https://${HOST}";
-EASYINDEX_CLI_VERSION="1.0.6";
+BASE_URL="https://dawidrylko.com"
+BLOG_DIR="../../../content/blog/"
+TMP_DIR="$(pwd)/tmp"
+TMP_FILE="google.csv"
+EASYINDEX_CLI_VERSION="1.0.6"
 
-BLOG_DIR=../../../content/blog/; # Location of /content/blog/ folder relative to tmp working dir
+start_time=$(date +%s.%3N)
 
-WORKING_DIR=$( pwd; );
-TMP_DIR=$WORKING_DIR"/tmp";
+log_error() {
+  echo "Error: $1"
+  exit 1
+}
 
-LOCAL_CREDENTIALS_FILE=../credentials.json;
-CREDENTIALS_FILE=credentials.json;
-URL_FILE=urls.csv;
-
-# Look for a -o <value> flag to override the operating system
-# selection from linux to macos
-while getopts o: flag
-do
+while getopts o: flag; do
   case "${flag}" in
     o) OPERATING_SYSTEM=${OPTARG};;
   esac
 done
 
-if [[ $OPERATING_SYSTEM == "macos" ]]
-  then
-    EASYINDEX_CLI_OS="darwin_amd64"; # Assumes a mac with an Intel CPU
-  else
-    # Use linux as a default OS
-    OPERATING_SYSTEM="linux";
-    EASYINDEX_CLI_OS="linux_amd64";
-fi
-echo "Using operating system: $OPERATING_SYSTEM";
-
-# Create and enter the working directory if it does not exist
-if [ ! -d $TMP_DIR ]
-  then
-    echo "Creating temporary working directory.";
-    mkdir $TMP_DIR;
-fi
-cd $TMP_DIR;
-
-# Look for an existing easyindex-cli binary
-EASYINDEX_CLI=./easyindex-cli
-if [ ! -f $EASYINDEX_CLI ]
-  then
-    # Construct the easyindex-cli download URL
-    EASYINDEX_CLI_URL="https://github.com/usk81/easyindex-cli/releases/download/v${EASYINDEX_CLI_VERSION}/easyindex-cli_${EASYINDEX_CLI_VERSION}_${EASYINDEX_CLI_OS}.tar.gz";
-    echo "Using easyindex_cli URL: $EASYINDEX_CLI_URL";
-
-    echo "Fetching easyindex_cli binary.";
-    curl -s -L $EASYINDEX_CLI_URL | tar xz;
+if [[ $OPERATING_SYSTEM == "macos" ]]; then
+  EASYINDEX_CLI_OS="darwin_amd64"
 fi
 
-# Look for a local credentials file
-if [ -f $LOCAL_CREDENTIALS_FILE ]
-  then
-    echo "Using local service account credentials.";
-    cp $LOCAL_CREDENTIALS_FILE $CREDENTIALS_FILE;
-  else
-    echo "No local service account credentials file found...";
-    echo "Using the GOOGLE_JSON_KEY_FILE environment variable...";
+echo "Using operating system: $OPERATING_SYSTEM"
 
-    if [ -z "${GOOGLE_JSON_KEY_FILE}" ]
-      then
-        echo "GOOGLE_JSON_KEY_FILE is not set or is empty. Exiting.";
-        exit 1;
-    fi
+# Create a temporary working directory
+create_tmp_directory() {
+  if [ ! -d "$TMP_DIR" ]; then
+    echo "Creating temporary working directory: $TMP_DIR"
+    mkdir "$TMP_DIR" || log_error "Failed to create directory $TMP_DIR"
+  fi
+}
 
-    touch $CREDENTIALS_FILE;
-    echo $GOOGLE_JSON_KEY_FILE >> $CREDENTIALS_FILE;
-fi
+# Download https://github.com/usk81/easyindex-cli
+download_easyindex_cli() {
+  EASYINDEX_CLI="./easyindex-cli"
+  if [ ! -f "$EASYINDEX_CLI" ]; then
+    EASYINDEX_CLI_URL="https://github.com/usk81/easyindex-cli/releases/download/v${EASYINDEX_CLI_VERSION}/easyindex-cli_${EASYINDEX_CLI_VERSION}_${EASYINDEX_CLI_OS}.tar.gz"
+    echo "Using easyindex_cli URL: $EASYINDEX_CLI_URL"
+    echo "Fetching easyindex_cli binary."
+    curl -s -L "$EASYINDEX_CLI_URL" | tar xz || log_error "Failed to download and extract easyindex_cli binary."
+    echo
+  fi
+}
 
-echo "Building URL list from repository structure.";
-if [ -f $URL_FILE ]
-  then
-    # Clean up an existing URLs CSV file
-    rm $URL_FILE;
-fi
+# Copy credentials file
+copy_credentials_file() {
+  echo "Using the GOOGLE_JSON_KEY_FILE environment variable..."
+  if [ -z "${GOOGLE_JSON_KEY_FILE:-}" ]; then
+    log_error "GOOGLE_JSON_KEY_FILE is not set or is empty. Exiting."
+  fi
 
-# Begin URLs CSV file creation
-touch $URL_FILE;
-echo ""notification_type","url"" >> $URL_FILE; # Headers line
+  echo "$GOOGLE_JSON_KEY_FILE" > "$TMP_DIR/credentials.json" || log_error "Failed to write to credentials file $TMP_DIR/credentials.json"
+}
 
-echo ""URL_UPDATED","${BASE_URL}/"" >> $URL_FILE; # Add root URL
+# Construct submission payload
+construct_submission_payload() {
+  echo '{"notification_type":"url"}' > "$TMP_FILE"
+  echo '{"URL_UPDATED":"'${BASE_URL}'/"}' >> "$TMP_FILE"
 
-# Iterate over folders in the /content/blog/ directory
-# to create links to each individual generated blog page
-BLOGS=($(ls $BLOG_DIR));
-for BLOG in "${BLOGS[@]}"
-do
-  echo ""URL_UPDATED","${BASE_URL}/${BLOG}/"" >> $URL_FILE;
-done
-# URLs CSV file creation complete
+  BLOGS=($(ls "$BLOG_DIR"))
+  for BLOG in "${BLOGS[@]}"; do
+    echo '{"URL_UPDATED":"'${BASE_URL}'/'"${BLOG}"'"}' >> "$TMP_FILE"
+  done
 
-echo "URLs CSV file contents:";
-cat $URL_FILE;
+  echo "Constructed CSV file contents:"
+  cat "$TMP_FILE" | jq '.'
+  echo
+}
 
-echo;
-echo "---";
-echo "Updating Google through Indexing API...";
-$EASYINDEX_CLI google -d -c $URL_FILE;
-if [ $? -ne 0 ]
-  then
-    echo "Error returned by easyindex-cli. Exiting.";
-    exit 1;
-fi
+# Submit URLs to Google search engine
+submit_to_search_engine() {
+  echo "Submitting to Google via Indexing API..."
+  "$EASYINDEX_CLI" google publish --csv "$TMP_FILE" -C "$TMP_DIR/credentials.json" || log_error "An error returned by easyindex-cli. Exiting."
+}
 
-echo;
-echo "Done.";
+# Main execution
+create_tmp_directory
+
+cd "$TMP_DIR" || log_error "Failed to change to temporary directory $TMP_DIR"
+
+download_easyindex_cli
+copy_credentials_file
+construct_submission_payload
+submit_to_search_engine
+
+end_time=$(date +%s.%3N)
+duration=$(echo "scale=0; ($end_time - $start_time) * 1000 / 1" | bc)
+echo "---------------------------------"
+echo "Script completed in $duration milliseconds."
