@@ -49,7 +49,7 @@ construct_submission_payload() {
 
   BLOGS=($(ls "$BLOG_DIR"))
   for BLOG in "${BLOGS[@]}"; do
-    echo '{"URL_UPDATED":"'${BASE_URL}'/'"${BLOG}"'"}' >> "$TMP_FILE"
+    echo "\"URL_UPDATED\",\"${BASE_URL}/${BLOG}/\"" >> $TMP_FILE;
   done
 
   echo "Constructed CSV file contents:"
