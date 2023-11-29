@@ -63,6 +63,7 @@ construct_submission_payload() {
 submit_to_search_engine() {
   echo "Submitting to Google via Indexing API..."
   "$EASYINDEX_CLI" google publish --csv "$TMP_FILE" -C "$TMP_DIR/credentials.json" || log_error "An error returned by easyindex-cli. Exiting."
+  echo
 }
 
 # Main execution
