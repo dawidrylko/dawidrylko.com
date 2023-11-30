@@ -15,9 +15,9 @@ Artykuł stanowi kontynuację serii. Pierwszy artykuł możesz przeczytać, klik
 
 **Flex items** to wszystkie obiekty wewnątrz kontenera z zadeklarowaną wartością `flex`. To właśnie operacje na potomkach oraz przypisanie im odpowiednich styli sprawiają, że cały układ zachowa się w możliwie najlepszy (co za tym idzie najbardziej optymalny) sposób.
 
-# Właściwości potomka (children items)
+## Właściwości potomka (children items)
 
-## Flexbox Layout – Order
+### Flexbox Layout – Order
 
 ```css
 .item {
@@ -29,7 +29,7 @@ Artykuł stanowi kontynuację serii. Pierwszy artykuł możesz przeczytać, klik
 
 Standardowo elementy w kontenerze są ułożone w kolejności występowania w pliku **HTML**. Kolejnością można jednak bez problemu sterować poprzez zastosowanie właściwości `order`.
 
-## Flexbox Layout – Flex grow
+### Flexbox Layout – Flex grow
 
 ```css
 .item {
@@ -45,7 +45,7 @@ Jeśli wszystkim elementom wewnątrz kontenera zostanie przyporządkowana właś
 
 **Ujemne wartości zostają oznaczone jako błędne.**
 
-## Flexbox Layout – Flex shrink
+### Flexbox Layout – Flex shrink
 
 ```css
 .item {
@@ -57,7 +57,7 @@ Właściwość `flex-shrink` pozwala elementom na zmniejszanie się, jeśli jest
 
 **Ujemne wartości zostają oznaczone jako błędne.**
 
-## Flexbox Layout – Flex basis
+### Flexbox Layout – Flex basis
 
 ```css
 .item {
@@ -67,7 +67,7 @@ Właściwość `flex-shrink` pozwala elementom na zmniejszanie się, jeśli jest
 
 Podstawową wielkość elementu wewnątrz **flexible container** uzyskujemy dzięki właściwości `flex-basis`. Brak zadeklarowanej wartości oznacza przyjęcie domyślnej – czyli `auto`. Inne wykorzystanie tej właściwości to podanie długości – np. `200px`, `20em`, `20%` itp.
 
-## Flexbox Layout – Flex
+### Flexbox Layout – Flex
 
 ```css
 .item {
