@@ -1,13 +1,21 @@
 import React from 'react';
-import { Link, graphql } from 'gatsby';
+import { PageProps, Link, graphql, HeadFC } from 'gatsby';
 import { StaticImage } from 'gatsby-plugin-image';
 
 import Layout from '../components/layout';
 import Seo from '../components/seo';
 
+type DataProps = {
+  site: {
+    siteMetadata: {
+      title: string;
+    };
+  };
+};
+
 const Title = 'Nie znaleziono strony';
 
-const NotFoundPage = function ({ data, location }) {
+const NotFoundPage: React.FC<PageProps<DataProps>> = ({ data, location }) => {
   const siteTitle =
     data.site.siteMetadata?.title || '68 97 119 105 100 32 82 121 108 107 111';
 
@@ -29,14 +37,12 @@ const NotFoundPage = function ({ data, location }) {
   );
 };
 
-export const Head = function () {
-  return (
-    <Seo
-      title={Title}
-      description="Nie ma nic ciekawego na tej stronie, tym bardziej jej opisu."
-    />
-  );
-};
+export const Head: HeadFC<DataProps> = () => (
+  <Seo
+    title={Title}
+    description="Nie ma nic ciekawego na tej stronie, tym bardziej jej opisu."
+  />
+);
 
 export default NotFoundPage;
 

@@ -10,12 +10,12 @@ type DataProps = {
   site: {
     siteMetadata: {
       title: string;
-      description: string;
     };
   };
 };
 
 const Title = 'Bio';
+
 const Metadata: React.FC<PageProps<DataProps>> = ({ data, location }) => {
   const siteTitle =
     data.site.siteMetadata?.title || '68 97 119 105 100 32 82 121 108 107 111';
@@ -52,7 +52,6 @@ export const query = graphql`
     site {
       siteMetadata {
         title
-        description
       }
     }
   }

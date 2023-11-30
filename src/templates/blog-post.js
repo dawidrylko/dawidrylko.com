@@ -6,8 +6,6 @@ import Bio from '../components/bio';
 import Layout from '../components/layout';
 import Seo from '../components/seo';
 
-import 'katex/dist/katex.min.css';
-
 const BlogPostTemplate = function ({
   data: { previous, next, site, markdownRemark: post },
   location,
