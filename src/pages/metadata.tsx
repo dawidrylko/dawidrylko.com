@@ -51,7 +51,10 @@ const Metadata: React.FC<PageProps<DataProps>> = ({ data, location }) => {
     <Layout location={location} title={siteTitle}>
       <h1>{Title}</h1>
       <Table data={createMetadataArray(data.site)} />
-      <Link to="/">Wróć na stronę główną</Link>
+      <hr />
+      <Link to="/" className="static-link">
+        Wróć na stronę główną
+      </Link>
     </Layout>
   );
 };

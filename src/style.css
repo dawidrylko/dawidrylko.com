@@ -81,10 +81,6 @@ body {
   color: var(--color-text);
 }
 
-footer {
-  padding: var(--spacing-6) var(--spacing-0);
-}
-
 hr {
   background: var(--color-accent);
   height: 1px;
@@ -240,6 +236,11 @@ a:focus {
   text-decoration: none;
 }
 
+.static-link {
+  display: flex;
+  margin-bottom: calc(var(--spacing-8) / 2);
+}
+
 /* Custom classes */
 
 .global-wrapper {
@@ -324,7 +325,7 @@ a:focus {
   font-family: var(--font-heading);
 }
 
-.blog-post .gatsby-image-wrapper {
+.blog-post .gatsby-image-wrapper:not(footer .gatsby-image-wrapper) {
   margin-bottom: var(--spacing-8);
 }
 

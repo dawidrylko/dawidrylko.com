@@ -1,5 +1,6 @@
 import React from 'react';
 import { PageProps, Link, graphql, HeadFC } from 'gatsby';
+import { StaticImage } from 'gatsby-plugin-image';
 
 import Bio from '../components/bio';
 import Layout from '../components/layout';
@@ -23,7 +24,16 @@ const Metadata: React.FC<PageProps<DataProps>> = ({ data, location }) => {
     <Layout location={location} title={siteTitle}>
       <h1>{Title}</h1>
       <Bio />
-      <Link to="/">Wróć na stronę główną</Link>
+      <StaticImage
+        src="../images/motto.jpg"
+        alt="Zdjęcie, którym znajduje się graffiti, przedstawiające czarno-biały wizerunek Charlie Chaplina oraz zawierające cytat: 'A day without laughter is a day wasted'."
+        placeholder="blurred"
+        layout="fullWidth"
+      />
+      <hr />
+      <Link to="/" className="static-link">
+        Wróć na stronę główną
+      </Link>
     </Layout>
   );
 };

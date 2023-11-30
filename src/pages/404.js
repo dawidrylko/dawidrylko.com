@@ -1,10 +1,11 @@
 import React from 'react';
 import { Link, graphql } from 'gatsby';
+import { StaticImage } from 'gatsby-plugin-image';
 
 import Layout from '../components/layout';
 import Seo from '../components/seo';
 
-const Title = 'Nie znaleziono strony 😶';
+const Title = 'Nie znaleziono strony';
 
 const NotFoundPage = function ({ data, location }) {
   const siteTitle =
@@ -13,8 +14,17 @@ const NotFoundPage = function ({ data, location }) {
   return (
     <Layout location={location} title={siteTitle}>
       <h1>{Title}</h1>
-      <p>Kiedyś byłem ninja^2, teraz nawet strony brakuje... 😔</p>
-      <Link to="/">Wróć na stronę główną</Link>
+      <p>Tej strony brakuje, ponieważ wyskoczyłem na hot-doga... 🌭</p>
+      <StaticImage
+        src="../images/hot-dog.jpg"
+        alt="Zdjęcie przedstawiające pomnik uśmiechniętego hot-doga."
+        placeholder="blurred"
+        layout="fullWidth"
+      />
+      <hr />
+      <Link to="/" className="static-link">
+        Wróć na stronę główną
+      </Link>
     </Layout>
   );
 };

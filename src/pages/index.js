@@ -83,6 +83,7 @@ const BlogIndex = function ({ data, location }) {
           );
         })}
       </ol>
+      <hr />
       <Bio />
     </Layout>
   );
