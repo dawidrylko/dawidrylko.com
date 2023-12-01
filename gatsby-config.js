@@ -144,5 +144,11 @@ module.exports = {
         icon: `src/images/logo.jpg`, // This path is relative to the root of the site.
       },
     },
+    {
+      resolve: "gatsby-plugin-google-tagmanager",
+      options: {
+        id: "G-1SKESWY49E",
+      },
+    },
   ],
 };
