@@ -177,10 +177,6 @@ ol li {
   margin-bottom: calc(var(--spacing-8) / 2);
 }
 
-ol li + li {
-  border-top: 1px solid var(--color-accent);
-}
-
 li > p {
   margin-bottom: calc(var(--spacing-8) / 2);
 }
@@ -335,6 +331,14 @@ a:focus {
 
 .gatsby-highlight {
   margin-bottom: var(--spacing-8);
+}
+
+.posts li {
+  list-style: none;
+}
+
+.posts li + li {
+  border-top: 1px solid var(--color-accent);
 }
 
 /* Media queries */

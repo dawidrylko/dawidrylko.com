@@ -22,7 +22,7 @@ const BlogIndex = function ({ data, location }) {
 
   return (
     <Layout location={location} title={siteTitle}>
-      <ol style={{ listStyle: `none` }}>
+      <ol className="posts">
         {posts.map(post => {
           const title = post.frontmatter.title || post.fields.slug;
           const img = getImage(
