@@ -26,7 +26,7 @@
   "dependencies": {
     "@fontsource-variable/montserrat": "^5.0.16",
     "@fontsource/merriweather": "^5.0.8",
-    "gatsby": "^5.12.11",
+    "gatsby": "^5.12.12",
     "gatsby-plugin-feed": "^5.12.3",
     "gatsby-plugin-google-tagmanager": "^5.12.3",
     "gatsby-plugin-image": "^3.12.3",
