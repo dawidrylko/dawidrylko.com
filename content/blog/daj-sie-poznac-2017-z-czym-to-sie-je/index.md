@@ -1,7 +1,6 @@
 ---
 title: Daj się poznać 2017 – z czym to się je
 date: 2017-03-01T17:04:24.200Z
-tags: []
 ---
 
 Pierwszy dzień marca - czas na nowe wyzwanie. Motorem napędowym jest tym razem konkurs **Daj Się Poznać**. Spróbuję wytrwać te mordercze 10 tygodni, wyprodukować wtenczas przynajmniej 20 postów, rozbudować swoje GitHubowe repozytorium oraz doskonale się bawić w imię Samorozwoju.

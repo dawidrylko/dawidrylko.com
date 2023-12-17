@@ -4,7 +4,7 @@ date: 2016-06-05T18:23:04.200Z
 description: Odkryj Flexbox. Czas na drugi wpis z serii Flexbox Layout. Tym razem skupimy się na potomkach kontenera – czyli children items. Odkryj właściwości takie jak `order`, `flex-grow`, `flex-shrink`, `flex-basis` oraz `flex`. Ten artykuł pomoże ci zrozumieć, jak skutecznie zarządzać rozmieszczeniem i przestrzenią dla elementów wewnątrz kontenera.
 featuredImg: ./books.jpg
 featuredImgAlt: Równo poukładane książki na półkach w bibliotece. Photo by Eilis Garvey on Unsplash.
-tags: [css]
+tags: ['css']
 ---
 
 Rozdysponowanie elementów wewnątrz kontenera wcale nie jest takie proste. Czas na drugi wpis z serii **Flexbox Layout**, tym razem poświęcony potomkom kontenera – czyli **children items**.
