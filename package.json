@@ -31,7 +31,7 @@
     "gatsby-plugin-google-tagmanager": "^5.12.3",
     "gatsby-plugin-image": "^3.12.3",
     "gatsby-plugin-manifest": "^5.12.3",
-    "gatsby-plugin-sharp": "^5.12.3",
+    "gatsby-plugin-sharp": "^5.13.0",
     "gatsby-plugin-sitemap": "^6.12.3",
     "gatsby-remark-images": "^7.12.3",
     "gatsby-remark-katex": "^7.12.0",
