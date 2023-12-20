@@ -3,7 +3,7 @@
   "description": "My personal website",
   "private": true,
   "author": "Dawid Ryłko",
-  "license": "0BSD",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/dawidrylko/dawidrylko.com.git"
@@ -41,7 +41,7 @@
     "gatsby-source-filesystem": "^5.13.0",
     "gatsby-transformer-remark": "^6.12.3",
     "gatsby-transformer-sharp": "^5.13.0",
-    "katex": "^0.16.9",
+    "katex": "^0.13.3",
     "prismjs": "^1.29.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
@@ -54,12 +54,12 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-config-react": "^1.1.7",
     "eslint-import-resolver-babel-module": "^5.3.2",
-    "eslint-loader": "^4.0.2",
     "eslint-plugin-import": "^2.29.0",
     "eslint-plugin-jest": "^27.6.0",
     "eslint-plugin-jsx-a11y": "^6.8.0",
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-webpack-plugin": "^4.0.1",
     "gatsby-plugin-eslint": "^4.0.4",
     "prettier": "^3.1.1"
   },
