@@ -27,6 +27,7 @@
     "@fontsource-variable/montserrat": "^5.0.17",
     "@fontsource/merriweather": "^5.0.8",
     "gatsby": "^5.13.0",
+    "gatsby-plugin-canonical-urls": "^5.13.0",
     "gatsby-plugin-feed": "^5.13.0",
     "gatsby-plugin-google-tagmanager": "^5.13.0",
     "gatsby-plugin-image": "^3.13.0",

@@ -7,9 +7,12 @@
 /**
  * @type {import('gatsby').GatsbyConfig}
  */
+
+const siteUrl = `https://dawidrylko.com/`;
+
 module.exports = {
   siteMetadata: {
-    siteUrl: `https://dawidrylko.com/`,
+    siteUrl,
     title: `Dawid Ryłko`,
     description: `Dawid Ryłko. Moja osobista strona internetowa i blog. 68 97 119 105 100 32 82 121 108 107 111`,
     author: {
@@ -145,9 +148,16 @@ module.exports = {
       },
     },
     {
-      resolve: "gatsby-plugin-google-tagmanager",
+      resolve: `gatsby-plugin-google-tagmanager`,
       options: {
-        id: "G-1SKESWY49E",
+        id: 'G-1SKESWY49E',
+      },
+    },
+    {
+      resolve: `gatsby-plugin-canonical-urls`,
+      options: {
+        siteUrl,
+        stripQueryString: true,
       },
     },
   ],
