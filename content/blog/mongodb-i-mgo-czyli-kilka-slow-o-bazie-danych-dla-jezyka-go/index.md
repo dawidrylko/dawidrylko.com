@@ -54,3 +54,9 @@ I jeszcze z basha dla komendy `db.products.find()`:
 ```bash
 { "_id" : ObjectId("58c19cc71c4e63572e45e3f4"), "name" : "Szynka z 9 marca" }
 ```
+
+---
+
+#### Aktualizacja 21 grudnia 2023
+
+Od czasu powstania tego artykułu, w Go oraz MongoDB wiele się zmieniło. Używana przeze mnie paczka `gopkg.in/mgo.v2` jest przestarzała. Obecnie zaleca się stosowanie nowszej i bardziej rozbudowanej paczki `go.mongodb.org/mongo-driver/mongo`.
