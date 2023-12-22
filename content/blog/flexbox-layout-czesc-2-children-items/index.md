@@ -1,15 +1,15 @@
 ---
-title: Flexbox Layout – część 2 – children items
+title: Flexbox Layout - część 2 - children items
 date: 2016-06-05T18:23:04.200Z
-description: Odkryj Flexbox. Czas na drugi wpis z serii Flexbox Layout. Tym razem skupimy się na potomkach kontenera – czyli children items. Odkryj właściwości takie jak `order`, `flex-grow`, `flex-shrink`, `flex-basis` oraz `flex`. Ten artykuł pomoże ci zrozumieć, jak skutecznie zarządzać rozmieszczeniem i przestrzenią dla elementów wewnątrz kontenera.
+description: Odkryj Flexbox. Czas na drugi wpis z serii Flexbox Layout. Tym razem skupimy się na potomkach kontenera - czyli children items. Odkryj właściwości takie jak `order`, `flex-grow`, `flex-shrink`, `flex-basis` oraz `flex`. Ten artykuł pomoże ci zrozumieć, jak skutecznie zarządzać rozmieszczeniem i przestrzenią dla elementów wewnątrz kontenera.
 featuredImg: ./books.jpg
 featuredImgAlt: Równo poukładane książki na półkach w bibliotece. Photo by Eilis Garvey on Unsplash.
 tags: ['css']
 ---
 
-Rozdysponowanie elementów wewnątrz kontenera wcale nie jest takie proste. Czas na drugi wpis z serii **Flexbox Layout**, tym razem poświęcony potomkom kontenera – czyli **children items**.
+Rozdysponowanie elementów wewnątrz kontenera wcale nie jest takie proste. Czas na drugi wpis z serii **Flexbox Layout**, tym razem poświęcony potomkom kontenera - czyli **children items**.
 
-Artykuł stanowi kontynuację serii. Pierwszy artykuł możesz przeczytać, klikając w: [Flexbox Layout – część 1 – parent container](/flexbox-layout-czesc-1-parent-container/).
+Artykuł stanowi kontynuację serii. Pierwszy artykuł możesz przeczytać, klikając w: [Flexbox Layout - część 1 - parent container](/flexbox-layout-czesc-1-parent-container/).
 
 ![Flex children - kontener nadrzędny z kontenerami w środku. Czerwony tekst 'Potomkowie', z którego wychodzą cztery czerwone strzałki skierowane na kontenery w środku.](./flex-children.png)
 
@@ -17,7 +17,7 @@ Artykuł stanowi kontynuację serii. Pierwszy artykuł możesz przeczytać, klik
 
 ## Właściwości potomka (children items)
 
-### Flexbox Layout – Order
+### Flexbox Layout - Order
 
 ```css
 .item {
@@ -29,7 +29,7 @@ Artykuł stanowi kontynuację serii. Pierwszy artykuł możesz przeczytać, klik
 
 Standardowo elementy w kontenerze są ułożone w kolejności występowania w pliku **HTML**. Kolejnością można jednak bez problemu sterować poprzez zastosowanie właściwości `order`.
 
-### Flexbox Layout – Flex grow
+### Flexbox Layout - Flex grow
 
 ```css
 .item {
@@ -45,7 +45,7 @@ Jeśli wszystkim elementom wewnątrz kontenera zostanie przyporządkowana właś
 
 **Ujemne wartości zostają oznaczone jako błędne.**
 
-### Flexbox Layout – Flex shrink
+### Flexbox Layout - Flex shrink
 
 ```css
 .item {
@@ -57,7 +57,7 @@ Właściwość `flex-shrink` pozwala elementom na zmniejszanie się, jeśli jest
 
 **Ujemne wartości zostają oznaczone jako błędne.**
 
-### Flexbox Layout – Flex basis
+### Flexbox Layout - Flex basis
 
 ```css
 .item {
@@ -65,9 +65,9 @@ Właściwość `flex-shrink` pozwala elementom na zmniejszanie się, jeśli jest
 }
 ```
 
-Podstawową wielkość elementu wewnątrz **flexible container** uzyskujemy dzięki właściwości `flex-basis`. Brak zadeklarowanej wartości oznacza przyjęcie domyślnej – czyli `auto`. Inne wykorzystanie tej właściwości to podanie długości – np. `200px`, `20em`, `20%` itp.
+Podstawową wielkość elementu wewnątrz **flexible container** uzyskujemy dzięki właściwości `flex-basis`. Brak zadeklarowanej wartości oznacza przyjęcie domyślnej - czyli `auto`. Inne wykorzystanie tej właściwości to podanie długości - np. `200px`, `20em`, `20%` itp.
 
-### Flexbox Layout – Flex
+### Flexbox Layout - Flex
 
 ```css
 .item {

@@ -1,5 +1,5 @@
 ---
-title: Daj się poznać 2017 – z czym to się je
+title: Daj się poznać 2017 - z czym to się je
 date: 2017-03-01T17:04:24.200Z
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: HTTP methods z Go i MongoDB – część 1 – POST
+title: HTTP methods z Go i MongoDB - część 1 - POST
 date: 2017-03-11T07:18:40.200Z
 tags: ['go', 'mongo']
 ---
