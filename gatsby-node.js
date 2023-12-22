@@ -124,6 +124,7 @@ exports.createSchemaCustomization = ({ actions }) => {
       draft: Boolean
       featuredImg: File @fileByRelativePath
       featuredImgAlt: String
+      homePage: Boolean
     }
 
     type Fields {
