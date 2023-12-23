@@ -101,6 +101,8 @@ if __name__ == "__main__":
     main()
 ```
 
+## Wynik
+
 Wynik w konsoli:
 
 ```vim

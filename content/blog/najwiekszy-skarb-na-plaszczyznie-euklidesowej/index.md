@@ -7,8 +7,6 @@ featuredImgAlt: Mapa kartograficzna z przypinanymi do niej czerwonymi pinezkami.
 tags: ['math', 'javascript', 'datascience']
 ---
 
-## Wprowadzenie
-
 Czy kiedykolwiek zastanawialiście się, jak za pomocą jednego algorytmu można odnaleźć najcenniejsze punkty w dwuwymiarowej przestrzeni? W dzisiejszym wpisie zgłębimy to zagadnienie mające zastosowanie w dziedzinach, takich jak analiza danych, grafika komputerowa czy algorytmy optymalizacyjne.
 
 ## Problem
@@ -23,7 +21,7 @@ $
 
 gdzie $d(u, v)$ to odległość między punktami $u$ i $v$.
 
-## Algorytm
+## Rozwiązanie
 
 Opisany powyżej problem zostanie rozwiązany za pomocą programu napisanego w języku **JavaScript**.
 
