@@ -1,0 +1,60 @@
+{
+  "files": ["dominoTilingSolver-BigInt.js"],
+  "testCases": [
+    {
+      "rowCount": 1,
+      "colCount": 2,
+      "expectedResult": "1"
+    },
+    {
+      "rowCount": 2,
+      "colCount": 2,
+      "expectedResult": "2"
+    },
+    {
+      "rowCount": 4,
+      "colCount": 4,
+      "expectedResult": "36"
+    },
+    {
+      "rowCount": 6,
+      "colCount": 6,
+      "expectedResult": "6728"
+    },
+    {
+      "rowCount": 8,
+      "colCount": 8,
+      "expectedResult": "12988816"
+    },
+    {
+      "rowCount": 10,
+      "colCount": 10,
+      "expectedResult": "258584046368"
+    },
+    {
+      "rowCount": 12,
+      "colCount": 12,
+      "expectedResult": "53060477521960000"
+    },
+    {
+      "rowCount": 14,
+      "colCount": 14,
+      "expectedResult": "112202208776036178000000"
+    },
+    {
+      "rowCount": 16,
+      "colCount": 16,
+      "expectedResult": "2444888770250892795802079170816"
+    },
+    {
+      "rowCount": 18,
+      "colCount": 18,
+      "expectedResult": "548943583215388338077567813208427340288"
+    },
+    {
+      "rowCount": 20,
+      "colCount": 20,
+      "expectedResult": "1269984011256235834242602753102293934298576249856"
+    }
+  ]
+}

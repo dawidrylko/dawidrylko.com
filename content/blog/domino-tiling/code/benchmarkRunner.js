@@ -1,7 +1,11 @@
 const fs = require('fs');
-const parseArgs = require('./commandLineArgsParser');
-const exec = require('./scriptExecutor');
-const { files, testCases } = require('./dominoTilingTests.json');
+const { parseArgs, exec } = require('./helpers');
+const {
+  filesInt,
+  testCasesInt,
+  filesBigInt,
+  testCasesBigInt,
+} = require('./test-data');
 
 function calculateAverageTime(executionTimes) {
   return (
@@ -70,6 +74,23 @@ function runBenchmarkTest(testCase) {
   return true;
 }
 
+function executeBenchmark(options, files, testCases) {
+  const pairs = files.flatMap(fileName =>
+    testCases.map(testCase => ({ ...options, fileName, ...testCase })),
+  );
+  const allPassed = pairs.every((testCase, index) => {
+    process.stdout.write(
+      `Executing benchmark ${index + 1} of ${pairs.length} for ${
+        testCase.fileName
+      }... `,
+    );
+
+    return runBenchmarkTest(testCase);
+  });
+
+  return allPassed;
+}
+
 function __main__() {
   try {
     const argsSchema = { '-n': 'numberOfExecutions' };
@@ -83,20 +104,14 @@ function __main__() {
       `Starting benchmark execution with ${options.numberOfExecutions} executions each...`,
     );
 
-    const pairs = files.flatMap(fileName =>
-      testCases.map(testCase => ({ ...options, fileName, ...testCase })),
+    const allPassedInt = executeBenchmark(options, filesInt, testCasesInt);
+    const allPassedBigInt = executeBenchmark(
+      options,
+      filesBigInt,
+      testCasesBigInt,
     );
-    const allPassed = pairs.every((testCase, index) => {
-      process.stdout.write(
-        `Executing benchmark ${index + 1} of ${pairs.length} for ${
-          testCase.fileName
-        }... `,
-      );
 
-      return runBenchmarkTest(testCase);
-    });
-
-    if (allPassed) {
+    if (allPassedInt && allPassedBigInt) {
       console.log('All benchmarks completed successfully.');
       process.exit(0);
     } else {

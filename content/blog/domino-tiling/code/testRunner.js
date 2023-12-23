@@ -1,15 +1,17 @@
-const exec = require('./scriptExecutor');
-const { files, testCases } = require('./dominoTilingTests.json');
+const { exec, verifyInt, verifyBigInt } = require('./helpers');
+const {
+  filesInt,
+  testCasesInt,
+  filesBigInt,
+  testCasesBigInt,
+} = require('./test-data');
 
-function verifyResult(expected, actual) {
-  return parseInt(expected, 36) === parseInt(actual, 36);
-}
-
-function runTest(testCase) {
+function runTest(testCase, useBigInt) {
   const { fileName, expectedResult } = testCase;
 
   try {
     const result = exec(fileName, testCase);
+    const verifyResult = useBigInt ? verifyBigInt : verifyInt;
 
     if (verifyResult(expectedResult, result)) {
       console.log('Passed!');
@@ -27,24 +29,31 @@ function runTest(testCase) {
   return true;
 }
 
+function executeTests(files, testCases, useBigInt) {
+  const pairs = files.flatMap(fileName =>
+    testCases.map((testCase, index) => ({ index, fileName, ...testCase })),
+  );
+  const allPassed = pairs.every((testCase, index) => {
+    process.stdout.write(
+      `Executing test ${index + 1} of ${pairs.length} for ${
+        testCase.fileName
+      }... `,
+    );
+
+    return runTest(testCase, useBigInt);
+  });
+
+  return allPassed;
+}
+
 function __main__() {
   try {
     console.log('Starting test execution...');
 
-    const pairs = files.flatMap(fileName =>
-      testCases.map((testCase, index) => ({ index, fileName, ...testCase })),
-    );
-    const allPassed = pairs.every((testCase, index) => {
-      process.stdout.write(
-        `Executing test ${index + 1} of ${pairs.length} for ${
-          testCase.fileName
-        }... `,
-      );
+    const allPassedInt = executeTests(filesInt, testCasesInt, false);
+    const allPassedBigInt = executeTests(filesBigInt, testCasesBigInt, true);
 
-      return runTest(testCase);
-    });
-
-    if (allPassed) {
+    if (allPassedInt && allPassedBigInt) {
       console.log('All tests completed successfully.');
       process.exit(0);
     } else {

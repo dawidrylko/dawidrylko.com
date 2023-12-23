@@ -28,8 +28,8 @@ function searchTileArrangements(params) {
     return;
   }
 
-  const currentBit = 1 << colIndex;
-  const nextBit = 1 << (colIndex + 1);
+  const currentBit = BigInt(1) << BigInt(colIndex);
+  const nextBit = BigInt(1) << BigInt(colIndex + 1);
 
   currentMask & currentBit
     ? searchTileArrangements({ ...params, colIndex: colIndex + 1 })
@@ -46,13 +46,13 @@ function searchTileArrangements(params) {
 
 function createInitialTilingMatrix(rowCount, colCount) {
   return Array.from({ length: rowCount + 1 }, () =>
-    new Array(1 << colCount).fill(0),
+    new Array(1 << colCount).fill(BigInt(0)),
   );
 }
 
 function calculateTotalTilingCombinations({ rowCount, colCount }) {
   const tilingMatrix = createInitialTilingMatrix(rowCount, colCount);
-  tilingMatrix[0][0] = 1;
+  tilingMatrix[0][0] = BigInt(1);
 
   for (let rowIndex = 0; rowIndex < rowCount; ++rowIndex) {
     for (let currentMask = 0; currentMask < 1 << colCount; ++currentMask) {
@@ -62,8 +62,8 @@ function calculateTotalTilingCombinations({ rowCount, colCount }) {
         colCount,
         rowIndex,
         colIndex: 0,
-        currentMask,
-        nextMask: 0,
+        currentMask: BigInt(currentMask),
+        nextMask: BigInt(0),
       });
     }
   }
@@ -83,7 +83,7 @@ function __main__() {
   }
 
   const result = calculateTotalTilingCombinations(options);
-  console.log(result);
+  console.log(result.toString());
   process.exit(0);
 }
 
