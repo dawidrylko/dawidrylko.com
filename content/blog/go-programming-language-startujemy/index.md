@@ -1,6 +1,6 @@
 ---
 title: Go Programming Language - startujemy!
-date: 2017-03-05T17:14:30.200Z
+date: 2017-03-05T17:16:30.000Z
 tags: ['go']
 ---
 

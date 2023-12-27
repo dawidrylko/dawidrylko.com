@@ -1,6 +1,6 @@
 ---
 title: MongoDB i mgo - czyli kilka słów o bazie danych dla języka Go
-date: 2017-03-09T16:39:30.200Z
+date: 2017-03-09T18:39:30.000Z
 tags: ['go', 'mongo']
 ---
 

@@ -1,6 +1,6 @@
 ---
 title: HTTP methods z Go i MongoDB - część 2 - GET
-date: 2017-03-12T06:45:59.200Z
+date: 2017-03-12T08:45:59.000Z
 tags: ['go', 'mongo']
 ---
 

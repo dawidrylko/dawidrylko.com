@@ -1,6 +1,6 @@
 ---
 title: HTTP methods z Go i MongoDB - część 3 - PUT i DELETE
-date: 2017-03-17T12:41:43.200Z
+date: 2017-03-17T14:41:43.000Z
 tags: ['go', 'mongo']
 ---
 

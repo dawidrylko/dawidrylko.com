@@ -1,7 +1,7 @@
 ---
 title: Angular 2 - Angular CLI - Help
 description: Angular CLI to potężne narzędzie, które usprawnia i automatyzuje wiele procesów podczas pracy z Angular 2. Uruchomienie komendy `ng help` wyświetla obszerną pomoc.
-date: 2017-03-19T17:34:53.200Z
+date: 2017-03-19T18:34:53.000Z
 tags: ['angular']
 homePage: false
 ---

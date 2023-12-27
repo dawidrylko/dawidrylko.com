@@ -1,6 +1,6 @@
 ---
 title: Angular 2 - HTTP - pobieranie danych - @angular/http
-date: 2017-03-23T18:36:32.200Z
+date: 2017-03-23T20:36:32.000Z
 tags: ['angular']
 ---
 

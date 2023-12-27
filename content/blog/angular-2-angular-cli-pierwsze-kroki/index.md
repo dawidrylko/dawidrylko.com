@@ -1,6 +1,6 @@
 ---
 title: Angular 2 - Angular CLI - pierwsze kroki
-date: 2017-03-19T16:34:53.200Z
+date: 2017-03-19T18:34:53.000Z
 tags: ['angular']
 ---
 

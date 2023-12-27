@@ -1,6 +1,6 @@
 ---
 title: Największy skarb na płaszczyźnie euklidesowej
-date: 2023-11-27T19:26:44.200Z
+date: 2023-11-27T19:26:44.000Z
 description: Sprawdź, jak za pomocą jednego programu w języku JavaScript rozwiązać problem znajdowania najcenniejszych punktów w dwuwymiarowej przestrzeni euklidesowej. Odkryj, jak działa algorytm, który znajduje k-elementowy podzbiór punktów o maksymalnej sumie odległości między nimi.
 featuredImg: ./pin-on-the-map.jpg
 featuredImgAlt: Mapa kartograficzna z przypinanymi do niej czerwonymi pinezkami. Photo by GeoJango Maps on Unsplash.
