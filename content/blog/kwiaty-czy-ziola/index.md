@@ -119,6 +119,6 @@ Może nie piękne, ale praktyczne. Sami o sobie piszą tak:
 
 > OR-Tools to pakiet oprogramowania typu open source do optymalizacji zaprojektowany w celu rozwiązania najtrudniejszych na świecie problemów z routingiem, przebiegami, programowaniem liczb całkowitych i liniowych oraz programowaniem ograniczeń.
 
-## Przydatne linki
+## Źródła
 
 - [ortools.linear_solver.pywraplp](https://or-tools.github.io/docs/pdoc/ortools/linear_solver/pywraplp.html#Solver.CLP_LINEAR_PROGRAMMING)

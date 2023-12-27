@@ -57,6 +57,6 @@ NaN ** 2; // NaN
 
 Mnogość zmian oraz szeroki wachlarz możliwości jakie daje **ECMAScript 6** budzi różnorakie emocje. Sceptycy twierdzą, że jest to przerost formy nad treścią i JS nigdy nie zostanie _"prawdziwym"_ językiem programowania. Innych z kolei przeraża ogrom zmian. Ludzie związani z szeroko rozumianym front-endem często zaś popadają w huraoptymizm widząc jakie możliwości dają coraz to nowsze wersje specyfikacji ECMA. Pamiętajmy jednak o tym, że tak długo jak przeglądarki nie będą w stu procentach kompatybilne ze standardem, tak długo nie będziemy mogli korzystać z dobrodziejstw jakie zostają na dostarczone (chyba, że bezustannie będziemy korzystać z kompilatorów).
 
-### Źródła:
+## Źródła
 
 - [ECMAScript Next support in Mozilla - JavaScript | MDN](https://web.archive.org/web/20171019083731/https://developer.mozilla.org/en-US/docs/Web/JavaScript/New_in_JavaScript/ECMAScript_Next_support_in_Mozilla) _[Wayback Machine]_

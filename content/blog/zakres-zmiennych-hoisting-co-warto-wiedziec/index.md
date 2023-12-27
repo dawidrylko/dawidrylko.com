@@ -109,7 +109,7 @@ let a; // ReferenceError: a is not defined
 
 Temat został pobieżnie wywołany, przy okazji hoistingu, nie bez przyczyny. **Strict mode** nie zezwala na skorzystanie ze zmiennej, dopóki nie zostanie zadeklarowana.
 
-### Warto przeczytać:
+## Źródła
 
 - [const - JavaScript | MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const)
 - [let - JavaScript | MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let)
