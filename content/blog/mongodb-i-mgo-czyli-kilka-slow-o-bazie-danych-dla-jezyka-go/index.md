@@ -1,7 +1,7 @@
 ---
 title: MongoDB i mgo - czyli kilka słów o bazie danych dla języka Go
 date: 2017-03-09T18:39:30.000Z
-tags: ['go', 'mongo']
+tags: ['shopping manager', 'go', 'mongo']
 ---
 
 Podczas projektowania aplikacji internetowych ważny jest dobór narzędzi - powinny być dostosowane do potrzeb. Nie ma sensu wprowadzać do projektu niczego na wyrost, czegoś co ma lepsze zastosowanie w innego typu projektach. Wyjątkiem od tej reguły są aplikacje tworzone dla zabicia rutyny lub szkoleniowe. **MongoDB** jest właśnie takim narzędziem. Gdyby nie konkurs [Daj Się Poznać](/daj-sie-poznac-2017-z-czym-to-sie-je/), w którym obecnie biorę udział, pewnie jeszcze długo nie znalazłbym czasu, by przetestować go w praktyce.

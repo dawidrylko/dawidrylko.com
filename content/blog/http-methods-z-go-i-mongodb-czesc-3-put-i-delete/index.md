@@ -1,7 +1,7 @@
 ---
 title: HTTP methods z Go i MongoDB - część 3 - PUT i DELETE
 date: 2017-03-17T14:41:43.000Z
-tags: ['go', 'mongo']
+tags: ['shopping manager', 'go', 'mongo']
 ---
 
 W poprzednich dwóch częściach cyklu nauczyliśmy się [tworzyć](/http-methods-z-go-i-mongodb-czesc-1-post/) produkty, [pobierać](/http-methods-z-go-i-mongodb-czesc-2-get/) listę produktów oraz pojedynczy produkt za pomocą `ID`. Poniższy wpis zademonstruje, w jaki sposób możemy zaaktualizować produkt oraz jak go usunąć, czyli poznamy metody **PUT** i **DELETE**.

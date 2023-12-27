@@ -1,7 +1,7 @@
 ---
 title: Go Programming Language - startujemy!
 date: 2017-03-05T17:16:30.000Z
-tags: ['go']
+tags: ['shopping manager', 'go']
 ---
 
 Każdy projekt opiera się na jakichś filarach. Dlatego na samym początku przedstawię wam język **Go**, który wybrałem do tworzenia backendu mojej aplikacji **Shopping Manager**.

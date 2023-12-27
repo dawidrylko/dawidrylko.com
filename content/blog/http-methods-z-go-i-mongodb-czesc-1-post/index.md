@@ -1,7 +1,7 @@
 ---
 title: HTTP methods z Go i MongoDB - część 1 - POST
 date: 2017-03-11T09:18:40.000Z
-tags: ['go', 'mongo']
+tags: ['shopping manager', 'go', 'mongo']
 ---
 
 W poprzednich dwóch częściach było małe co nieco o [języku GO](/go-programming-language-startujemy/) oraz [MongoDB](/mongodb-i-mgo-czyli-kilka-slow-o-bazie-danych-dla-jezyka-go/). Czas scalić te dwie odrębne do tej pory funkcjonalności za pomocą **HTTP methods**. Czas na poznanie pierwszej z nich, czyli metody `POST`.

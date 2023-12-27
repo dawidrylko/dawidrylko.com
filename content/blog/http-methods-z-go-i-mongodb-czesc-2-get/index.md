@@ -1,7 +1,7 @@
 ---
 title: HTTP methods z Go i MongoDB - część 2 - GET
 date: 2017-03-12T08:45:59.000Z
-tags: ['go', 'mongo']
+tags: ['shopping manager', 'go', 'mongo']
 ---
 
 Dobrze zaplanowana praca to podstawa. W [poprzedniej części HTTP methods](/http-methods-z-go-i-mongodb-czesc-1-post/), nauczyliśmy się tworzyć produkty za pomocą metody `POST`. W tym wpisie czas na pobieranie listy produktów oraz pojedynczego produktu po ID.

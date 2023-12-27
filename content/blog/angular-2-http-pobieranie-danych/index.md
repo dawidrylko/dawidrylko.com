@@ -1,7 +1,7 @@
 ---
 title: Angular 2 - HTTP - pobieranie danych - @angular/http
 date: 2017-03-23T20:36:32.000Z
-tags: ['angular']
+tags: ['shopping manager', 'angular']
 ---
 
 W poprzednim wpisie [utworzyliśmy aplikację w Angular 2](/angular-2-angular-cli-pierwsze-kroki/) z pomocą Angular CLI. W tym wpisie stworzymy prosty serwis do pobierania danych z API oraz wyświetlimy wynik naszej pracy w przeglądarce. Do komunikacji wykorzystamy paczkę **Angular 2 - HTTP** (`@angular/http`).

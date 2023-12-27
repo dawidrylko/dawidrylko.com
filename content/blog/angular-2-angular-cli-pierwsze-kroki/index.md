@@ -1,7 +1,7 @@
 ---
 title: Angular 2 - Angular CLI - pierwsze kroki
 date: 2017-03-19T18:34:53.000Z
-tags: ['angular']
+tags: ['shopping manager', 'angular']
 ---
 
 Szybki i przyjemny frontend aplikacji internetowej, to marzenie wielu deweloperów. Naprzeciw oczekiwaniom programistów wyszedł Google z produktem **Angular CLI**. Dedykowany command-line interface ma jedno zasadnicze zadanie, przyspieszyć i maksymalnie uprościć pracę w standardowych czynnościach związanych z tworzeniem i zarządzaniem projektem.
