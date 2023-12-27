@@ -77,12 +77,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gatsby-build-
       - name: Install dependencies
-        run: |
-          if [ "${{ steps.detect-package-manager.outputs.manager }}" = "npm" ]; then
-            ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
-          else
-            ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
-          fi
+        run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
       - name: Build with Gatsby
         env:
           PREFIX_PATHS: 'true'
