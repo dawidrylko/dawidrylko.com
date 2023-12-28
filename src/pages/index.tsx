@@ -1,12 +1,47 @@
 import React from 'react';
-import { Link, graphql } from 'gatsby';
-import { GatsbyImage, getImage } from 'gatsby-plugin-image';
+import { Link, graphql, PageProps, HeadFC } from 'gatsby';
+import { GatsbyImage, getImage, IGatsbyImageData } from 'gatsby-plugin-image';
 
 import Bio from '../components/bio';
 import Layout from '../components/layout';
 import Seo from '../components/seo';
 
-const BlogIndex = function ({ data, location }) {
+interface PostNode {
+  frontmatter: {
+    title: string;
+    description?: string;
+    dateFormatted?: string;
+    dateOriginal?: string;
+    featuredImg?: {
+      childImageSharp?: {
+        gatsbyImageData: IGatsbyImageData;
+      };
+    };
+    featuredImgAlt?: string;
+  };
+  fields: {
+    slug: string;
+  };
+  excerpt?: string;
+}
+
+type SiteMetadata = {
+  title: string;
+  author?: {
+    name: string;
+  };
+};
+
+type DataType = {
+  site: {
+    siteMetadata?: SiteMetadata;
+  };
+  allMarkdownRemark: {
+    nodes: PostNode[];
+  };
+};
+
+const BlogIndex: React.FC<PageProps<DataType>> = ({ data, location }) => {
   const siteTitle =
     data.site.siteMetadata?.title || '68 97 119 105 100 32 82 121 108 107 111';
   const posts = data.allMarkdownRemark.nodes;
@@ -26,7 +61,8 @@ const BlogIndex = function ({ data, location }) {
         {posts.map(post => {
           const title = post.frontmatter.title || post.fields.slug;
           const img = getImage(
-            post.frontmatter.featuredImg?.childImageSharp?.gatsbyImageData,
+            post.frontmatter.featuredImg?.childImageSharp?.gatsbyImageData ||
+              null,
           );
 
           return (
@@ -73,7 +109,8 @@ const BlogIndex = function ({ data, location }) {
                   )}
                   <p
                     dangerouslySetInnerHTML={{
-                      __html: post.frontmatter.description || post.excerpt,
+                      __html:
+                        post.frontmatter.description || post.excerpt || '',
                     }}
                     itemProp="description"
                   />
@@ -91,14 +128,7 @@ const BlogIndex = function ({ data, location }) {
 
 export default BlogIndex;
 
-/**
- * Head export to define metadata for the page
- *
- * See: https://www.gatsbyjs.com/docs/reference/built-in-components/gatsby-head/
- */
-export const Head = function () {
-  return <Seo title="Home" />;
-};
+export const Head: HeadFC<DataType> = () => <Seo title="Home" />;
 
 export const pageQuery = graphql`
   {

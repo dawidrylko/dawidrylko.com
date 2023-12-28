@@ -1,20 +1,60 @@
 import React from 'react';
-import { Link, graphql } from 'gatsby';
-import { GatsbyImage, getImage } from 'gatsby-plugin-image';
+import { Link, graphql, PageProps } from 'gatsby';
+import { GatsbyImage, getImage, IGatsbyImageData } from 'gatsby-plugin-image';
 
 import Bio from '../components/bio';
 import Layout from '../components/layout';
 import Seo from '../components/seo';
 
-const BlogPostTemplate = function ({
-  data: { previous, next, site, markdownRemark: post },
-  location,
-}) {
+type PostNode = {
+  frontmatter: {
+    title: string;
+    description?: string;
+    dateFormatted?: string;
+    dateOriginal?: string;
+    featuredImg?: {
+      childImageSharp?: {
+        gatsbyImageData: IGatsbyImageData;
+      };
+    };
+    featuredImgAlt?: string;
+  };
+  fields: {
+    slug: string;
+  };
+  html: string;
+  excerpt?: string;
+};
+
+type SiteMetadata = {
+  title: string;
+  description?: string;
+  siteUrl?: string;
+  image?: string;
+  social?: {
+    twitter?: string;
+  };
+  author: {
+    name: string;
+  };
+};
+
+type Data = {
+  site: {
+    siteMetadata?: SiteMetadata;
+  };
+  markdownRemark: PostNode;
+  previous: PostNode;
+  next: PostNode;
+};
+
+const BlogPostTemplate: React.FC<PageProps<Data>> = ({ data, location }) => {
+  const { previous, next, site, markdownRemark: post } = data;
   const siteTitle =
     site.siteMetadata?.title || '68 97 119 105 100 32 82 121 108 107 111';
 
   const img = getImage(
-    post.frontmatter.featuredImg?.childImageSharp?.gatsbyImageData,
+    post.frontmatter.featuredImg?.childImageSharp?.gatsbyImageData || null,
   );
 
   return (

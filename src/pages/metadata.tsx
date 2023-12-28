@@ -9,14 +9,18 @@ type MetadataItem = {
   value: string;
 };
 
-type DataProps = {
-  site: {
-    siteMetadata: {
-      title: string;
-      description: string;
-    };
-    buildTime: string;
-  };
+type SiteMetadata = {
+  title: string;
+  description: string;
+};
+
+type Site = {
+  siteMetadata: SiteMetadata;
+  buildTime: string;
+};
+
+type DataType = {
+  site: Site;
 };
 
 const Table: React.FC<{ data: MetadataItem[] }> = ({ data }) => (
@@ -32,10 +36,7 @@ const Table: React.FC<{ data: MetadataItem[] }> = ({ data }) => (
   </table>
 );
 
-const createMetadataArray = ({
-  siteMetadata,
-  buildTime,
-}: DataProps['site']) => [
+const createMetadataArray = ({ siteMetadata, buildTime }: DataType['site']) => [
   { key: 'Title', value: siteMetadata.title },
   { key: 'Description', value: siteMetadata.description },
   { key: 'Build time', value: buildTime },
@@ -43,7 +44,7 @@ const createMetadataArray = ({
 
 const Title = 'Metadata 🤖';
 
-const Metadata: React.FC<PageProps<DataProps>> = ({ data, location }) => {
+const MetadataPage: React.FC<PageProps<DataType>> = ({ data, location }) => {
   const siteTitle =
     data.site.siteMetadata?.title || '68 97 119 105 100 32 82 121 108 107 111';
 
@@ -59,16 +60,16 @@ const Metadata: React.FC<PageProps<DataProps>> = ({ data, location }) => {
   );
 };
 
-export const Head: HeadFC<DataProps> = () => (
+export const Head: HeadFC<DataType> = () => (
   <Seo
     title={Title}
     description="Ta strona jest do użytku wewnętrznego. Jeżeli już tu trafiłeś to musisz się bardzo nudzić."
   />
 );
 
-export default Metadata;
+export default MetadataPage;
 
-export const query = graphql`
+export const pageQuery = graphql`
   {
     site {
       siteMetadata {

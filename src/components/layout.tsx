@@ -1,8 +1,15 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { Link } from 'gatsby';
 
-const Layout = function ({ location, title, children }) {
-  // eslint-disable-next-line no-undef
+type LayoutProps = {
+  location: Location;
+  title: string;
+  children: ReactNode;
+};
+
+declare const __PATH_PREFIX__: string;
+
+const Layout: React.FC<LayoutProps> = ({ location, title, children }) => {
   const rootPath = `${__PATH_PREFIX__}/`;
   const isRootPath = location.pathname === rootPath;
   const fakeTitle = '68 97 119 105 100 32 82 121 108 107 111';

@@ -1,16 +1,27 @@
-/**
- * Bio component that queries for data
- * with Gatsby's useStaticQuery component
- *
- * See: https://www.gatsbyjs.com/docs/how-to/querying-data/use-static-query/
- */
-
 import React from 'react';
 import { useStaticQuery, graphql } from 'gatsby';
 import { StaticImage } from 'gatsby-plugin-image';
 
-const Bio = function () {
-  const { site } = useStaticQuery(graphql`
+type Social = {
+  name: string;
+  url: string;
+};
+
+type SiteMetadata = {
+  author?: {
+    name: string;
+  };
+  social?: Social[];
+};
+
+type Data = {
+  site: {
+    siteMetadata?: SiteMetadata;
+  };
+};
+
+const Bio: React.FC = () => {
+  const { site } = useStaticQuery<Data>(graphql`
     query BioQuery {
       site {
         siteMetadata {
@@ -26,7 +37,6 @@ const Bio = function () {
     }
   `);
 
-  // Set these values by editing "siteMetadata" in gatsby-config.js
   const author = site.siteMetadata?.author;
   const social = site.siteMetadata?.social || [];
 

@@ -5,17 +5,21 @@ import { StaticImage } from 'gatsby-plugin-image';
 import Layout from '../components/layout';
 import Seo from '../components/seo';
 
-type DataProps = {
-  site: {
-    siteMetadata: {
-      title: string;
-    };
-  };
+type SiteMetadata = {
+  title: string;
+};
+
+type Site = {
+  siteMetadata: SiteMetadata;
+};
+
+type DataType = {
+  site: Site;
 };
 
 const Title = 'Nie znaleziono strony';
 
-const NotFoundPage: React.FC<PageProps<DataProps>> = ({ data, location }) => {
+const NotFoundPage: React.FC<PageProps<DataType>> = ({ data, location }) => {
   const siteTitle =
     data.site.siteMetadata?.title || '68 97 119 105 100 32 82 121 108 107 111';
 
@@ -37,7 +41,7 @@ const NotFoundPage: React.FC<PageProps<DataProps>> = ({ data, location }) => {
   );
 };
 
-export const Head: HeadFC<DataProps> = () => (
+export const Head: HeadFC<DataType> = () => (
   <Seo
     title={Title}
     description="Nie ma nic ciekawego na tej stronie, tym bardziej jej opisu."
