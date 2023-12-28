@@ -341,6 +341,12 @@ a:focus {
   border-top: 1px solid var(--color-accent);
 }
 
+.math.math-display .katex-display {
+  padding: 1em;
+  margin: 0.5em 0;
+  overflow: auto;
+}
+
 /* Media queries */
 
 @media screen and (max-width: 600px) {

@@ -27,9 +27,9 @@ Teraz można przejść do opisu problemu.
 
 **Maksymalizujemy funkcję zysku**:
 
-$
+$$
 Z(x, y) = 240x + 300y
-$
+$$
 
 **Dodajemy ograniczenia**:
 

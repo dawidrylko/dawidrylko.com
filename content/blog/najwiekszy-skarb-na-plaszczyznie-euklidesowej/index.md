@@ -15,9 +15,9 @@ Dany jest zbiór $P$ zawierający punkty na płaszczyźnie euklidesowej. Celem j
 
 Zdefiniowany problem możemy zapisać za pomocą wzoru:
 
-$
+$$
 Q^* = \underset{Q \subseteq P, |Q| = k}{\arg\max} \sum_{\lbrace u,v \rbrace \subseteq Q} d(u, v)
-$
+$$
 
 gdzie $d(u, v)$ to odległość między punktami $u$ i $v$.
 
@@ -29,9 +29,9 @@ Opisany powyżej problem zostanie rozwiązany za pomocą programu napisanego w j
 
 Pierwszym elementem składowym jest funkcja obliczająca odległość między dwoma punktami na płaszczyźnie euklidesowej. Łatwiej można to zrozumieć, wyobrażając sobie długość odcinka pomiędzy tymi punktami. Formalnie, odległość między punktem $P_1(x_1, y_1)$, a punktem $P_2(x_2, y_2)$ możemy wyrazić wzorem:
 
-$
+$$
 d(P_1, P_2) = \sqrt{(x_1 - x_2)^2 + (y_1 - y_2)^2}
-$
+$$
 
 Funkcja `calculateDistance` to implementacja powyższego wzoru w języku JavaScript. Przyjmując punkty $P_1$ o współrzędnych $(x_1, y_1)$ i $P_2$ o współrzędnych $(x_2, y_2)$, odległość euklidesowa między punktami to pierwiastek kwadratowy z sumy kwadratów różnic współrzędnych.
 
@@ -76,9 +76,9 @@ Algorytm zwraca obiekt zawierający sumę odległości (`distanceSum`) oraz inde
 
 Dla każdego punktu $i$ w zbiorze $P$, obliczamy sumę odległości od wszystkich innych punktów. Wartość ta zostaje zapisana w tablicy `distances[i]`.
 
-$
+$$
 \text{distances}[i] = \sum_{j=0}^{n-1} d(\text{points}[i], \text{points}[j])
-$
+$$
 
 gdzie $d(P_1, P_2)$ to odległość euklidesowa między punktami $P_1$ i $P_2$, co jest obliczane za pomocą funkcji `calculateDistance`.
 
@@ -120,9 +120,9 @@ W powyższym kodzie:
 
 Dla każdego punktu $i$ spoza $Q$, obliczamy wzrost sumy odległości, jaki byłby uzyskany po dodaniu punktu $i$ do $Q$.
 
-$
+$$
 \text{increase} = \sum_{j=0}^{k-1} \left( \text{distances}[i] - d(\text{points}[i], \text{points}[Q[j]]) \right)
-$
+$$
 
 Jeśli `increase` jest większe od `maxIncrease`, wtedy aktualizujemy `maxIncrease` i `bestPoint`.
 
@@ -147,9 +147,9 @@ for (let i = 0; i < n; i++) {
 
 Po wybraniu $k$ punktów, obliczamy sumę odległości między każdą parą punktów w $Q$.
 
-$
+$$
 \text{distanceSum} = \sum*{i=0}^{k-1} \sum*{j=i+1}^{k-1} d(\text{points}[Q[i]], \text{points}[Q[j]])
-$
+$$
 
 ```javascript
 let distanceSum = 0;
