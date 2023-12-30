@@ -38,7 +38,7 @@ Analogicznie, jak w poprzednim wpisie, na początku tworzymy metodę `getAll()`,
 
 Całą "magię" załatwia za nas odpowiednie zapytanie do bazy danych:
 
-```
+```go
 server.GetSession().DB("shopping-manager").C("products").Find(nil).All(&products)
 ```
 
@@ -82,7 +82,7 @@ Przygotowana przez nas zmienna `oid` pozwoli nam na przeszukanie kolekcji za jej
 
 Warto przy tej okazji pokazać, jak zbudowany jest nasz endpoint:
 
-```
+```go
 server.Router.HandleFunc("/product/{id}", get).Methods("GET")
 ```
 

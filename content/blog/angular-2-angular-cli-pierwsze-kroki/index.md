@@ -10,7 +10,7 @@ Szybki i przyjemny frontend aplikacji internetowej, to marzenie wielu deweloper√
 
 Pierwszy etap pracy z **Angular CLI** to globalne zainstalowanie paczki `@angular/cli` przez `npm`:
 
-```
+```bash
 npm install -g @angular/cli
 ```
 

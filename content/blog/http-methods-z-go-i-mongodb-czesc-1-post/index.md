@@ -37,13 +37,13 @@ Sesję z bazą danych otwieramy poprzez wcześniej przygotowaną metodę `GetSes
 
 Pamiętajmy o nagłówkach:
 
-```
+```go
 responseWriter.Header().Set("Content-Type", "application/json")
 ```
 
 oraz o odpowiedzi:
 
-```
+```go
 responseWriter.WriteHeader(201)
 ```
 
