@@ -3,6 +3,7 @@ set -o errexit
 set -o nounset
 
 BASE_URL="https://dawidrylko.com"
+STATIC_PAGES=("bio" "metadata")
 BLOG_DIR="../../../content/blog/"
 TMP_DIR="$(pwd)/tmp"
 TMP_FILE="bing.json"
@@ -25,6 +26,10 @@ create_tmp_directory() {
 # Construct submission payload
 construct_submission_payload() {
   local json_content="{\"siteUrl\": \"$BASE_URL\", \"urlList\": [\"$BASE_URL/\","
+
+  for page in "${STATIC_PAGES[@]}"; do
+    json_content+="\"$BASE_URL/$page\","
+  done
 
   if [ -d "$BLOG_DIR" ]; then
     BLOGS=("$BLOG_DIR"/*/)

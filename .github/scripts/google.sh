@@ -3,6 +3,7 @@ set -o errexit
 set -o nounset
 
 BASE_URL="https://dawidrylko.com"
+STATIC_PAGES=("bio" "metadata")
 BLOG_DIR="../../../content/blog/"
 TMP_DIR="$(pwd)/tmp"
 TMP_FILE="google.csv"
@@ -46,6 +47,10 @@ copy_credentials_file() {
 construct_submission_payload() {
   echo "\"notification_type\",\"url\"" >> $TMP_FILE
   echo "\"URL_UPDATED\",\"${BASE_URL}/\"" >> $TMP_FILE
+
+  for page in "${STATIC_PAGES[@]}"; do
+    echo "\"URL_UPDATED\",\"${BASE_URL}/${page}\"" >> $TMP_FILE
+  done
 
   if [ -d "$BLOG_DIR" ]; then
     BLOGS=("$BLOG_DIR"/*/)
