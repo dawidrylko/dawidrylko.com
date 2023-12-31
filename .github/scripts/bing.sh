@@ -28,7 +28,7 @@ construct_submission_payload() {
   local json_content="{\"siteUrl\": \"$BASE_URL\", \"urlList\": [\"$BASE_URL/\","
 
   for page in "${STATIC_PAGES[@]}"; do
-    json_content+="\"$BASE_URL/$page\","
+    json_content+="\"$BASE_URL/$page/\","
   done
 
   if [ -d "$BLOG_DIR" ]; then

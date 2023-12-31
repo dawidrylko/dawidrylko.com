@@ -49,7 +49,7 @@ construct_submission_payload() {
   echo "\"URL_UPDATED\",\"${BASE_URL}/\"" >> $TMP_FILE
 
   for page in "${STATIC_PAGES[@]}"; do
-    echo "\"URL_UPDATED\",\"${BASE_URL}/${page}\"" >> $TMP_FILE
+    echo "\"URL_UPDATED\",\"${BASE_URL}/${page}/\"" >> $TMP_FILE
   done
 
   if [ -d "$BLOG_DIR" ]; then
