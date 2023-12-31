@@ -7,7 +7,7 @@ featuredImgAlt: Płytki domino rozłożone płasko na planszy.
 tags: ['math', 'javascript', 'datascience']
 ---
 
-Układanie płytek domino na kwadratowej planszy 2n x 2n nie wydaje się zbyt skomplikowane. Wyliczenie ilości możliwych uładów w zależności od wymiaru planszy także nie powinno sprawić kłopotu. Problem pojawia się, gdy potrzebujemy to zrobić w rozsądnym limicie czasu.
+Układanie płytek domino na kwadratowej planszy 2n x 2n nie wydaje się zbyt skomplikowane. Wyliczenie ilości możliwych układów w zależności od wymiaru planszy także nie powinno sprawić kłopotu. Problem pojawia się, gdy potrzebujemy to zrobić w rozsądnym limicie czasu.
 
 > 1, 2, 36, 6728, 12988816, 258584046368, 53060477521960000, 112202208776036178000000, 2444888770250892795802079170816, 548943583215388338077567813208427340288, 1269984011256235834242602753102293934298576249856
 
@@ -121,7 +121,7 @@ Potrzebne było mi miejsce, gdzie będę mógł stworzyć i zainicjalizować mac
 
 #### Utworzenie macierzy początkowej
 
-Funkcja `createInitialTilingMatrix` tworzy i inicjalizuje macierz (dwuwymiarową tablicę), która jest używan do śledzenia liczby możliwych układów płytek domino. Macierz `tilingMatrix` przechowuje wyniki pośrednie, umożliwiając uniknięcie powtórnego obliczania tych samych wartości.
+Funkcja `createInitialTilingMatrix` tworzy i inicjalizuje macierz (dwuwymiarową tablicę), która jest używana do śledzenia liczby możliwych układów płytek domino. Macierz `tilingMatrix` przechowuje wyniki pośrednie, umożliwiając uniknięcie powtórnego obliczania tych samych wartości.
 
 ```javascript
 const tilingMatrix = createInitialTilingMatrix(rowCount, colCount);
@@ -505,33 +505,34 @@ Zapisane wyniki znajdują się w [folderze benchmark](https://github.com/dawidry
 
 #### Benchmark `Integer` - `dominoTilingSolver.js`
 
-| Rozmiar | Wynik [ms] | Ilość egzekucji |
-| :-----: | ---------: | --------------: |
-|   1x2   |     24.942 |            1000 |
-|   2x2   |     25.749 |            1000 |
-|   4x4   |     24.876 |            1000 |
-|   6x6   |     27.603 |            1000 |
-|   8x8   |     35.453 |            1000 |
-|  10x10  |     94.160 |            1000 |
-|  12x12  |    505.818 |            1000 |
+| Rozmiar | Średni wynik [ms] | Ilość egzekucji |
+| :-----: | ----------------: | --------------: |
+|   1x2   |            24.942 |            1000 |
+|   2x2   |            25.749 |            1000 |
+|   4x4   |            24.876 |            1000 |
+|   6x6   |            27.603 |            1000 |
+|   8x8   |            35.453 |            1000 |
+|  10x10  |            94.160 |            1000 |
+|  12x12  |           505.818 |            1000 |
 
 #### Benchmark `BigInt` - `dominoTilingSolver-BigInt.js`
 
-| Rozmiar |    Wynik [ms] | Ilość egzekucji |
-| :-----: | ------------: | --------------: |
-|   1x2   |        28.280 |            1000 |
-|   2x2   |        29.005 |            1000 |
-|   4x4   |        28.594 |            1000 |
-|   6x6   |        31.335 |            1000 |
-|   8x8   |        44.904 |            1000 |
-|  10x10  |       145.033 |            1000 |
-|  12x12  |       833.903 |            1000 |
-|  14x14  |     5,615.200 |              10 |
-|  16x16  |    37,765.400 |              10 |
-|  18x18  |   248,372.000 |               1 |
-|  20x20  | 1,640,246.000 |               1 |
+| Rozmiar | Średni wynik [ms] | Ilość egzekucji |
+| :-----: | ----------------: | --------------: |
+|   1x2   |            28.280 |            1000 |
+|   2x2   |            29.005 |            1000 |
+|   4x4   |            28.594 |            1000 |
+|   6x6   |            31.335 |            1000 |
+|   8x8   |            44.904 |            1000 |
+|  10x10  |           145.033 |            1000 |
+|  12x12  |           833.903 |            1000 |
+|  14x14  |         5,615.200 |              10 |
+|  16x16  |        37,765.400 |              10 |
+|  18x18  |       248,372.000 |               1 |
+|  20x20  |     1,640,246.000 |               1 |
 
 ## Źródła
 
-- [Number of domino tilings (or dimer coverings) of a 2n X 2n square](https://oeis.org/A004003)
-- [Richard Kenyon: An introduction to the dimer model](https://doi.org/10.48550/arXiv.math/0310326)
+1. Richard Kenyon (2003), "An introduction to the dimer model", [arXiv:math/0310326](https://arxiv.org/abs/math/0310326).
+1. The On-Line Encyclopedia of Integer Sequences (OEIS), "Number of domino tilings (or dimer coverings) of a 2n X 2n square", [oeis.org/A004003](https://oeis.org/A004003).
+1. Wikipedia, "Domino tiling", [en.wikipedia.org/wiki/Domino_tiling](https://en.wikipedia.org/wiki/Domino_tiling).
