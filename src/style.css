@@ -347,6 +347,10 @@ a:focus {
   overflow: auto;
 }
 
+blockquote {
+  overflow: auto;
+}
+
 /* Media queries */
 
 @media screen and (max-width: 600px) {
