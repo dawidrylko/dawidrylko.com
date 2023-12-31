@@ -21,6 +21,8 @@ type Site = {
 
 type DataType = {
   site: Site;
+  nonBlogPages: { pageCount: number; pagePaths: string[] };
+  blogPosts: { postCount: number; postPaths: string[] };
 };
 
 const Table: React.FC<{ data: MetadataItem[] }> = ({ data }) => (
@@ -36,11 +38,29 @@ const Table: React.FC<{ data: MetadataItem[] }> = ({ data }) => (
   </table>
 );
 
-const createMetadataArray = ({ siteMetadata, buildTime }: DataType['site']) => [
+const createMetadataArray = ({
+  site: { siteMetadata, buildTime },
+  nonBlogPages: { pageCount },
+  blogPosts: { postCount },
+}: DataType) => [
   { key: 'Title', value: siteMetadata.title },
   { key: 'Description', value: siteMetadata.description },
   { key: 'Build time', value: buildTime },
+  { key: 'Pages', value: pageCount.toString() },
+  { key: 'Blog posts', value: postCount.toString() },
 ];
+
+const createNonBlogPagesArray = ({ nonBlogPages: { pagePaths } }: DataType) =>
+  pagePaths.map((path, index) => ({
+    key: (index + 1).toString(),
+    value: path,
+  }));
+
+const createBlogPostsArray = ({ blogPosts: { postPaths } }: DataType) =>
+  postPaths.map((path, index) => ({
+    key: (index + 1).toString(),
+    value: path,
+  }));
 
 const Title = 'Metadata 🤖';
 
@@ -51,7 +71,11 @@ const MetadataPage: React.FC<PageProps<DataType>> = ({ data, location }) => {
   return (
     <Layout location={location} title={siteTitle}>
       <h1>{Title}</h1>
-      <Table data={createMetadataArray(data.site)} />
+      <Table data={createMetadataArray(data)} />
+      <h2>Pages</h2>
+      <Table data={createNonBlogPagesArray(data)} />
+      <h2>Blog posts</h2>
+      <Table data={createBlogPostsArray(data)} />
       <hr />
       <Link to="/" className="static-link">
         Wróć na stronę główną
@@ -77,6 +101,16 @@ export const pageQuery = graphql`
         description
       }
       buildTime(formatString: "YYYY-MM-DD hh:mm a z")
+    }
+    nonBlogPages: allSitePage(
+      filter: { component: { regex: "/^(?!.*templates/blog-post).*$/" } }
+    ) {
+      pageCount: totalCount
+      pagePaths: distinct(field: path)
+    }
+    blogPosts: allMarkdownRemark {
+      postCount: totalCount
+      postPaths: distinct(field: fields___slug)
     }
   }
 `;
