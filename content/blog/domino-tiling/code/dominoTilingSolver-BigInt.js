@@ -77,7 +77,7 @@ function __main__() {
 
   if (!options.rowCount || !options.colCount) {
     console.error(
-      'Usage: node dominoTilingSolver.js -r <rowCount> -c <colCount>',
+      'Usage: node dominoTilingSolver-BigInt.js -r <rowCount> -c <colCount>',
     );
     process.exit(1);
   }
