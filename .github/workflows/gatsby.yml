@@ -52,13 +52,9 @@ jobs:
             exit 1
           fi
       - name: Setup Node
-        id: setup-node
-        run: echo "{name}={value}" >> $GITHUB_OUTPUT
-      - name: Use Node ${{ steps.setup-node.outputs.node_version }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: ${{ steps.setup-node.outputs.node_version }}
-          cache: ${{ steps.detect-package-manager.outputs.manager }}
+          node-version-file: '.nvmrc'
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v3
