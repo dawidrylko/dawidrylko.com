@@ -22,7 +22,7 @@ type Site = {
 type DataType = {
   site: Site;
   nonBlogPages: { pageCount: number; pagePaths: string[] };
-  blogPosts: { postCount: number; postPaths: string[] };
+  blogPosts: { postCount: number; postPaths: { fields: { slug: string } }[] };
 };
 
 const Table: React.FC<{ data: MetadataItem[] }> = ({ data }) => (
@@ -57,10 +57,12 @@ const createNonBlogPagesArray = ({ nonBlogPages: { pagePaths } }: DataType) =>
   }));
 
 const createBlogPostsArray = ({ blogPosts: { postPaths } }: DataType) =>
-  postPaths.map((path, index) => ({
-    key: (index + 1).toString(),
-    value: path,
-  }));
+  postPaths
+    .map(({ fields: { slug } }) => slug)
+    .map((path, index) => ({
+      key: (index + 1).toString(),
+      value: path,
+    }));
 
 const Title = 'Metadata 🤖';
 
@@ -108,9 +110,13 @@ export const pageQuery = graphql`
       pageCount: totalCount
       pagePaths: distinct(field: { path: SELECT })
     }
-    blogPosts: allMarkdownRemark {
+    blogPosts: allMarkdownRemark(sort: { frontmatter: { date: ASC } }) {
       postCount: totalCount
-      postPaths: distinct(field: { fields: { slug: SELECT } })
+      postPaths: nodes {
+        fields {
+          slug
+        }
+      }
     }
   }
 `;
