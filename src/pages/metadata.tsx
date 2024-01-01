@@ -106,11 +106,11 @@ export const pageQuery = graphql`
       filter: { component: { regex: "/^(?!.*templates/blog-post).*$/" } }
     ) {
       pageCount: totalCount
-      pagePaths: distinct(field: path)
+      pagePaths: distinct(field: { path: SELECT })
     }
     blogPosts: allMarkdownRemark {
       postCount: totalCount
-      postPaths: distinct(field: fields___slug)
+      postPaths: distinct(field: { fields: { slug: SELECT } })
     }
   }
 `;
