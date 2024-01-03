@@ -16,7 +16,7 @@ npm install -g @angular/cli
 
 ![Angular CLI - version](./ng-version.png)
 
-Jeżeli wszystko przebiegło pomyślnie, odpalenie komendy `ng help` powinno wyświetlić [obszerną pomoc](./ng-help). Już na tym etapie możemy zauważyć, że prefiks `ng` został zarezerwowany właśnie na potrzeby Angular CLI.
+Jeżeli wszystko przebiegło pomyślnie, odpalenie komendy `ng help` powinno wyświetlić [obszerną pomoc](./ng-help/). Już na tym etapie możemy zauważyć, że prefiks `ng` został zarezerwowany właśnie na potrzeby Angular CLI.
 
 ## Pierwszy projekt
 
