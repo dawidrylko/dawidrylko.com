@@ -4,7 +4,7 @@ set -o nounset
 
 BASE_URL="https://dawidrylko.com"
 STATIC_PAGES=("bio" "metadata")
-BLOG_DIR="../../../content/blog/"
+POSTS_DIR="../../../content/posts/"
 TMP_DIR="$(pwd)/tmp"
 TMP_FILE="google.csv"
 
@@ -52,10 +52,10 @@ construct_submission_payload() {
     echo "\"URL_UPDATED\",\"${BASE_URL}/${page}/\"" >> $TMP_FILE
   done
 
-  if [ -d "$BLOG_DIR" ]; then
-    BLOGS=("$BLOG_DIR"/*/)
-    for ((i=0; i<${#BLOGS[@]}; i++)); do
-      echo "\"URL_UPDATED\",\"$BASE_URL${BLOGS[i]:${#BLOG_DIR}}\"" >> $TMP_FILE
+  if [ -d "$POSTS_DIR" ]; then
+    POSTS=("$POSTS_DIR"/*/)
+    for ((i=0; i<${#POSTS[@]}; i++)); do
+      echo "\"URL_UPDATED\",\"$BASE_URL${POSTS[i]:${#POSTS_DIR}}\"" >> $TMP_FILE
     done
   fi
 
