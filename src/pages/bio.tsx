@@ -51,7 +51,7 @@ export const Head: HeadFC<DataType> = () => (
 
 export default BioPage;
 
-export const pageQuery = graphql`
+export const bioPageQuery = graphql`
   {
     site {
       siteMetadata {

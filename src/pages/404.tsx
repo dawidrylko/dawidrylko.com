@@ -50,7 +50,7 @@ export const Head: HeadFC<DataType> = () => (
 
 export default NotFoundPage;
 
-export const pageQuery = graphql`
+export const notFoundPageQuery = graphql`
   query {
     site {
       siteMetadata {

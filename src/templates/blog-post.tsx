@@ -142,7 +142,7 @@ export const Head = function ({ data: { markdownRemark: post } }) {
 
 export default BlogPostTemplate;
 
-export const pageQuery = graphql`
+export const blogPageQuery = graphql`
   query BlogPostBySlug(
     $id: String!
     $previousPostId: String

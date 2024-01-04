@@ -130,7 +130,7 @@ export default BlogIndex;
 
 export const Head: HeadFC<DataType> = () => <Seo title="Home" />;
 
-export const pageQuery = graphql`
+export const blogIndexQuery = graphql`
   {
     site {
       siteMetadata {

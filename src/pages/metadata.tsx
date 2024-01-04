@@ -95,7 +95,7 @@ export const Head: HeadFC<DataType> = () => (
 
 export default MetadataPage;
 
-export const pageQuery = graphql`
+export const metadataPageQuery = graphql`
   {
     site {
       siteMetadata {
