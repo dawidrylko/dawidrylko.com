@@ -128,7 +128,7 @@ const BlogIndex: React.FC<PageProps<DataType>> = ({ data, location }) => {
 
 export default BlogIndex;
 
-export const Head: HeadFC<DataType> = () => <Seo title="Home" />;
+export const Head: HeadFC<DataType> = () => <Seo />;
 
 export const blogIndexQuery = graphql`
   {
