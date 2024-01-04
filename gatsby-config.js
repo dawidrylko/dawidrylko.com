@@ -32,14 +32,11 @@ module.exports = {
     ],
   },
   plugins: [
-    `gatsby-plugin-eslint`,
-    `gatsby-plugin-sitemap`,
-    `gatsby-plugin-image`,
     {
       resolve: `gatsby-source-filesystem`,
       options: {
-        name: `blog`,
-        path: `${__dirname}/content/blog`,
+        name: `posts`,
+        path: `${__dirname}/content/posts`,
       },
     },
     {
@@ -49,6 +46,9 @@ module.exports = {
         path: `${__dirname}/src/images`,
       },
     },
+    `gatsby-plugin-eslint`,
+    `gatsby-plugin-sitemap`,
+    `gatsby-plugin-image`,
     {
       resolve: `gatsby-transformer-remark`,
       options: {
@@ -127,6 +127,7 @@ module.exports = {
             }`,
             output: `/rss.xml`,
             title: `Dawid Ryłko blog RSS Feed`,
+            language: `pl`,
           },
         ],
       },
@@ -146,9 +147,9 @@ module.exports = {
       },
     },
     {
-      resolve: `gatsby-plugin-google-tagmanager`,
+      resolve: `gatsby-plugin-google-gtag`,
       options: {
-        id: `G-1SKESWY49E`,
+        trackingIds: ['G-1SKESWY49E'],
       },
     },
     {
