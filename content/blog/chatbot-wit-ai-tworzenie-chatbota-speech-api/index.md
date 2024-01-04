@@ -104,7 +104,7 @@ W metodzie connect przekazujemy token, który możemy wygenerować w ustawieniac
 
 ## Podsumowanie
 
-Po implementacji i deployu na Heroku, możemy sprawdzić, jak się zachowuje aplikacja. Przykładowy screen z testu zamieszczam poniżej. Cały kod dostępny jest na [moim GitHubie](https://github.com/dawidrylko/spy-web), zachęcam też do [przetestowania aplikacji](https://spy-chatbot.herokuapp.com/) samodzielnie.
+Po implementacji i deployu na Heroku, możemy sprawdzić, jak się zachowuje aplikacja. Przykładowy screen z testu zamieszczam poniżej. Cały kod dostępny jest na [moim GitHubie](https://github.com/dawidrylko/spy-web), zachęcam też do przetestowania aplikacji samodzielnie.
 
 ![Spy chatbot - Speech API](./Zrzut-ekranu-2017-05-17-o-22.44.56.png)
 
@@ -112,5 +112,5 @@ Po implementacji i deployu na Heroku, możemy sprawdzić, jak się zachowuje apl
 
 - [wit-ai/microphone](https://github.com/wit-ai/microphone) - dedykowana biblioteka obsługująca mikrofon w przeglądarce. Oparta na WebRTC i WebSockets.
 - [wit.ai/docs/quickstart](https://wit.ai/docs/quickstart) - szybki start z Wit.ai
-- [spy-chatbot.herokuapp.com](https://spy-chatbot.herokuapp.com/) - aplikacja wykonana w tym wpisie
+- ~~spy-chatbot.herokuapp.com - aplikacja wykonana w tym wpisie~~
 - [github.com/dawidrylko/spy-web](https://github.com/dawidrylko/spy-web) - kod źródłowy
