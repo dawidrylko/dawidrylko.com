@@ -1,18 +1,9 @@
 {
   "name": "dawidrylko.com",
-  "description": "My personal website",
+  "description": "My personal website based on React and Gatsby.",
   "private": true,
   "author": "Dawid Ryłko",
   "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/dawidrylko/dawidrylko.com.git"
-  },
-  "homepage": "https://github.com/dawidrylko/dawidrylko.com#readme",
-  "keywords": [
-    "gatsby",
-    "blog"
-  ],
   "scripts": {
     "build": "gatsby build",
     "develop": "gatsby develop",
