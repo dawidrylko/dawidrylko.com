@@ -24,7 +24,7 @@
     "gatsby-plugin-image": "^3.13.1",
     "gatsby-plugin-manifest": "^5.13.1",
     "gatsby-plugin-sharp": "^5.13.1",
-    "gatsby-plugin-sitemap": "^6.12.3",
+    "gatsby-plugin-sitemap": "^6.13.1",
     "gatsby-remark-images": "^7.13.1",
     "gatsby-remark-katex": "^7.13.1",
     "gatsby-remark-prismjs": "^7.13.1",
