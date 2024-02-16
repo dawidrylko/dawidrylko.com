@@ -268,9 +268,9 @@ Jest odpowiedzialna za:
 - **wyświetlanie wyników**.
 
 Cały program można znaleźć
-[tu](https://raw.githubusercontent.com/dawidrylko/dawidrylko.com/master/content/blog/najwiekszy-skarb-na-plaszczyznie-euklidesowej/code/prog.js),
+[tu](https://github.com/dawidrylko/dawidrylko.com/blob/1f6a88c813dbaf2a6b817275ed0a2e7cf2739555/content/posts/najwiekszy-skarb-na-plaszczyznie-euklidesowej/code/prog.js),
 a przykładowe punkty znajdują się
-[tu](https://raw.githubusercontent.com/dawidrylko/dawidrylko.com/master/content/blog/najwiekszy-skarb-na-plaszczyznie-euklidesowej/code/points.txt).
+[tu](https://github.com/dawidrylko/dawidrylko.com/blob/1f6a88c813dbaf2a6b817275ed0a2e7cf2739555/content/posts/najwiekszy-skarb-na-plaszczyznie-euklidesowej/code/points.txt).
 
 Aby skorzystać z programu, należy go uruchomić z odpowiednimi parametrami, na przykład:
 
