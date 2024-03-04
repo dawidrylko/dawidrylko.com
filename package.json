@@ -15,7 +15,7 @@
     "start": "npm run clean && npm run develop"
   },
   "dependencies": {
-    "@fontsource-variable/montserrat": "^5.0.17",
+    "@fontsource-variable/montserrat": "^5.0.18",
     "@fontsource/merriweather": "^5.0.12",
     "gatsby": "^5.13.3",
     "gatsby-plugin-canonical-urls": "^5.13.1",
