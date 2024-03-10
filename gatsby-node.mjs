@@ -4,16 +4,15 @@
  * See: https://www.gatsbyjs.com/docs/reference/config-files/gatsby-node/
  */
 
-const path = require(`path`);
-const { createFilePath } = require(`gatsby-source-filesystem`);
+import path from 'path';
+import { createFilePath } from 'gatsby-source-filesystem';
 
-// Define the template for blog post
 const blogPost = path.resolve(`./src/templates/blog-post.tsx`);
 
 /**
  * @type {import('gatsby').GatsbyNode['createPages']}
  */
-exports.createPages = async ({ graphql, actions, reporter }) => {
+export const createPages = async ({ graphql, actions, reporter }) => {
   const { createPage } = actions;
 
   // Get all markdown blog posts sorted by date
@@ -70,7 +69,7 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
 /**
  * @type {import('gatsby').GatsbyNode['onCreateNode']}
  */
-exports.onCreateNode = ({ node, actions, getNode }) => {
+export const onCreateNode = ({ node, actions, getNode }) => {
   const { createNodeField } = actions;
 
   if (node.internal.type === `MarkdownRemark`) {
@@ -87,7 +86,7 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
 /**
  * @type {import('gatsby').GatsbyNode['createSchemaCustomization']}
  */
-exports.createSchemaCustomization = ({ actions }) => {
+export const createSchemaCustomization = ({ actions }) => {
   const { createTypes } = actions;
 
   // Explicitly define the siteMetadata {} object

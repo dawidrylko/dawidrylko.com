@@ -8,7 +8,7 @@
  * @type {import('gatsby').GatsbyConfig}
  */
 
-module.exports = {
+export default {
   siteMetadata: {
     siteUrl: `https://dawidrylko.com/`,
     title: `Dawid Ryłko`,
@@ -36,14 +36,14 @@ module.exports = {
       resolve: `gatsby-source-filesystem`,
       options: {
         name: `posts`,
-        path: `${__dirname}/content/posts`,
+        path: `content/posts`,
       },
     },
     {
       resolve: `gatsby-source-filesystem`,
       options: {
         name: `images`,
-        path: `${__dirname}/src/images`,
+        path: `src/images`,
       },
     },
     `gatsby-plugin-eslint`,
