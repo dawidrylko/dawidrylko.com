@@ -1,13 +1,8 @@
-/**
- * Configure your Gatsby site with this file.
- *
- * See: https://www.gatsbyjs.com/docs/reference/config-files/gatsby-config/
- */
+import remarkGfm from "remark-gfm"
 
 /**
  * @type {import('gatsby').GatsbyConfig}
  */
-
 export default {
   siteMetadata: {
     siteUrl: `https://dawidrylko.com/`,
@@ -75,6 +70,9 @@ export default {
             },
           },
         ],
+        mdxOptions: {
+          remarkPlugins: [remarkGfm],
+        },
       },
     },
     `gatsby-transformer-sharp`,

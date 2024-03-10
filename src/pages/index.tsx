@@ -35,7 +35,7 @@ type DataType = {
   site: {
     siteMetadata?: SiteMetadata;
   };
-  allPost: {
+  allMdx: {
     nodes: PostNode[];
   };
 };

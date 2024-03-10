@@ -90,10 +90,7 @@ const BlogPostTemplate: React.FC<PageProps<Data>> = ({ data, location, children 
             alt={post.frontmatter.featuredImgAlt || ''}
           />
         )}
-        <section
-          dangerouslySetInnerHTML={children}
-          itemProp="articleBody"
-        />
+        <section itemProp="articleBody">{children}</section>
         <hr />
         <footer>
           <Bio />
