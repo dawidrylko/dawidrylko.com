@@ -31,7 +31,7 @@ export default {
       resolve: `gatsby-source-filesystem`,
       options: {
         name: `posts`,
-        path: `content/posts`,
+        path: `content/pl`,
       },
     },
     {

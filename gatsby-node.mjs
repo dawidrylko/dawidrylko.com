@@ -78,13 +78,13 @@ export const onCreateNode = ({ node, actions, getNode }) => {
   }
 
   const { createNodeField } = actions;
-
-  const value = createFilePath({ node, getNode });
+  const filePath = createFilePath({ node, getNode });
+  const slugValue = filePath.replace(/.*--/, '/');
 
   createNodeField({
     name: `slug`,
     node,
-    value,
+    value: slugValue,
   });
 };
 
@@ -94,12 +94,6 @@ export const onCreateNode = ({ node, actions, getNode }) => {
 export const createSchemaCustomization = ({ actions }) => {
   const { createTypes } = actions;
 
-  // Explicitly define the siteMetadata {} object
-  // This way those will always be defined even if removed from gatsby-config.js
-
-  // Also explicitly define the Markdown frontmatter
-  // This way the "MarkdownRemark" queries will return `null` even when no
-  // blog posts are stored inside "content/blog" instead of returning an error
   createTypes(`#graphql
     type Mdx implements Node {
       frontmatter: Frontmatter
