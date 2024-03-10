@@ -22,7 +22,6 @@ interface PostNode {
   fields: {
     slug: string;
   };
-  excerpt?: string;
 }
 
 type SiteMetadata = {
@@ -36,7 +35,7 @@ type DataType = {
   site: {
     siteMetadata?: SiteMetadata;
   };
-  allMarkdownRemark: {
+  allPost: {
     nodes: PostNode[];
   };
 };
@@ -44,7 +43,7 @@ type DataType = {
 const BlogIndex: React.FC<PageProps<DataType>> = ({ data, location }) => {
   const siteTitle =
     data.site.siteMetadata?.title || '68 97 119 105 100 32 82 121 108 107 111';
-  const posts = data.allMarkdownRemark.nodes;
+  const posts = data.allMdx.nodes;
 
   if (posts.length === 0) {
     return (
@@ -110,7 +109,7 @@ const BlogIndex: React.FC<PageProps<DataType>> = ({ data, location }) => {
                   <p
                     dangerouslySetInnerHTML={{
                       __html:
-                        post.frontmatter.description || post.excerpt || '',
+                        post.frontmatter.description || '',
                     }}
                     itemProp="description"
                   />
@@ -140,12 +139,11 @@ export const blogIndexQuery = graphql`
         }
       }
     }
-    allMarkdownRemark(
+    allMdx(
       sort: { frontmatter: { date: DESC } }
       filter: { frontmatter: { draft: { ne: true }, homePage: { ne: false } } }
     ) {
       nodes {
-        excerpt
         fields {
           slug
         }

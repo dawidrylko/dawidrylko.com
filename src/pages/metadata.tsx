@@ -110,7 +110,7 @@ export const metadataPageQuery = graphql`
       pageCount: totalCount
       pagePaths: distinct(field: { path: SELECT })
     }
-    blogPosts: allMarkdownRemark(sort: { frontmatter: { date: ASC } }) {
+    blogPosts: allMdx(sort: { frontmatter: { date: ASC } }) {
       postCount: totalCount
       postPaths: nodes {
         fields {

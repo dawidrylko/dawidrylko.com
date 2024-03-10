@@ -18,7 +18,7 @@ export const createPages = async ({ graphql, actions, reporter }) => {
   // Get all markdown blog posts sorted by date
   const result = await graphql(`
     {
-      allMarkdownRemark(
+      allMdx(
         sort: { frontmatter: { date: ASC } }
         limit: 1000
         filter: { frontmatter: { draft: { ne: true } } }
@@ -27,6 +27,9 @@ export const createPages = async ({ graphql, actions, reporter }) => {
           id
           fields {
             slug
+          }
+          internal {
+            contentFilePath
           }
         }
       }
@@ -41,7 +44,7 @@ export const createPages = async ({ graphql, actions, reporter }) => {
     return;
   }
 
-  const posts = result.data.allMarkdownRemark.nodes;
+  const posts = result.data.allMdx.nodes;
 
   // Create blog posts pages
   // But only if there's at least one markdown file found at "content/blog" (defined in gatsby-config.js)
@@ -55,7 +58,7 @@ export const createPages = async ({ graphql, actions, reporter }) => {
 
       createPage({
         path: post.fields.slug,
-        component: blogPost,
+        component: `${blogPost}?__contentFilePath=${post.internal.contentFilePath}`,
         context: {
           id: post.id,
           previousPostId,
@@ -70,17 +73,19 @@ export const createPages = async ({ graphql, actions, reporter }) => {
  * @type {import('gatsby').GatsbyNode['onCreateNode']}
  */
 export const onCreateNode = ({ node, actions, getNode }) => {
+  if (node.internal.type !== `Mdx`) {
+    return;
+  }
+
   const { createNodeField } = actions;
 
-  if (node.internal.type === `MarkdownRemark`) {
-    const value = createFilePath({ node, getNode });
+  const value = createFilePath({ node, getNode });
 
-    createNodeField({
-      name: `slug`,
-      node,
-      value,
-    });
-  }
+  createNodeField({
+    name: `slug`,
+    node,
+    value,
+  });
 };
 
 /**
@@ -95,23 +100,8 @@ export const createSchemaCustomization = ({ actions }) => {
   // Also explicitly define the Markdown frontmatter
   // This way the "MarkdownRemark" queries will return `null` even when no
   // blog posts are stored inside "content/blog" instead of returning an error
-  createTypes(`
-    type SiteMetadata {
-      author: Author
-      siteUrl: String
-      social: [Social]
-    }
-
-    type Author {
-      name: String
-    }
-
-    type Social {
-      name: String
-      url: String
-    }
-
-    type MarkdownRemark implements Node {
+  createTypes(`#graphql
+    type Mdx implements Node {
       frontmatter: Frontmatter
       fields: Fields
     }

@@ -50,9 +50,10 @@ export default {
     `gatsby-plugin-sitemap`,
     `gatsby-plugin-image`,
     {
-      resolve: `gatsby-transformer-remark`,
+      resolve: `gatsby-plugin-mdx`,
       options: {
-        plugins: [
+        extensions: [`.md`, `.mdx`],
+        gatsbyRemarkPlugins: [
           {
             resolve: `gatsby-remark-images`,
             options: {
@@ -107,24 +108,25 @@ export default {
                 };
               });
             },
-            query: `{
-              allMarkdownRemark(
-                sort: { frontmatter: { date: DESC } }
-                filter: { frontmatter: { draft: { ne: true } } }
-              ) {
-                nodes {
-                  excerpt
-                  html
-                  fields {
-                    slug
-                  }
-                  frontmatter {
-                    title
-                    date
+            query: `#graphql
+              {
+                posts: allMdx(
+                  sort: { frontmatter: { date: DESC } }
+                  filter: { frontmatter: { draft: { ne: true } } }
+                ) {
+                  nodes {
+                    html
+                    fields {
+                      slug
+                    }
+                    frontmatter {
+                      title
+                      date
+                    }
                   }
                 }
               }
-            }`,
+            `,
             output: `/rss.xml`,
             title: `Dawid Ryłko blog RSS Feed`,
             language: `pl`,
