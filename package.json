@@ -52,7 +52,7 @@
     "eslint-plugin-jsx-a11y": "^6.8.0",
     "eslint-plugin-react": "^7.34.0",
     "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-webpack-plugin": "^4.0.1",
+    "eslint-webpack-plugin": "^4.1.0",
     "gatsby-plugin-eslint": "^4.0.4",
     "prettier": "^3.2.5"
   },
