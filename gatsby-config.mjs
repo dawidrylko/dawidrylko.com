@@ -1,9 +1,9 @@
-import remarkGfm from "remark-gfm"
+import remarkGfm from 'remark-gfm';
 
 /**
  * @type {import('gatsby').GatsbyConfig}
  */
-export default {
+const gatsbyConfig = {
   siteMetadata: {
     siteUrl: `https://dawidrylko.com/`,
     title: `Dawid Ryłko`,
@@ -161,3 +161,5 @@ export default {
     },
   ],
 };
+
+export default gatsbyConfig;
