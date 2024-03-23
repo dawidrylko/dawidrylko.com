@@ -55,9 +55,5 @@
     "eslint-webpack-plugin": "^4.1.0",
     "gatsby-plugin-eslint": "^4.0.4",
     "prettier": "^3.2.5"
-  },
-  "optionalDependencies": {
-    "@parcel/watcher-linux-x64-glibc": "2.4.1",
-    "lightningcss-linux-x64-gnu": "1.24.1"
   }
 }
