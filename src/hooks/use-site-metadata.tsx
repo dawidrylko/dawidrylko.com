@@ -1,22 +1,18 @@
 import { graphql, useStaticQuery } from 'gatsby';
 
-type SiteAuthor = {
-  name: string;
-};
-
-type Social = {
-  name: string;
-  url: string;
-};
-
 type Props = {
   site: {
     siteMetadata: {
       siteUrl: string;
       siteTitle: string;
       siteDescription: string;
-      siteAuthor: SiteAuthor;
-      siteSocial: Social[];
+      siteAuthor: {
+        name: string;
+      };
+      siteSocial: {
+        name: string;
+        url: string;
+      }[];
     };
   };
 };
