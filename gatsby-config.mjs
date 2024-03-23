@@ -80,7 +80,7 @@ const gatsbyConfig = {
     {
       resolve: `gatsby-plugin-feed`,
       options: {
-        query: `
+        query: `#graphql
           {
             site {
               siteMetadata {
@@ -94,15 +94,18 @@ const gatsbyConfig = {
         `,
         feeds: [
           {
-            serialize: ({ query: { site, allMarkdownRemark } }) => {
-              return allMarkdownRemark.nodes.map(node => {
+            serialize: ({ query: { site, posts } }) => {
+              return posts.nodes.map(node => {
+                const url = `${site.siteMetadata.siteUrl}${node.fields.slug}`
+                const content = `<p>${node.description}</p><div style="margin-top: 50px; font-style: italic;"><strong><a href="${url}">Keep reading</a>.</strong></div><br /> <br />`
+                
                 return {
                   ...node.frontmatter,
                   description: node.excerpt,
                   date: node.frontmatter.date,
-                  url: site.siteMetadata.siteUrl + node.fields.slug,
-                  guid: site.siteMetadata.siteUrl + node.fields.slug,
-                  custom_elements: [{ 'content:encoded': node.html }],
+                  url,
+                  guid: url,
+                  custom_elements: [{ 'content:encoded': content }],
                 };
               });
             },
@@ -113,7 +116,6 @@ const gatsbyConfig = {
                   filter: { frontmatter: { draft: { ne: true } } }
                 ) {
                   nodes {
-                    html
                     fields {
                       slug
                     }
