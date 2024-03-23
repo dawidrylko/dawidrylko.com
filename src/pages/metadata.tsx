@@ -3,26 +3,17 @@ import { PageProps, Link, graphql, HeadFC } from 'gatsby';
 
 import Layout from '../components/layout';
 import Seo from '../components/seo';
+import { useSiteMetadata } from '../hooks/use-site-metadata';
 
 type MetadataItem = {
   key: string;
   value: string;
 };
 
-type SiteMetadata = {
-  title: string;
-  description: string;
-};
-
-type Site = {
-  siteMetadata: SiteMetadata;
-  buildTime: string;
-};
-
 type DataType = {
-  site: Site;
   nonBlogPages: { pageCount: number; pagePaths: string[] };
   blogPosts: { postCount: number; postPaths: { fields: { slug: string } }[] };
+  site: { buildTime: string };
 };
 
 const Table: React.FC<{ data: MetadataItem[] }> = ({ data }) => (
@@ -38,13 +29,16 @@ const Table: React.FC<{ data: MetadataItem[] }> = ({ data }) => (
   </table>
 );
 
-const createMetadataArray = ({
-  site: { siteMetadata, buildTime },
-  nonBlogPages: { pageCount },
-  blogPosts: { postCount },
-}: DataType) => [
-  { key: 'Title', value: siteMetadata.title },
-  { key: 'Description', value: siteMetadata.description },
+const createMetadataArray = (
+  {
+    nonBlogPages: { pageCount },
+    blogPosts: { postCount },
+    site: { buildTime },
+  }: DataType,
+  siteMetadata,
+) => [
+  { key: 'Title', value: siteMetadata.siteTitle },
+  { key: 'Description', value: siteMetadata.siteDescription },
   { key: 'Build time', value: buildTime },
   { key: 'Pages', value: pageCount.toString() },
   { key: 'Blog posts', value: postCount.toString() },
@@ -67,13 +61,12 @@ const createBlogPostsArray = ({ blogPosts: { postPaths } }: DataType) =>
 const Title = 'Metadata 🤖';
 
 const MetadataPage: React.FC<PageProps<DataType>> = ({ data, location }) => {
-  const siteTitle =
-    data.site.siteMetadata?.title || '68 97 119 105 100 32 82 121 108 107 111';
+  const siteMetadata = useSiteMetadata();
 
   return (
-    <Layout location={location} title={siteTitle}>
+    <Layout location={location} title={siteMetadata.siteTitle}>
       <h1>{Title}</h1>
-      <Table data={createMetadataArray(data)} />
+      <Table data={createMetadataArray(data, siteMetadata)} />
       <h2>Pages</h2>
       <Table data={createNonBlogPagesArray(data)} />
       <h2>Blog posts</h2>
@@ -86,7 +79,7 @@ const MetadataPage: React.FC<PageProps<DataType>> = ({ data, location }) => {
   );
 };
 
-export const Head: HeadFC<DataType> = () => (
+export const Head = () => (
   <Seo
     title={Title}
     description="Ta strona jest do użytku wewnętrznego. Jeżeli już tu trafiłeś to musisz się bardzo nudzić."
@@ -95,15 +88,8 @@ export const Head: HeadFC<DataType> = () => (
 
 export default MetadataPage;
 
-export const metadataPageQuery = graphql`
+export const query = graphql`
   {
-    site {
-      siteMetadata {
-        title
-        description
-      }
-      buildTime(formatString: "YYYY-MM-DD hh:mm a z")
-    }
     nonBlogPages: allSitePage(
       filter: { component: { regex: "/^(?!.*templates/blog-post).*$/" } }
     ) {
@@ -117,6 +103,9 @@ export const metadataPageQuery = graphql`
           slug
         }
       }
+    }
+    site {
+      buildTime(formatString: "YYYY-MM-DD HH:mm:ss")
     }
   }
 `;

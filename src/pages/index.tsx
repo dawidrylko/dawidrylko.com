@@ -1,49 +1,37 @@
 import React from 'react';
-import { Link, graphql, PageProps, HeadFC } from 'gatsby';
-import { GatsbyImage, getImage, IGatsbyImageData } from 'gatsby-plugin-image';
+import { Link, graphql, PageProps } from 'gatsby';
+import { GatsbyImage, getImage } from 'gatsby-plugin-image';
 
 import Bio from '../components/bio';
 import Layout from '../components/layout';
 import Seo from '../components/seo';
+import { useSiteMetadata } from '../hooks/use-site-metadata';
 
-interface PostNode {
-  frontmatter: {
-    title: string;
-    description?: string;
-    dateFormatted?: string;
-    dateOriginal?: string;
-    featuredImg?: {
-      childImageSharp?: {
-        gatsbyImageData: IGatsbyImageData;
-      };
-    };
-    featuredImgAlt?: string;
-  };
-  fields: {
-    slug: string;
-  };
-}
-
-type SiteMetadata = {
-  title: string;
-  author?: {
-    name: string;
-  };
-};
-
-type DataType = {
-  site: {
-    siteMetadata?: SiteMetadata;
-  };
+type DataProps = {
   allMdx: {
-    nodes: PostNode[];
+    nodes: {
+      fields: {
+        slug: string;
+      };
+      frontmatter: {
+        title: string;
+        description: string;
+        dateOriginal: string;
+        dateFormatted: string;
+        featuredImg: {
+          childImageSharp: {
+            gatsbyImageData: any;
+          };
+        };
+        featuredImgAlt: string;
+      };
+    }[];
   };
 };
 
-const BlogIndex: React.FC<PageProps<DataType>> = ({ data, location }) => {
-  const siteTitle =
-    data.site.siteMetadata?.title || '68 97 119 105 100 32 82 121 108 107 111';
-  const posts = data.allMdx.nodes;
+const BlogIndex: React.FC<PageProps<DataProps>> = ({ data, location }) => {
+  const { siteTitle, siteAuthor } = useSiteMetadata();
+  const posts = data?.allMdx.nodes;
 
   if (posts.length === 0) {
     return (
@@ -92,7 +80,7 @@ const BlogIndex: React.FC<PageProps<DataType>> = ({ data, location }) => {
                     >
                       <Link itemProp="url" to="/bio">
                         <span itemProp="name">
-                          {data.site.siteMetadata?.author?.name}
+                          {siteAuthor?.name}
                         </span>
                       </Link>
                     </span>
@@ -108,8 +96,7 @@ const BlogIndex: React.FC<PageProps<DataType>> = ({ data, location }) => {
                   )}
                   <p
                     dangerouslySetInnerHTML={{
-                      __html:
-                        post.frontmatter.description || '',
+                      __html: post.frontmatter.description || '',
                     }}
                     itemProp="description"
                   />
@@ -127,18 +114,10 @@ const BlogIndex: React.FC<PageProps<DataType>> = ({ data, location }) => {
 
 export default BlogIndex;
 
-export const Head: HeadFC<DataType> = () => <Seo />;
+export const Head = () => <Seo />;
 
-export const blogIndexQuery = graphql`
+export const query = graphql`
   {
-    site {
-      siteMetadata {
-        title
-        author {
-          name
-        }
-      }
-    }
     allMdx(
       sort: { frontmatter: { date: DESC } }
       filter: { frontmatter: { draft: { ne: true }, homePage: { ne: false } } }

@@ -1,0 +1,19 @@
+{
+  "include": [
+    "src/**/*.ts",
+    ".eslintrc.js",
+  ],
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "CommonJS",
+    "lib": ["dom", "es2020"],
+    "moduleResolution": "node",
+    "forceConsistentCasingInFileNames": true,
+    "jsx": "react",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "noImplicitAny": false,
+    "resolveJsonModule": true,
+  }
+}

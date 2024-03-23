@@ -1,30 +1,16 @@
 import remarkGfm from 'remark-gfm';
+import SITE_METADATA from './src/const/site-metadata.mjs';
 
 /**
  * @type {import('gatsby').GatsbyConfig}
  */
 const gatsbyConfig = {
   siteMetadata: {
-    siteUrl: `https://dawidrylko.com/`,
-    title: `Dawid Ryłko`,
-    description: `Dawid Ryłko. Moja osobista strona internetowa i blog. 68 97 119 105 100 32 82 121 108 107 111`,
-    author: {
-      name: `Dawid Ryłko`,
-    },
-    social: [
-      {
-        name: `github`,
-        url: `https://github.com/dawidrylko`,
-      },
-      {
-        name: `twitter`,
-        url: `https://twitter.com/dawidrylko`,
-      },
-      {
-        name: `linkedin`,
-        url: `https://www.linkedin.com/in/dawidrylko`,
-      },
-    ],
+    siteUrl: SITE_METADATA.url,
+    siteTitle: SITE_METADATA.title,
+    siteDescription: SITE_METADATA.description,
+    siteAuthor: SITE_METADATA.author,
+    siteSocial: SITE_METADATA.social,
   },
   plugins: [
     {
@@ -96,9 +82,9 @@ const gatsbyConfig = {
           {
             serialize: ({ query: { site, posts } }) => {
               return posts.nodes.map(node => {
-                const url = `${site.siteMetadata.siteUrl}${node.fields.slug}`
-                const content = `<p>${node.description}</p><div style="margin-top: 50px; font-style: italic;"><strong><a href="${url}">Keep reading</a>.</strong></div><br /> <br />`
-                
+                const url = `${site.siteMetadata.siteUrl}${node.fields.slug}`;
+                const content = `<p>${node.description}</p><div style="margin-top: 50px; font-style: italic;"><strong><a href="${url}">Keep reading</a>.</strong></div><br /> <br />`;
+
                 return {
                   ...node.frontmatter,
                   description: node.excerpt,

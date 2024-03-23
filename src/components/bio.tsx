@@ -1,44 +1,9 @@
 import React from 'react';
-import { useStaticQuery, graphql } from 'gatsby';
 import { StaticImage } from 'gatsby-plugin-image';
-
-type Social = {
-  name: string;
-  url: string;
-};
-
-type SiteMetadata = {
-  author?: {
-    name: string;
-  };
-  social?: Social[];
-};
-
-type Data = {
-  site: {
-    siteMetadata?: SiteMetadata;
-  };
-};
+import { useSiteMetadata } from '../hooks/use-site-metadata';
 
 const Bio: React.FC = () => {
-  const { site } = useStaticQuery<Data>(graphql`
-    query BioQuery {
-      site {
-        siteMetadata {
-          author {
-            name
-          }
-          social {
-            name
-            url
-          }
-        }
-      }
-    }
-  `);
-
-  const author = site.siteMetadata?.author;
-  const social = site.siteMetadata?.social || [];
+  const { siteAuthor, siteSocial } = useSiteMetadata();
 
   return (
     <div className="bio">
@@ -52,16 +17,16 @@ const Bio: React.FC = () => {
         quality={95}
         alt="Profile picture"
       />
-      {author?.name && (
+      {siteAuthor?.name && (
         <p>
-          <strong>{author.name}</strong>
+          <strong>{siteAuthor.name}</strong>
           <br />
-          {social.map(({ name, url }, index) => (
+          {siteSocial.map(({ name, url }, index) => (
             <React.Fragment key={name}>
               <a href={url} target="_blank" rel="noreferrer">
                 {name.charAt(0).toUpperCase() + name.slice(1)}
               </a>
-              {index < social.length - 1 && ' | '}
+              {index < siteSocial.length - 1 && ' | '}
             </React.Fragment>
           ))}
         </p>

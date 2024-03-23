@@ -5,6 +5,7 @@ import { GatsbyImage, getImage, IGatsbyImageData } from 'gatsby-plugin-image';
 import Bio from '../components/bio';
 import Layout from '../components/layout';
 import Seo from '../components/seo';
+import { useSiteMetadata } from '../hooks/use-site-metadata';
 
 type PostNode = {
   frontmatter: {
@@ -24,32 +25,19 @@ type PostNode = {
   };
 };
 
-type SiteMetadata = {
-  title: string;
-  description?: string;
-  siteUrl?: string;
-  image?: string;
-  social?: {
-    twitter?: string;
-  };
-  author: {
-    name: string;
-  };
-};
-
 type Data = {
-  site: {
-    siteMetadata?: SiteMetadata;
-  };
   mdx: PostNode;
   previous: PostNode;
   next: PostNode;
 };
 
-const BlogPostTemplate: React.FC<PageProps<Data>> = ({ data, location, children }) => {
-  const { previous, next, site, mdx: post } = data;
-  const siteTitle =
-    site.siteMetadata?.title || '68 97 119 105 100 32 82 121 108 107 111';
+const BlogPostTemplate: React.FC<PageProps<Data>> = ({
+  data,
+  location,
+  children,
+}) => {
+  const { siteTitle, siteAuthor } = useSiteMetadata();
+  const { previous, next, mdx: post } = data;
 
   const img = getImage(
     post.frontmatter.featuredImg?.childImageSharp?.gatsbyImageData || null,
@@ -78,7 +66,7 @@ const BlogPostTemplate: React.FC<PageProps<Data>> = ({ data, location, children 
               itemType="https://schema.org/Person"
             >
               <Link itemProp="url" to="/bio">
-                <span itemProp="name">{site.siteMetadata?.author?.name}</span>
+                <span itemProp="name">{siteAuthor?.name}</span>
               </Link>
             </span>
           </small>
@@ -143,14 +131,6 @@ export const blogPageQuery = graphql`
     $previousPostId: String
     $nextPostId: String
   ) {
-    site {
-      siteMetadata {
-        title
-        author {
-          name
-        }
-      }
-    }
     mdx(id: { eq: $id }) {
       id
       frontmatter {

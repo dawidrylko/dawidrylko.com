@@ -95,20 +95,6 @@ export const createSchemaCustomization = ({ actions }) => {
   const { createTypes } = actions;
 
   createTypes(`#graphql
-    type SiteMetadata {
-      author: Author
-      siteUrl: String
-      social: [Social]
-    }
-
-    type Author {
-      name: String
-    }
-
-    type Social {
-      name: String
-      url: String
-    }
 
     type Mdx implements Node {
       frontmatter: Frontmatter

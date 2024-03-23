@@ -1,24 +1,5 @@
 import React, { ReactNode } from 'react';
-import { useStaticQuery, graphql } from 'gatsby';
-
-type Social = {
-  name: string;
-  url: string;
-};
-
-type SiteMetadata = {
-  title: string;
-  description: string;
-  social: Social[];
-};
-
-type Site = {
-  siteMetadata: SiteMetadata;
-};
-
-type StaticQueryData = {
-  site: Site;
-};
+import { useSiteMetadata } from '../hooks/use-site-metadata';
 
 type Props = {
   description?: string;
@@ -27,28 +8,12 @@ type Props = {
 };
 
 const Seo: React.FC<Props> = ({ description, title, children }) => {
-  const { site }: StaticQueryData = useStaticQuery(graphql`
-    query {
-      site {
-        siteMetadata {
-          title
-          description
-          social {
-            name
-            url
-          }
-        }
-      }
-    }
-  `);
+  const { siteTitle, siteDescription, siteSocial } = useSiteMetadata();
 
-  const metaDescription = description || site.siteMetadata?.description;
-  const metaTitle = [title, site.siteMetadata?.title]
-    .filter(Boolean)
-    .join(' | ');
+  const metaDescription = description || siteDescription;
+  const metaTitle = [title, siteTitle].filter(Boolean).join(' | ');
   const twitterHandle =
-    site.siteMetadata?.social?.find(({ name }) => name === 'twitter')?.url ||
-    '';
+    siteSocial?.find(({ name }) => name === 'twitter')?.url || '';
 
   return (
     <>
