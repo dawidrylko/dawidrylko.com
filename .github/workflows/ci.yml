@@ -1,0 +1,36 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches: ['master']
+
+concurrency:
+  group: 'ci'
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        check: ['type-check', 'format-check']
+        node: ['18', '20', '22']
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Check
+        run: npm run ${{ matrix.check }}
