@@ -16,8 +16,8 @@
     "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,md}\""
   },
   "dependencies": {
-    "@fontsource-variable/montserrat": "^5.0.18",
-    "@fontsource/merriweather": "^5.0.12",
+    "@fontsource-variable/montserrat": "^5.0.19",
+    "@fontsource/merriweather": "^5.0.13",
     "@mdx-js/react": "^2.3.0",
     "gatsby": "^5.13.4",
     "gatsby-plugin-canonical-urls": "^5.13.1",
@@ -40,10 +40,10 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@types/node": "^20.11.19",
-    "@types/react": "^18.2.55",
-    "@types/react-dom": "^18.2.19",
-    "typescript": "^5.3.3",
+    "@types/node": "^20.12.7",
+    "@types/react": "^18.2.79",
+    "@types/react-dom": "^18.2.25",
+    "typescript": "^5.4.5",
     "prettier": "^3.2.5"
   }
 }
