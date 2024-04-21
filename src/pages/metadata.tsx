@@ -6,11 +6,7 @@ import { graphql } from 'gatsby';
 import Layout from '../components/layout';
 import ReturnLink from '../components/return-link';
 import Seo from '../components/seo';
-
-type MetadataItem = {
-  key: string;
-  value: string;
-};
+import Table from '../components/table';
 
 type DataType = {
   nonBlogPages: { pageCount: number; pagePaths: string[] };
@@ -21,19 +17,6 @@ type DataType = {
   };
 };
 
-const Table: React.FC<{ data: MetadataItem[] }> = ({ data }) => (
-  <table>
-    <tbody>
-      {data.map((item, index) => (
-        <tr key={index}>
-          <td>{item.key}</td>
-          <td>{item.value}</td>
-        </tr>
-      ))}
-    </tbody>
-  </table>
-);
-
 const createMetadataArray = ({
   nonBlogPages: { pageCount },
   blogPosts: { postCount },
@@ -42,26 +25,20 @@ const createMetadataArray = ({
     siteMetadata: { siteTitle, siteDescription },
   },
 }: DataType) => [
-  { key: 'Title', value: siteTitle },
-  { key: 'Description', value: siteDescription },
-  { key: 'Build time', value: buildTime },
-  { key: 'Pages', value: pageCount.toString() },
-  { key: 'Blog posts', value: postCount.toString() },
+  ['Title', siteTitle],
+  ['Description', siteDescription],
+  ['Build time', buildTime],
+  ['Pages', pageCount.toString()],
+  ['Blog posts', postCount.toString()],
 ];
 
 const createNonBlogPagesArray = ({ nonBlogPages: { pagePaths } }: DataType) =>
-  pagePaths.map((path, index) => ({
-    key: (index + 1).toString(),
-    value: path,
-  }));
+  pagePaths.map((path, index) => [(index + 1).toString(), path]);
 
 const createBlogPostsArray = ({ blogPosts: { postPaths } }: DataType) =>
   postPaths
     .map(({ fields: { slug } }) => slug)
-    .map((path, index) => ({
-      key: (index + 1).toString(),
-      value: path,
-    }));
+    .map((path, index) => [(index + 1).toString(), path]);
 
 const title = 'Metadata 🤖';
 
@@ -69,6 +46,7 @@ const MetadataPage: React.FC<PageProps<DataType>> = ({ data, location }) => {
   return (
     <Layout location={location}>
       <h1>{title}</h1>
+      <h2>Base</h2>
       <Table data={createMetadataArray(data)} />
       <h2>Pages</h2>
       <Table data={createNonBlogPagesArray(data)} />
@@ -84,6 +62,7 @@ export const Head: HeadFC = () => (
   <Seo
     title={title}
     description="Ta strona jest do użytku wewnętrznego. Jeżeli już tu trafiłeś to musisz się bardzo nudzić."
+    noIndex
   />
 );
 
@@ -104,7 +83,7 @@ export const query = graphql`
       pageCount: totalCount
       pagePaths: distinct(field: { path: SELECT })
     }
-    blogPosts: allMdx(sort: { frontmatter: { date: ASC } }) {
+    blogPosts: allMdx(sort: { frontmatter: { date: DESC } }) {
       postCount: totalCount
       postPaths: nodes {
         fields {
