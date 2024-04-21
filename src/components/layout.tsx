@@ -1,15 +1,18 @@
-import React, { ReactNode } from 'react';
+import type { ReactNode } from 'react';
+
+import * as React from 'react';
 import { Link } from 'gatsby';
+import { useSiteMetadata } from '../hooks/use-site-metadata';
 
 type LayoutProps = {
   location: Location;
-  title: string;
   children: ReactNode;
 };
 
 declare const __PATH_PREFIX__: string;
 
-const Layout: React.FC<LayoutProps> = ({ location, title, children }) => {
+const Layout: React.FC<LayoutProps> = ({ location, children }) => {
+  const { siteAuthor } = useSiteMetadata();
   const rootPath = `${__PATH_PREFIX__}/`;
   const isRootPath = location.pathname === rootPath;
   const fakeTitle = '68 97 119 105 100 32 82 121 108 107 111';
@@ -34,7 +37,7 @@ const Layout: React.FC<LayoutProps> = ({ location, title, children }) => {
       <header className="global-header">{header}</header>
       <main>{children}</main>
       <footer>
-        Copyright © {new Date().getFullYear()} {title}
+        Copyright © {new Date().getFullYear()} {siteAuthor.name}
       </footer>
     </div>
   );

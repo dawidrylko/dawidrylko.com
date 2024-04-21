@@ -1,4 +1,8 @@
-.cache
+node_modules/
+.cache/
+public
+src/gatsby-types.d.ts
+
 package.json
 package-lock.json
-public
+tsconfig.json

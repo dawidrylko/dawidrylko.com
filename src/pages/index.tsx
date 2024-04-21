@@ -1,5 +1,7 @@
-import React from 'react';
-import { Link, graphql, PageProps } from 'gatsby';
+import type { PageProps } from 'gatsby';
+
+import * as React from 'react';
+import { Link, graphql } from 'gatsby';
 import { GatsbyImage, getImage } from 'gatsby-plugin-image';
 
 import Bio from '../components/bio';
@@ -25,17 +27,18 @@ type DataProps = {
         };
         featuredImgAlt: string;
       };
+      excerpt: string;
     }[];
   };
 };
 
 const BlogIndex: React.FC<PageProps<DataProps>> = ({ data, location }) => {
-  const { siteTitle, siteAuthor } = useSiteMetadata();
+  const { siteAuthor } = useSiteMetadata();
   const posts = data?.allMdx.nodes;
 
   if (posts.length === 0) {
     return (
-      <Layout location={location} title={siteTitle}>
+      <Layout location={location}>
         <p>Nie znaleziono wpisów.</p>
         <Bio />
       </Layout>
@@ -43,10 +46,11 @@ const BlogIndex: React.FC<PageProps<DataProps>> = ({ data, location }) => {
   }
 
   return (
-    <Layout location={location} title={siteTitle}>
+    <Layout location={location}>
       <ol className="posts">
         {posts.map(post => {
           const title = post.frontmatter.title || post.fields.slug;
+          const description = post.frontmatter.description || post.excerpt;
           const img = getImage(
             post.frontmatter.featuredImg?.childImageSharp?.gatsbyImageData ||
               null,
@@ -79,9 +83,7 @@ const BlogIndex: React.FC<PageProps<DataProps>> = ({ data, location }) => {
                       itemType="https://schema.org/Person"
                     >
                       <Link itemProp="url" to="/bio">
-                        <span itemProp="name">
-                          {siteAuthor?.name}
-                        </span>
+                        <span itemProp="name">{siteAuthor?.name}</span>
                       </Link>
                     </span>
                   </small>
@@ -96,7 +98,7 @@ const BlogIndex: React.FC<PageProps<DataProps>> = ({ data, location }) => {
                   )}
                   <p
                     dangerouslySetInnerHTML={{
-                      __html: post.frontmatter.description || '',
+                      __html: description || '',
                     }}
                     itemProp="description"
                   />
@@ -118,10 +120,7 @@ export const Head = () => <Seo />;
 
 export const query = graphql`
   {
-    allMdx(
-      sort: { frontmatter: { date: DESC } }
-      filter: { frontmatter: { draft: { ne: true }, homePage: { ne: false } } }
-    ) {
+    allMdx(sort: { frontmatter: { date: DESC } }) {
       nodes {
         fields {
           slug
@@ -138,6 +137,7 @@ export const query = graphql`
           }
           featuredImgAlt
         }
+        excerpt
       }
     }
   }

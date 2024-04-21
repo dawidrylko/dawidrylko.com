@@ -1,19 +1,19 @@
-import React, { ReactNode } from 'react';
+import * as React from 'react';
 import { useSiteMetadata } from '../hooks/use-site-metadata';
 
-type Props = {
+type SeoProps = {
   description?: string;
   title?: string;
-  children?: ReactNode;
+  children?: React.ReactNode;
 };
 
-const Seo: React.FC<Props> = ({ description, title, children }) => {
+const Seo: React.FC<SeoProps> = ({ description, title, children }) => {
   const { siteTitle, siteDescription, siteSocial } = useSiteMetadata();
 
   const metaDescription = description || siteDescription;
   const metaTitle = [title, siteTitle].filter(Boolean).join(' | ');
   const twitterHandle =
-    siteSocial?.find(({ name }) => name === 'twitter')?.url || '';
+    siteSocial.find(({ name }) => name === 'twitter')?.url ?? '';
 
   return (
     <>

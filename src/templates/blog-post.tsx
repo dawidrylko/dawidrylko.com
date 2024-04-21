@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { Link, graphql, PageProps } from 'gatsby';
 import { GatsbyImage, getImage, IGatsbyImageData } from 'gatsby-plugin-image';
 
@@ -14,7 +14,7 @@ type PostNode = {
     dateFormatted?: string;
     dateOriginal?: string;
     featuredImg?: {
-      childImageSharp?: {
+      childImageSharp: {
         gatsbyImageData: IGatsbyImageData;
       };
     };
@@ -44,7 +44,7 @@ const BlogPostTemplate: React.FC<PageProps<Data>> = ({
   );
 
   return (
-    <Layout location={location} title={siteTitle}>
+    <Layout location={location}>
       <article
         className="blog-post"
         itemScope
@@ -114,7 +114,7 @@ const BlogPostTemplate: React.FC<PageProps<Data>> = ({
   );
 };
 
-export const Head = function ({ data: { mdx: post } }) {
+export const Head = function ({ data: { mdx: post } }: any) {
   return (
     <Seo
       title={post.frontmatter.title}
