@@ -5,11 +5,7 @@ import { createFilePath } from 'gatsby-source-filesystem';
 
 const blogPost = path.resolve(`./src/templates/blog-post.tsx`);
 
-export const createPages: GatsbyNode['createPages'] = async ({
-  graphql,
-  actions,
-  reporter,
-}: any) => {
+export const createPages: GatsbyNode['createPages'] = async ({ graphql, actions, reporter }: any) => {
   const { createPage } = actions;
   const result = await graphql(`
     query AllMdx {
@@ -28,10 +24,7 @@ export const createPages: GatsbyNode['createPages'] = async ({
   `);
 
   if (result.errors) {
-    reporter.panicOnBuild(
-      `There was an error loading your blog posts`,
-      result.errors,
-    );
+    reporter.panicOnBuild(`There was an error loading your blog posts`, result.errors);
     return;
   }
 
@@ -40,8 +33,7 @@ export const createPages: GatsbyNode['createPages'] = async ({
   if (posts.length > 0) {
     posts.forEach((post, index) => {
       const previousPostId = index === 0 ? null : posts[index - 1].id;
-      const nextPostId =
-        index === posts.length - 1 ? null : posts[index + 1].id;
+      const nextPostId = index === posts.length - 1 ? null : posts[index + 1].id;
 
       createPage({
         path: post.fields.slug,
@@ -56,11 +48,7 @@ export const createPages: GatsbyNode['createPages'] = async ({
   }
 };
 
-export const onCreateNode: GatsbyNode['onCreateNode'] = ({
-  node,
-  actions,
-  getNode,
-}) => {
+export const onCreateNode: GatsbyNode['onCreateNode'] = ({ node, actions, getNode }) => {
   if (node.internal.type !== `Mdx`) {
     return;
   }
@@ -78,9 +66,8 @@ export const onCreateNode: GatsbyNode['onCreateNode'] = ({
 
 // https://www.gatsbyjs.com/docs/reference/graphql-data-layer/schema-customization/
 // https://www.gatsbyjs.com/docs/how-to/local-development/graphql-typegen/
-export const createSchemaCustomization: GatsbyNode['createSchemaCustomization'] =
-  ({ actions }) => {
-    actions.createTypes(`#graphql
+export const createSchemaCustomization: GatsbyNode['createSchemaCustomization'] = ({ actions }) => {
+  actions.createTypes(`#graphql
     type Site {
       siteMetadata: SiteMetadata!
     }
@@ -89,4 +76,4 @@ export const createSchemaCustomization: GatsbyNode['createSchemaCustomization'] 
       title: String!
     }
   `);
-  };
+};

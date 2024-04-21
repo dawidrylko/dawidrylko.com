@@ -51,18 +51,11 @@ const BlogIndex: React.FC<PageProps<DataProps>> = ({ data, location }) => {
         {posts.map(post => {
           const title = post.frontmatter.title || post.fields.slug;
           const description = post.frontmatter.description || post.excerpt;
-          const img = getImage(
-            post.frontmatter.featuredImg?.childImageSharp?.gatsbyImageData ||
-              null,
-          );
+          const img = getImage(post.frontmatter.featuredImg?.childImageSharp?.gatsbyImageData || null);
 
           return (
             <li key={post.fields.slug}>
-              <article
-                className="post-list-item"
-                itemScope
-                itemType="http://schema.org/Article"
-              >
+              <article className="post-list-item" itemScope itemType="http://schema.org/Article">
                 <header>
                   <h2>
                     <Link to={post.fields.slug} itemProp="url">
@@ -70,18 +63,11 @@ const BlogIndex: React.FC<PageProps<DataProps>> = ({ data, location }) => {
                     </Link>
                   </h2>
                   <small>
-                    <span
-                      itemProp="datePublished"
-                      content={post.frontmatter.dateOriginal}
-                    >
+                    <span itemProp="datePublished" content={post.frontmatter.dateOriginal}>
                       {post.frontmatter.dateFormatted}
                     </span>
                     &nbsp;|&nbsp;
-                    <span
-                      itemProp="author"
-                      itemScope
-                      itemType="https://schema.org/Person"
-                    >
+                    <span itemProp="author" itemScope itemType="https://schema.org/Person">
                       <Link itemProp="url" to="/bio">
                         <span itemProp="name">{siteAuthor?.name}</span>
                       </Link>
@@ -89,13 +75,7 @@ const BlogIndex: React.FC<PageProps<DataProps>> = ({ data, location }) => {
                   </small>
                 </header>
                 <section>
-                  {img && (
-                    <GatsbyImage
-                      itemProp="image"
-                      image={img}
-                      alt={post.frontmatter.featuredImgAlt || ''}
-                    />
-                  )}
+                  {img && <GatsbyImage itemProp="image" image={img} alt={post.frontmatter.featuredImgAlt || ''} />}
                   <p
                     dangerouslySetInnerHTML={{
                       __html: description || '',

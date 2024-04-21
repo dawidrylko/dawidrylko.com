@@ -31,53 +31,30 @@ type Data = {
   next: PostNode;
 };
 
-const BlogPostTemplate: React.FC<PageProps<Data>> = ({
-  data,
-  location,
-  children,
-}) => {
+const BlogPostTemplate: React.FC<PageProps<Data>> = ({ data, location, children }) => {
   const { siteTitle, siteAuthor } = useSiteMetadata();
   const { previous, next, mdx: post } = data;
 
-  const img = getImage(
-    post.frontmatter.featuredImg?.childImageSharp?.gatsbyImageData || null,
-  );
+  const img = getImage(post.frontmatter.featuredImg?.childImageSharp?.gatsbyImageData || null);
 
   return (
     <Layout location={location}>
-      <article
-        className="blog-post"
-        itemScope
-        itemType="http://schema.org/Article"
-      >
+      <article className="blog-post" itemScope itemType="http://schema.org/Article">
         <header>
           <h1 itemProp="headline">{post.frontmatter.title}</h1>
           <small>
-            <span
-              itemProp="datePublished"
-              content={post.frontmatter.dateOriginal}
-            >
+            <span itemProp="datePublished" content={post.frontmatter.dateOriginal}>
               {post.frontmatter.dateFormatted}
             </span>
             &nbsp;|&nbsp;
-            <span
-              itemProp="author"
-              itemScope
-              itemType="https://schema.org/Person"
-            >
+            <span itemProp="author" itemScope itemType="https://schema.org/Person">
               <Link itemProp="url" to="/bio">
                 <span itemProp="name">{siteAuthor?.name}</span>
               </Link>
             </span>
           </small>
         </header>
-        {img && (
-          <GatsbyImage
-            itemProp="image"
-            image={img}
-            alt={post.frontmatter.featuredImgAlt || ''}
-          />
-        )}
+        {img && <GatsbyImage itemProp="image" image={img} alt={post.frontmatter.featuredImgAlt || ''} />}
         <section itemProp="articleBody">{children}</section>
         <hr />
         <footer>
@@ -115,22 +92,13 @@ const BlogPostTemplate: React.FC<PageProps<Data>> = ({
 };
 
 export const Head = function ({ data: { mdx: post } }: any) {
-  return (
-    <Seo
-      title={post.frontmatter.title}
-      description={post.frontmatter.description || ''}
-    />
-  );
+  return <Seo title={post.frontmatter.title} description={post.frontmatter.description || ''} />;
 };
 
 export default BlogPostTemplate;
 
 export const blogPageQuery = graphql`
-  query BlogPostBySlug(
-    $id: String!
-    $previousPostId: String
-    $nextPostId: String
-  ) {
+  query BlogPostBySlug($id: String!, $previousPostId: String, $nextPostId: String) {
     mdx(id: { eq: $id }) {
       id
       frontmatter {

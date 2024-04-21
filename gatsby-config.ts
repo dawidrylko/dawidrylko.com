@@ -123,13 +123,10 @@ const config: GatsbyConfig = {
             `,
             serialize: ({ query: { site, posts } }: any) =>
               posts.nodes
-                .sort(
-                  (a: any, b: any) => Date.parse(b.date) - Date.parse(a.date),
-                )
+                .sort((a: any, b: any) => Date.parse(b.date) - Date.parse(a.date))
                 .map((node: any) => {
                   const url = `${site.siteMetadata.siteUrl}${node.fields.slug}`;
-                  const description =
-                    node.frontmatter.description || node.excerpt;
+                  const description = node.frontmatter.description || node.excerpt;
                   const content = `<p>${description}</p><div style='margin-top: 50px; font-style: italic;'><strong><a href='${url}'>Keep reading</a>.</strong></div><br /> <br />`;
                   return {
                     title: node.frontmatter.title,

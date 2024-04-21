@@ -36,9 +36,7 @@ const createNonBlogPagesArray = ({ nonBlogPages: { pagePaths } }: DataType) =>
   pagePaths.map((path, index) => [(index + 1).toString(), path]);
 
 const createBlogPostsArray = ({ blogPosts: { postPaths } }: DataType) =>
-  postPaths
-    .map(({ fields: { slug } }) => slug)
-    .map((path, index) => [(index + 1).toString(), path]);
+  postPaths.map(({ fields: { slug } }) => slug).map((path, index) => [(index + 1).toString(), path]);
 
 const title = 'Metadata 🤖';
 
@@ -77,9 +75,7 @@ export const query = graphql`
       }
       buildTime(formatString: "YYYY-MM-DD HH:mm:ss")
     }
-    nonBlogPages: allSitePage(
-      filter: { component: { regex: "/^(?!.*templates/blog-post).*$/" } }
-    ) {
+    nonBlogPages: allSitePage(filter: { component: { regex: "/^(?!.*templates/blog-post).*$/" } }) {
       pageCount: totalCount
       pagePaths: distinct(field: { path: SELECT })
     }

@@ -13,8 +13,7 @@ const Seo: React.FC<SeoProps> = ({ title, description, noIndex, children }) => {
 
   const metaDescription = description || siteDescription;
   const metaTitle = [title, siteTitle].filter(Boolean).join(' | ');
-  const twitterHandle =
-    siteSocial.find(({ name }) => name === 'twitter')?.url ?? '';
+  const twitterHandle = siteSocial.find(({ name }) => name === 'twitter')?.url ?? '';
 
   return (
     <>
