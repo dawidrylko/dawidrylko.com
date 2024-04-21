@@ -1,4 +1,4 @@
-name: Deploy Gatsby site to Pages
+name: Continuous Deployment
 
 on:
   push:
