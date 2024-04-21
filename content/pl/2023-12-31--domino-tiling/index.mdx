@@ -4,7 +4,7 @@ date: 2023-12-31T02:30:00.000Z
 description: Artykuł przedstawia etapy tworzenia algorytmu w JavaScript, służącego do obliczania liczby możliwych układów płytek domino (pokryć dimerowych) na kwadratowej planszy o wymiarach 2n x 2n. Rozwiązanie (solver) wykorzystuje programowanie dynamiczne oraz rekurencję, działa na typach Integer i BigInt. Przygotowano również narzędzie do testowania oraz benchmark.
 featuredImg: ./domino.jpg
 featuredImgAlt: Płytki domino rozłożone płasko na planszy.
-tags: ['math', 'javascript', 'datascience']
+tags: ["math", "javascript", "datascience"]
 ---
 
 Układanie płytek domino na kwadratowej planszy 2n x 2n nie wydaje się zbyt skomplikowane. Wyliczenie ilości możliwych układów w zależności od wymiaru planszy także nie powinno sprawić kłopotu. Problem pojawia się, gdy potrzebujemy to zrobić w rozsądnym limicie czasu.
@@ -132,7 +132,7 @@ Każdy wiersz odpowiada stanowi wiersza na planszy. Każda kolumna w wierszu odp
 ```javascript
 function createInitialTilingMatrix(rowCount, colCount) {
   return Array.from({ length: rowCount + 1 }, () =>
-    new Array(1 << colCount).fill(0),
+    new Array(1 << colCount).fill(0)
   );
 }
 ```
@@ -177,12 +177,12 @@ Rolę wejścia do programu pełni funkcja `__main__`.
 
 ```javascript
 function __main__() {
-  const argsSchema = { '-r': 'rowCount', '-c': 'colCount' };
+  const argsSchema = { "-r": "rowCount", "-c": "colCount" };
   const options = parseArgs(process.argv.slice(2), argsSchema);
 
   if (!options.rowCount || !options.colCount) {
     console.error(
-      'Usage: node dominoTilingSolver.js -r <rowCount> -c <colCount>',
+      "Usage: node dominoTilingSolver.js -r <rowCount> -c <colCount>"
     );
     process.exit(1);
   }
@@ -218,7 +218,7 @@ node dominoTilingSolver.js -r <rowCount> -c <colCount>
 Kod:
 
 ```javascript
-const { parseArgs } = require('./helpers');
+const { parseArgs } = require("./helpers");
 
 function canSkipTwoBits(colIndex, colCount, currentMask, currentBit, nextBit) {
   return (
@@ -266,7 +266,7 @@ function searchTileArrangements(params) {
 
 function createInitialTilingMatrix(rowCount, colCount) {
   return Array.from({ length: rowCount + 1 }, () =>
-    new Array(1 << colCount).fill(0),
+    new Array(1 << colCount).fill(0)
   );
 }
 
@@ -292,12 +292,12 @@ function calculateTotalTilingCombinations({ rowCount, colCount }) {
 }
 
 function __main__() {
-  const argsSchema = { '-r': 'rowCount', '-c': 'colCount' };
+  const argsSchema = { "-r": "rowCount", "-c": "colCount" };
   const options = parseArgs(process.argv.slice(2), argsSchema);
 
   if (!options.rowCount || !options.colCount) {
     console.error(
-      'Usage: node dominoTilingSolver.js -r <rowCount> -c <colCount>',
+      "Usage: node dominoTilingSolver.js -r <rowCount> -c <colCount>"
     );
     process.exit(1);
   }
@@ -323,7 +323,7 @@ node dominoTilingSolver-BigInt.js -r <rowCount> -c <colCount>
 Kod:
 
 ```javascript
-const { parseArgs } = require('./helpers');
+const { parseArgs } = require("./helpers");
 
 function canSkipTwoBits(colIndex, colCount, currentMask, currentBit, nextBit) {
   return (
@@ -371,7 +371,7 @@ function searchTileArrangements(params) {
 
 function createInitialTilingMatrix(rowCount, colCount) {
   return Array.from({ length: rowCount + 1 }, () =>
-    new Array(1 << colCount).fill(BigInt(0)),
+    new Array(1 << colCount).fill(BigInt(0))
   );
 }
 
@@ -397,12 +397,12 @@ function calculateTotalTilingCombinations({ rowCount, colCount }) {
 }
 
 function __main__() {
-  const argsSchema = { '-r': 'rowCount', '-c': 'colCount' };
+  const argsSchema = { "-r": "rowCount", "-c": "colCount" };
   const options = parseArgs(process.argv.slice(2), argsSchema);
 
   if (!options.rowCount || !options.colCount) {
     console.error(
-      'Usage: node dominoTilingSolver-BigInt.js -r <rowCount> -c <colCount>',
+      "Usage: node dominoTilingSolver-BigInt.js -r <rowCount> -c <colCount>"
     );
     process.exit(1);
   }
@@ -505,31 +505,121 @@ Zapisane wyniki znajdują się w [folderze benchmark](https://github.com/dawidry
 
 #### Benchmark `Integer` - `dominoTilingSolver.js`
 
-| Rozmiar | Średni wynik [ms] | Ilość egzekucji |
-| :-----: | ----------------: | --------------: |
-|   1x2   |            24.942 |            1000 |
-|   2x2   |            25.749 |            1000 |
-|   4x4   |            24.876 |            1000 |
-|   6x6   |            27.603 |            1000 |
-|   8x8   |            35.453 |            1000 |
-|  10x10  |            94.160 |            1000 |
-|  12x12  |           505.818 |            1000 |
+<table>
+  <thead>
+    <tr>
+      <th>Rozmiar</th>
+      <th>Średni wynik [ms]</th>
+      <th>Ilość egzekucji</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1x2</td>
+      <td>24.942</td>
+      <td>1000</td>
+    </tr>
+    <tr>
+      <td>2x2</td>
+      <td>25.749</td>
+      <td>1000</td>
+    </tr>
+    <tr>
+      <td>4x4</td>
+      <td>24.876</td>
+      <td>1000</td>
+    </tr>
+    <tr>
+      <td>6x6</td>
+      <td>27.603</td>
+      <td>1000</td>
+    </tr>
+    <tr>
+      <td>8x8</td>
+      <td>35.453</td>
+      <td>1000</td>
+    </tr>
+    <tr>
+      <td>10x10</td>
+      <td>94.160</td>
+      <td>1000</td>
+    </tr>
+    <tr>
+      <td>12x12</td>
+      <td>505.818</td>
+      <td>1000</td>
+    </tr>
+  </tbody>
+</table>
 
 #### Benchmark `BigInt` - `dominoTilingSolver-BigInt.js`
 
-| Rozmiar | Średni wynik [ms] | Ilość egzekucji |
-| :-----: | ----------------: | --------------: |
-|   1x2   |            28.280 |            1000 |
-|   2x2   |            29.005 |            1000 |
-|   4x4   |            28.594 |            1000 |
-|   6x6   |            31.335 |            1000 |
-|   8x8   |            44.904 |            1000 |
-|  10x10  |           145.033 |            1000 |
-|  12x12  |           833.903 |            1000 |
-|  14x14  |         5,615.200 |              10 |
-|  16x16  |        37,765.400 |              10 |
-|  18x18  |       248,372.000 |               1 |
-|  20x20  |     1,640,246.000 |               1 |
+<table>
+  <thead>
+    <tr>
+      <th>Rozmiar</th>
+      <th>Średni wynik [ms]</th>
+      <th>Ilość egzekucji</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1x2</td>
+      <td>28.280</td>
+      <td>1000</td>
+    </tr>
+    <tr>
+      <td>2x2</td>
+      <td>29.005</td>
+      <td>1000</td>
+    </tr>
+    <tr>
+      <td>4x4</td>
+      <td>28.594</td>
+      <td>1000</td>
+    </tr>
+    <tr>
+      <td>6x6</td>
+      <td>31.335</td>
+      <td>1000</td>
+    </tr>
+    <tr>
+      <td>8x8</td>
+      <td>44.904</td>
+      <td>1000</td>
+    </tr>
+    <tr>
+      <td>10x10</td>
+      <td>145.033</td>
+      <td>1000</td>
+    </tr>
+    <tr>
+      <td>12x12</td>
+      <td>833.903</td>
+      <td>1000</td>
+    </tr>
+    <tr>
+      <td>14x14</td>
+      <td>5,615.200</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <td>16x16</td>
+      <td>37,765.400</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <td>18x18</td>
+      <td>248,372.000</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>20x20</td>
+      <td>1,640,246.000</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
 
 ## Źródła
 
