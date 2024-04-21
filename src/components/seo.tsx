@@ -2,12 +2,13 @@ import * as React from 'react';
 import { useSiteMetadata } from '../hooks/use-site-metadata';
 
 type SeoProps = {
-  description?: string;
   title?: string;
+  description?: string;
+  noIndex?: void | boolean;
   children?: React.ReactNode;
 };
 
-const Seo: React.FC<SeoProps> = ({ description, title, children }) => {
+const Seo: React.FC<SeoProps> = ({ title, description, noIndex, children }) => {
   const { siteTitle, siteDescription, siteSocial } = useSiteMetadata();
 
   const metaDescription = description || siteDescription;
@@ -28,6 +29,8 @@ const Seo: React.FC<SeoProps> = ({ description, title, children }) => {
       <meta name="twitter:creator" content={twitterHandle} />
       <meta name="twitter:title" content={metaTitle} />
       <meta name="twitter:description" content={metaDescription} />
+
+      {noIndex && <meta name="robots" content="noindex, nofollow" />}
 
       {children}
     </>
