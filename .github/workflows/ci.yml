@@ -13,7 +13,8 @@ defaults:
     shell: bash
 
 jobs:
-  checks:
+  check:
+    name: Check
     runs-on: ubuntu-latest
     strategy:
       matrix:
