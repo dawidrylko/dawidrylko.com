@@ -3,7 +3,7 @@ set -o errexit
 set -o nounset
 
 BASE_URL="https://dawidrylko.com"
-STATIC_PAGES=("bio" "metadata")
+STATIC_PAGES=("bio")
 POSTS_DIR="../../../content/posts/"
 TMP_DIR="$(pwd)/tmp"
 TMP_FILE="google.csv"
