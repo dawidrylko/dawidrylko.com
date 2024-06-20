@@ -58,8 +58,9 @@ const MetadataPage: React.FC<PageProps<DataType>> = ({ data, location }) => {
 
 export const Head: HeadFC = () => (
   <Seo
+    lang="en"
     title={title}
-    description="Ta strona jest do użytku wewnętrznego. Jeżeli już tu trafiłeś to musisz się bardzo nudzić."
+    description="This page is for internal use only. If you have found yourself here, you must be very bored."
     noIndex
   />
 );

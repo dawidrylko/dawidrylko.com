@@ -2,7 +2,7 @@
   "name": "dawidrylko.com",
   "description": "My personal website based on React and Gatsby.",
   "private": true,
-  "author": "Dawid Ryłko",
+  "author": "Dawid Ryłko <hello@dawid.dev>",
   "version": "1.0.0",
   "keywords": ["gatsby", "react", "typescript"],
   "scripts": {

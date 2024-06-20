@@ -23,8 +23,8 @@ const Bio: React.FC = () => {
           <br />
           {siteSocial.map(({ name, url }, index) => (
             <React.Fragment key={name}>
-              <a href={url} target="_blank" rel="noreferrer">
-                {name.charAt(0).toUpperCase() + name.slice(1)}
+              <a href={url} target="_blank" rel="noopener noreferrer">
+                {name}
               </a>
               {index < siteSocial.length - 1 && ' | '}
             </React.Fragment>
