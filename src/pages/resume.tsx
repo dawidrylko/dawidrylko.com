@@ -10,7 +10,7 @@ import Bio from '../components/bio';
 import { SITE_METADATA } from '../constants/site-metadata';
 
 const experience = [
-  ['Silesian Solutions', 'Founder', 'Oct 2015 - Present'],
+  ['Silesian Solutions', 'Self-employed', 'Oct 2015 - Present'],
   ['Proget', 'Team Leader, Senior Frontend Developer', 'Oct 2017 - Present'],
   ['Actaware', 'Lead Mobile Developer', 'Mar 2022 - May 2024'],
   ['DaVinci Studio', 'Frontend Developer', 'Dec 2015 - Sep 2017'],
