@@ -38,7 +38,7 @@ const NotFoundPage: React.FC<PageProps> = ({ location }) => {
 };
 
 export const Head: HeadFC = () => (
-  <Seo lang="en" title={title} description="There is nothing interesting on this page, not even a description." />
+  <Seo lang="en" title={title} description="There is nothing interesting on this page, not even a description." noIndex/>
 );
 
 export default NotFoundPage;
