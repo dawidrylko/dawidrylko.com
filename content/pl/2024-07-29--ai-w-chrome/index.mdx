@@ -1,0 +1,152 @@
+---
+title: AI w Chrome
+description: Google wprowadził eksperymentalne funkcje AI w przeglądarkach Chrome dla deweloperów, umożliwiając dostęp do najnowszego wbudowanego modelu językowego Gemini Nano. W artykule przedstawiony zostanie proces instalacji, konfiguracji oraz wykorzystania nowych funkcji AI w Chrome, w tym ustawianie flag oraz korzystanie z API, takich jak `createTextSession`, `prompt`, i `promptStreaming`.
+date: 2024-07-29T12:00:00.000Z
+featuredImg: ./DALL·E - A modern blog page featuring an article about AI in Chrome, viewed from a computer screen perspective.webp
+featuredImgAlt: A modern blog page featuring an article about AI in Chrome, viewed from a computer screen perspective. The screen shows sections with code snippets, images of Chrome browser settings, and developers working on their computers. The header displays the title 'AI w Chrome' and the main content showcases images of Chrome flags settings, API usage, and sample code executions. The design is clean and professional, with a tech-savvy feel and vibrant visuals. Replace the area where the clock is with a wall clock. Remove any Chrome logos from the wall.
+tags: ['javascript', 'ai', 'chrome']
+---
+
+Wychodząc naprzeciw oczekiwaniom użytkowników oraz programistów, Google wprowadził eksperymentalne funkcje AI w przeglądarkach Chrome dla deweloperów (Canary i Dev). Dzięki temu już teraz możemy korzystać z najnowszego wbudowanego w przeglądarkę Gemini Nano. W tym artykule pokrótce przedstawię, jak skorzystać z tych funkcji.
+
+> Aby wyszukiwanie w internecie było łatwiejsze, bezpieczniejsze i bardziej dostępne, wprowadziliśmy do Chrome najnowsze systemy uczące się i technologie AI. Deweloperzy mogą wykorzystać tę technologię, aby zwiększyć komfort korzystania z internetu.
+
+## Instalacja
+
+W celu skorzystania z najnowszych funkcji AI w Chrome, należy pobrać odpowiednią wersję przeglądarki. W momencie pisania tego artykułu funkcje AI są dostępne w wersji nightly dla deweloperów (Canary) oraz w wersji deweloperskiej:
+
+1. [Wersja nightly dla deweloperów (Canary)](https://www.google.com/intl/pl/chrome/canary/)
+   ![Pobieranie wersji Canary](./1.download-chrome-canary.png)
+2. [Google Chrome w wersji deweloperskiej](https://www.google.com/intl/pl/chrome/dev/)
+   ![Pobieranie wersji deweloperskiej](./1.download-chrome-dev.png)
+
+Po instalacji odpowiedniej przeglądarki możemy zauważyć, że funkcje, które nas interesują, są domyślnie wyłączone.
+
+![Okno przeglądarki Chrome bez włączonego AI](./1.window.ai-not-working.png)
+
+## Ustawienia
+
+Aby skorzystać z nowych funkcji AI w Chrome, należy włączyć odpowiednie flagi. W tym celu wpisujemy w pasek adresu przeglądarki `chrome://flags` i klikamy enter. Następnie szukamy odpowiednich flag.
+
+1.  Prompt API for Gemini Nano - **Enable**
+
+    > Enables the exploratory Prompt API, allowing you to send natural language instructions to a built-in large language model (Gemini Nano in Chrome). Exploratory APIs are designed for local prototyping to help discover potential use cases, and may never launch.
+
+    ```
+    chrome://flags/#prompt-api-for-gemini-nano
+    ```
+
+    ![Włączanie flagi Prompt API for Gemini Nano](./2.chrome-flags-prompt-api-for-gemini-nano.png)
+
+2.  Enables optimization guide on device - **Enable BypassPerfRequirement**
+
+    > Enables the optimization guide to execute models on device. – Mac, Windows, Linux, ChromeOS, Lacros
+
+    ```
+    chrome://flags/#optimization-guide-on-device-model
+    ```
+
+    ![Włączanie flagi optimization guide on device](./2.chrome-flags-optimization-guide-on-device-model.png)
+
+**Po ustawieniu flag należy zrestartować przeglądarkę.**
+
+![Komponent Optimization Guide On Device Model](./2.chrome-components-optimization-guide-on-device-model.png)
+
+Następnie przechodzimy do `chrome://components` i sprawdzamy, czy jest zainstalowany `Optimization Guide On Device Model`.
+
+Jeżeli nie pojawił się na liście, należy wyłączyć/włączyć flagi, zrestartować przeglądarkę i powtarzać tę czynność aż do momentu, kiedy komponent się pojawi. Jeżeli czynność się powiodła, możemy zauważyć, że funkcje AI są dostępne.
+
+![Okno przeglądarki Chrome z włączonym AI](./2.window.ai-working.png)
+
+## Praca z `window.ai`
+
+Tworzenie sesji wykonujemy za pomocą komendy `createTextSession`. Możemy również sprawdzić, czy możemy utworzyć sesję za pomocą komendy `canCreateTextSession`.
+
+![Tworzenie sesji AI](./3.window.ai.createTextSession.png)
+
+```javascript
+const session = await window.ai.createTextSession();
+```
+
+Teraz możemy wykorzystać sesję do interakcji z AI. W tym celu możemy wykorzystać komendę `prompt` lub `promptStreaming`.
+
+Przykładowe wywołanie komendy `prompt`:
+
+![Przykładowe wywołanie komendy prompt: Hi! I am Dawid.](./3.session.prompt-test_1.png)
+
+```javascript
+const result = await session.prompt('Hi! I am Dawid.');
+console.log(result);
+```
+
+![Przykładowe wywołanie komendy prompt: Tell me a joke](./3.session.prompt-test_2.png)
+
+```javascript
+await session.prompt('Tell me a joke');
+```
+
+## API
+
+![API w Chrome](./4.window.ai-api.png)
+
+### Window AI API
+
+```javascript
+await window.ai.canCreateTextSession();
+// 'readily'
+```
+
+Ta funkcja sprawdza, czy możliwe jest utworzenie sesji tekstowej AI. Zwraca wartość `'readily'`, jeśli jest to możliwe.
+
+```javascript
+await window.ai.defaultTextSessionOptions();
+// {temperature: 0.800000011920929, topK: 3}
+```
+
+Ta funkcja zwraca domyślne opcje konfiguracji sesji tekstowej AI. Opcje te obejmują parametry takie jak `temperature` i `topK`.
+
+```javascript
+await window.ai.createTextSession(options);
+// AITextSession {}
+```
+
+Ta funkcja tworzy nową sesję tekstową AI z podanymi opcjami. Zwraca obiekt `AITextSession`, który można wykorzystać do dalszej interakcji z AI.
+
+### Session API
+
+![Session API](./4.session-api.png)
+
+```javascript
+await session.prompt('Hi! I am Dawid.');
+// ' Hey Dawid!'
+```
+
+Ta funkcja wysyła komunikat tekstowy do sesji AI i zwraca odpowiedź. W tym przypadku AI odpowiada na przywitanie imieniem.
+
+```javascript
+await session.promptStreaming('Hi! I am Dawid.');
+// ReadableStream {locked: false}
+```
+
+Ta funkcja wysyła komunikat do AI i zwraca odpowiedź w formie strumienia danych. Jest to przydatne do przetwarzania większych ilości tekstu w czasie rzeczywistym.
+
+```javascript
+await session.clone();
+// AITextSession {}
+```
+
+Ta funkcja tworzy kopię istniejącej sesji tekstowej AI. Może być używana do rozpoczęcia nowej sesji z tymi samymi ustawieniami.
+
+```javascript
+await session.destroy();
+// undefined
+```
+
+Ta funkcja kończy sesję tekstową AI i zwalnia zasoby. Po jej wywołaniu sesja nie będzie już dostępna.
+
+## Źródła
+
+- [Artificial Intelligence | Chrome for Developers](https://developer.chrome.com/docs/ai)
+- [Chrome is adding `window.ai` – a Gemini Nano AI model right inside the browser | Hacker News](https://news.ycombinator.com/item?id=40834600)
+- [Google Chrome Canary](https://www.google.com/intl/pl/chrome/canary/)
+- [Google Chrome Dev](https://www.google.com/intl/pl/chrome/dev/)
