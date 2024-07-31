@@ -4,9 +4,9 @@ set -o nounset
 
 BASE_URL="https://dawidrylko.com"
 STATIC_PAGES=("bio")
-POSTS_DIR="../../../content/posts/"
+POSTS_DIR="../../../content/pl/"
 TMP_DIR="$(pwd)/tmp"
-TMP_FILE="bing.json"
+TMP_FILE="$TMP_DIR/bing.json"
 
 start_time=$(date +%s.%3N)
 
@@ -32,9 +32,12 @@ construct_submission_payload() {
   done
 
   if [ -d "$POSTS_DIR" ]; then
-    POSTSS=("$POSTS_DIR"/*/)
-    for ((i=0; i<${#POSTSS[@]}; i++)); do
-      json_content+="\"$BASE_URL${POSTSS[i]:${#POSTS_DIR}}\","
+    POSTS=("$POSTS_DIR"*/)
+    for ((i=0; i<${#POSTS[@]}; i++)); do
+      POST_DIR="${POSTS[i]}"
+      POST_NAME=$(basename "$POST_DIR")
+      POST_SLUG="${POST_NAME:12}"
+      json_content+="\"$BASE_URL/$POST_SLUG/\","
     done
   fi
 

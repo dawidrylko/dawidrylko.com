@@ -4,9 +4,9 @@ set -o nounset
 
 BASE_URL="https://dawidrylko.com"
 STATIC_PAGES=("bio")
-POSTS_DIR="../../../content/posts/"
+POSTS_DIR="../../../content/pl/"
 TMP_DIR="$(pwd)/tmp"
-TMP_FILE="google.csv"
+TMP_FILE="$TMP_DIR/google.csv"
 
 start_time=$(date +%s.%3N)
 
@@ -45,17 +45,20 @@ copy_credentials_file() {
 
 # Construct submission payload
 construct_submission_payload() {
-  echo "\"notification_type\",\"url\"" >> $TMP_FILE
-  echo "\"URL_UPDATED\",\"${BASE_URL}/\"" >> $TMP_FILE
+  echo "\"notification_type\",\"url\"" >> "$TMP_FILE"
+  echo "\"URL_UPDATED\",\"${BASE_URL}/\"" >> "$TMP_FILE"
 
   for page in "${STATIC_PAGES[@]}"; do
-    echo "\"URL_UPDATED\",\"${BASE_URL}/${page}/\"" >> $TMP_FILE
+    echo "\"URL_UPDATED\",\"${BASE_URL}/${page}/\"" >> "$TMP_FILE"
   done
 
   if [ -d "$POSTS_DIR" ]; then
-    POSTS=("$POSTS_DIR"/*/)
+    POSTS=("$POSTS_DIR"*/)
     for ((i=0; i<${#POSTS[@]}; i++)); do
-      echo "\"URL_UPDATED\",\"$BASE_URL${POSTS[i]:${#POSTS_DIR}}\"" >> $TMP_FILE
+      POST_DIR="${POSTS[i]}"
+      POST_NAME=$(basename "$POST_DIR")
+      POST_SLUG="${POST_NAME:12}"
+      echo "\"URL_UPDATED\",\"${BASE_URL}/${POST_SLUG}/\"" >> "$TMP_FILE"
     done
   fi
 
