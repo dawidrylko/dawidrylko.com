@@ -12,20 +12,23 @@ const title = 'Page Not Found';
 const NotFoundPage: React.FC<PageProps> = ({ location }) => {
   return (
     <Layout location={location}>
-      <header>
-        <h1>{title}</h1>
+      <header vocab="http://schema.org" typeof="WebPage">
+        <h1 property="headline">{title}</h1>
       </header>
-      <main>
+      <main property="mainEntity" typeof="CreativeWork">
         <section id="hot-dog">
-          <p>This page is missing because I went out for a hot dog... 🌭</p>
-          <figure style={{ margin: 0 }}>
+          <p property="description">This page is missing because I went out for a hot dog... 🌭</p>
+          <figure vocab="http://schema.org" typeof="ImageObject" style={{ margin: 0 }}>
             <StaticImage
               src="../images/hot-dog.jpg"
               alt="Statue of a smiling hot dog character with arms, legs, and a face, sitting on a rock."
               placeholder="blurred"
               layout="fullWidth"
+              property="image"
             />
-            <figcaption>Photo by Dawid Ryłko. Taken on September 8, 2017, in Crete, Greece.</figcaption>
+            <figcaption property="description">
+              Photo by Dawid Ryłko. Taken on September 8, 2017, in Crete, Greece.
+            </figcaption>
           </figure>
         </section>
       </main>
@@ -38,7 +41,7 @@ const NotFoundPage: React.FC<PageProps> = ({ location }) => {
 };
 
 export const Head: HeadFC = () => (
-  <Seo lang="en" title={title} description="There is nothing interesting on this page, not even a description." noIndex/>
+<Seo lang="en" title={title} description="There is nothing interesting on this page, not even a description." noIndex/>
 );
 
 export default NotFoundPage;
