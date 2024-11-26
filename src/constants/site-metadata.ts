@@ -1,8 +1,8 @@
 export const SITE_METADATA = {
-  lang: 'pl',
+  lang: 'en',
   url: 'https://dawidrylko.com/',
   title: 'Dawid Ryłko',
-  description: 'Dawid Ryłko. Moja osobista strona internetowa i blog. 68 97 119 105 100 32 82 121 108 107 111',
+  description: 'Dawid Ryłko. My personal website and blog. 68 97 119 105 100 32 82 121 108 107 111',
   author: {
     name: 'Dawid Ryłko',
     email: 'hello@dawid.dev',
@@ -24,6 +24,16 @@ export const SITE_METADATA = {
     {
       name: 'Linkedin',
       url: 'https://www.linkedin.com/in/dawidrylko',
+    },
+  ],
+  menu: [
+    {
+      name: 'Blog 🇵🇱',
+      url: '/blog',
+    },
+    {
+      name: 'Bio 🥷',
+      url: '/bio',
     },
   ],
 };

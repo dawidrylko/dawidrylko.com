@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import * as React from 'react';
 import { Link } from 'gatsby';
 import { useSiteMetadata } from '../hooks/use-site-metadata';
+import Menu from './menu';
 
 type LayoutProps = {
   location: Location;
@@ -34,7 +35,10 @@ const Layout: React.FC<LayoutProps> = ({ location, children }) => {
 
   return (
     <div className="global-wrapper" data-is-root-path={isRootPath}>
-      <header className="global-header">{header}</header>
+      <div className="header">
+        <header>{header}</header>
+        <Menu />
+      </div>
       <main>{children}</main>
       <hr />
       {siteUrl && siteAuthor.name && (

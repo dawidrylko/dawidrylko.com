@@ -4,7 +4,6 @@ import * as React from 'react';
 import { graphql } from 'gatsby';
 
 import Layout from '../components/layout';
-import ReturnLink from '../components/return-link';
 import Seo from '../components/seo';
 import Table from '../components/table';
 
@@ -50,8 +49,6 @@ const MetadataPage: React.FC<PageProps<DataType>> = ({ data, location }) => {
       <Table data={createNonBlogPagesArray(data)} />
       <h2>Blog posts</h2>
       <Table data={createBlogPostsArray(data)} />
-      <hr />
-      <ReturnLink />
     </Layout>
   );
 };
@@ -59,9 +56,7 @@ const MetadataPage: React.FC<PageProps<DataType>> = ({ data, location }) => {
 export const Head: HeadFC = () => (
   <Seo
     lang="en"
-    title={title}
     description="This page is for internal use only. If you have found yourself here, you must be very bored."
-    noIndex
   />
 );
 

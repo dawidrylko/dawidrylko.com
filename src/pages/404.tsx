@@ -4,7 +4,6 @@ import * as React from 'react';
 import { StaticImage } from 'gatsby-plugin-image';
 
 import Layout from '../components/layout';
-import ReturnLink from '../components/return-link';
 import Seo from '../components/seo';
 
 const title = 'Page Not Found';
@@ -32,16 +31,12 @@ const NotFoundPage: React.FC<PageProps> = ({ location }) => {
           </figure>
         </section>
       </main>
-      <footer>
-        <hr />
-        <ReturnLink />
-      </footer>
     </Layout>
   );
 };
 
 export const Head: HeadFC = () => (
-<Seo lang="en" title={title} description="There is nothing interesting on this page, not even a description." noIndex/>
+  <Seo title={title} description="There is nothing interesting on this page, not even a description." noIndex />
 );
 
 export default NotFoundPage;

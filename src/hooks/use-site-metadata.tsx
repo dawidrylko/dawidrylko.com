@@ -13,6 +13,10 @@ type SiteMetadata = {
     name: string;
     url: string;
   }[];
+  menu: {
+    name: string;
+    url: string;
+  }[];
 };
 
 export const useSiteMetadata = (): SiteMetadata => {
@@ -29,6 +33,10 @@ export const useSiteMetadata = (): SiteMetadata => {
             jobTitle
           }
           siteSocial {
+            name
+            url
+          }
+          menu {
             name
             url
           }

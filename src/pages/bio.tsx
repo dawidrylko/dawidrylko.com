@@ -5,11 +5,10 @@ import { StaticImage } from 'gatsby-plugin-image';
 
 import Bio from '../components/bio';
 import Layout from '../components/layout';
-import ReturnLink from '../components/return-link';
 import Seo from '../components/seo';
 import { SITE_METADATA } from '../constants/site-metadata';
 
-const title = 'Bio';
+const title = 'Bio 🥷';
 
 const BioPage: React.FC<PageProps> = ({ location }) => {
   return (
@@ -79,17 +78,12 @@ const BioPage: React.FC<PageProps> = ({ location }) => {
           </a>
         </section>
       </main>
-      <footer>
-        <hr />
-        <ReturnLink />
-      </footer>
     </Layout>
   );
 };
 
 export const Head: HeadFC = () => (
   <Seo
-    lang="en"
     title={title}
     description="Everything needs to be invented anew, because days cannot vanish into the past, filled only with landscape, with motionless, unchanging matter that will eventually shake us off its body, shrugging us off like all those minor incidents, those faces, and existences no longer than a single glance."
   />

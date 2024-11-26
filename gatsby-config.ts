@@ -9,6 +9,7 @@ const config: GatsbyConfig = {
     siteDescription: SITE_METADATA.description,
     siteAuthor: SITE_METADATA.author,
     siteSocial: SITE_METADATA.social,
+    menu: SITE_METADATA.menu,
   },
   // More easily incorporate content into your pages through automatic TypeScript type generation and better GraphQL IntelliSense.
   // If you use VSCode you can also use the GraphQL plugin

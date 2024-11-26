@@ -2,7 +2,6 @@ import type { HeadFC, PageProps } from 'gatsby';
 import * as React from 'react';
 
 import Layout from '../components/layout';
-import ReturnLink from '../components/return-link';
 import Seo from '../components/seo';
 import Table from '../components/table';
 import Bio from '../components/bio';
@@ -95,9 +94,18 @@ const ResumePage: React.FC<PageProps> = ({ location }) => {
             For a comprehensive overview of my experience and skills, please download the full version of my CV in PDF
             format.
           </p>
-          <a href="/resume-en.pdf" download="Dawid_Rylko.pdf" title="Download Full CV" property="url">
-            Download CV (PDF)
-          </a>
+          <ul>
+            <li>
+              <a href="/resume-en.pdf" download="Dawid_Rylko.pdf" title="Download Full CV (English)" property="url">
+                Download CV (PDF) in English 🇬🇧
+              </a>
+            </li>
+            <li>
+              <a href="/resume-pl.pdf" download="Dawid_Rylko.pdf" title="Download Full CV (Polish)" property="url">
+                Download CV (PDF) in Polish 🇵🇱
+              </a>
+            </li>
+          </ul>
         </section>
         <section id="contact" typeof="ContactPoint">
           <h2 property="name">Contact</h2>
@@ -107,14 +115,10 @@ const ResumePage: React.FC<PageProps> = ({ location }) => {
           </a>
         </section>
       </main>
-      <footer>
-        <hr />
-        <ReturnLink />
-      </footer>
     </Layout>
   );
 };
 
-export const Head: HeadFC = () => <Seo lang="en" title={title} description="Dawid Ryłko's Résumé" noIndex />;
+export const Head: HeadFC = () => <Seo lang="en" title={title} description="Dawid Ryłko's Résumé" />;
 
 export default ResumePage;
