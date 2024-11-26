@@ -6,30 +6,45 @@ const Bio: React.FC = () => {
   const { siteAuthor, siteSocial } = useSiteMetadata();
 
   return (
-    <div className="bio">
+    <div vocab="http://schema.org" typeof="Person" className="bio">
       <StaticImage
-        className="bio-avatar"
+        className="avatar"
         layout="fixed"
         formats={['auto', 'webp', 'avif']}
         src="../images/avatar.jpeg"
-        width={50}
-        height={50}
+        width={60}
+        height={60}
         quality={95}
         alt="Profile picture"
+        property="image"
       />
       {siteAuthor?.name && (
-        <p>
-          <strong>{siteAuthor.name}</strong>
-          <br />
-          {siteSocial.map(({ name, url }, index) => (
-            <React.Fragment key={name}>
-              <a href={url} target="_blank" rel="noopener noreferrer">
-                {name}
-              </a>
-              {index < siteSocial.length - 1 && ' | '}
-            </React.Fragment>
-          ))}
-        </p>
+        <div>
+          <p property="name" className="name">
+            {siteAuthor.name}
+          </p>
+          {siteAuthor.jobTitle && (
+            <p property="jobTitle" className="job-title">
+              {siteAuthor.jobTitle}
+            </p>
+          )}
+          <ul>
+            {siteAuthor.email && (
+              <li property="contactPoint" typeof="ContactPoint">
+                <a href={`mailto:${siteAuthor.email}`} property="email">
+                  <span property="contactType">Email</span>
+                </a>
+              </li>
+            )}
+            {siteSocial.map(({ name, url }) => (
+              <li key={name}>
+                <a href={url} property="sameAs" target="_blank" rel="noopener noreferrer">
+                  <span property="name">{name}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
       )}
     </div>
   );

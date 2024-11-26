@@ -47,6 +47,8 @@ const BlogIndex: React.FC<PageProps<DataProps>> = ({ data, location }) => {
 
   return (
     <Layout location={location}>
+      <Bio />
+      <hr />
       <ol className="posts">
         {posts.map(post => {
           const title = post.frontmatter.title || post.fields.slug;
@@ -88,8 +90,6 @@ const BlogIndex: React.FC<PageProps<DataProps>> = ({ data, location }) => {
           );
         })}
       </ol>
-      <hr />
-      <Bio />
     </Layout>
   );
 };

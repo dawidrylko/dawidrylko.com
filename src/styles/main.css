@@ -293,19 +293,34 @@ a:focus {
 
 .bio {
   display: flex;
+  align-items: center;
   margin-top: var(--spacing-10);
   margin-bottom: var(--spacing-10);
 }
-
-.bio p {
-  margin-bottom: var(--spacing-0);
-}
-
-.bio-avatar {
+.bio .avatar {
   margin-right: var(--spacing-4);
   margin-bottom: var(--spacing-0);
-  min-width: 50px;
+  min-width: 60px;
   border-radius: 100%;
+}
+.bio .name {
+  font-weight: bold;
+  margin-bottom: var(--spacing-0);
+}
+.bio .job-title {
+  font-size: var(--fontSize-0);
+  margin-bottom: var(--spacing-0);
+}
+.bio ul {
+  font-size: var(--fontSize-0);
+  margin: var(--spacing-0);
+}
+.bio ul li {
+  display: inline;
+}
+.bio ul li:not(:last-child)::after {
+  content: '•';
+  margin: 0 var(--spacing-1);
 }
 
 .blog-post header {

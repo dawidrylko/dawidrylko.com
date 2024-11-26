@@ -6,6 +6,8 @@ type SiteMetadata = {
   siteDescription: string;
   siteAuthor: {
     name: string;
+    email: string;
+    jobTitle: string;
   };
   siteSocial: {
     name: string;
@@ -23,6 +25,8 @@ export const useSiteMetadata = (): SiteMetadata => {
           siteDescription
           siteAuthor {
             name
+            email
+            jobTitle
           }
           siteSocial {
             name

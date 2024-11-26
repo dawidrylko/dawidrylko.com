@@ -6,6 +6,7 @@ export const SITE_METADATA = {
   author: {
     name: 'Dawid Ryłko',
     email: 'hello@dawid.dev',
+    jobTitle: 'Software Engineer | Frontend Architect',
   },
   social: [
     {
