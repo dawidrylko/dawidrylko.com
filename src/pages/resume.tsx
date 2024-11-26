@@ -26,8 +26,8 @@ const title = 'Résumé 📄';
 const ResumePage: React.FC<PageProps> = ({ location }) => {
   return (
     <Layout location={location}>
-      <header>
-        <h1>{title}</h1>
+      <header vocab="http://schema.org" typeof="WebPage">
+        <h1 property="headline">{title}</h1>
         <Bio />
       </header>
       <main vocab="http://schema.org" typeof="Person">
@@ -57,12 +57,21 @@ const ResumePage: React.FC<PageProps> = ({ location }) => {
         </section>
         <section id="experience" typeof="ItemList">
           <h2 property="name">Experience</h2>
-          <Table data={experience} tableSchema="Organization" rowSchema="OrganizationRole" cellSchema="name" />
+          <Table
+            data={experience}
+            header={['Company', 'Position', 'Duration']}
+            widthConfig={['35%', '35%', '30%']}
+            tableSchema="Organization"
+            rowSchema="OrganizationRole"
+            cellSchema="name"
+          />
         </section>
         <section id="education" typeof="EducationalOccupationalProgram">
           <h2 property="name">Education</h2>
           <Table
             data={education}
+            header={['Institution', 'Degree']}
+            widthConfig={['50%', '50%']}
             tableSchema="EducationalOccupationalOccupancy"
             rowSchema="OrganizationRole"
             cellSchema="degree"
