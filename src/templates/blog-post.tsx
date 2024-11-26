@@ -92,7 +92,7 @@ const BlogPostTemplate: React.FC<PageProps<Data>> = ({ data, location, children 
 };
 
 export const Head = function ({ data: { mdx: post } }: any) {
-  return <Seo title={post.frontmatter.title} description={post.frontmatter.description || ''} />;
+  return <Seo lang="pl" title={post.frontmatter.title} description={post.frontmatter.description || ''} />;
 };
 
 export default BlogPostTemplate;

@@ -119,6 +119,6 @@ const ResumePage: React.FC<PageProps> = ({ location }) => {
   );
 };
 
-export const Head: HeadFC = () => <Seo lang="en" title={title} description="Dawid Ryłko's Résumé" />;
+export const Head: HeadFC = () => <Seo title={title} description="Dawid Ryłko's Résumé" />;
 
 export default ResumePage;
