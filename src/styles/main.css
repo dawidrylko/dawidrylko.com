@@ -226,6 +226,7 @@ table td {
 table th {
   background-color: var(--color-primary);
   color: white;
+  text-align: left;
 }
 
 table tr:nth-child(even) {

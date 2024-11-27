@@ -44,11 +44,11 @@ const MetadataPage: React.FC<PageProps<DataType>> = ({ data, location }) => {
     <Layout location={location}>
       <h1>{title}</h1>
       <h2>Base</h2>
-      <Table data={createMetadataArray(data)} />
+      <Table data={createMetadataArray(data)} header={['Property', 'Value']} widthConfig={['30%', '70%']} />
       <h2>Pages</h2>
-      <Table data={createNonBlogPagesArray(data)} />
+      <Table data={createNonBlogPagesArray(data)} header={['#', 'Path']} widthConfig={['10%', '90%']} />
       <h2>Blog posts</h2>
-      <Table data={createBlogPostsArray(data)} />
+      <Table data={createBlogPostsArray(data)} header={['#', 'Path']} widthConfig={['10%', '90%']} />
     </Layout>
   );
 };
