@@ -2,7 +2,6 @@ import * as React from 'react';
 import { Link, graphql, PageProps } from 'gatsby';
 import { GatsbyImage, getImage, IGatsbyImageData } from 'gatsby-plugin-image';
 
-import Bio from '../components/bio';
 import Layout from '../components/layout';
 import Seo from '../components/seo';
 import { useSiteMetadata } from '../hooks/use-site-metadata';
@@ -56,10 +55,6 @@ const BlogPostTemplate: React.FC<PageProps<Data>> = ({ data, location, children 
         </header>
         {img && <GatsbyImage itemProp="image" image={img} alt={post.frontmatter.featuredImgAlt || ''} />}
         <section itemProp="articleBody">{children}</section>
-        <hr />
-        <footer>
-          <Bio />
-        </footer>
       </article>
       <nav className="blog-post-nav">
         <ul

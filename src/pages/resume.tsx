@@ -4,7 +4,6 @@ import * as React from 'react';
 import Layout from '../components/layout';
 import Seo from '../components/seo';
 import Table from '../components/table';
-import Bio from '../components/bio';
 import { SITE_METADATA } from '../constants/site-metadata';
 
 const experience = [
@@ -27,7 +26,6 @@ const ResumePage: React.FC<PageProps> = ({ location }) => {
     <Layout location={location}>
       <header vocab="http://schema.org" typeof="WebPage">
         <h1 property="headline">{title}</h1>
-        <Bio />
       </header>
       <main vocab="http://schema.org" typeof="Person">
         <section id="summary" typeof="CreativeWork">

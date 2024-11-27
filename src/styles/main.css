@@ -256,13 +256,6 @@ a:focus {
   padding: var(--spacing-10) var(--spacing-5);
 }
 
-.main-heading {
-  font-weight: var(--fontWeight-bold);
-  font-family: var(--font-heading);
-  font-size: var(--fontSize-2);
-  margin: 0;
-}
-
 .post-list-item {
   margin-bottom: var(--spacing-8) !important;
   margin-top: var(--spacing-8) !important;
@@ -291,13 +284,6 @@ a:focus {
 .post-list-item section .gatsby-image-wrapper {
   flex: 0 0 150px;
   margin-right: var(--spacing-4);
-}
-
-.header-link-home {
-  font-weight: var(--fontWeight-bold);
-  font-family: var(--font-heading);
-  text-decoration: none;
-  font-size: var(--fontSize-2);
 }
 
 .bio {
@@ -336,6 +322,25 @@ a:focus {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
+  margin-bottom: var(--spacing-12);
+}
+.header-link-home {
+  font-weight: var(--fontWeight-bold);
+  font-family: var(--font-heading);
+  font-size: var(--fontSize-2);
+  text-decoration: none;
+}
+.header-link-home.root {
+  color: var(--color-heading-black);
+  cursor: default;
+}
+.header-link-home h1
+ {
+  font-weight: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  margin: var(--spacing-0);
+  letter-spacing: 0;
 }
 .menu {
   display: flex;

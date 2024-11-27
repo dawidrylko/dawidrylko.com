@@ -15,7 +15,6 @@ const BioPage: React.FC<PageProps> = ({ location }) => {
     <Layout location={location}>
       <header vocab="http://schema.org" typeof="WebPage">
         <h1 property="headline">{title}</h1>
-        <Bio />
       </header>
       <main>
         <section id="personal-intro" property="about">
