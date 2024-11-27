@@ -28,19 +28,19 @@ const BlogIndex: React.FC<PageProps> = ({ location }) => {
             about page
           </a>
           . You can also find me sharing projects and code on{' '}
-          <a href="https://github.com/dawidrylko" property="sameAs">
+          <a href="https://github.com/dawidrylko" property="sameAs" target="_blank" rel="noopener noreferrer">
             GitHub
           </a>
           , discussing ideas on{' '}
-          <a href="https://twitter.com/dawidrylko" property="sameAs">
+          <a href="https://twitter.com/dawidrylko" property="sameAs" target="_blank" rel="noopener noreferrer">
             Twitter
           </a>
           , or connecting professionally on{' '}
-          <a href="https://www.linkedin.com/in/dawidrylko" property="sameAs">
+          <a href="https://www.linkedin.com/in/dawidrylko" property="sameAs" target="_blank" rel="noopener noreferrer">
             LinkedIn
           </a>
           . Explore my{' '}
-          <a href="https://dawid.dev" property="url" typeof="CreativeWork">
+          <a href="https://dawid.dev" property="url" typeof="CreativeWork" target="_blank" rel="noopener noreferrer">
             digital persona
           </a>{' '}
           — a space for experiments and tech insights.
