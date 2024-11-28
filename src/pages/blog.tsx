@@ -1,12 +1,15 @@
 import type { PageProps } from 'gatsby';
 
 import * as React from 'react';
+import { JsonLd } from 'react-schemaorg';
+import { Person, Blog, WithContext } from 'schema-dts';
 import { Link, graphql } from 'gatsby';
 import { GatsbyImage, getImage, StaticImage } from 'gatsby-plugin-image';
 
 import Layout from '../components/layout';
 import Seo from '../components/seo';
 import { useSiteMetadata } from '../hooks/use-site-metadata';
+import { useStructuredData } from '../hooks/use-structured-data';
 
 type DataProps = {
   allMdx: {
@@ -35,6 +38,7 @@ const title = 'Blog 🇵🇱';
 
 const BlogIndex: React.FC<PageProps<DataProps>> = ({ data, location }) => {
   const { siteAuthor } = useSiteMetadata();
+  const { person } = useStructuredData() as { person: WithContext<Person> };
   const posts = data?.allMdx.nodes;
 
   if (posts.length === 0) {
@@ -45,10 +49,40 @@ const BlogIndex: React.FC<PageProps<DataProps>> = ({ data, location }) => {
     );
   }
 
+  const structuredData: WithContext<Blog> = {
+    '@context': 'https://schema.org',
+    '@type': 'Blog',
+    headline: title,
+    author: person,
+    blogPost: posts.map(post => {
+      const img = getImage(post.frontmatter.featuredImg?.childImageSharp?.gatsbyImageData || null);
+
+      return {
+        '@type': 'BlogPosting',
+        headline: post.frontmatter.title,
+        description: post.frontmatter.description || post.excerpt,
+        datePublished: post.frontmatter.dateOriginal,
+        author: {
+          '@type': 'Person',
+          name: siteAuthor?.name,
+        },
+        image: img
+          ? {
+              '@type': 'ImageObject',
+              url: post.frontmatter.featuredImg?.childImageSharp?.gatsbyImageData?.images?.fallback?.src || '',
+              description: post.frontmatter.featuredImgAlt || '',
+            }
+          : undefined,
+        url: `${location.origin}${post.fields.slug}`,
+      };
+    }),
+  };
+
   return (
     <Layout location={location}>
-      <header vocab="http://schema.org" typeof="WebPage">
-        <h1 property="headline">{title}</h1>
+      <JsonLd<Blog> item={structuredData} />
+      <header>
+        <h1>{title}</h1>
       </header>
       <div className="rss">
         <StaticImage src="../images/rss.svg" alt="Ikona RSS" placeholder="blurred" width={20} height={20} />
@@ -64,32 +98,25 @@ const BlogIndex: React.FC<PageProps<DataProps>> = ({ data, location }) => {
 
           return (
             <li key={post.fields.slug}>
-              <article className="post-list-item" itemScope itemType="http://schema.org/Article">
+              <article className="post-list-item">
                 <header>
                   <h2>
-                    <Link to={post.fields.slug} itemProp="url">
-                      <span itemProp="headline">{title}</span>
-                    </Link>
+                    <Link to={post.fields.slug}>{title}</Link>
                   </h2>
                   <small>
-                    <span itemProp="datePublished" content={post.frontmatter.dateOriginal}>
-                      {post.frontmatter.dateFormatted}
-                    </span>
+                    <span>{post.frontmatter.dateFormatted}</span>
                     &nbsp;|&nbsp;
-                    <span itemProp="author" itemScope itemType="https://schema.org/Person">
-                      <Link itemProp="url" to="/bio">
-                        <span itemProp="name">{siteAuthor?.name}</span>
-                      </Link>
+                    <span>
+                      <Link to="/bio">{siteAuthor?.name}</Link>
                     </span>
                   </small>
                 </header>
                 <section>
-                  {img && <GatsbyImage itemProp="image" image={img} alt={post.frontmatter.featuredImgAlt || ''} />}
+                  {img && <GatsbyImage image={img} alt={post.frontmatter.featuredImgAlt || ''} />}
                   <p
                     dangerouslySetInnerHTML={{
                       __html: description || '',
                     }}
-                    itemProp="description"
                   />
                 </section>
               </article>

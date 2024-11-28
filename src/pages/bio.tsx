@@ -1,78 +1,115 @@
-import type { PageProps, HeadFC } from 'gatsby';
-
 import * as React from 'react';
+import { JsonLd } from 'react-schemaorg';
+import { Person, WebPage, WithContext } from 'schema-dts';
+import type { PageProps, HeadFC } from 'gatsby';
 import { StaticImage } from 'gatsby-plugin-image';
 
-import Bio from '../components/bio';
 import Layout from '../components/layout';
 import Seo from '../components/seo';
-import { SITE_METADATA } from '../constants/site-metadata';
+import { useSiteMetadata } from '../hooks/use-site-metadata';
+import { useStructuredData } from '../hooks/use-structured-data';
+import imgSource from '../images/motto.jpg';
 
 const title = 'Bio 🥷';
 
+const citations = [
+  {
+    authorName: 'Andrzej Stasiuk',
+    citation: 'Jadąc do Babadag',
+    text: 'Wszystko trzeba wymyślać od nowa, ponieważ dni nie mogą przepadać w przeszłości, wypełnione jedynie pejzażem, nieruchomą, niezmienną materią, która w końcu strząśnie nas ze swojego cielska, strzepnie jak te wszystkie drobne incydenty, te twarze oraz istnienia nie dłuższe niż jedno spojrzenie.',
+  },
+  {
+    authorName: 'Andrzej Stasiuk',
+    citation: 'On the Road to Babadag',
+    text: 'Everything must be invented anew, because days cannot vanish into the past, filled only with landscapes, the motionless, unchanging matter that will eventually shake us off its body, brush us away like all those small incidents, those faces and existences no longer than a single glance.',
+    extraDetails: [
+      {
+        type: 'translation',
+        url: 'https://chatgpt.com/share/527def35-a739-4d85-9b66-078f677c1abf',
+        note: 'Translated by ChatGPT.',
+      },
+    ],
+  },
+];
+
+const image = {
+  alt: `Graffiti on a utility box featuring a black-and-white image of Charlie Chaplin with the quote: 'A day without laughter is a day wasted'.`,
+  figcaption: `Photo by Dawid Ryłko. Taken on September 7, 2017, in Malia, Greece.`,
+};
+
 const BioPage: React.FC<PageProps> = ({ location }) => {
+  const { person } = useStructuredData() as { person: WithContext<Person> };
+  const { siteUrl, siteAuthor } = useSiteMetadata();
+
+  const structuredData: WithContext<WebPage> = {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    headline: title,
+    about: {
+      '@type': 'CreativeWork',
+      name: 'Favourite Quote',
+      citation: citations.map(({ authorName, citation, text }) => ({
+        '@type': 'Quotation',
+        text,
+        author: {
+          '@type': 'Person',
+          name: authorName,
+        },
+        citation,
+      })),
+    },
+    primaryImageOfPage: {
+      '@type': 'ImageObject',
+      contentUrl: `${siteUrl}${imgSource}`,
+      description: image.figcaption,
+    },
+    mainEntity: person,
+  };
+
   return (
     <Layout location={location}>
-      <header vocab="http://schema.org" typeof="WebPage">
-        <h1 property="headline">{title}</h1>
+      <JsonLd<WebPage> item={structuredData} />
+      <header>
+        <h1>{title}</h1>
       </header>
       <main>
-        <section id="personal-intro" property="about">
+        <section id="personal-intro">
+          <h2>About Me</h2>
           <p>
             Writing about myself? Nah, that's not really my thing 😎. But check out the quote and picture below 📸 -
             they're like my personal motto. They capture me better than I ever could! ✨
           </p>
         </section>
-        <section id="quote" typeof="CreativeWork">
+        <section id="quote">
           <h2>Favourite Quote</h2>
-          <blockquote property="citation">
-            Wszystko trzeba wymyślać od nowa, ponieważ dni nie mogą przepadać w przeszłości, wypełnione jedynie
-            pejzażem, nieruchomą, niezmienną materią, która w końcu strząśnie nas ze swojego cielska, strzepnie jak te
-            wszystkie drobne incydenty, te twarze oraz istnienia nie dłuższe niż jedno spojrzenie.
-            <br />
-            <cite>
-              — Andrzej Stasiuk, <i>Jadąc do Babadag</i>
-            </cite>
-          </blockquote>
-          <blockquote property="citation">
-            Everything must be invented anew, because days cannot vanish into the past, filled only with landscapes, the
-            motionless, unchanging matter that will eventually shake us off its body, brush us away like all those small
-            incidents, those faces and existences no longer than a single glance.
-            <br />
-            <cite>
-              — Andrzej Stasiuk, <i>On the Road to Babadag</i>
-            </cite>
-            <br />
-            <small>
-              <a
-                href="https://chatgpt.com/share/527def35-a739-4d85-9b66-078f677c1abf"
-                target="_blank"
-                rel="noopener noreferrer"
-                property="url"
-              >
-                Translated by ChatGPT.
-              </a>
-            </small>
-          </blockquote>
+          {citations.map(({ authorName, citation, text }, index) => (
+            <blockquote key={index}>
+              {text}
+              <br />
+              <cite>
+                — {authorName}, {citation}
+              </cite>
+              {citations[index].extraDetails?.map(({ type, url, note }) => (
+                <React.Fragment key={type}>
+                  <br />
+                  <small>
+                    <a href={url} target="_blank" rel="noopener noreferrer">
+                      {note}
+                    </a>
+                  </small>
+                </React.Fragment>
+              ))}
+            </blockquote>
+          ))}
         </section>
-        <figure style={{ margin: '0' }} vocab="http://schema.org" typeof="ImageObject">
-          <StaticImage
-            src="../images/motto.jpg"
-            alt="Graffiti on a utility box featuring a black-and-white image of Charlie Chaplin with the quote: 'A day without laughter is a day wasted'."
-            placeholder="blurred"
-            layout="fullWidth"
-            property="image"
-          />
-          <figcaption property="description">
-            Photo by Dawid Ryłko. Taken on September 7, 2017, in Malia, Greece.
-          </figcaption>
+        <figure style={{ margin: '0' }}>
+          <StaticImage src="../images/motto.jpg" alt={image.alt} placeholder="blurred" layout="fullWidth" />
+          <figcaption>{image.figcaption}</figcaption>
         </figure>
-        <section id="contact" typeof="ContactPoint">
+        <section id="contact">
           <h2>Contact</h2>
-          <p property="description">
-            If you have any questions or would like to get in touch, feel free to contact me via email.
-          </p>
-          <a href={`mailto:${SITE_METADATA.author.email}`} property="email" title="Email Me">
+          <p>If you have any questions or would like to get in touch, feel free to contact me via email.</p>
+          <a href={`mailto:${siteAuthor.email}`} title="Email Me">
             Email Me
           </a>
         </section>
@@ -81,11 +118,6 @@ const BioPage: React.FC<PageProps> = ({ location }) => {
   );
 };
 
-export const Head: HeadFC = () => (
-  <Seo
-    title={title}
-    description="Everything needs to be invented anew, because days cannot vanish into the past, filled only with landscape, with motionless, unchanging matter that will eventually shake us off its body, shrugging us off like all those minor incidents, those faces, and existences no longer than a single glance."
-  />
-);
+export const Head: HeadFC = () => <Seo title={title} description={citations[1].text} />;
 
 export default BioPage;

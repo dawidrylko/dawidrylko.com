@@ -4,7 +4,11 @@
   "private": true,
   "author": "Dawid Ryłko <hello@dawid.dev>",
   "version": "1.0.0",
-  "keywords": ["gatsby", "react", "typescript"],
+  "keywords": [
+    "gatsby",
+    "react",
+    "typescript"
+  ],
   "scripts": {
     "develop": "gatsby develop",
     "start": "gatsby develop",
@@ -37,13 +41,15 @@
     "katex": "^0.13.3",
     "prismjs": "^1.29.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-schemaorg": "^2.0.0",
+    "schema-dts": "^1.1.2"
   },
   "devDependencies": {
     "@types/node": "^20.12.7",
     "@types/react": "^18.2.79",
     "@types/react-dom": "^18.2.25",
-    "typescript": "^5.4.5",
-    "prettier": "^3.2.5"
+    "prettier": "^3.2.5",
+    "typescript": "^5.4.5"
   }
 }

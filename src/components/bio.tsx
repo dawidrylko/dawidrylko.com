@@ -1,12 +1,17 @@
 import * as React from 'react';
+import { JsonLd } from 'react-schemaorg';
+import { Person, WithContext } from 'schema-dts';
 import { StaticImage } from 'gatsby-plugin-image';
 import { useSiteMetadata } from '../hooks/use-site-metadata';
+import { useStructuredData } from '../hooks/use-structured-data';
 
 const Bio: React.FC = () => {
   const { siteAuthor, siteSocial } = useSiteMetadata();
+  const { person } = useStructuredData() as { person: WithContext<Person> };
 
   return (
-    <div vocab="http://schema.org" typeof="Person" className="bio">
+    <div className="bio">
+      <JsonLd<Person> item={person} />
       <StaticImage
         className="avatar"
         layout="fixed"
@@ -16,30 +21,21 @@ const Bio: React.FC = () => {
         height={60}
         quality={95}
         alt="Profile picture"
-        property="image"
       />
       {siteAuthor?.name && (
         <div>
-          <p property="name" className="name">
-            {siteAuthor.name}
-          </p>
-          {siteAuthor.jobTitle && (
-            <p property="jobTitle" className="job-title">
-              {siteAuthor.jobTitle}
-            </p>
-          )}
+          <p className="name">{siteAuthor.name}</p>
+          {siteAuthor.jobTitle && <p className="job-title">{siteAuthor.jobTitle}</p>}
           <ul>
             {siteAuthor.email && (
-              <li property="contactPoint" typeof="ContactPoint">
-                <a href={`mailto:${siteAuthor.email}`} property="email">
-                  <span property="contactType">Email</span>
-                </a>
+              <li>
+                <a href={`mailto:${siteAuthor.email}`}>Email</a>
               </li>
             )}
             {siteSocial.map(({ name, url }) => (
               <li key={name}>
-                <a href={url} property="sameAs" target="_blank" rel="noopener noreferrer">
-                  <span property="name">{name}</span>
+                <a href={url} target="_blank" rel="noopener noreferrer">
+                  {name}
                 </a>
               </li>
             ))}
