@@ -5,6 +5,7 @@ import { GatsbyImage, getImage, IGatsbyImageData } from 'gatsby-plugin-image';
 import Layout from '../components/layout';
 import Seo from '../components/seo';
 import { useSiteMetadata } from '../hooks/use-site-metadata';
+import { useStructuredData } from '../hooks/use-structured-data';
 
 type PostNode = {
   frontmatter: {
@@ -31,30 +32,48 @@ type Data = {
 };
 
 const BlogPostTemplate: React.FC<PageProps<Data>> = ({ data, location, children }) => {
-  const { siteTitle, siteAuthor } = useSiteMetadata();
+  const { siteAuthor } = useSiteMetadata();
+  const { person } = useStructuredData();
   const { previous, next, mdx: post } = data;
 
   const img = getImage(post.frontmatter.featuredImg?.childImageSharp?.gatsbyImageData || null);
 
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.frontmatter.title,
+    description: post.frontmatter.description || '',
+    datePublished: post.frontmatter.dateOriginal,
+    author: person,
+    image: img
+      ? {
+          '@type': 'ImageObject',
+          url: post.frontmatter.featuredImg?.childImageSharp?.gatsbyImageData?.images?.fallback?.src || '',
+          description: post.frontmatter.featuredImgAlt || '',
+        }
+      : undefined,
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': location.href,
+    },
+  };
+
   return (
     <Layout location={location}>
-      <article className="blog-post" itemScope itemType="http://schema.org/Article">
+      <script type="application/ld+json">{JSON.stringify(structuredData)}</script>
+      <article className="blog-post">
         <header>
-          <h1 itemProp="headline">{post.frontmatter.title}</h1>
+          <h1>{post.frontmatter.title}</h1>
           <small>
-            <span itemProp="datePublished" content={post.frontmatter.dateOriginal}>
-              {post.frontmatter.dateFormatted}
-            </span>
+            <span>{post.frontmatter.dateFormatted}</span>
             &nbsp;|&nbsp;
-            <span itemProp="author" itemScope itemType="https://schema.org/Person">
-              <Link itemProp="url" to="/bio">
-                <span itemProp="name">{siteAuthor?.name}</span>
-              </Link>
+            <span>
+              <Link to="/bio">{siteAuthor?.name}</Link>
             </span>
           </small>
         </header>
-        {img && <GatsbyImage itemProp="image" image={img} alt={post.frontmatter.featuredImgAlt || ''} />}
-        <section itemProp="articleBody">{children}</section>
+        {img && <GatsbyImage image={img} alt={post.frontmatter.featuredImgAlt || ''} />}
+        <section>{children}</section>
       </article>
       <nav className="blog-post-nav">
         <ul

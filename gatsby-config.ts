@@ -4,7 +4,7 @@ import { SITE_METADATA } from './src/constants/site-metadata';
 
 const config: GatsbyConfig = {
   siteMetadata: {
-    siteUrl: SITE_METADATA.url,
+    siteUrl: `${SITE_METADATA.url}/`,
     siteTitle: SITE_METADATA.title,
     siteDescription: SITE_METADATA.description,
     siteAuthor: SITE_METADATA.author,
@@ -40,7 +40,7 @@ const config: GatsbyConfig = {
     {
       resolve: 'gatsby-plugin-canonical-urls',
       options: {
-        siteUrl: SITE_METADATA.url,
+        siteUrl: `${SITE_METADATA.url}/`,
         stripQueryString: true,
       },
     },
