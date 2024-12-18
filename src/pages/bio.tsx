@@ -8,7 +8,6 @@ import Layout from '../components/layout';
 import Seo from '../components/seo';
 import { useSiteMetadata } from '../hooks/use-site-metadata';
 import { useStructuredData } from '../hooks/use-structured-data';
-import imgSource from '../images/motto.jpg';
 
 const title = 'Bio 🥷';
 
@@ -57,11 +56,6 @@ const BioPage: React.FC<PageProps> = ({ location }) => {
         },
         citation,
       })),
-    },
-    primaryImageOfPage: {
-      '@type': 'ImageObject',
-      contentUrl: `${siteUrl}${imgSource}`,
-      description: image.figcaption,
     },
     mainEntity: person,
   };

@@ -7,7 +7,6 @@ import { StaticImage } from 'gatsby-plugin-image';
 import Layout from '../components/layout';
 import Seo from '../components/seo';
 import { useSiteMetadata } from '../hooks/use-site-metadata';
-import imgSource from '../images/hot-dog.jpg';
 
 const title = 'Page Not Found';
 const description = 'This page is missing because I went out for a hot dog... 🌭';
@@ -27,11 +26,6 @@ const NotFoundPage: React.FC<PageProps> = ({ location }) => {
     mainEntity: {
       '@type': 'CreativeWork',
       description,
-      image: {
-        '@type': 'ImageObject',
-        contentUrl: `${siteUrl}${imgSource}`,
-        description: hotDogImage.caption,
-      },
     },
   };
 

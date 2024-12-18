@@ -6,7 +6,7 @@ type SeoProps = {
   lang?: string;
   title?: string;
   description?: string;
-  noIndex?: void | boolean;
+  noIndex?: boolean;
   children?: React.ReactNode;
 };
 
