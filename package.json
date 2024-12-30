@@ -20,7 +20,7 @@
     "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,md}\""
   },
   "dependencies": {
-    "@fontsource-variable/montserrat": "^5.1.0",
+    "@fontsource-variable/montserrat": "^5.1.1",
     "@fontsource/merriweather": "^5.1.0",
     "@mdx-js/react": "^2.3.0",
     "gatsby": "^5.14.0",
