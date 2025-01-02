@@ -17,7 +17,8 @@
     "clean": "gatsby clean",
     "type:check": "tsc --noEmit",
     "format:write": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
-    "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,md}\""
+    "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,md}\"",
+    "prepare": "husky && husky install"
   },
   "dependencies": {
     "@fontsource-variable/montserrat": "^5.1.1",
@@ -49,7 +50,11 @@
     "@types/node": "^22.10.2",
     "@types/react": "^18.3.1",
     "@types/react-dom": "^18.3.1",
+    "husky": "^9.1.7",
     "prettier": "^3.4.2",
     "typescript": "^5.7.2"
+  },
+  "lint-staged": {
+    "**/*.{js,jsx,ts,tsx,json,md}": "prettier --write"
   }
 }
