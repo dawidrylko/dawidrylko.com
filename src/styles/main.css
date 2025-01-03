@@ -318,6 +318,36 @@ a:focus {
   content: '•';
   margin: 0 var(--spacing-1);
 }
+/* Media queries */
+@media screen and (max-width: 600px) {
+  .bio {
+    align-items: center;
+    flex-direction: column;
+  }
+  .bio .avatar {
+    margin-bottom: var(--spacing-4);
+  }
+  .bio .name {
+    text-align: center;
+  }
+  .bio .job-title {
+    text-align: center;
+  }
+  .bio ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-1);
+    justify-content: center;
+  }
+  .bio ul li {
+    display: inline-flex;
+    margin: 0;
+  }
+  .bio ul li:not(:last-child)::after {
+    content: '';
+    margin: 0 var(--spacing-1);
+  }
+}
 
 .header {
   display: flex;
@@ -357,6 +387,30 @@ a:focus {
 .menu ul li:not(:last-child)::after {
   content: '•';
   margin: 0 var(--spacing-1);
+}
+/* Media queries */
+@media screen and (max-width: 600px) {
+  .header {
+    flex-direction: column;
+    align-items: center;
+  }
+  .menu {
+    margin-top: var(--spacing-2);
+  }
+  .menu ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-1);
+    justify-content: center;
+  }
+  .menu ul li {
+    display: inline-flex;
+    margin: 0;
+  }
+  .menu ul li:not(:last-child)::after {
+    content: '';
+    margin: 0 var(--spacing-1);
+  }
 }
 
 .blog-post header {
