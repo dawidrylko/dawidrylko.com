@@ -20,7 +20,7 @@
     "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,md}\"",
     "lint:fix": "eslint . --fix",
     "lint:check": "eslint .",
-    "prepare": "husky && husky install"
+    "prepare": "husky"
   },
   "dependencies": {
     "@fontsource-variable/montserrat": "^5.1.1",
@@ -64,9 +64,7 @@
     "typescript-eslint": "^8.19.0"
   },
   "lint-staged": {
-    "**/*.{js,jsx,ts,tsx,json,md}": [
-      "prettier --write",
-      "eslint . --fix"
-    ]
+    "**/*.{js,jsx,ts,tsx,json,md}": "prettier --write",
+    "**/*.{js,jsx,ts,tsx}": "eslint . --fix"
   }
 }
