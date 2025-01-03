@@ -20,11 +20,11 @@ const citations = [
   {
     authorName: 'Andrzej Stasiuk',
     citation: 'On the Road to Babadag',
-    text: 'Everything must be invented anew, because days cannot vanish into the past, filled only with landscapes, the motionless, unchanging matter that will eventually shake us off its body, brush us away like all those small incidents, those faces and existences no longer than a single glance.',
+    text: 'Everything must be invented anew, for days cannot vanish into the past, filled only with landscapes, with still, unchanging matter that will eventually shake us off its vast body, brushing us aside like all those fleeting incidents, those faces, those existences no longer than a single glance.',
     extraDetails: [
       {
         type: 'translation',
-        url: 'https://chatgpt.com/share/527def35-a739-4d85-9b66-078f677c1abf',
+        url: 'https://chatgpt.com/share/6777b0af-4574-8009-a644-1be940b1f63d',
         note: 'Translated by ChatGPT.',
       },
     ],
