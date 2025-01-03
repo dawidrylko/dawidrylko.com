@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { GatsbyConfig } from 'gatsby';
 import { GTAG } from './src/constants/gtag';
 import { SITE_METADATA } from './src/constants/site-metadata';

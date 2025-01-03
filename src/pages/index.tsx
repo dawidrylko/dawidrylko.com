@@ -12,8 +12,8 @@ const BlogIndex: React.FC<PageProps> = ({ location }) => {
   return (
     <Layout location={location}>
       <p>
-        Hi there! I'm <strong>Dawid Ryłko</strong>, a Software Engineer and Frontend Architect with a passion for clean
-        code, problem-solving, and sharing knowledge along the way.
+        Hi there! I&apos;m <strong>Dawid Ryłko</strong>, a Software Engineer and Frontend Architect with a passion for
+        clean code, problem-solving, and sharing knowledge along the way.
       </p>
       <p>
         Stay updated with my latest thoughts and ideas on the <a href="/blog">blog</a>. To learn more about my journey
@@ -36,7 +36,7 @@ const BlogIndex: React.FC<PageProps> = ({ location }) => {
         — a space for experiments and tech insights.
       </p>
       <p>
-        If you'd like to collaborate or just say hi, feel free to{' '}
+        If you&apos;d like to collaborate or just say hi, feel free to{' '}
         <a href={`mailto:${siteAuthor?.email}`}>send me an email</a>.
       </p>
     </Layout>

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { GatsbyNode } from 'gatsby';
 
 import path from 'path';

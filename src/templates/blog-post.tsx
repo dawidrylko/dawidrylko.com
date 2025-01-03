@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { Link, graphql, PageProps } from 'gatsby';
+import { Link, graphql, PageProps, HeadProps } from 'gatsby';
 import { GatsbyImage, getImage, IGatsbyImageData } from 'gatsby-plugin-image';
 import { JsonLd } from 'react-schemaorg';
-import { WithContext, WebPage, BlogPosting, Person } from 'schema-dts';
+import { WithContext, BlogPosting, Person } from 'schema-dts';
 
 import Layout from '../components/layout';
 import Seo from '../components/seo';
@@ -107,9 +107,9 @@ const BlogPostTemplate: React.FC<PageProps<Data>> = ({ data, location, children 
   );
 };
 
-export const Head = function ({ data: { mdx: post } }: any) {
-  return <Seo lang="pl" title={post.frontmatter.title} description={post.frontmatter.description || ''} />;
-};
+export const Head: React.FC<HeadProps<Data>> = ({ data: { mdx: post } }) => (
+  <Seo lang="pl" title={post.frontmatter.title} description={post.frontmatter.description || ''} />
+);
 
 export default BlogPostTemplate;
 

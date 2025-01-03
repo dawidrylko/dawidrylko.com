@@ -26,6 +26,7 @@ const title = 'Résumé 📄';
 
 const ResumePage: React.FC<PageProps> = ({ location }) => {
   const { siteAuthor } = useSiteMetadata();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { person } = useStructuredData() as { person: any };
 
   const structuredData: WithContext<WebPage> = {
@@ -73,19 +74,19 @@ const ResumePage: React.FC<PageProps> = ({ location }) => {
         <section id="summary">
           <h2>Summary</h2>
           <p>
-            Hello, I'm <strong>Dawid Ryłko</strong>, an experienced Software Engineer with a comprehensive skill set
-            spanning software architecture, system optimisation, and problem-solving. I specialise in designing robust,
-            scalable solutions and thrive on turning complex challenges into streamlined, efficient systems. My approach
-            blends technical precision with creativity, always aiming to deliver results that meet both business and
-            user needs.
+            Hello, I&apos;m <strong>Dawid Ryłko</strong>, an experienced Software Engineer with a comprehensive skill
+            set spanning software architecture, system optimisation, and problem-solving. I specialise in designing
+            robust, scalable solutions and thrive on turning complex challenges into streamlined, efficient systems. My
+            approach blends technical precision with creativity, always aiming to deliver results that meet both
+            business and user needs.
           </p>
           <p>
-            Beyond technology, I'm passionate about the creative synergy between film, gaming, and cutting-edge
+            Beyond technology, I&apos;m passionate about the creative synergy between film, gaming, and cutting-edge
             software, which often inspires my work.
           </p>
           <p>
             In a fast-evolving tech landscape, I am committed to continuous learning and embracing the latest
-            advancements to stay ahead. Let's connect and explore opportunities to shape the future of technology
+            advancements to stay ahead. Let&apos;s connect and explore opportunities to shape the future of technology
             together!
           </p>
         </section>

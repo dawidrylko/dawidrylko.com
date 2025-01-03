@@ -6,7 +6,6 @@ import { StaticImage } from 'gatsby-plugin-image';
 
 import Layout from '../components/layout';
 import Seo from '../components/seo';
-import { useSiteMetadata } from '../hooks/use-site-metadata';
 
 const title = 'Page Not Found';
 const description = 'This page is missing because I went out for a hot dog... 🌭';
@@ -17,8 +16,6 @@ const hotDogImage = {
 };
 
 const NotFoundPage: React.FC<PageProps> = ({ location }) => {
-  const { siteUrl } = useSiteMetadata();
-
   const structuredData: WithContext<WebPage> = {
     '@context': 'https://schema.org',
     '@type': 'WebPage',

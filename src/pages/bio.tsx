@@ -38,7 +38,7 @@ const image = {
 
 const BioPage: React.FC<PageProps> = ({ location }) => {
   const { person } = useStructuredData() as { person: WithContext<Person> };
-  const { siteUrl, siteAuthor } = useSiteMetadata();
+  const { siteAuthor } = useSiteMetadata();
 
   const structuredData: WithContext<WebPage> = {
     '@context': 'https://schema.org',
@@ -70,8 +70,8 @@ const BioPage: React.FC<PageProps> = ({ location }) => {
         <section id="personal-intro">
           <h2>About Me</h2>
           <p>
-            Writing about myself? Nah, that's not really my thing 😎. But check out the quote and picture below 📸 -
-            they're like my personal motto. They capture me better than I ever could! ✨
+            Writing about myself? Nah, that&apos;s not really my thing 😎. But check out the quote and picture below 📸
+            - they&apos;re like my personal motto. They capture me better than I ever could! ✨
           </p>
         </section>
         <section id="quote">

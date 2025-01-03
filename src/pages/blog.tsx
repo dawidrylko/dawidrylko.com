@@ -4,7 +4,7 @@ import * as React from 'react';
 import { JsonLd } from 'react-schemaorg';
 import { Person, Blog, WithContext } from 'schema-dts';
 import { Link, graphql } from 'gatsby';
-import { GatsbyImage, getImage, StaticImage } from 'gatsby-plugin-image';
+import { GatsbyImage, getImage, IGatsbyImageData, StaticImage } from 'gatsby-plugin-image';
 
 import Layout from '../components/layout';
 import Seo from '../components/seo';
@@ -24,7 +24,7 @@ type DataProps = {
         dateFormatted: string;
         featuredImg: {
           childImageSharp: {
-            gatsbyImageData: any;
+            gatsbyImageData: IGatsbyImageData;
           };
         };
         featuredImgAlt: string;
