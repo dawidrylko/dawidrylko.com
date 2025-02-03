@@ -4,7 +4,7 @@ on:
   pull_request:
 
 concurrency:
-  group: 'ci'
+  group: 'ci-${{ github.event.pull_request.number }}'
   cancel-in-progress: true
 
 defaults:
@@ -18,7 +18,7 @@ jobs:
     strategy:
       matrix:
         check: ['type:check', 'format:check']
-        node: ['18', '20', '22']
+        node: ['20', '22']
 
     steps:
       - name: Checkout
