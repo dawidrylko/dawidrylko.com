@@ -1,12 +1,7 @@
-# To get started with Dependabot version updates, you'll need to specify which
-# package ecosystems to update and where the package manifests are located.
-# Please see the documentation for all configuration options:
-# https://docs.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
-
 version: 2
 updates:
-  - package-ecosystem: 'pnpm' # See documentation for possible values
-    directory: '/' # Location of package manifests
+  - package-ecosystem: 'pnpm'
+    directory: '/'
     schedule:
       interval: 'weekly'
       time: '03:00'
@@ -15,6 +10,16 @@ updates:
       - 'dawidrylko'
     reviewers:
       - 'dawidrylko'
+    groups:
+      lint:
+        dependency-type: 'development'
+        patterns:
+          - '@eslint/*'
+          - 'eslint*'
+      typescript:
+        dependency-type: 'development'
+        patterns:
+          - '@types/*'
     ignore:
       - dependency-name: 'katex'
       - dependency-name: 'react'

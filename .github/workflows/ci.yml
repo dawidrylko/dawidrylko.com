@@ -18,7 +18,7 @@ jobs:
     strategy:
       matrix:
         check: ['type:check', 'format:check']
-        node: ['20', '22']
+        node: ['22']
 
     steps:
       - name: Checkout
