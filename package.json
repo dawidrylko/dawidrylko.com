@@ -66,5 +66,15 @@
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx,json,md}": "prettier --write",
     "**/*.{js,jsx,ts,tsx}": "eslint . --fix"
+  },
+  "pnpm": {
+    "supportedArchitectures": {
+      "libc": [
+        "musl"
+      ]
+    },
+    "overrides": {
+      "sharp": "0.33.3"
+    }
   }
 }
