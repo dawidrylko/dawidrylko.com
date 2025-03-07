@@ -120,6 +120,8 @@ Aby bezpiecznie przechowywać klucz API w repozytorium:
 2. Przejdź do `Secrets and variables > Actions`.
 3. Kliknij `New repository secret` i dodaj sekret, np. `BING_API_KEY`.
    ![Dodanie nowego sekretu w GitHub Actions](./5.Dodanie-nowego-sekretu-w-GitHub-Actions.png)
+4. W polu `Name` wprowadź nazwę sekretu `BING_API_KEY`, a w polu `Secret` wklej skopiowany wcześniej klucz API.
+5. Kliknij `Add secret`, aby zapisać.
 
 ## GitHub Actions
 
@@ -227,6 +229,14 @@ duration=$(echo "scale=0; ($end_time - $start_time) * 1000 / 1" | bc)
 echo "---------------------------------"
 echo "Script completed in $duration milliseconds."
 ```
+
+Po utworzeniu pliku `bing.sh` należy nadać mu uprawnienia wykonywania, używając polecenia:
+
+```bash
+chmod +x .github/scripts/bing.sh
+```
+
+Ten krok jest kluczowy - bez nadania uprawnień wykonywania skrypt nie będzie mógł zostać uruchomiony przez GitHub Actions.
 
 ### `cd.yml`
 

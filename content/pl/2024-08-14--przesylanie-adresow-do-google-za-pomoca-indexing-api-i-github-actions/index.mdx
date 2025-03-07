@@ -156,6 +156,8 @@ Ostatnią kwestią, związaną z konfiguracją, jest dodanie klucza do GitHub Ac
 3. Z menu po lewej stronie wybierz `Secrets and variables`, a następnie `Actions`.
 4. Kliknij `New repository secret` i dodaj nowy sekret.
    ![Add Secret - GitHub](./15.Add_Secret-GitHub.png)
+5. W polu `Name` wprowadź nazwę sekretu (np. `GOOGLE_JSON_KEY_FILE`), a w polu `Secret` wklej całą zawartość pliku JSON z kluczem pobranym wcześniej (w kroku 11). Upewnij się, że wklejasz całą zawartość pliku JSON, łącznie z nawiasami klamrowymi i wszystkimi wartościami.
+6. Kliknij `Add secret`, aby zapisać sekret.
 
 ## GitHub Actions
 
@@ -259,6 +261,14 @@ duration=$(echo "scale=0; ($end_time - $start_time) * 1000 / 1" | bc)
 echo "---------------------------------"
 echo "Script completed in $duration milliseconds."
 ```
+
+Po utworzeniu pliku `google.sh`, należy nadać mu uprawnienia do wykonywania. W przeciwnym razie skrypt nie będzie mógł być uruchomiony:
+
+```bash
+chmod +x .github/scripts/google.sh
+```
+
+Ten krok jest kluczowy, ponieważ bez nadania uprawnień wykonywania, GitHub Actions nie będzie mógł uruchomić skryptu, co spowoduje błąd podczas działania workflow.
 
 ### `cd.yml`
 
