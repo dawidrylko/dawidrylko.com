@@ -12,8 +12,15 @@ const BlogIndex: React.FC<PageProps> = ({ location }) => {
   return (
     <Layout location={location}>
       <p>
-        Hi there! I&apos;m <strong>Dawid Ryłko</strong>, a Software Engineer and Frontend Architect with a passion for
-        clean code, problem-solving, and sharing knowledge along the way.
+        Hi there! I&apos;m <strong>Dawid Ryłko</strong>, a Software Engineer and expert in scalable, secure, and
+        resilient system design. With over a decade of experience in the IT industry, I specialise in crafting{' '}
+        <strong>end-to-end digital solutions</strong> — from intuitive frontend interfaces and high-performance backend
+        services to infrastructure automation, AI integration, and cybersecurity.
+      </p>
+      <p>
+        My mission is to deliver technology that makes sense — reliable, future-proof systems that solve real problems
+        and support long-term business goals. I blend deep technical expertise with strategic thinking to build
+        solutions that are not only robust, but meaningful.
       </p>
       <p>
         Stay updated with my latest thoughts and ideas on the <a href="/blog">blog</a>. To learn more about my journey
@@ -21,7 +28,7 @@ const BlogIndex: React.FC<PageProps> = ({ location }) => {
         <a href="https://github.com/dawidrylko" target="_blank" rel="noopener noreferrer">
           GitHub
         </a>
-        , discussing ideas on{' '}
+        , exchanging ideas on{' '}
         <a href="https://twitter.com/dawidrylko" target="_blank" rel="noopener noreferrer">
           Twitter
         </a>
@@ -33,11 +40,14 @@ const BlogIndex: React.FC<PageProps> = ({ location }) => {
         <a href="https://dawid.dev" target="_blank" rel="noopener noreferrer">
           digital persona
         </a>{' '}
-        — a space for experiments and tech insights.
+        — a space for experimentation and tech insights.
       </p>
       <p>
         If you&apos;d like to collaborate or just say hi, feel free to{' '}
-        <a href={`mailto:${siteAuthor?.email}`}>send me an email</a>.
+        <a href={`mailto:${siteAuthor?.email}`} title="Email me">
+          send me an email
+        </a>
+        .
       </p>
     </Layout>
   );

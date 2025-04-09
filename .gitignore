@@ -5,3 +5,5 @@ src/gatsby-types.d.ts
 
 # Draft
 draft/
+
+.DS_Store

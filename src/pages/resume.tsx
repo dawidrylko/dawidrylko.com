@@ -74,20 +74,15 @@ const ResumePage: React.FC<PageProps> = ({ location }) => {
         <section id="summary">
           <h2>Summary</h2>
           <p>
-            Hello, I&apos;m <strong>Dawid Ryłko</strong>, an experienced Software Engineer with a comprehensive skill
-            set spanning software architecture, system optimisation, and problem-solving. I specialise in designing
-            robust, scalable solutions and thrive on turning complex challenges into streamlined, efficient systems. My
-            approach blends technical precision with creativity, always aiming to deliver results that meet both
-            business and user needs.
+            I&apos;m <strong>Dawid Ryłko</strong> — a Software Engineer and expert in designing scalable, secure, and
+            resilient digital systems. I specialise in delivering <strong>end-to-end solutions</strong> that span
+            intuitive frontend development, backend services, infrastructure automation, AI integration, and
+            cybersecurity.
           </p>
           <p>
-            Beyond technology, I&apos;m passionate about the creative synergy between film, gaming, and cutting-edge
-            software, which often inspires my work.
-          </p>
-          <p>
-            In a fast-evolving tech landscape, I am committed to continuous learning and embracing the latest
-            advancements to stay ahead. Let&apos;s connect and explore opportunities to shape the future of technology
-            together!
+            My work blends deep technical knowledge with strategic thinking to create systems that are robust,
+            future-proof, and aligned with business goals. I focus on long-term value, performance, and maintainability
+            — helping organisations turn complexity into clarity through technology.
           </p>
         </section>
         <section id="experience">
@@ -133,6 +128,11 @@ const ResumePage: React.FC<PageProps> = ({ location }) => {
   );
 };
 
-export const Head: HeadFC = () => <Seo title={title} description="Dawid Ryłko's Résumé" />;
+export const Head: HeadFC = () => (
+  <Seo
+    title={title}
+    description="Experienced Software Engineer specialising in end-to-end digital solutions, system architecture, cybersecurity, and AI. Discover my skills, expertise, and downloadable résumé."
+  />
+);
 
 export default ResumePage;

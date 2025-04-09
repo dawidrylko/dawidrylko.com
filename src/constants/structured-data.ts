@@ -6,20 +6,44 @@ export const STRUCTURED_DATA = {
     '@type': 'Person',
     name: SITE_METADATA.author.name,
     description:
-      'An experienced Software Engineer specializing in robust, scalable solutions. Skilled in software architecture, system optimization, and problem-solving.',
+      'Dawid Ryłko is a Software Engineer with over 10 years of experience, specialising in end-to-end digital solutions. He designs scalable, secure, and resilient systems by combining frontend and backend development with infrastructure automation, AI integration, DevOps, and cybersecurity. Known for his strategic thinking and problem-solving skills, Dawid helps organisations build robust technologies that align with business goals and deliver long-term value.',
+
     url: `${SITE_METADATA.url}/`,
     jobTitle: SITE_METADATA.author.jobTitle,
     knowsAbout: [
-      'problem-solving',
+      // Software Engineering & Architecture
+      'end-to-end digital solutions',
       'software architecture',
+      'system scalability',
+      'resilient systems',
       'system optimization',
-      'cutting-edge software',
-      'clean code',
-      'sharing knowledge',
+
+      // Frontend & Backend Development
       'frontend development',
+      'backend development',
+      'clean code',
+
+      // DevOps & Automation
+      'infrastructure automation',
+      'DevOps',
+
+      // Artificial Intelligence & Emerging Tech
+      'AI integration',
+      'cutting-edge software',
+
+      // Security
+      'cybersecurity',
+
+      // Mindset & Soft Skills
+      'strategic thinking',
+      'problem-solving',
+      'sharing knowledge',
+
+      // Technologies & Programming Languages
       'TypeScript',
       'JavaScript',
       'Python',
+      'Node.js',
     ],
     email: SITE_METADATA.author.email,
     contactPoint: {

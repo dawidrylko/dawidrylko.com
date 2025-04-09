@@ -20,11 +20,11 @@ const citations = [
   {
     authorName: 'Andrzej Stasiuk',
     citation: 'On the Road to Babadag',
-    text: 'Everything must be invented anew, for days cannot vanish into the past, filled only with landscapes, with still, unchanging matter that will eventually shake us off its vast body, brushing us aside like all those fleeting incidents, those faces, those existences no longer than a single glance.',
+    text: 'Everything must be invented anew, because days cannot vanish into the past filled merely with landscape, with motionless, unchanging matter, which will finally shake us off its body, flick us away like all those minor incidents, those faces and existences lasting no longer than a single glance.',
     extraDetails: [
       {
         type: 'translation',
-        url: 'https://chatgpt.com/share/6777b0af-4574-8009-a644-1be940b1f63d',
+        url: 'https://chatgpt.com/share/67f6eeda-2aac-8009-857a-3021f04d73f6',
         note: 'Translated by ChatGPT.',
       },
     ],
@@ -68,10 +68,10 @@ const BioPage: React.FC<PageProps> = ({ location }) => {
       </header>
       <main>
         <section id="personal-intro">
-          <h2>About Me</h2>
           <p>
-            Writing about myself? Nah, that&apos;s not really my thing 😎. But check out the quote and picture below 📸
-            - they&apos;re like my personal motto. They capture me better than I ever could! ✨
+            Instead of repeating what you can already find on my other pages — I&apos;d rather leave you with something
+            more personal. The quote and photo below reflect how I think. Technology isn&apos;t just code. It&apos;s
+            also emotion, intuition, and fleeting moments. 🌍✨
           </p>
         </section>
         <section id="quote">

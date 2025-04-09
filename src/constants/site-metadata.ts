@@ -7,7 +7,7 @@ export const SITE_METADATA = {
   author: {
     name: 'Dawid Ryłko',
     email: 'hello@dawid.dev',
-    jobTitle: 'Software Engineer',
+    jobTitle: 'Software Engineer | Expert in Designing Scalable, Secure and Resilient Systems',
   },
   social: [
     {
@@ -35,6 +35,10 @@ export const SITE_METADATA = {
     {
       name: 'Bio 🥷',
       url: '/bio',
+    },
+    {
+      name: 'Contact 📬',
+      url: '/contact',
     },
   ],
 };
