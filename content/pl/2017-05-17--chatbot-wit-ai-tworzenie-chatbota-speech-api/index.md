@@ -112,5 +112,4 @@ Po implementacji i deployu na Heroku, możemy sprawdzić, jak się zachowuje apl
 
 - [wit-ai/microphone](https://github.com/wit-ai/microphone) - dedykowana biblioteka obsługująca mikrofon w przeglądarce. Oparta na WebRTC i WebSockets.
 - [wit.ai/docs/quickstart](https://wit.ai/docs/quickstart) - szybki start z Wit.ai
-- ~~spy-chatbot.herokuapp.com - aplikacja wykonana w tym wpisie~~
 - [github.com/dawidrylko/spy-web](https://github.com/dawidrylko/spy-web) - kod źródłowy

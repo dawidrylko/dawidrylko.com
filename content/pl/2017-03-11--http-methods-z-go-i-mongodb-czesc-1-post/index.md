@@ -55,8 +55,6 @@ Endpoint działa poprawnie, co prezentuje screen z Postmana zamieszczony poniże
 
 ![Postman - POST method - HTTP](./Zrzut-ekranu-2017-03-11-o-10.05.51.png)
 
-Super, że aktualizujesz swój artykuł, to zawsze świetny sposób na utrzymanie jego wartości dla czytelników. Możesz dodać dopisek mniej więcej w ten sposób:
-
 ---
 
 #### Aktualizacja 21 grudnia 2023
