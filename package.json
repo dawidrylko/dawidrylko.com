@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "@fontsource-variable/montserrat": "^5.2.5",
-    "@fontsource/merriweather": "^5.2.7",
+    "@fontsource/merriweather": "^5.2.9",
     "@mdx-js/react": "^3.1.0",
     "gatsby": "^5.14.3",
     "gatsby-plugin-canonical-urls": "^5.14.0",
