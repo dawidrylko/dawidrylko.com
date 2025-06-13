@@ -27,7 +27,7 @@ const NotFoundPage: React.FC<PageProps> = ({ location }) => {
   };
 
   return (
-    <Layout location={location}>
+    <Layout location={location} breadcrumbTitle={title}>
       <JsonLd<WebPage> item={structuredData} />
       <header>
         <h1>{title}</h1>

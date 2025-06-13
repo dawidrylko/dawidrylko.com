@@ -61,7 +61,7 @@ const BlogPostTemplate: React.FC<PageProps<Data>> = ({ data, location, children 
   };
 
   return (
-    <Layout location={location}>
+    <Layout location={location} breadcrumbTitle={post.frontmatter.title}>
       <JsonLd<BlogPosting> item={structuredData} />
       <article className="blog-post">
         <header>

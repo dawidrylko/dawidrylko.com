@@ -41,7 +41,7 @@ const title = 'Metadata 🤖';
 
 const MetadataPage: React.FC<PageProps<DataType>> = ({ data, location }) => {
   return (
-    <Layout location={location}>
+    <Layout location={location} breadcrumbTitle={title}>
       <h1>{title}</h1>
       <h2>Base</h2>
       <Table data={createMetadataArray(data)} header={['Property', 'Value']} widthConfig={['30%', '70%']} />

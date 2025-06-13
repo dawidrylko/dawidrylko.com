@@ -43,7 +43,7 @@ const BlogIndex: React.FC<PageProps<DataProps>> = ({ data, location }) => {
 
   if (posts.length === 0) {
     return (
-      <Layout location={location}>
+      <Layout location={location} breadcrumbTitle={title}>
         <p>Nie znaleziono wpisów.</p>
       </Layout>
     );
@@ -79,7 +79,7 @@ const BlogIndex: React.FC<PageProps<DataProps>> = ({ data, location }) => {
   };
 
   return (
-    <Layout location={location}>
+    <Layout location={location} breadcrumbTitle={title}>
       <JsonLd<Blog> item={structuredData} />
       <header>
         <h1>{title}</h1>

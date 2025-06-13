@@ -5,15 +5,17 @@ import { Link } from 'gatsby';
 import { useSiteMetadata } from '../hooks/use-site-metadata';
 import Bio from './bio';
 import Menu from './menu';
+import Breadcrumbs from './breadcrumbs';
 
 type LayoutProps = {
   location: Location;
   children: ReactNode;
+  breadcrumbTitle: string;
 };
 
 declare const __PATH_PREFIX__: string;
 
-const Layout: React.FC<LayoutProps> = ({ location, children }) => {
+const Layout: React.FC<LayoutProps> = ({ location, children, breadcrumbTitle }) => {
   const { siteUrl, siteAuthor } = useSiteMetadata();
   const rootPath = `${__PATH_PREFIX__}/`;
   const isRootPath = location.pathname === rootPath;
@@ -29,6 +31,7 @@ const Layout: React.FC<LayoutProps> = ({ location, children }) => {
         </header>
         <Menu />
       </div>
+      <Breadcrumbs location={location} customTitle={breadcrumbTitle} />
       <main>{children}</main>
       <hr />
       <Bio />

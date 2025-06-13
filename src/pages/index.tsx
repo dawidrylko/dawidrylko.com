@@ -10,7 +10,7 @@ const BlogIndex: React.FC<PageProps> = ({ location }) => {
   const { siteAuthor } = useSiteMetadata();
 
   return (
-    <Layout location={location}>
+    <Layout location={location} breadcrumbTitle="Home">
       <p>
         Hi there! I&apos;m <strong>Dawid Ryłko</strong>, a Software Engineer and expert in scalable, secure, and
         resilient system design. With over a decade of experience in the IT industry, I specialise in crafting{' '}
