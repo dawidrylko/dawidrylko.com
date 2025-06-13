@@ -10,13 +10,22 @@ export const STRUCTURED_DATA = {
 
     url: `${SITE_METADATA.url}/`,
     jobTitle: SITE_METADATA.author.jobTitle,
-    worksFor: {
-      '@type': 'Organization',
-      name: 'Silesian Solutions',
-      url: 'https://silesiansolutions.com/',
-      description:
-        'Software development & consulting company delivering scalable, secure and resilient digital solutions tailored to business needs.',
-    },
+    worksFor: [
+      {
+        '@type': 'Organization',
+        name: 'Silesian Solutions',
+        url: 'https://silesiansolutions.com/',
+        description:
+          'Software development & consulting company delivering scalable, secure and resilient digital solutions tailored to business needs.',
+      },
+      {
+        '@type': 'Organization',
+        name: 'Cyber Katalog',
+        url: 'https://cyberkatalog.pl/',
+        description:
+          'CyberKatalog.pl is a curated Polish directory of cybersecurity companies, promoting digital safety, privacy, and open knowledge. Dawid plays a professional role in enhancing the platform—leading feature development, performance optimization, and content quality—to elevate standards and visibility within Poland’s cybersecurity sector.',
+      },
+    ],
     knowsAbout: [
       // Software Engineering & Architecture
       'end-to-end digital solutions',
