@@ -70,8 +70,8 @@ const BioPage: React.FC<PageProps> = ({ location }) => {
         <section id="personal-intro">
           <p>
             Instead of repeating what you can already find on my other pages — I&apos;d rather leave you with something
-            more personal. The quote and photo below reflect how I think. Technology isn&apos;t just code. It&apos;s
-            also emotion, intuition, and fleeting moments. 🌍✨
+            more personal. The quote and photo below reflect how I&nbsp;think. Technology isn&apos;t just code.
+            It&apos;s also emotion, intuition, and fleeting moments. 🌍✨
           </p>
         </section>
         <section id="quote">

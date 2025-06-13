@@ -15,7 +15,7 @@ const BlogIndex: React.FC<PageProps> = ({ location }) => {
         <p>
           Hi there! I&apos;m <strong>Dawid Ryłko</strong>, a <strong>Software Engineer</strong> and expert in{' '}
           <strong>scalable, secure, and resilient system design</strong>. With <time>over a decade of experience</time>{' '}
-          in the <strong>IT industry</strong>, I specialise in crafting{' '}
+          in the <strong>IT industry</strong>, I&nbsp;specialise in crafting{' '}
           <a href="https://silesiansolutions.com/" target="_blank" rel="noopener noreferrer">
             <strong>end-to-end digital solutions</strong>
           </a>{' '}
@@ -29,7 +29,7 @@ const BlogIndex: React.FC<PageProps> = ({ location }) => {
         <p>
           My mission is to deliver <strong>technology that makes sense</strong> — reliable,{' '}
           <strong>future-proof systems</strong> that solve real problems and support long-term{' '}
-          <strong>business goals</strong>. I blend deep <strong>technical expertise</strong> with{' '}
+          <strong>business goals</strong>. I&nbsp;blend deep <strong>technical expertise</strong> with{' '}
           <strong>strategic thinking</strong> to build solutions that are not only <strong>robust</strong>, but{' '}
           <strong>meaningful</strong>.
         </p>{' '}

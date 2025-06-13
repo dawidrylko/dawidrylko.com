@@ -75,14 +75,14 @@ const ResumePage: React.FC<PageProps> = ({ location }) => {
           <h2>Summary</h2>
           <p>
             I&apos;m <strong>Dawid Ryłko</strong> — a Software Engineer and expert in designing scalable, secure, and
-            resilient digital systems. I specialise in delivering <strong>end-to-end solutions</strong> that span
+            resilient digital systems. I&nbsp;specialise in delivering <strong>end-to-end solutions</strong> that span
             intuitive frontend development, backend services, infrastructure automation, AI integration, and
             cybersecurity.
           </p>
           <p>
             My work blends deep technical knowledge with strategic thinking to create systems that are robust,
-            future-proof, and aligned with business goals. I focus on long-term value, performance, and maintainability
-            — helping organisations turn complexity into clarity through technology.
+            future-proof, and aligned with business goals. I&nbsp;focus on long-term value, performance, and
+            maintainability — helping organisations turn complexity into clarity through technology.
           </p>
         </section>
         <section id="experience">

@@ -34,16 +34,18 @@ const ContactPage: React.FC<PageProps> = ({ location }) => {
           that involve thoughtful tech and long-term vision.
         </p>
         <p>
-          I work across the full stack — from sleek frontends and robust backend systems to infrastructure automation,
-          AI-powered features and cybersecurity. I care deeply about building software that&apos;s scalable, secure and
-          designed to last.
+          I&nbsp;work across the full stack — from sleek frontends and robust backend systems to infrastructure
+          automation, AI-powered features and cybersecurity. I&nbsp;care deeply about building software that&apos;s
+          scalable, secure and designed to last.
         </p>
         <p>
           My work often focuses on system architecture, developer experience and performance optimisation. Whether
-          you&apos;re starting from scratch or improving an existing system, I bring a pragmatic, strategic approach to
-          every project.
+          you&apos;re starting from scratch or improving an existing system, I&nbsp;bring a pragmatic, strategic
+          approach to every project.
         </p>
-        <p>If that sounds like what you need — drop me a line. I usually reply within 24 hours on business days.</p>
+        <p>
+          If that sounds like what you need — drop me a line. I&nbsp;usually reply within 24 hours on business days.
+        </p>
 
         <p>
           The best way to reach me is via email:&nbsp;
