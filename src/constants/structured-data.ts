@@ -10,6 +10,13 @@ export const STRUCTURED_DATA = {
 
     url: `${SITE_METADATA.url}/`,
     jobTitle: SITE_METADATA.author.jobTitle,
+    worksFor: {
+      '@type': 'Organization',
+      name: 'Silesian Solutions',
+      url: 'https://silesiansolutions.com/',
+      description:
+        'Software development & consulting company delivering scalable, secure and resilient digital solutions tailored to business needs.',
+    },
     knowsAbout: [
       // Software Engineering & Architecture
       'end-to-end digital solutions',

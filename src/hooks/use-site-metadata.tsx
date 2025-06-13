@@ -12,6 +12,7 @@ type SiteMetadata = {
   siteSocial: {
     name: string;
     url: string;
+    follow: boolean;
   }[];
   menu: {
     name: string;
@@ -35,6 +36,7 @@ export const useSiteMetadata = (): SiteMetadata => {
           siteSocial {
             name
             url
+            follow
           }
           menu {
             name

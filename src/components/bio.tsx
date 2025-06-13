@@ -32,9 +32,9 @@ const Bio: React.FC = () => {
                 <a href={`mailto:${siteAuthor.email}`}>Email</a>
               </li>
             )}
-            {siteSocial.map(({ name, url }) => (
+            {siteSocial.map(({ name, url, follow }) => (
               <li key={name}>
-                <a href={url} target="_blank" rel="noopener noreferrer">
+                <a href={url} target="_blank" rel={follow ? 'noopener noreferrer' : 'noopener noreferrer nofollow'}>
                   {name}
                 </a>
               </li>

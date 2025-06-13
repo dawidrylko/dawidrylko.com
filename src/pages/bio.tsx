@@ -87,7 +87,7 @@ const BioPage: React.FC<PageProps> = ({ location }) => {
                 <React.Fragment key={type}>
                   <br />
                   <small>
-                    <a href={url} target="_blank" rel="noopener noreferrer">
+                    <a href={url} target="_blank" rel="noopener noreferrer nofollow">
                       {note}
                     </a>
                   </small>

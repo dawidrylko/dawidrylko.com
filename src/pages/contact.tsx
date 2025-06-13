@@ -11,7 +11,7 @@ import { useStructuredData } from '../hooks/use-structured-data';
 const title = 'Contact 📬';
 
 const ContactPage: React.FC<PageProps> = ({ location }) => {
-  const { siteAuthor } = useSiteMetadata();
+  const { siteAuthor, siteSocial } = useSiteMetadata();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { person } = useStructuredData() as { person: any };
 
@@ -53,21 +53,15 @@ const ContactPage: React.FC<PageProps> = ({ location }) => {
         </p>
         <p>You can also connect with me here:</p>
         <ul>
-          <li>
-            <a href="https://github.com/dawidrylko" target="_blank" rel="noopener noreferrer">
-              GitHub
-            </a>
-          </li>
-          <li>
-            <a href="https://twitter.com/dawidrylko" target="_blank" rel="noopener noreferrer">
-              Twitter
-            </a>
-          </li>
-          <li>
-            <a href="https://www.linkedin.com/in/dawidrylko" target="_blank" rel="noopener noreferrer">
-              LinkedIn
-            </a>
-          </li>
+          {siteSocial
+            .filter(({ name }) => ['GitHub', 'Twitter', 'Linkedin'].includes(name))
+            .map(({ name, url, follow }) => (
+              <li key={name}>
+                <a href={url} target="_blank" rel={follow ? 'noopener noreferrer' : 'noopener noreferrer nofollow'}>
+                  {name}
+                </a>
+              </li>
+            ))}
         </ul>
         <p>I typically reply within 24 hours on business days. Let&apos;s build something meaningful together.</p>
       </main>

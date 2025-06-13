@@ -3,7 +3,6 @@ import type { GatsbyNode } from 'gatsby';
 
 import path from 'path';
 import { createFilePath } from 'gatsby-source-filesystem';
-import { STRUCTURED_DATA } from './src/constants/structured-data';
 
 const blogPost = path.resolve(`./src/templates/blog-post.tsx`);
 
@@ -77,24 +76,5 @@ export const createSchemaCustomization: GatsbyNode['createSchemaCustomization'] 
     type SiteMetadata {
       title: String!
     }
-
-    type StructuredDataNode implements Node {
-      structuredData: JSON
-    }
   `);
-};
-
-export const sourceNodes: GatsbyNode['sourceNodes'] = ({ actions, createContentDigest }) => {
-  const { createNode } = actions;
-
-  createNode({
-    id: 'structured-data-node',
-    parent: null,
-    children: [],
-    internal: {
-      type: 'StructuredDataNode',
-      contentDigest: createContentDigest(STRUCTURED_DATA),
-    },
-    structuredData: STRUCTURED_DATA,
-  });
 };
