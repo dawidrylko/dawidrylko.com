@@ -11,10 +11,10 @@ type SeoProps = {
 };
 
 const Seo: React.FC<SeoProps> = ({ lang, title, description, noIndex, children }) => {
-  const { siteTitle, siteDescription, siteSocial } = useSiteMetadata();
+  const { siteTitle, siteDescription, siteSocial, siteAuthor } = useSiteMetadata();
 
   const metaDescription = description || siteDescription;
-  const metaTitle = [title, siteTitle].filter(Boolean).join(' | ');
+  const metaTitle = title ? `${title} | ${siteTitle}` : `${siteTitle} | ${siteAuthor.jobTitle}`;
   const twitterHandle = siteSocial.find(({ name }) => name === 'Twitter')?.url ?? '';
 
   return (

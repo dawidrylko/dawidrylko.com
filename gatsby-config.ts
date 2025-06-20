@@ -6,7 +6,7 @@ import { SITE_METADATA } from './src/constants/site-metadata';
 const config: GatsbyConfig = {
   siteMetadata: {
     siteUrl: `${SITE_METADATA.url}/`,
-    siteTitle: `${SITE_METADATA.title} | ${SITE_METADATA.author.jobTitle}`,
+    siteTitle: SITE_METADATA.title,
     siteDescription: SITE_METADATA.description,
     siteAuthor: SITE_METADATA.author,
     siteSocial: SITE_METADATA.social,
