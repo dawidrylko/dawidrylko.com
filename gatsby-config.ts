@@ -7,7 +7,7 @@ const config: GatsbyConfig = {
   siteMetadata: {
     siteUrl: `${SITE_METADATA.url}/`,
     siteTitle: SITE_METADATA.title,
-    siteDescription: SITE_METADATA.description,
+    siteDescription: SITE_METADATA.description.en,
     siteAuthor: SITE_METADATA.author,
     siteSocial: SITE_METADATA.social,
     menu: SITE_METADATA.menu,
@@ -117,33 +117,103 @@ const config: GatsbyConfig = {
                       title
                       description
                       date
+                      tags
+                      featuredImg {
+                        childImageSharp {
+                          gatsbyImageData(width: 1200, height: 630)
+                        }
+                      }
                     }
                     excerpt
                   }
                 }
               }
             `,
-            serialize: ({ query: { site, posts } }: any) =>
-              posts.nodes
-                .sort((a: any, b: any) => Date.parse(b.date) - Date.parse(a.date))
-                .map((node: any) => {
-                  const url = `${site.siteMetadata.siteUrl}${node.fields.slug}`;
-                  const description = node.frontmatter.description || node.excerpt;
-                  const content = `<p>${description}</p><div style='margin-top: 50px; font-style: italic;'><strong><a href='${url}'>Keep reading</a>.</strong></div><br /> <br />`;
-                  return {
-                    title: node.frontmatter.title,
-                    description,
-                    url,
-                    guid: url,
-                    author: SITE_METADATA.author,
-                    date: node.frontmatter.date,
-                    custom_elements: [{ 'content:encoded': content }],
-                  };
-                }),
+            serialize: ({ query: { site, posts } }: any) => {
+              const getImageMimeType = (src: string): string => {
+                const extension = src.split('.').pop()?.toLowerCase();
+                switch (extension) {
+                  case 'jpg':
+                  case 'jpeg':
+                    return 'image/jpeg';
+                  case 'png':
+                    return 'image/png';
+                  case 'webp':
+                    return 'image/webp';
+                  case 'gif':
+                    return 'image/gif';
+                  default:
+                    return 'image/jpeg';
+                }
+              };
+
+              return posts.nodes.map((node: any) => {
+                const url = `${site.siteMetadata.siteUrl}${node.fields.slug}`;
+                const description = node.frontmatter.description || node.excerpt;
+                const content = `<p>${description}</p><div style='margin-top: 50px; font-style: italic;'><strong><a href='${url}'>Czytaj dalej</a>.</strong></div><br /> <br />`;
+                const categories = node.frontmatter.tags || [];
+                const enclosure = node.frontmatter.featuredImg?.childImageSharp?.gatsbyImageData
+                  ? {
+                      url: `${site.siteMetadata.siteUrl}${node.frontmatter.featuredImg.childImageSharp.gatsbyImageData.images.fallback.src}`,
+                      type: getImageMimeType(
+                        node.frontmatter.featuredImg.childImageSharp.gatsbyImageData.images.fallback.src,
+                      ),
+                      length: '0',
+                    }
+                  : void 0;
+
+                const rssItem: any = {
+                  title: node.frontmatter.title,
+                  description,
+                  url,
+                  guid: url,
+                  author: `${SITE_METADATA.author.email} (${SITE_METADATA.author.name})`,
+                  date: node.frontmatter.date,
+                  custom_elements: [{ 'content:encoded': content }],
+                };
+
+                if (categories.length > 0) {
+                  rssItem.categories = categories;
+                }
+
+                if (enclosure) {
+                  rssItem.enclosure = enclosure;
+                }
+
+                return rssItem;
+              });
+            },
             output: '/rss.xml',
             title: SITE_METADATA.title,
-            language: SITE_METADATA.lang,
-            image_url: 'src/images/logo.jpg',
+            description: SITE_METADATA.description.pl,
+            link: SITE_METADATA.url,
+            language: 'pl',
+            copyright: `Copyright © ${new Date().getFullYear()}, ${SITE_METADATA.author.name}`,
+            managingEditor: `${SITE_METADATA.author.email} (${SITE_METADATA.author.name})`,
+            webMaster: `${SITE_METADATA.author.email} (${SITE_METADATA.author.name})`,
+            generator: `${SITE_METADATA.title} RSS Feed`,
+            docs: 'https://www.rssboard.org/rss-specification',
+            ttl: 60,
+            image_url: `${SITE_METADATA.url}/icons/icon-144x144.png`,
+            image_title: SITE_METADATA.title,
+            image_link: SITE_METADATA.url,
+            image_description: `Logo dla ${SITE_METADATA.title}`,
+            custom_namespaces: {
+              content: 'http://purl.org/rss/1.0/modules/content/',
+              atom: 'http://www.w3.org/2005/Atom',
+              dc: 'http://purl.org/dc/elements/1.1/',
+            },
+            custom_elements: [
+              {
+                'atom:link': {
+                  _attr: {
+                    href: `${SITE_METADATA.url}/rss.xml`,
+                    rel: 'self',
+                    type: 'application/rss+xml',
+                  },
+                },
+              },
+            ],
           },
         ],
       },

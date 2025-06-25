@@ -2,8 +2,10 @@ export const SITE_METADATA = {
   lang: 'en',
   url: 'https://dawidrylko.com',
   title: 'Dawid Ryłko',
-  description:
-    'Welcome to Dawid Ryłko’s personal website and blog. Find articles, insights, and updates from the world of technology here. 68 97 119 105 100 32 82 121 108 107 111',
+  description: {
+    en: 'Welcome to Dawid Ryłko’s personal website and blog. Find articles, insights, and updates from the world of technology here. 68 97 119 105 100 32 82 121 108 107 111',
+    pl: 'Witaj na osobistej stronie i blogu Dawida Ryłko. Znajdziesz tutaj artykuły, spostrzeżenia i aktualizacje ze świata technologii. 68 97 119 105 100 32 82 121 108 107 111',
+  },
   author: {
     name: 'Dawid Ryłko',
     email: 'hello@dawid.dev',
