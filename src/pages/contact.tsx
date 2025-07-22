@@ -34,7 +34,7 @@ const ContactPage: React.FC<PageProps> = ({ location }) => {
           that involve thoughtful tech and long-term vision.
         </p>
         <p>
-          I&nbsp;work across the full stack — from sleek frontends and robust backend systems to infrastructure
+          I&nbsp;work across the full stack - from sleek frontends and robust backend systems to infrastructure
           automation, AI-powered features and cybersecurity. I&nbsp;care deeply about building software that&apos;s
           scalable, secure and designed to last.
         </p>
@@ -44,7 +44,7 @@ const ContactPage: React.FC<PageProps> = ({ location }) => {
           approach to every project.
         </p>
         <p>
-          If that sounds like what you need — drop me a line. I&nbsp;usually reply within 24 hours on business days.
+          If that sounds like what you need - drop me a line. I&nbsp;usually reply within 24 hours on business days.
         </p>
 
         <p>
@@ -76,6 +76,6 @@ export default ContactPage;
 export const Head = () => (
   <Seo
     title={title}
-    description="Get in touch with Dawid Ryłko — an experienced Software Engineer specialising in full-stack development, system architecture, AI integration, DevOps, and cybersecurity. Let’s build secure, scalable and future-ready digital solutions together. Contact via email or social media."
+    description="Get in touch with Dawid Ryłko - an experienced Software Engineer specialising in full-stack development, system architecture, AI integration, DevOps, and cybersecurity. Let’s build secure, scalable and future-ready digital solutions together. Contact via email or social media."
   />
 );

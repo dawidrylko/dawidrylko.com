@@ -19,7 +19,7 @@ const BlogIndex: React.FC<PageProps> = ({ location }) => {
           <a href="https://silesiansolutions.com/" target="_blank" rel="noopener noreferrer">
             <strong>end-to-end digital solutions</strong>
           </a>{' '}
-          — from intuitive <strong>frontend interfaces</strong> and high-performance <strong>backend services</strong>{' '}
+          - from intuitive <strong>frontend interfaces</strong> and high-performance <strong>backend services</strong>{' '}
           to <strong>infrastructure automation</strong>, <strong>AI integration</strong>, and{' '}
           <a href="https://cyberkatalog.pl/" target="_blank" rel="noopener noreferrer nofollow">
             <strong>cybersecurity</strong>
@@ -27,7 +27,7 @@ const BlogIndex: React.FC<PageProps> = ({ location }) => {
           .
         </p>
         <p>
-          My mission is to deliver <strong>technology that makes sense</strong> — reliable,{' '}
+          My mission is to deliver <strong>technology that makes sense</strong> - reliable,{' '}
           <strong>future-proof systems</strong> that solve real problems and support long-term{' '}
           <strong>business goals</strong>. I&nbsp;blend deep <strong>technical expertise</strong> with{' '}
           <strong>strategic thinking</strong> to build solutions that are not only <strong>robust</strong>, but{' '}
@@ -51,7 +51,7 @@ const BlogIndex: React.FC<PageProps> = ({ location }) => {
           <a href="https://dawid.dev" target="_blank" rel="noopener noreferrer">
             digital persona
           </a>{' '}
-          — a space for experimentation and tech insights.
+          - a space for experimentation and tech insights.
         </p>
         <address>
           <p>

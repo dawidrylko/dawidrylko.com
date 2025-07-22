@@ -18,8 +18,16 @@ const experience = [
 ];
 
 const education = [
-  ['University of Bielsko-Biala', "Master's degree, Information Technology"],
-  ['The Silesian University of Technology', "Bachelor's degree, Information Technology"],
+  [
+    'University of Bielsko-Biala',
+    'Master of Science in Engineering (MSc Eng)',
+    'Computer Science - Information and Communication Technologies',
+  ],
+  [
+    'The Silesian University of Technology',
+    'Bachelor of Engineering (BEng)',
+    'Computer Science - Internet and Computer Systems',
+  ],
 ];
 
 const title = 'Résumé 📄';
@@ -74,7 +82,7 @@ const ResumePage: React.FC<PageProps> = ({ location }) => {
         <section id="summary">
           <h2>Summary</h2>
           <p>
-            I&apos;m <strong>Dawid Ryłko</strong> — a Software Engineer and expert in designing scalable, secure, and
+            I&apos;m <strong>Dawid Ryłko</strong> - a Software Engineer and expert in designing scalable, secure, and
             resilient digital systems. I&nbsp;specialise in delivering <strong>end-to-end solutions</strong> that span
             intuitive frontend development, backend services, infrastructure automation, AI integration, and
             cybersecurity.
@@ -82,7 +90,7 @@ const ResumePage: React.FC<PageProps> = ({ location }) => {
           <p>
             My work blends deep technical knowledge with strategic thinking to create systems that are robust,
             future-proof, and aligned with business goals. I&nbsp;focus on long-term value, performance, and
-            maintainability — helping organisations turn complexity into clarity through technology.
+            maintainability - helping organisations turn complexity into clarity through technology.
           </p>
         </section>
         <section id="experience">
@@ -95,7 +103,11 @@ const ResumePage: React.FC<PageProps> = ({ location }) => {
         </section>
         <section id="education">
           <h2>Education</h2>
-          <Table data={education} header={['Institution', 'Degree']} widthConfig={['50%', '50%']} />
+          <Table
+            data={education}
+            header={['Institution', 'Degree', 'Field of Study']}
+            widthConfig={['35%', '35%', '30%']}
+          />
         </section>
         <section id="download">
           <h2>Download My Full CV</h2>

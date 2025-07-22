@@ -23,7 +23,7 @@ export const STRUCTURED_DATA = {
         name: 'Cyber Katalog',
         url: 'https://cyberkatalog.pl/',
         description:
-          'CyberKatalog.pl is a curated Polish directory of cybersecurity companies, promoting digital safety, privacy, and open knowledge. Dawid plays a professional role in enhancing the platform—leading feature development, performance optimization, and content quality—to elevate standards and visibility within Poland’s cybersecurity sector.',
+          'CyberKatalog.pl is a curated Polish directory of cybersecurity companies, promoting digital safety, privacy, and open knowledge. Dawid plays a professional role in enhancing the platform-leading feature development, performance optimization, and content quality-to elevate standards and visibility within Poland’s cybersecurity sector.',
       },
     ],
     knowsAbout: [
