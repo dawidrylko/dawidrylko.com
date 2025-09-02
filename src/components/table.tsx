@@ -3,7 +3,7 @@ import { JsonLd } from 'react-schemaorg';
 import { ItemList, ListItem, WithContext } from 'schema-dts';
 
 type TableProps = {
-  data: string[][];
+  data: (string | React.ReactNode)[][];
   header?: string[];
   widthConfig?: string[];
   tableSchema?: ItemList['@type'];
@@ -23,7 +23,7 @@ const Table: React.FC<TableProps> = ({ data, header, widthConfig, tableSchema, r
         itemListElement: row.map((cell, cellIndex) => ({
           '@type': cellSchema || 'ListItem',
           position: cellIndex + 1,
-          name: cell,
+          name: typeof cell === 'string' ? cell : `Item ${cellIndex + 1}`,
         })),
       },
     })),
