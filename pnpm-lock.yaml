@@ -63,8 +63,8 @@ importers:
         specifier: ^5.14.0
         version: 5.14.0(gatsby@5.14.6(babel-eslint@10.1.0(eslint@9.34.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.2))
       gatsby-transformer-sharp:
-        specifier: ^5.14.0
-        version: 5.14.0(gatsby-plugin-sharp@5.15.0(gatsby@5.14.6(babel-eslint@10.1.0(eslint@9.34.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.2))(graphql@16.11.0))(gatsby@5.14.6(babel-eslint@10.1.0(eslint@9.34.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.2))(graphql@16.11.0)
+        specifier: ^5.15.0
+        version: 5.15.0(gatsby-plugin-sharp@5.15.0(gatsby@5.14.6(babel-eslint@10.1.0(eslint@9.34.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.2))(graphql@16.11.0))(gatsby@5.14.6(babel-eslint@10.1.0(eslint@9.34.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.2))(graphql@16.11.0)
       katex:
         specifier: 0.13.3
         version: 0.13.3
@@ -3805,8 +3805,8 @@ packages:
     peerDependencies:
       gatsby: ^5.0.0-next
 
-  gatsby-transformer-sharp@5.14.0:
-    resolution: {integrity: sha512-U4Z3t6JBKgM1QSpoicMsUzD5+BJGdO1bXW4b09M1Ze46B86gIBZFtSoH57PI3pARLjx0TmA9aoADbAo1B0jWPw==}
+  gatsby-transformer-sharp@5.15.0:
+    resolution: {integrity: sha512-VXxxwcQZAfxom/h3Mz/e+oey4+hN2rNmdZxpEP0Wt6T5FETCxjlQ3CU83j0Q+lXLMwFtbup7eslSpp/x5GB5DA==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       gatsby: ^5.0.0-next
@@ -8536,7 +8536,7 @@ snapshots:
       '@babel/runtime': 7.28.3
       '@parcel/namer-default': 2.8.3(@parcel/core@2.8.3)
       '@parcel/plugin': 2.8.3(@parcel/core@2.8.3)
-      gatsby-core-utils: 4.15.0
+      gatsby-core-utils: 4.14.0
     transitivePeerDependencies:
       - '@parcel/core'
 
@@ -12224,15 +12224,15 @@ snapshots:
       valid-url: 1.0.9
       xstate: 4.38.3
 
-  gatsby-transformer-sharp@5.14.0(gatsby-plugin-sharp@5.15.0(gatsby@5.14.6(babel-eslint@10.1.0(eslint@9.34.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.2))(graphql@16.11.0))(gatsby@5.14.6(babel-eslint@10.1.0(eslint@9.34.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.2))(graphql@16.11.0):
+  gatsby-transformer-sharp@5.15.0(gatsby-plugin-sharp@5.15.0(gatsby@5.14.6(babel-eslint@10.1.0(eslint@9.34.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.2))(graphql@16.11.0))(gatsby@5.14.6(babel-eslint@10.1.0(eslint@9.34.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.2))(graphql@16.11.0):
     dependencies:
-      '@babel/runtime': 7.27.6
+      '@babel/runtime': 7.28.3
       bluebird: 3.7.2
       common-tags: 1.8.2
-      fs-extra: 11.3.0
+      fs-extra: 11.3.1
       gatsby: 5.14.6(babel-eslint@10.1.0(eslint@9.34.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.2)
       gatsby-plugin-sharp: 5.15.0(gatsby@5.14.6(babel-eslint@10.1.0(eslint@9.34.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.2))(graphql@16.11.0)
-      gatsby-plugin-utils: 4.14.0(gatsby@5.14.6(babel-eslint@10.1.0(eslint@9.34.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.2))(graphql@16.11.0)
+      gatsby-plugin-utils: 4.15.0(gatsby@5.14.6(babel-eslint@10.1.0(eslint@9.34.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.2))(graphql@16.11.0)
       probe-image-size: 7.2.3
       semver: 7.7.2
       sharp: 0.33.3
