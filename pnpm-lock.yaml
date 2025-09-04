@@ -39,8 +39,8 @@ importers:
         specifier: ^5.15.0
         version: 5.15.0(gatsby@5.15.0(babel-eslint@10.1.0(eslint@9.34.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.2))(graphql@16.11.0)
       gatsby-plugin-mdx:
-        specifier: ^5.14.1
-        version: 5.14.1(@mdx-js/react@3.1.0(@types/react@19.1.6)(react@18.3.1))(gatsby-source-filesystem@5.14.0(gatsby@5.15.0(babel-eslint@10.1.0(eslint@9.34.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.2)))(gatsby@5.15.0(babel-eslint@10.1.0(eslint@9.34.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.2))(graphql@16.11.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: ^5.15.0
+        version: 5.15.0(@mdx-js/react@3.1.0(@types/react@19.1.6)(react@18.3.1))(gatsby-source-filesystem@5.14.0(gatsby@5.15.0(babel-eslint@10.1.0(eslint@9.34.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.2)))(gatsby@5.15.0(babel-eslint@10.1.0(eslint@9.34.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.2))(graphql@16.11.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       gatsby-plugin-sharp:
         specifier: ^5.15.0
         version: 5.15.0(gatsby@5.15.0(babel-eslint@10.1.0(eslint@9.34.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.2))(graphql@16.11.0)
@@ -2830,8 +2830,8 @@ packages:
     resolution: {integrity: sha512-z2S+W9X73hAUUki+N+9Za2lBlun89zigOyGrsax+KUQ6wKW4ZoWpEYBkGhQjwAjjDCkWxhY0VKEhk8wzY7F5cA==}
     engines: {node: '>=0.10.0'}
 
-  decode-named-character-reference@1.1.0:
-    resolution: {integrity: sha512-Wy+JTSbFThEOXQIR2L6mxJvEs+veIzpmqD7ynWxMXGpnk3smkHQOp6forLdHsKpAMW9iJpaBBIxz285t1n1C3w==}
+  decode-named-character-reference@1.2.0:
+    resolution: {integrity: sha512-c6fcElNV6ShtZXmsgNgFFV5tVX2PaV4g+MOAkb8eXHvn6sryJBrZa9r0zV6+dtTyoCKxtDy5tyQ5ZwQuidtd+Q==}
 
   decode-uri-component@0.2.2:
     resolution: {integrity: sha512-FqUYQ+8o158GyGTrMFJms9qh3CqTKvAqgqsTnkLI8sKu0028orqBhxNMFkFen0zGyg6epACD32pjVk58ngIErQ==}
@@ -3703,8 +3703,8 @@ packages:
     peerDependencies:
       gatsby: ^5.0.0-next
 
-  gatsby-plugin-mdx@5.14.1:
-    resolution: {integrity: sha512-BkrK10XqWkvYJNraSnPt/Ih/TmSjEzSWOEyWMSOJhHC+xpdqGakKKbkHButGQLMwC4W+v7jjQ3ZCbDQLXxZ5ZQ==}
+  gatsby-plugin-mdx@5.15.0:
+    resolution: {integrity: sha512-JYT6OHxmgBJ7J8q9IPz/01OyK3GQFJ+2snEtdsENbucXH/DYFpeit8r2N2m/nwiTz4lfuYyg7S7ht3By5epL3w==}
     peerDependencies:
       '@mdx-js/react': ^2.0.0
       gatsby: ^5.0.0-next
@@ -10748,7 +10748,7 @@ snapshots:
 
   decamelize@1.2.0: {}
 
-  decode-named-character-reference@1.1.0:
+  decode-named-character-reference@1.2.0:
     dependencies:
       character-entities: 2.0.2
 
@@ -12016,7 +12016,7 @@ snapshots:
     transitivePeerDependencies:
       - graphql
 
-  gatsby-plugin-mdx@5.14.1(@mdx-js/react@3.1.0(@types/react@19.1.6)(react@18.3.1))(gatsby-source-filesystem@5.14.0(gatsby@5.15.0(babel-eslint@10.1.0(eslint@9.34.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.2)))(gatsby@5.15.0(babel-eslint@10.1.0(eslint@9.34.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.2))(graphql@16.11.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  gatsby-plugin-mdx@5.15.0(@mdx-js/react@3.1.0(@types/react@19.1.6)(react@18.3.1))(gatsby-source-filesystem@5.14.0(gatsby@5.15.0(babel-eslint@10.1.0(eslint@9.34.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.2)))(gatsby@5.15.0(babel-eslint@10.1.0(eslint@9.34.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.2))(graphql@16.11.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
       '@mdx-js/mdx': 2.3.0
       '@mdx-js/react': 3.1.0(@types/react@19.1.6)(react@18.3.1)
@@ -12025,10 +12025,10 @@ snapshots:
       astring: 1.9.0
       deepmerge: 4.3.1
       estree-util-build-jsx: 2.2.2
-      fs-extra: 11.3.0
+      fs-extra: 11.3.1
       gatsby: 5.15.0(babel-eslint@10.1.0(eslint@9.34.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.2)
-      gatsby-core-utils: 4.14.0
-      gatsby-plugin-utils: 4.14.0(gatsby@5.15.0(babel-eslint@10.1.0(eslint@9.34.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.2))(graphql@16.11.0)
+      gatsby-core-utils: 4.15.0
+      gatsby-plugin-utils: 4.15.0(gatsby@5.15.0(babel-eslint@10.1.0(eslint@9.34.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.2))(graphql@16.11.0)
       gatsby-source-filesystem: 5.14.0(gatsby@5.15.0(babel-eslint@10.1.0(eslint@9.34.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.2))
       gray-matter: 4.0.3
       mdast-util-mdx: 2.0.1
@@ -13351,7 +13351,7 @@ snapshots:
     dependencies:
       '@types/mdast': 3.0.15
       '@types/unist': 2.0.11
-      decode-named-character-reference: 1.1.0
+      decode-named-character-reference: 1.2.0
       mdast-util-to-string: 3.2.0
       micromark: 3.2.0
       micromark-util-decode-numeric-character-reference: 1.1.0
@@ -13513,7 +13513,7 @@ snapshots:
 
   micromark-core-commonmark@1.1.0:
     dependencies:
-      decode-named-character-reference: 1.1.0
+      decode-named-character-reference: 1.2.0
       micromark-factory-destination: 1.1.0
       micromark-factory-label: 1.1.0
       micromark-factory-space: 1.1.0
@@ -13657,7 +13657,7 @@ snapshots:
 
   micromark-util-decode-string@1.1.0:
     dependencies:
-      decode-named-character-reference: 1.1.0
+      decode-named-character-reference: 1.2.0
       micromark-util-character: 1.2.0
       micromark-util-decode-numeric-character-reference: 1.1.0
       micromark-util-symbol: 1.1.0
@@ -13713,7 +13713,7 @@ snapshots:
     dependencies:
       '@types/debug': 4.1.12
       debug: 4.4.1
-      decode-named-character-reference: 1.1.0
+      decode-named-character-reference: 1.2.0
       micromark-core-commonmark: 1.1.0
       micromark-factory-space: 1.1.0
       micromark-util-character: 1.2.0
@@ -14066,7 +14066,7 @@ snapshots:
       '@types/unist': 2.0.11
       character-entities-legacy: 3.0.0
       character-reference-invalid: 2.0.1
-      decode-named-character-reference: 1.1.0
+      decode-named-character-reference: 1.2.0
       is-alphanumerical: 2.0.1
       is-decimal: 2.0.1
       is-hexadecimal: 2.0.1
