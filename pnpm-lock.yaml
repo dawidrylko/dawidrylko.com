@@ -57,8 +57,8 @@ importers:
         specifier: ^7.15.0
         version: 7.15.0(gatsby@5.14.6(babel-eslint@10.1.0(eslint@9.34.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.2))(prismjs@1.30.0)
       gatsby-remark-responsive-iframe:
-        specifier: ^6.14.0
-        version: 6.14.0(gatsby@5.14.6(babel-eslint@10.1.0(eslint@9.34.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.2))
+        specifier: ^6.15.0
+        version: 6.15.0(gatsby@5.14.6(babel-eslint@10.1.0(eslint@9.34.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.2))
       gatsby-source-filesystem:
         specifier: ^5.14.0
         version: 5.14.0(gatsby@5.14.6(babel-eslint@10.1.0(eslint@9.34.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.2))
@@ -2724,10 +2724,6 @@ packages:
     resolution: {integrity: sha512-tRpdppF7TRazZrjJ6v3stzv93qxRcSsFmW6cX0Zm2NVKpxE1WV1HblnghVv9TreireHkqI/VDEsfolRF1p6y7Q==}
     engines: {node: '>=8.0.0'}
 
-  css-what@6.1.0:
-    resolution: {integrity: sha512-HTUrgRJ7r4dsZKU6GjmpfRK1O76h97Z8MfS1G0FozR+oF2kG6Vfe8JE6zwrkbxigziPHinCJ+gCPjA9EaBDtRw==}
-    engines: {node: '>= 6'}
-
   css-what@6.2.2:
     resolution: {integrity: sha512-u/O3vwbptzhMs3L1fQE82ZSLHQQfto5gyZzwteVIEyeaY5Fc7R4dapF/BvRoSYFeqfBk4m0V1Vafq5Pjv25wvA==}
     engines: {node: '>= 6'}
@@ -3777,8 +3773,8 @@ packages:
       gatsby: ^5.0.0-next
       prismjs: ^1.15.0
 
-  gatsby-remark-responsive-iframe@6.14.0:
-    resolution: {integrity: sha512-/ypQmqNHrQVpJQqUUozX0it2jhL+/GxKWhsGT/WmXN8gMRQokV4C2TLAhhcc4j82nX30ZJhpkJmwMsCqfWFNfw==}
+  gatsby-remark-responsive-iframe@6.15.0:
+    resolution: {integrity: sha512-9z31zYti22iMP7QtWOZkxIh7+bSLDxUtvw01LnSa8ztKm5417cU0Um2X7ZPUXryMddTHguDmH34SgaWJ492/VQ==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       gatsby: ^5.0.0-next
@@ -10378,7 +10374,7 @@ snapshots:
     dependencies:
       boolbase: 1.0.0
       css-select: 5.2.2
-      css-what: 6.1.0
+      css-what: 6.2.2
       domelementtype: 2.3.0
       domhandler: 5.0.3
       domutils: 3.2.2
@@ -10641,7 +10637,7 @@ snapshots:
   css-select@5.2.2:
     dependencies:
       boolbase: 1.0.0
-      css-what: 6.1.0
+      css-what: 6.2.2
       domhandler: 5.0.3
       domutils: 3.2.2
       nth-check: 2.1.1
@@ -10652,8 +10648,6 @@ snapshots:
     dependencies:
       mdn-data: 2.0.14
       source-map: 0.6.1
-
-  css-what@6.1.0: {}
 
   css-what@6.2.2: {}
 
@@ -12188,9 +12182,9 @@ snapshots:
       prismjs: 1.30.0
       unist-util-visit: 2.0.3
 
-  gatsby-remark-responsive-iframe@6.14.0(gatsby@5.14.6(babel-eslint@10.1.0(eslint@9.34.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.2)):
+  gatsby-remark-responsive-iframe@6.15.0(gatsby@5.14.6(babel-eslint@10.1.0(eslint@9.34.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.2)):
     dependencies:
-      '@babel/runtime': 7.27.6
+      '@babel/runtime': 7.28.3
       cheerio: 1.0.0-rc.12
       common-tags: 1.8.2
       gatsby: 5.14.6(babel-eslint@10.1.0(eslint@9.34.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.2)
