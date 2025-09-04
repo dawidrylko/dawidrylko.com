@@ -51,8 +51,8 @@ importers:
         specifier: ^7.14.0
         version: 7.14.0(gatsby-plugin-sharp@5.15.0(gatsby@5.15.0(babel-eslint@10.1.0(eslint@9.34.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.2))(graphql@16.11.0))(gatsby@5.15.0(babel-eslint@10.1.0(eslint@9.34.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.2))
       gatsby-remark-katex:
-        specifier: ^7.14.0
-        version: 7.14.0(gatsby@5.15.0(babel-eslint@10.1.0(eslint@9.34.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.2))(katex@0.13.3)
+        specifier: ^7.15.0
+        version: 7.15.0(gatsby@5.15.0(babel-eslint@10.1.0(eslint@9.34.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.2))(katex@0.13.3)
       gatsby-remark-prismjs:
         specifier: ^7.15.0
         version: 7.15.0(gatsby@5.15.0(babel-eslint@10.1.0(eslint@9.34.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.2))(prismjs@1.30.0)
@@ -3767,8 +3767,8 @@ packages:
       gatsby: ^5.0.0-next
       gatsby-plugin-sharp: ^5.0.0-next
 
-  gatsby-remark-katex@7.14.0:
-    resolution: {integrity: sha512-no4LuEF8+UzcF6yG5v5pAttK2ydVFLihjTjyZweBGEwfl9ncq7LR/WwoBbK2vXYVAlu4OhPB2Qs/LlXsHxjlpw==}
+  gatsby-remark-katex@7.15.0:
+    resolution: {integrity: sha512-jdy6ebbl5C7bghZqnhLzWM7MCG5OxgysO+xwUbDr8sc+FYwVU2yxfvrgQ7+Ky4BpgyDJhPFX1QS3mb0/k6otEg==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       gatsby: ^5.0.0-next
@@ -12157,9 +12157,9 @@ snapshots:
       unist-util-select: 3.0.4
       unist-util-visit-parents: 3.1.1
 
-  gatsby-remark-katex@7.14.0(gatsby@5.15.0(babel-eslint@10.1.0(eslint@9.34.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.2))(katex@0.13.3):
+  gatsby-remark-katex@7.15.0(gatsby@5.15.0(babel-eslint@10.1.0(eslint@9.34.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.2))(katex@0.13.3):
     dependencies:
-      '@babel/runtime': 7.27.6
+      '@babel/runtime': 7.28.3
       gatsby: 5.15.0(babel-eslint@10.1.0(eslint@9.34.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.2)
       katex: 0.13.3
       rehype-parse: 7.0.1
