@@ -27,12 +27,12 @@
   --spacing-20: 5rem;
   --spacing-24: 6rem;
   --spacing-32: 8rem;
-  --fontFamily-sans: 'MontserratVariable', system-ui, -apple-system,
-    BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans',
-    sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
-    'Noto Color Emoji';
-  --fontFamily-serif: 'Merriweather', 'Georgia', Cambria, 'Times New Roman',
-    Times, serif;
+  --fontFamily-sans:
+    'MontserratVariable', system-ui, -apple-system, BlinkMacSystemFont,
+    'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif,
+    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  --fontFamily-serif:
+    'Merriweather', 'Georgia', Cambria, 'Times New Roman', Times, serif;
   --font-body: var(--fontFamily-serif);
   --font-heading: var(--fontFamily-sans);
   --fontWeight-normal: 400;
@@ -350,69 +350,52 @@ a:focus {
 }
 
 .header {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  margin-bottom: var(--spacing-12);
+  margin-bottom: var(--spacing-8);
 }
 .header-link-home {
   font-weight: var(--fontWeight-bold);
   font-family: var(--font-heading);
   font-size: var(--fontSize-2);
   text-decoration: none;
+  display: block;
+  margin-bottom: var(--spacing-4);
 }
 .header-link-home.root {
   color: var(--color-heading-black);
   cursor: default;
 }
-.header-link-home h1
- {
-  font-weight: inherit;
-  font-family: inherit;
-  font-size: inherit;
+.header-link-home h1 {
+  font-weight: var(--fontWeight-bold);
+  font-family: var(--font-heading);
+  font-size: var(--fontSize-2);
   margin: var(--spacing-0);
   letter-spacing: 0;
-}
-.menu {
-  display: flex;
-  justify-content: end;
-}
-.menu ul {
-  font-size: var(--fontSize-1);
-  margin: var(--spacing-2);
-}
-.menu ul li {
-  display: inline;
-}
-.menu ul li:not(:last-child)::after {
-  content: '•';
-  margin: 0 var(--spacing-1);
-}
-/* Media queries */
-@media screen and (max-width: 600px) {
-  .header {
-    flex-direction: column;
-    align-items: center;
-  }
-  .menu {
-    margin-top: var(--spacing-2);
-  }
-  .menu ul {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--spacing-1);
-    justify-content: center;
-  }
-  .menu ul li {
-    display: inline-flex;
-    margin: 0;
-  }
-  .menu ul li:not(:last-child)::after {
-    content: '';
-    margin: 0 var(--spacing-1);
-  }
+  color: var(--color-heading-black);
 }
 
+.menu {
+  margin-bottom: var(--spacing-4);
+}
+
+.menu ul {
+  font-size: var(--fontSize-1);
+  margin: var(--spacing-0);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-4);
+  align-items: center;
+}
+
+.menu ul li {
+  display: inline;
+  margin: var(--spacing-0);
+}
+
+.menu ul li:not(:last-child)::after {
+  content: '•';
+  margin: 0 var(--spacing-2);
+  color: var(--color-text-light);
+}
 .blog-post header {
   margin-bottom: var(--spacing-4);
 }
@@ -479,7 +462,6 @@ blockquote {
 /* Breadcrumbs */
 
 .breadcrumbs {
-  margin-bottom: var(--spacing-6);
   font-size: var(--fontSize-0);
   color: var(--color-text-light);
 }
@@ -517,7 +499,9 @@ blockquote {
   padding: var(--spacing-1) var(--spacing-2);
   border-radius: var(--spacing-1);
   text-decoration: none;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
   word-break: break-word;
   hyphens: auto;
   max-width: 100%;
@@ -553,7 +537,6 @@ blockquote {
 /* Mobile optimizations */
 @media screen and (max-width: 600px) {
   .breadcrumbs {
-    margin-bottom: var(--spacing-4);
     font-size: var(--fontSize-0);
   }
 
@@ -572,49 +555,11 @@ blockquote {
   .breadcrumbs a,
   .breadcrumbs span {
     padding: var(--spacing-1);
-    font-size: var(--fontSize-0);
   }
 
   .breadcrumbs .separator {
     margin: 0;
     font-size: 0.75rem;
-  }
-
-  /* Show ellipsis for very long breadcrumb items on mobile */
-  .breadcrumbs li:not(:first-child):not(:last-child) a,
-  .breadcrumbs li:not(:first-child):not(:last-child) span {
-    max-width: 100px;
-  }
-}
-
-/* Tablet optimizations */
-@media screen and (min-width: 601px) and (max-width: 42rem) {
-  .breadcrumbs li:not(:first-child):not(:last-child) {
-    max-width: 180px;
-  }
-
-  .breadcrumbs li:last-child {
-    max-width: 300px;
-  }
-}
-
-/* Desktop optimizations */
-@media screen and (min-width: 43rem) {
-  .breadcrumbs {
-    font-size: var(--fontSize-1);
-  }
-
-  .breadcrumbs li:not(:first-child):not(:last-child) {
-    max-width: 250px;
-  }
-
-  .breadcrumbs li:last-child {
-    max-width: 400px;
-  }
-
-  .breadcrumbs a,
-  .breadcrumbs span {
-    white-space: nowrap;
   }
 }
 

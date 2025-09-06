@@ -35,15 +35,23 @@ export const SITE_METADATA = {
   ],
   menu: [
     {
+      name: 'Bio',
+      url: '/bio',
+    },
+    {
       name: 'Blog 🇵🇱',
       url: '/blog',
     },
     {
-      name: 'Bio 🥷',
-      url: '/bio',
+      name: 'Setup',
+      url: '/setup',
     },
     {
-      name: 'Contact 📬',
+      name: 'Metadata',
+      url: '/metadata',
+    },
+    {
+      name: 'Contact',
       url: '/contact',
     },
   ],

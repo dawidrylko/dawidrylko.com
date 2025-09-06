@@ -8,7 +8,9 @@ import Seo from '../components/seo';
 import { useSiteMetadata } from '../hooks/use-site-metadata';
 import { useStructuredData } from '../hooks/use-structured-data';
 
-const title = 'Contact 📬';
+const title = 'Contact';
+const description =
+  'Contact Dawid Ryłko - Software Engineer specializing in full-stack development, system architecture, AI integration, DevOps, and cybersecurity. Get in touch for meaningful collaborations on scalable, secure digital solutions.';
 
 const ContactPage: React.FC<PageProps> = ({ location }) => {
   const { siteAuthor, siteSocial } = useSiteMetadata();
@@ -73,9 +75,4 @@ const ContactPage: React.FC<PageProps> = ({ location }) => {
 
 export default ContactPage;
 
-export const Head = () => (
-  <Seo
-    title={title}
-    description="Get in touch with Dawid Ryłko - an experienced Software Engineer specialising in full-stack development, system architecture, AI integration, DevOps, and cybersecurity. Let’s build secure, scalable and future-ready digital solutions together. Contact via email or social media."
-  />
-);
+export const Head = () => <Seo title={title} description={description} />;

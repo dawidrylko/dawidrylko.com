@@ -39,9 +39,9 @@ const hardwareSetup = [
   ['Storage', 'WD Red SN700, 500 GB, M.2 NVMe', 'https://www.ceneo.pl/119197771#crid=774139&pid=29997', 'Cache, 2 pcs'],
 ];
 
-const title = 'My Setup 💻';
+const title = 'Setup';
 const description =
-  'A complete overview of my personal computer setup, including hardware, peripherals, cables, desk, and NAS storage.';
+  "Discover Dawid Ryłko's complete computer setup - from Mac mini M4 and ultrawide monitor to NAS storage and cable management. A detailed overview of hardware, peripherals, and tools used for professional software development.";
 
 const SetupPage: React.FC<PageProps> = ({ location }) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -61,7 +61,6 @@ const SetupPage: React.FC<PageProps> = ({ location }) => {
       <JsonLd<WebPage> item={structuredData} />
       <header>
         <h1>{title}</h1>
-        <p>{description}</p>
       </header>
       <main>
         <section id="hardware">

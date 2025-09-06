@@ -35,6 +35,8 @@ type DataProps = {
 };
 
 const title = 'Blog 🇵🇱';
+const description =
+  'Artykuły i wpisy na blogu Dawida Ryłko o programowaniu, technologiach, architekturze systemów i rozwoju oprogramowania. Praktyczne porady i spostrzeżenia ze świata IT.';
 
 const BlogIndex: React.FC<PageProps<DataProps>> = ({ data, location }) => {
   const { siteAuthor } = useSiteMetadata();
@@ -130,7 +132,7 @@ const BlogIndex: React.FC<PageProps<DataProps>> = ({ data, location }) => {
 
 export default BlogIndex;
 
-export const Head = () => <Seo lang="pl" title={title} description="Moje wpisy na blogu." />;
+export const Head = () => <Seo lang="pl" title={title} description={description} />;
 
 export const query = graphql`
   {

@@ -37,7 +37,8 @@ const createNonBlogPagesArray = ({ nonBlogPages: { pagePaths } }: DataType) =>
 const createBlogPostsArray = ({ blogPosts: { postPaths } }: DataType) =>
   postPaths.map(({ fields: { slug } }) => slug).map((path, index) => [(index + 1).toString(), path]);
 
-const title = 'Metadata 🤖';
+const title = 'Metadata';
+const description = 'This page is for internal use only. If you have found yourself here, you must be very bored.';
 
 const MetadataPage: React.FC<PageProps<DataType>> = ({ data, location }) => {
   return (
@@ -53,12 +54,7 @@ const MetadataPage: React.FC<PageProps<DataType>> = ({ data, location }) => {
   );
 };
 
-export const Head: HeadFC = () => (
-  <Seo
-    title={title}
-    description="This page is for internal use only. If you have found yourself here, you must be very bored."
-  />
-);
+export const Head: HeadFC = () => <Seo title={title} description={description} />;
 
 export default MetadataPage;
 

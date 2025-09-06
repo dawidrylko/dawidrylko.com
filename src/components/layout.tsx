@@ -23,15 +23,13 @@ const Layout: React.FC<LayoutProps> = ({ location, children, breadcrumbTitle }) 
 
   return (
     <div className="global-wrapper" data-is-root-path={isRootPath}>
-      <div className="header">
-        <header>
-          <Link className={`header-link-home ${isRootPath ? 'root' : ''}`} to="/">
-            {isRootPath ? <h1>{fakeTitle}</h1> : fakeTitle}
-          </Link>
-        </header>
+      <header className="header">
+        <Link className={`header-link-home ${isRootPath ? 'root' : ''}`} to="/">
+          {isRootPath ? <h1>{fakeTitle}</h1> : fakeTitle}
+        </Link>
         <Menu />
-      </div>
-      <Breadcrumbs location={location} customTitle={breadcrumbTitle} />
+        <Breadcrumbs location={location} customTitle={breadcrumbTitle} />
+      </header>
       <main>{children}</main>
       <hr />
       <Bio />

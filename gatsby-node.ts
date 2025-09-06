@@ -7,7 +7,15 @@ import { createFilePath } from 'gatsby-source-filesystem';
 const blogPost = path.resolve(`./src/templates/blog-post.tsx`);
 
 export const createPages: GatsbyNode['createPages'] = async ({ graphql, actions, reporter }: any) => {
-  const { createPage } = actions;
+  const { createPage, createRedirect } = actions;
+
+  createRedirect({
+    fromPath: '/resume',
+    toPath: '/bio',
+    isPermanent: true,
+    redirectInBrowser: true,
+  });
+
   const result = await graphql(`
     query AllMdx {
       allMdx(sort: { frontmatter: { date: ASC } }, limit: 1000) {
