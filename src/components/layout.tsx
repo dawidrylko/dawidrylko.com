@@ -1,7 +1,6 @@
 import type { ReactNode } from 'react';
 
 import * as React from 'react';
-import { Link } from 'gatsby';
 import { useSiteMetadata } from '../hooks/use-site-metadata';
 import Bio from './bio';
 import Menu from './menu';
@@ -24,13 +23,12 @@ const Layout: React.FC<LayoutProps> = ({ location, children, breadcrumbTitle }) 
   return (
     <div className="global-wrapper" data-is-root-path={isRootPath}>
       <header className="header">
-        <Link className={`header-link-home ${isRootPath ? 'root' : ''}`} to="/">
-          {isRootPath ? <h1>{fakeTitle}</h1> : fakeTitle}
-        </Link>
+        <div className="header-title">{fakeTitle}</div>
         <Menu />
-        <Breadcrumbs location={location} customTitle={breadcrumbTitle} />
       </header>
       <main>{children}</main>
+      <hr />
+      <Breadcrumbs location={location} customTitle={breadcrumbTitle} />
       <hr />
       <Bio />
       <hr />

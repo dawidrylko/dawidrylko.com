@@ -6,11 +6,16 @@ import Layout from '../components/layout';
 import Seo from '../components/seo';
 import { useSiteMetadata } from '../hooks/use-site-metadata';
 
+const title = 'Home';
+
 const BlogIndex: React.FC<PageProps> = ({ location }) => {
   const { siteAuthor } = useSiteMetadata();
 
   return (
     <Layout location={location} breadcrumbTitle="Home">
+      <header>
+        <h1>{title}</h1>
+      </header>
       <section>
         <p>
           Hi there! I&apos;m <strong>Dawid Ryłko</strong>, a <strong>Software Engineer</strong> and expert in{' '}

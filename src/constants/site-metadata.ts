@@ -35,6 +35,10 @@ export const SITE_METADATA = {
   ],
   menu: [
     {
+      name: 'Home',
+      url: '/',
+    },
+    {
       name: 'Bio',
       url: '/bio',
     },
