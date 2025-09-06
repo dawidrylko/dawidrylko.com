@@ -27,7 +27,6 @@ const Layout: React.FC<LayoutProps> = ({ location, children, breadcrumbTitle }) 
         <Menu />
       </header>
       <main>{children}</main>
-      <hr />
       <Breadcrumbs location={location} customTitle={breadcrumbTitle} />
       <hr />
       <Bio />

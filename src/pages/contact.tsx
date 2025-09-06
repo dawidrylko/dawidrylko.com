@@ -10,7 +10,7 @@ import { useStructuredData } from '../hooks/use-structured-data';
 
 const title = 'Contact';
 const description =
-  'Contact Dawid Ryłko - Software Engineer specializing in full-stack development, system architecture, AI integration, DevOps, and cybersecurity. Get in touch for meaningful collaborations on scalable, secure digital solutions.';
+  'Get in touch with Dawid Ryłko for software engineering projects, system architecture consulting, and technology collaboration. Available for projects requiring scalable, secure, and future-proof solutions.';
 
 const ContactPage: React.FC<PageProps> = ({ location }) => {
   const { siteAuthor, siteSocial } = useSiteMetadata();
@@ -31,43 +31,55 @@ const ContactPage: React.FC<PageProps> = ({ location }) => {
         <h1>{title}</h1>
       </header>
       <main>
-        <p>
-          Got an idea, challenge or project in mind? Let&apos;s talk. I&apos;m always open to meaningful collaborations
-          that involve thoughtful tech and long-term vision.
-        </p>
-        <p>
-          I&nbsp;work across the full stack - from sleek frontends and robust backend systems to infrastructure
-          automation, AI-powered features and cybersecurity. I&nbsp;care deeply about building software that&apos;s
-          scalable, secure and designed to last.
-        </p>
-        <p>
-          My work often focuses on system architecture, developer experience and performance optimisation. Whether
-          you&apos;re starting from scratch or improving an existing system, I&nbsp;bring a pragmatic, strategic
-          approach to every project.
-        </p>
-        <p>
-          If that sounds like what you need - drop me a line. I&nbsp;usually reply within 24 hours on business days.
-        </p>
-
-        <p>
-          The best way to reach me is via email:&nbsp;
-          <a href={`mailto:${siteAuthor?.email}`} title="Email me">
-            <strong>{siteAuthor?.email}</strong>
-          </a>
-        </p>
-        <p>You can also connect with me here:</p>
-        <ul>
-          {siteSocial
-            .filter(({ name }) => ['GitHub', 'Twitter', 'Linkedin'].includes(name))
-            .map(({ name, url, follow }) => (
-              <li key={name}>
-                <a href={url} target="_blank" rel={follow ? 'noopener noreferrer' : 'noopener noreferrer nofollow'}>
-                  {name}
-                </a>
-              </li>
-            ))}
-        </ul>
-        <p>I typically reply within 24 hours on business days. Let&apos;s build something meaningful together.</p>
+        <section>
+          <p>
+            Interested in collaborating on <strong>innovative technology projects</strong>? I&apos;m open to working on
+            ideas that require a thoughtful approach and a long-term vision. My focus is on creating meaningful,
+            reliable solutions that make a real impact.
+          </p>
+          <p>
+            I work across the entire <strong>technology stack</strong> - from user-friendly{' '}
+            <strong>frontend interfaces</strong> and robust <strong>backend systems</strong> to{' '}
+            <strong>cloud infrastructure</strong>, <strong>AI-driven features</strong>, and advanced{' '}
+            <strong>security implementations</strong>. Every solution I build is <strong>scalable</strong>,{' '}
+            <strong>maintainable</strong>, and <strong>designed to last</strong>.
+          </p>
+          <p>
+            Whether you&apos;re starting from scratch or improving an existing platform, I bring a{' '}
+            <strong>strategic and pragmatic mindset</strong> to ensure your technology supports long-term business
+            goals.
+          </p>
+        </section>
+        <section>
+          <h2>How to Reach Me</h2>
+          <p>
+            The best way to get in touch is by email:&nbsp;
+            <a href={`mailto:${siteAuthor?.email}`} title="Send email">
+              <strong>{siteAuthor?.email}</strong>
+            </a>
+          </p>
+          <p>I usually respond within 24 hours on business days.</p>
+        </section>
+        <section>
+          <h2>Find Me Online</h2>
+          <p>Connect with me on professional and developer platforms:</p>
+          <ul>
+            {siteSocial
+              .filter(({ name }) => ['GitHub', 'Twitter', 'Linkedin'].includes(name))
+              .map(({ name, url, follow }) => (
+                <li key={name}>
+                  <a
+                    href={url}
+                    target="_blank"
+                    rel={follow ? 'noopener noreferrer' : 'noopener noreferrer nofollow'}
+                    title={`Find Dawid Ryłko on ${name}`}
+                  >
+                    {name}
+                  </a>
+                </li>
+              ))}
+          </ul>
+        </section>
       </main>
     </Layout>
   );

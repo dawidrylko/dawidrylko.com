@@ -1,7 +1,6 @@
 import type { HeadFC, PageProps } from 'gatsby';
-
 import * as React from 'react';
-import { graphql } from 'gatsby';
+import { graphql, Link } from 'gatsby';
 
 import Layout from '../components/layout';
 import Seo from '../components/seo';
@@ -32,24 +31,47 @@ const createMetadataArray = ({
 ];
 
 const createNonBlogPagesArray = ({ nonBlogPages: { pagePaths } }: DataType) =>
-  pagePaths.map((path, index) => [(index + 1).toString(), path]);
+  pagePaths.map((path, index) => [
+    (index + 1).toString(),
+    <Link key={path} to={path}>
+      {path}
+    </Link>,
+  ]);
 
 const createBlogPostsArray = ({ blogPosts: { postPaths } }: DataType) =>
-  postPaths.map(({ fields: { slug } }) => slug).map((path, index) => [(index + 1).toString(), path]);
+  postPaths
+    .map(({ fields: { slug } }) => slug)
+    .map((path, index) => [
+      (index + 1).toString(),
+      <Link key={path} to={path}>
+        {path}
+      </Link>,
+    ]);
 
 const title = 'Metadata';
-const description = 'This page is for internal use only. If you have found yourself here, you must be very bored.';
+const description =
+  'Technical metadata and site statistics for dawidrylko.com, including build details, page counts, and structure overview.';
 
 const MetadataPage: React.FC<PageProps<DataType>> = ({ data, location }) => {
   return (
     <Layout location={location} breadcrumbTitle={title}>
-      <h1>{title}</h1>
-      <h2>Base</h2>
-      <Table data={createMetadataArray(data)} header={['Property', 'Value']} widthConfig={['30%', '70%']} />
-      <h2>Pages</h2>
-      <Table data={createNonBlogPagesArray(data)} header={['#', 'Path']} widthConfig={['10%', '90%']} />
-      <h2>Blog posts</h2>
-      <Table data={createBlogPostsArray(data)} header={['#', 'Path']} widthConfig={['10%', '90%']} />
+      <header>
+        <h1>{title}</h1>
+      </header>
+      <main>
+        <section id="site-info" aria-label="Site Information">
+          <h2>Site Information</h2>
+          <Table data={createMetadataArray(data)} header={['Property', 'Value']} widthConfig={['30%', '70%']} />
+        </section>
+        <section id="pages" aria-label="Pages">
+          <h2>Pages</h2>
+          <Table data={createNonBlogPagesArray(data)} header={['#', 'Path']} widthConfig={['10%', '90%']} />
+        </section>
+        <section id="blog-posts" aria-label="Blog Posts">
+          <h2>Blog Posts</h2>
+          <Table data={createBlogPostsArray(data)} header={['#', 'Path']} widthConfig={['10%', '90%']} />
+        </section>
+      </main>
     </Layout>
   );
 };

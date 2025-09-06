@@ -39,7 +39,7 @@ export const SITE_METADATA = {
       url: '/',
     },
     {
-      name: 'Bio',
+      name: 'About',
       url: '/bio',
     },
     {

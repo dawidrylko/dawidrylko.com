@@ -94,6 +94,7 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ location, customTitle }) => {
   return (
     <>
       <JsonLd<BreadcrumbList> item={structuredData} />
+      <hr />
       <nav className="breadcrumbs" aria-label="Breadcrumb">
         <ol>
           {breadcrumbs.map((item, index) => (

@@ -10,9 +10,9 @@ import Table from '../components/table';
 import { useSiteMetadata } from '../hooks/use-site-metadata';
 import { useStructuredData } from '../hooks/use-structured-data';
 
-const title = 'Bio';
+const title = 'About';
 const description =
-  'Get to know Dawid Ryłko beyond the code - professional experience, favorite quotes, and the philosophy behind the work. Discover how technology meets emotion, intuition, and meaningful moments in software development.';
+  'Learn about Dawid Ryłko - experienced Software Engineer with expertise in scalable system design, AI integration, cybersecurity, and technology leadership. Discover his professional background, education, and philosophy behind building meaningful technology solutions.';
 
 const experience = [
   ['Silesian Solutions', 'Self-employed', 'Oct 2015 - Present', 'https://silesiansolutions.com'],
@@ -56,7 +56,7 @@ const citations = [
 
 const image = {
   alt: `Graffiti on a utility box featuring a black-and-white image of Charlie Chaplin with the quote: 'A day without laughter is a day wasted'.`,
-  figcaption: `Photo by Dawid Ryłko. Taken on September 7, 2017, in Malia, Greece.`,
+  figcaption: `Photo by Dawid Ryłko, taken on September 7, 2017, in Malia, Greece.`,
 };
 
 const BioPage: React.FC<PageProps> = ({ location }) => {
@@ -96,7 +96,7 @@ const BioPage: React.FC<PageProps> = ({ location }) => {
     potentialAction: {
       '@type': 'Action',
       name: 'Download My Full CV',
-      description: 'Download a comprehensive overview of my experience and skills in PDF format.',
+      description: 'Download a detailed overview of Dawid Ryłko’s experience and skills in PDF format.',
       target: [
         {
           '@type': 'EntryPoint',
@@ -121,61 +121,55 @@ const BioPage: React.FC<PageProps> = ({ location }) => {
       <main>
         <section id="summary">
           <p>
-            I&apos;m <strong>Dawid Ryłko</strong> - a Software Engineer and expert in designing scalable, secure, and
-            resilient digital systems. I&nbsp;specialise in delivering <strong>end-to-end solutions</strong> that span
-            intuitive frontend development, backend services, infrastructure automation, AI integration, and
-            cybersecurity.
+            Hi, I&apos;m <strong>Dawid Ryłko</strong> - a <strong>Software Engineer</strong> passionate about{' '}
+            <strong>scalable, secure, and resilient systems</strong>. With{' '}
+            <time>over 10 years of professional experience</time> in the <strong>technology industry</strong>, I
+            specialise in designing and delivering{' '}
+            <a href="https://silesiansolutions.com/" target="_blank" rel="noopener noreferrer">
+              <strong>end-to-end digital solutions</strong>
+            </a>
+            . From intuitive <strong>frontend experiences</strong> and high-performance <strong>backend systems</strong>{' '}
+            to <strong>infrastructure automation</strong>, <strong>AI-driven innovation</strong>, and{' '}
+            <a href="https://cyberkatalog.pl/" target="_blank" rel="noopener noreferrer nofollow">
+              <strong>cybersecurity</strong>
+            </a>
+            , I build technology with purpose.
           </p>
           <p>
-            My work blends deep technical knowledge with strategic thinking to create systems that are robust,
-            future-proof, and aligned with business goals. I&nbsp;focus on long-term value, performance, and
-            maintainability - helping organisations turn complexity into clarity through technology.
+            My mission is to create <strong>technology that truly matters</strong> - solutions that are{' '}
+            <strong>reliable</strong>, <strong>future-proof</strong>, and aligned with <strong>business goals</strong>.
+            By combining deep <strong>technical expertise</strong> with <strong>strategic thinking</strong>, I ensure
+            every project is not only <strong>robust</strong> but also <strong>meaningful</strong> and sustainable.
+          </p>
+          <p>
+            You can explore my open-source work on{' '}
+            <a href="https://github.com/dawidrylko" target="_blank" rel="noopener noreferrer nofollow">
+              GitHub
+            </a>
+            , share ideas with me on{' '}
+            <a href="https://twitter.com/dawidrylko" target="_blank" rel="noopener noreferrer nofollow">
+              Twitter
+            </a>
+            , or connect professionally on{' '}
+            <a href="https://www.linkedin.com/in/dawidrylko" target="_blank" rel="noopener noreferrer nofollow">
+              LinkedIn
+            </a>
+            . Visit my personal site at{' '}
+            <a href="https://dawid.dev" target="_blank" rel="noopener noreferrer">
+              dawid.dev
+            </a>{' '}
+            to see experiments, articles, and insights on technology and software craftsmanship.
           </p>
         </section>
-        <section id="experience">
-          <h2>Experience</h2>
-          <Table
-            data={experience.map(([company, position, duration]) => [company, position, duration])}
-            header={['Company', 'Position', 'Duration']}
-            widthConfig={['35%', '35%', '30%']}
-          />
-        </section>
-        <section id="education">
-          <h2>Education</h2>
-          <Table
-            data={education}
-            header={['Institution', 'Degree', 'Field of Study']}
-            widthConfig={['35%', '35%', '30%']}
-          />
-        </section>
-        <section id="download">
-          <h2>Download My Full CV</h2>
+        <section id="philosophy">
+          <h2>Philosophy</h2>
           <p>
-            For a comprehensive overview of my experience and skills, please download the full version of my CV in PDF
-            format.
-          </p>
-          <ul>
-            <li>
-              <a href="/resume-en.pdf" download="Dawid_Rylko.pdf" title="Download Full CV (English)">
-                Download CV (PDF) in English 🇬🇧
-              </a>
-            </li>
-            <li>
-              <a href="/resume-pl.pdf" download="Dawid_Rylko.pdf" title="Download Full CV (Polish)">
-                Download CV (PDF) in Polish 🇵🇱
-              </a>
-            </li>
-          </ul>
-        </section>
-        <section id="personal-intro">
-          <h2>Personal Note</h2>
-          <p>
-            The quote and photo below reflect how I&nbsp;think. Technology isn&apos;t just code. It&apos;s also emotion,
-            intuition, and fleeting moments.
+            <strong>Technology</strong> is more than just <strong>code</strong>. It represents creativity, intuition,
+            and the power to shape meaningful experiences. The quote and image below reflect how I view my craft - a
+            constant process of reinvention, curiosity, and building with purpose.
           </p>
         </section>
         <section id="quote">
-          <h2>Favourite Quote</h2>
           {citations.map(({ authorName, citation, text }, index) => (
             <blockquote key={index}>
               {text}
@@ -196,12 +190,54 @@ const BioPage: React.FC<PageProps> = ({ location }) => {
           <StaticImage src="../images/motto.jpg" alt={image.alt} placeholder="blurred" layout="fullWidth" />
           <figcaption>{image.figcaption}</figcaption>
         </figure>
+        <section id="experience">
+          <h2>Experience</h2>
+          <Table
+            data={experience.map(([company, position, duration]) => [company, position, duration])}
+            header={['Company', 'Position', 'Duration']}
+            widthConfig={['35%', '35%', '30%']}
+          />
+        </section>
+        <section id="education">
+          <h2>Education</h2>
+          <Table
+            data={education}
+            header={['Institution', 'Degree', 'Field of Study']}
+            widthConfig={['35%', '35%', '30%']}
+          />
+        </section>
+        <section id="download">
+          <h2>Download My Full CV</h2>
+          <p>
+            For a detailed overview of my career, experience, and technical skills, download the full version of my CV
+            in PDF format below.
+          </p>
+          <ul>
+            <li>
+              <a href="/resume-en.pdf" download="Dawid_Rylko_CV_EN.pdf" title="Download Full CV (English)">
+                Download CV (English PDF) 🇬🇧
+              </a>
+            </li>
+            <li>
+              <a href="/resume-pl.pdf" download="Dawid_Rylko_CV_PL.pdf" title="Download Full CV (Polish)">
+                Download CV (Polish PDF) 🇵🇱
+              </a>
+            </li>
+          </ul>
+        </section>
         <section id="contact">
-          <h2>Contact</h2>
-          <p>If you have any questions or would like to get in touch, feel free to contact me via email.</p>
-          <a href={`mailto:${siteAuthor.email}`} title="Email Me">
-            Email Me
-          </a>
+          <h2>Get in Touch</h2>
+          <p>
+            Interested in working together or have any questions?{' '}
+            <a href="/contact" title="Contact Dawid Ryłko">
+              Visit my contact page
+            </a>{' '}
+            or{' '}
+            <a href={`mailto:${siteAuthor.email}`} title="Send me an email">
+              send me an email
+            </a>
+            . I&apos;m always open to meaningful conversations about technology, software design, and collaboration.
+          </p>
         </section>
       </main>
     </Layout>

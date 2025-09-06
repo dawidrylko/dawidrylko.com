@@ -41,7 +41,7 @@ const hardwareSetup = [
 
 const title = 'Setup';
 const description =
-  "Discover Dawid Ryłko's complete computer setup - from Mac mini M4 and ultrawide monitor to NAS storage and cable management. A detailed overview of hardware, peripherals, and tools used for professional software development.";
+  "A look at Dawid Ryłko's complete development environment, optimised for productivity, scalability, and building reliable software solutions.";
 
 const SetupPage: React.FC<PageProps> = ({ location }) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
