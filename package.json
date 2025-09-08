@@ -23,23 +23,23 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "@fontsource-variable/montserrat": "^5.2.6",
+    "@fontsource-variable/montserrat": "^5.2.7",
     "@fontsource/merriweather": "^5.2.10",
-    "@mdx-js/react": "^3.1.0",
+    "@mdx-js/react": "^3.1.1",
     "gatsby": "^5.15.0",
     "gatsby-plugin-canonical-urls": "^5.15.0",
-    "gatsby-plugin-feed": "^5.14.0",
+    "gatsby-plugin-feed": "^5.15.0",
     "gatsby-plugin-google-gtag": "^5.15.0",
     "gatsby-plugin-image": "^3.15.0",
     "gatsby-plugin-manifest": "^5.15.0",
     "gatsby-plugin-mdx": "^5.15.0",
     "gatsby-plugin-sharp": "^5.15.0",
     "gatsby-plugin-sitemap": "^6.15.0",
-    "gatsby-remark-images": "^7.14.0",
+    "gatsby-remark-images": "^7.15.0",
     "gatsby-remark-katex": "^7.15.0",
     "gatsby-remark-prismjs": "^7.15.0",
     "gatsby-remark-responsive-iframe": "^6.15.0",
-    "gatsby-source-filesystem": "^5.14.0",
+    "gatsby-source-filesystem": "^5.15.0",
     "gatsby-transformer-sharp": "^5.15.0",
     "katex": "0.13.3",
     "prismjs": "^1.30.0",
@@ -49,11 +49,11 @@
     "schema-dts": "^1.1.5"
   },
   "devDependencies": {
-    "@eslint/js": "^9.34.0",
+    "@eslint/js": "^9.35.0",
     "@types/node": "^24.3.1",
-    "@types/react": "^19.1.6",
-    "@types/react-dom": "^19.1.6",
-    "eslint": "^9.34.0",
+    "@types/react": "^19.1.12",
+    "@types/react-dom": "^19.1.9",
+    "eslint": "^9.35.0",
     "eslint-config-react-app": "^7.0.1",
     "eslint-plugin-flowtype": "^8.0.3",
     "eslint-plugin-react": "^7.37.5",
@@ -61,7 +61,7 @@
     "husky": "^9.1.7",
     "prettier": "^3.6.2",
     "typescript": "^5.9.2",
-    "typescript-eslint": "^8.41.0"
+    "typescript-eslint": "^8.42.0"
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx,json,md}": "prettier --write",
