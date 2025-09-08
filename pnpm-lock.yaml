@@ -18,8 +18,8 @@ importers:
         specifier: ^5.2.9
         version: 5.2.9
       '@mdx-js/react':
-        specifier: ^3.1.0
-        version: 3.1.0(@types/react@19.1.6)(react@18.3.1)
+        specifier: ^3.1.1
+        version: 3.1.1(@types/react@19.1.6)(react@18.3.1)
       gatsby:
         specifier: ^5.15.0
         version: 5.15.0(babel-eslint@10.1.0(eslint@9.34.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.2)
@@ -40,7 +40,7 @@ importers:
         version: 5.15.0(gatsby@5.15.0(babel-eslint@10.1.0(eslint@9.34.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.2))(graphql@16.11.0)
       gatsby-plugin-mdx:
         specifier: ^5.15.0
-        version: 5.15.0(@mdx-js/react@3.1.0(@types/react@19.1.6)(react@18.3.1))(gatsby-source-filesystem@5.14.0(gatsby@5.15.0(babel-eslint@10.1.0(eslint@9.34.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.2)))(gatsby@5.15.0(babel-eslint@10.1.0(eslint@9.34.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.2))(graphql@16.11.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 5.15.0(@mdx-js/react@3.1.1(@types/react@19.1.6)(react@18.3.1))(gatsby-source-filesystem@5.14.0(gatsby@5.15.0(babel-eslint@10.1.0(eslint@9.34.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.2)))(gatsby@5.15.0(babel-eslint@10.1.0(eslint@9.34.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.2))(graphql@16.11.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       gatsby-plugin-sharp:
         specifier: ^5.15.0
         version: 5.15.0(gatsby@5.15.0(babel-eslint@10.1.0(eslint@9.34.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.2))(graphql@16.11.0)
@@ -300,6 +300,11 @@ packages:
 
   '@babel/parser@7.28.3':
     resolution: {integrity: sha512-7+Ey1mAgYqFAx2h0RuoxcQT5+MlG3GTV0TQrgr7/ZliKsm/MNDxVVutlWaziMq7wJNAz8MTqz55XLpWvva6StA==}
+    engines: {node: '>=6.0.0'}
+    hasBin: true
+
+  '@babel/parser@7.28.4':
+    resolution: {integrity: sha512-yZbBqeM6TkpP9du/I2pUZnJsRMGGvOuIrhjzC1AwHwW+6he4mni6Bp/m8ijn0iOuZuPI2BfkCoSRunpyjnrQKg==}
     engines: {node: '>=6.0.0'}
     hasBin: true
 
@@ -929,8 +934,16 @@ packages:
     resolution: {integrity: sha512-7w4kZYHneL3A6NP2nxzHvT3HCZ7puDZZjFMqDpBPECub79sTtSO5CGXDkKrTQq8ksAwfD/XI2MRFX23njdDaIQ==}
     engines: {node: '>=6.9.0'}
 
+  '@babel/traverse@7.28.4':
+    resolution: {integrity: sha512-YEzuboP2qvQavAcjgQNVgsvHIDv6ZpwXvcvjmyySP2DIMuByS/6ioU5G9pYrWHM6T2YDfc7xga9iNzYOs12CFQ==}
+    engines: {node: '>=6.9.0'}
+
   '@babel/types@7.28.2':
     resolution: {integrity: sha512-ruv7Ae4J5dUYULmeXw1gmb7rYRz57OWCPM57pHojnLq/3Z1CK2lNSLTCVjxVk1F/TZHwOZZrOWi0ur95BbLxNQ==}
+    engines: {node: '>=6.9.0'}
+
+  '@babel/types@7.28.4':
+    resolution: {integrity: sha512-bkFqkLhh3pMBUQQkpVgWDWq/lqzc2678eUyDlTBhRqhCHFguYYGM0Efga7tYk4TogG/3x0EEl66/OQ+WGbWB/Q==}
     engines: {node: '>=6.9.0'}
 
   '@builder.io/partytown@0.7.6':
@@ -1349,8 +1362,8 @@ packages:
   '@mdx-js/mdx@2.3.0':
     resolution: {integrity: sha512-jLuwRlz8DQfQNiUCJR50Y09CGPq3fLtmtUQfVrj79E0JWu3dvsVcxVIcfhR5h0iXu+/z++zDrYeiJqifRynJkA==}
 
-  '@mdx-js/react@3.1.0':
-    resolution: {integrity: sha512-QjHtSaoameoalGnKDT3FoIl4+9RwyTmo9ZJGBdLOks/YOiWHoRDI3PUwEzOE7kEmGcV3AFcp9K6dYu9rEuKLAQ==}
+  '@mdx-js/react@3.1.1':
+    resolution: {integrity: sha512-f++rKLQgUVYDAtECQ6fn/is15GkEH9+nZPM3MS0RcxVqoTfawHvDlSCH7JbMhAM6uJ32v3eXLvLmLvjGu7PTQw==}
     peerDependencies:
       '@types/react': '>=16'
       react: '>=16'
@@ -7133,6 +7146,10 @@ snapshots:
     dependencies:
       '@babel/types': 7.28.2
 
+  '@babel/parser@7.28.4':
+    dependencies:
+      '@babel/types': 7.28.4
+
   '@babel/plugin-bugfix-firefox-class-in-computed-class-key@7.27.1(@babel/core@7.27.4)':
     dependencies:
       '@babel/core': 7.27.4
@@ -8440,7 +8457,24 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  '@babel/traverse@7.28.4':
+    dependencies:
+      '@babel/code-frame': 7.27.1
+      '@babel/generator': 7.28.3
+      '@babel/helper-globals': 7.28.0
+      '@babel/parser': 7.28.4
+      '@babel/template': 7.27.2
+      '@babel/types': 7.28.4
+      debug: 4.4.1
+    transitivePeerDependencies:
+      - supports-color
+
   '@babel/types@7.28.2':
+    dependencies:
+      '@babel/helper-string-parser': 7.27.1
+      '@babel/helper-validator-identifier': 7.27.1
+
+  '@babel/types@7.28.4':
     dependencies:
       '@babel/helper-string-parser': 7.27.1
       '@babel/helper-validator-identifier': 7.27.1
@@ -8914,7 +8948,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@mdx-js/react@3.1.0(@types/react@19.1.6)(react@18.3.1)':
+  '@mdx-js/react@3.1.1(@types/react@19.1.6)(react@18.3.1)':
     dependencies:
       '@types/mdx': 2.0.13
       '@types/react': 19.1.6
@@ -9953,9 +9987,9 @@ snapshots:
   babel-eslint@10.1.0(eslint@9.34.0):
     dependencies:
       '@babel/code-frame': 7.27.1
-      '@babel/parser': 7.28.3
-      '@babel/traverse': 7.28.3
-      '@babel/types': 7.28.2
+      '@babel/parser': 7.28.4
+      '@babel/traverse': 7.28.4
+      '@babel/types': 7.28.4
       eslint: 9.34.0
       eslint-visitor-keys: 1.3.0
       resolve: 1.22.10
@@ -12016,10 +12050,10 @@ snapshots:
     transitivePeerDependencies:
       - graphql
 
-  gatsby-plugin-mdx@5.15.0(@mdx-js/react@3.1.0(@types/react@19.1.6)(react@18.3.1))(gatsby-source-filesystem@5.14.0(gatsby@5.15.0(babel-eslint@10.1.0(eslint@9.34.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.2)))(gatsby@5.15.0(babel-eslint@10.1.0(eslint@9.34.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.2))(graphql@16.11.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  gatsby-plugin-mdx@5.15.0(@mdx-js/react@3.1.1(@types/react@19.1.6)(react@18.3.1))(gatsby-source-filesystem@5.14.0(gatsby@5.15.0(babel-eslint@10.1.0(eslint@9.34.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.2)))(gatsby@5.15.0(babel-eslint@10.1.0(eslint@9.34.0))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.2))(graphql@16.11.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
       '@mdx-js/mdx': 2.3.0
-      '@mdx-js/react': 3.1.0(@types/react@19.1.6)(react@18.3.1)
+      '@mdx-js/react': 3.1.1(@types/react@19.1.6)(react@18.3.1)
       acorn: 8.15.0
       acorn-jsx: 5.3.2(acorn@8.15.0)
       astring: 1.9.0
