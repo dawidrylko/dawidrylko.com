@@ -15,8 +15,8 @@ importers:
         specifier: ^5.2.6
         version: 5.2.6
       '@fontsource/merriweather':
-        specifier: ^5.2.9
-        version: 5.2.9
+        specifier: ^5.2.10
+        version: 5.2.10
       '@mdx-js/react':
         specifier: ^3.1.0
         version: 3.1.0(@types/react@19.1.6)(react@18.3.1)
@@ -295,6 +295,11 @@ packages:
 
   '@babel/parser@7.28.3':
     resolution: {integrity: sha512-7+Ey1mAgYqFAx2h0RuoxcQT5+MlG3GTV0TQrgr7/ZliKsm/MNDxVVutlWaziMq7wJNAz8MTqz55XLpWvva6StA==}
+    engines: {node: '>=6.0.0'}
+    hasBin: true
+
+  '@babel/parser@7.28.4':
+    resolution: {integrity: sha512-yZbBqeM6TkpP9du/I2pUZnJsRMGGvOuIrhjzC1AwHwW+6he4mni6Bp/m8ijn0iOuZuPI2BfkCoSRunpyjnrQKg==}
     engines: {node: '>=6.0.0'}
     hasBin: true
 
@@ -1011,8 +1016,8 @@ packages:
   '@fontsource-variable/montserrat@5.2.6':
     resolution: {integrity: sha512-1eHefcz9ZXSMjZPckKCWSYd8rLjUpmzQIsNO8DuyU0IdPvsqletPvSIJmztr0sCU6sX4EFKsSHxJWawjmROp2A==}
 
-  '@fontsource/merriweather@5.2.9':
-    resolution: {integrity: sha512-amd5Wp7BM5U0HE/FUgsJmf/dvfqSKYf55HrxR1tMlpT3BqQmVZHB9RJDBpNqqf3/yF6fkryCbx5H9fEMa4mY3g==}
+  '@fontsource/merriweather@5.2.10':
+    resolution: {integrity: sha512-jZFajhfv5K8BSz8SVXY450BPa3C/WBYXwCHehi9sdqSsfEo9k4GorNidPX2CViNTnBqg6kt+3+D/oricLD5uDg==}
 
   '@gatsbyjs/parcel-namer-relative-to-cwd@2.15.0':
     resolution: {integrity: sha512-k1a8iLsjQY0m5Rkj+IA6Ev5QwAUU7KK2NKX+5IMcr8Ld5s13Xc1l+8Vg++yX1eCFQUALk4J4dvm2gHBjDldd2Q==}
@@ -8536,7 +8541,7 @@ snapshots:
 
   '@fontsource-variable/montserrat@5.2.6': {}
 
-  '@fontsource/merriweather@5.2.9': {}
+  '@fontsource/merriweather@5.2.10': {}
 
   '@gatsbyjs/parcel-namer-relative-to-cwd@2.15.0(@parcel/core@2.8.3)':
     dependencies:
