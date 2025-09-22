@@ -15,8 +15,8 @@ importers:
         specifier: ^5.2.7
         version: 5.2.7
       '@fontsource/merriweather':
-        specifier: ^5.2.10
-        version: 5.2.10
+        specifier: ^5.2.11
+        version: 5.2.11
       '@mdx-js/react':
         specifier: ^3.1.1
         version: 3.1.1(@types/react@19.1.12)(react@18.3.1)
@@ -869,8 +869,8 @@ packages:
   '@fontsource-variable/montserrat@5.2.7':
     resolution: {integrity: sha512-uBjVHAAlEux6bBUFnjrRQmONbuzSXPD1RlTKtWcXfG1qCx4sNgAGN0KUNYAWk+Pf/+WONCwuOpU2kOVloXQODA==}
 
-  '@fontsource/merriweather@5.2.10':
-    resolution: {integrity: sha512-jZFajhfv5K8BSz8SVXY450BPa3C/WBYXwCHehi9sdqSsfEo9k4GorNidPX2CViNTnBqg6kt+3+D/oricLD5uDg==}
+  '@fontsource/merriweather@5.2.11':
+    resolution: {integrity: sha512-ZiIMeUh5iT8d73o6xlSF8GKgjV5pgiFrufYc5jZTVAfExtWKqM2vQHnsqXSFMv4ELhAcjt6Vf+5T3oVGXhAizQ==}
 
   '@gatsbyjs/parcel-namer-relative-to-cwd@2.15.0':
     resolution: {integrity: sha512-k1a8iLsjQY0m5Rkj+IA6Ev5QwAUU7KK2NKX+5IMcr8Ld5s13Xc1l+8Vg++yX1eCFQUALk4J4dvm2gHBjDldd2Q==}
@@ -7579,7 +7579,7 @@ snapshots:
 
   '@fontsource-variable/montserrat@5.2.7': {}
 
-  '@fontsource/merriweather@5.2.10': {}
+  '@fontsource/merriweather@5.2.11': {}
 
   '@gatsbyjs/parcel-namer-relative-to-cwd@2.15.0(@parcel/core@2.8.3)':
     dependencies:
