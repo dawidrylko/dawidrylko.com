@@ -12,8 +12,8 @@ importers:
   .:
     dependencies:
       '@fontsource-variable/montserrat':
-        specifier: ^5.2.7
-        version: 5.2.7
+        specifier: ^5.2.8
+        version: 5.2.8
       '@fontsource/merriweather':
         specifier: ^5.2.10
         version: 5.2.10
@@ -866,8 +866,8 @@ packages:
   '@expo/sudo-prompt@9.3.2':
     resolution: {integrity: sha512-HHQigo3rQWKMDzYDLkubN5WQOYXJJE2eNqIQC2axC2iO3mHdwnIR7FgZVvHWtBwAdzBgAP0ECp8KqS8TiMKvgw==}
 
-  '@fontsource-variable/montserrat@5.2.7':
-    resolution: {integrity: sha512-uBjVHAAlEux6bBUFnjrRQmONbuzSXPD1RlTKtWcXfG1qCx4sNgAGN0KUNYAWk+Pf/+WONCwuOpU2kOVloXQODA==}
+  '@fontsource-variable/montserrat@5.2.8':
+    resolution: {integrity: sha512-d8wykq7GCKhEOlLwEuQIOK3w3qsXNxwDlH0meru4AZZzQ4/+rZyvHWKL6BBtHdmbovSHEEQDkwkD8qYUKlcFtQ==}
 
   '@fontsource/merriweather@5.2.10':
     resolution: {integrity: sha512-jZFajhfv5K8BSz8SVXY450BPa3C/WBYXwCHehi9sdqSsfEo9k4GorNidPX2CViNTnBqg6kt+3+D/oricLD5uDg==}
@@ -7577,7 +7577,7 @@ snapshots:
 
   '@expo/sudo-prompt@9.3.2': {}
 
-  '@fontsource-variable/montserrat@5.2.7': {}
+  '@fontsource-variable/montserrat@5.2.8': {}
 
   '@fontsource/merriweather@5.2.10': {}
 
