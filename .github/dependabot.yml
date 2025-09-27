@@ -10,6 +10,7 @@ updates:
       - 'dawidrylko'
     reviewers:
       - 'dawidrylko'
+    rebase-strategy: auto
     groups:
       lint:
         dependency-type: 'development'
