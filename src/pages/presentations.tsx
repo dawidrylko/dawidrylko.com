@@ -25,17 +25,11 @@ type DataType = {
 
 const LANGUAGE_PATTERN = /[_-](pl|en)$/i;
 const DEFAULT_LANGUAGE = 'EN';
-const FILE_ICONS: Record<string, string> = {
-  key: '🎨',
-  pdf: '📄',
-  ppt: '📊',
-  pptx: '📊',
-};
-const FILE_TYPES: Record<string, string> = {
-  key: 'Keynote',
-  pdf: 'PDF',
-  ppt: 'PowerPoint',
-  pptx: 'PowerPoint',
+const FILE_CONFIG: Record<string, { icon: string; type: string }> = {
+  key: { icon: '🎨', type: 'Keynote' },
+  pdf: { icon: '📄', type: 'PDF' },
+  ppt: { icon: '📊', type: 'PowerPoint' },
+  pptx: { icon: '📊', type: 'PowerPoint' },
 };
 
 const detectLanguage = (fileName: string): string => {
@@ -63,10 +57,10 @@ const groupFilesByName = (files: FileNode[]): Map<string, FileNode[]> => {
   }, new Map<string, FileNode[]>());
 };
 
-const getFileMetadata = (extension: string) => ({
-  icon: FILE_ICONS[extension.toLowerCase()] || '�',
-  type: FILE_TYPES[extension.toLowerCase()] || extension.toUpperCase(),
-});
+const getFileMetadata = (extension: string) => {
+  const config = FILE_CONFIG[extension.toLowerCase()];
+  return config || { icon: '�', type: extension.toUpperCase() };
+};
 
 const createPresentationsArray = ({ allFile: { nodes } }: DataType) => {
   const groupedFiles = groupFilesByName(nodes);
@@ -79,23 +73,30 @@ const createPresentationsArray = ({ allFile: { nodes } }: DataType) => {
 
     const downloadLinks = (
       <>
-        {files.map(file => {
-          const { icon, type } = getFileMetadata(file.extension);
-          const fullName = `${cleanName}.${file.extension}`;
+        {files
+          .sort((a, b) => {
+            const orderKeys = Object.keys(FILE_CONFIG);
+            const indexA = orderKeys.indexOf(a.extension.toLowerCase());
+            const indexB = orderKeys.indexOf(b.extension.toLowerCase());
+            return (indexA === -1 ? Infinity : indexA) - (indexB === -1 ? Infinity : indexB);
+          })
+          .map(file => {
+            const { icon, type } = getFileMetadata(file.extension);
+            const fullName = `${cleanName}.${file.extension}`;
 
-          return (
-            <a
-              key={file.publicURL}
-              href={file.publicURL}
-              download={fullName}
-              aria-label={`Download ${cleanName} as ${type} format`}
-              title={`Download ${type} (${formatFileSize(file.size)})`}
-              style={{ marginRight: '0.5rem' }}
-            >
-              {icon}
-            </a>
-          );
-        })}
+            return (
+              <a
+                key={file.publicURL}
+                href={file.publicURL}
+                download={fullName}
+                aria-label={`Download ${cleanName} as ${type} format`}
+                title={`Download ${type} (${formatFileSize(file.size)})`}
+                style={{ marginRight: '0.5rem' }}
+              >
+                {icon}
+              </a>
+            );
+          })}
       </>
     );
 
