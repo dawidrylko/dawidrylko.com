@@ -1,27 +1,25 @@
 import * as React from 'react';
 import { JsonLd } from 'react-schemaorg';
-import { ItemList, ListItem, WithContext } from 'schema-dts';
+import { ItemList, WithContext } from 'schema-dts';
 
 type TableProps = {
   data: (string | React.ReactNode)[][];
   header?: string[];
   widthConfig?: string[];
-  tableSchema?: ItemList['@type'];
-  rowSchema?: ListItem['@type'];
-  cellSchema?: ListItem['@type'];
+  ariaLabel?: string;
 };
 
-const Table: React.FC<TableProps> = ({ data, header, widthConfig, tableSchema, rowSchema, cellSchema }) => {
+const Table: React.FC<TableProps> = ({ data, header, widthConfig, ariaLabel }) => {
   const structuredData: WithContext<ItemList> = {
     '@context': 'https://schema.org',
-    '@type': tableSchema || 'ItemList',
+    '@type': 'ItemList',
     itemListElement: data.map((row, rowIndex) => ({
-      '@type': rowSchema || 'ListItem',
+      '@type': 'ListItem',
       position: rowIndex + 1,
       item: {
         '@type': 'ItemList',
         itemListElement: row.map((cell, cellIndex) => ({
-          '@type': cellSchema || 'ListItem',
+          '@type': 'ListItem',
           position: cellIndex + 1,
           name: typeof cell === 'string' ? cell : `Item ${cellIndex + 1}`,
         })),
@@ -32,21 +30,23 @@ const Table: React.FC<TableProps> = ({ data, header, widthConfig, tableSchema, r
   return (
     <>
       <JsonLd<ItemList> item={structuredData} />
-      <table>
+      <table role="table" aria-label={ariaLabel}>
         {header && (
           <thead>
-            <tr>
+            <tr role="row">
               {header.map((item, index) => (
-                <th key={index}>{item}</th>
+                <th key={index} scope="col" role="columnheader">
+                  {item}
+                </th>
               ))}
             </tr>
           </thead>
         )}
         <tbody>
           {data.map((row, rowIndex) => (
-            <tr key={rowIndex}>
+            <tr key={rowIndex} role="row">
               {row.map((cell, cellIndex) => (
-                <td key={cellIndex} width={widthConfig?.[cellIndex]}>
+                <td key={cellIndex} width={widthConfig?.[cellIndex]} role="cell">
                   {cell}
                 </td>
               ))}

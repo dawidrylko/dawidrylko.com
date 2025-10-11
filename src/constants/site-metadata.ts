@@ -47,10 +47,6 @@ export const SITE_METADATA = {
       url: '/blog',
     },
     {
-      name: 'Setup',
-      url: '/setup',
-    },
-    {
       name: 'Metadata',
       url: '/metadata',
     },
