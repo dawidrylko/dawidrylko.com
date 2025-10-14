@@ -62,8 +62,8 @@ const config: GatsbyConfig = {
     {
       resolve: 'gatsby-source-filesystem',
       options: {
-        name: 'presentations',
-        path: 'static/presentations',
+        name: 'files',
+        path: 'static/files',
       },
     },
     {
