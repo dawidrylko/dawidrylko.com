@@ -31,11 +31,23 @@ type ParsedFileName = {
   fullName: string;
 };
 
-const FILE_CONFIG: Record<string, { icon: string; type: string; hidden: boolean }> = {
-  pdf: { icon: '📄', type: 'PDF', hidden: false },
-  key: { icon: '🎨', type: 'Keynote', hidden: true },
-  ppt: { icon: '📊', type: 'PowerPoint', hidden: true },
-  pptx: { icon: '📊', type: 'PowerPoint', hidden: true },
+type FileAction = 'download' | 'open';
+
+type FileConfig = {
+  icon: string;
+  type: string;
+  action: FileAction;
+  hidden: boolean;
+};
+
+const FILE_CONFIG: Record<string, FileConfig[]> = {
+  pdf: [
+    { icon: '↗️', type: 'PDF', action: 'open', hidden: false },
+    { icon: '📄', type: 'PDF', action: 'download', hidden: false },
+  ],
+  key: [{ icon: '🎨', type: 'Keynote', action: 'download', hidden: true }],
+  ppt: [{ icon: '📊', type: 'PowerPoint', action: 'download', hidden: true }],
+  pptx: [{ icon: '📊', type: 'PowerPoint', action: 'download', hidden: true }],
 };
 
 const parseFileName = (fileName: string): ParsedFileName | null => {
@@ -81,9 +93,9 @@ const groupFilesByIdentity = (files: FileNode[]): Map<string, FileNode[]> => {
   }, new Map<string, FileNode[]>());
 };
 
-const getFileMetadata = (extension: string) => {
+const getFileMetadata = (extension: string): FileConfig[] => {
   const config = FILE_CONFIG[extension.toLowerCase()];
-  return config || { icon: '�', type: extension.toUpperCase(), hidden: false };
+  return config || [{ icon: '📎', type: extension.toUpperCase(), action: 'download', hidden: false }];
 };
 
 const createPresentationsArray = ({ allFile: { nodes } }: DataType, showHidden: boolean) => {
@@ -119,11 +131,12 @@ const createPresentationsArray = ({ allFile: { nodes } }: DataType, showHidden: 
       return [];
     }
 
-    const dateSource = files.find(f => f.extension.toLowerCase() === 'key') || files[0];
-    const totalSize = files.reduce((sum, file) => sum + file.size, 0);
+    const pdfFile = files.find(f => f.extension.toLowerCase() === 'pdf');
+    const dateSource = pdfFile || files[0];
+    const sizeSource = pdfFile || files[0];
 
     const downloadLinks = (
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem' }}>
         {files
           .sort((a, b) => {
             const orderKeys = Object.keys(FILE_CONFIG);
@@ -131,27 +144,35 @@ const createPresentationsArray = ({ allFile: { nodes } }: DataType, showHidden: 
             const indexB = orderKeys.indexOf(b.extension.toLowerCase());
             return (indexA === -1 ? Infinity : indexA) - (indexB === -1 ? Infinity : indexB);
           })
-          .map(file => {
-            const { icon, type, hidden } = getFileMetadata(file.extension);
+          .flatMap(file => {
+            const configs = getFileMetadata(file.extension);
             const downloadName = `${parsed.title} - Dawid Ryłko - dawidrylko.com.${file.extension}`;
-            const shouldShow = !hidden || showHidden;
 
-            if (!shouldShow) {
-              return null;
-            }
+            return configs
+              .filter(config => !config.hidden || showHidden)
+              .map((config, index) => {
+                const linkProps =
+                  config.action === 'open'
+                    ? {
+                        href: file.publicURL,
+                        target: '_blank' as const,
+                        rel: 'noopener noreferrer',
+                        'aria-label': `Open ${parsed.title} ${config.type} in new tab`,
+                        title: `Open ${config.type} in new tab (${formatFileSize(file.size)})`,
+                      }
+                    : {
+                        href: file.publicURL,
+                        download: downloadName,
+                        'aria-label': `Download ${parsed.title} as ${config.type}`,
+                        title: `Download ${config.type} (${formatFileSize(file.size)})`,
+                      };
 
-            return (
-              <a
-                key={file.publicURL}
-                href={file.publicURL}
-                download={downloadName}
-                aria-label={`Download ${parsed.title} as ${type} format`}
-                title={`Download ${type} (${formatFileSize(file.size)})`}
-                style={{ marginRight: '0.5rem' }}
-              >
-                {icon}
-              </a>
-            );
+                return (
+                  <a key={`${file.publicURL}-${index}`} {...linkProps}>
+                    {config.icon}
+                  </a>
+                );
+              });
           })}
       </div>
     );
@@ -161,7 +182,7 @@ const createPresentationsArray = ({ allFile: { nodes } }: DataType, showHidden: 
       parsed.topic.toUpperCase(),
       parsed.title,
       parsed.language,
-      formatFileSize(totalSize),
+      formatFileSize(sizeSource.size),
       formatDate(dateSource.birthTime),
       formatDate(dateSource.modifiedTime),
       downloadLinks,
