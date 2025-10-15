@@ -47,10 +47,6 @@ export const SITE_METADATA = {
       url: '/blog',
     },
     {
-      name: 'Metadata',
-      url: '/metadata',
-    },
-    {
       name: 'Contact',
       url: '/contact',
     },

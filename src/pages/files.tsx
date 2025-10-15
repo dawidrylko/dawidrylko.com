@@ -90,15 +90,24 @@ const createPresentationsArray = ({ allFile: { nodes } }: DataType, showHidden: 
   const groupedFiles = groupFilesByIdentity(nodes);
 
   const sortedEntries = Array.from(groupedFiles.entries()).sort(([keyA], [keyB]) => {
-    const parsedA = parseFileName(keyA);
-    const parsedB = parseFileName(keyB);
+    const filesA = groupedFiles.get(keyA);
+    const filesB = groupedFiles.get(keyB);
+
+    if (!filesA || !filesB) {
+      return 0;
+    }
+
+    const parsedA = parseFileName(filesA[0].name);
+    const parsedB = parseFileName(filesB[0].name);
 
     if (!parsedA || !parsedB) {
       return 0;
     }
+
     if (parsedA.topic !== parsedB.topic) {
       return parsedA.topic.localeCompare(parsedB.topic);
     }
+
     return parsedA.order - parsedB.order;
   });
 

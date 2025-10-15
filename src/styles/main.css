@@ -644,3 +644,15 @@ blockquote {
     outline: 1px solid currentColor;
   }
 }
+
+/* Footer */
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.footer-metadata a {
+  color: var(--color-accent);
+}

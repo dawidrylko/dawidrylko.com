@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 
 import * as React from 'react';
+import { Link } from 'gatsby';
 import { useSiteMetadata } from '../hooks/use-site-metadata';
 import Bio from './bio';
 import Menu from './menu';
@@ -32,8 +33,13 @@ const Layout: React.FC<LayoutProps> = ({ location, children, breadcrumbTitle }) 
       <Bio />
       <hr />
       {siteUrl && siteAuthor.name && (
-        <footer>
-          Copyright © {new Date().getFullYear()} <a href={siteUrl}>{siteAuthor.name}</a>
+        <footer className="footer">
+          <div className="footer-copyright">
+            Copyright © {new Date().getFullYear()} <a href={siteUrl}>{siteAuthor.name}</a>
+          </div>
+          <div className="footer-metadata">
+            <Link to="/metadata">Metadata</Link>
+          </div>
         </footer>
       )}
     </div>
