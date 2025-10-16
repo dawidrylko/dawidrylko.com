@@ -60,13 +60,6 @@ const config: GatsbyConfig = {
       },
     },
     {
-      resolve: 'gatsby-source-filesystem',
-      options: {
-        name: 'files',
-        path: 'static/files',
-      },
-    },
-    {
       resolve: `gatsby-plugin-mdx`,
       options: {
         extensions: ['.mdx', '.md'],

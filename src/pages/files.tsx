@@ -13,12 +13,10 @@ type FileNode = {
   extension: string;
   publicURL: string;
   size: number;
-  birthTime: string;
-  modifiedTime: string;
 };
 
 type DataType = {
-  allFile: {
+  allStaticFile: {
     nodes: FileNode[];
   };
 };
@@ -79,8 +77,6 @@ const formatFileSize = (bytes: number): string => {
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(2))} ${sizes[i]}`;
 };
 
-const formatDate = (dateString: string): string => new Date(dateString).toISOString().split('T')[0];
-
 const groupFilesByIdentity = (files: FileNode[]): Map<string, FileNode[]> => {
   return files.reduce((map, file) => {
     const parsed = parseFileName(file.name);
@@ -98,7 +94,7 @@ const getFileMetadata = (extension: string): FileConfig[] => {
   return config || [{ icon: '📎', type: extension.toUpperCase(), action: 'download', hidden: false }];
 };
 
-const createPresentationsArray = ({ allFile: { nodes } }: DataType, showHidden: boolean) => {
+const createPresentationsArray = ({ allStaticFile: { nodes } }: DataType, showHidden: boolean) => {
   const groupedFiles = groupFilesByIdentity(nodes);
 
   const sortedEntries = Array.from(groupedFiles.entries()).sort(([keyA], [keyB]) => {
@@ -132,11 +128,10 @@ const createPresentationsArray = ({ allFile: { nodes } }: DataType, showHidden: 
     }
 
     const pdfFile = files.find(f => f.extension.toLowerCase() === 'pdf');
-    const dateSource = pdfFile || files[0];
     const sizeSource = pdfFile || files[0];
 
     const downloadLinks = (
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
         {files
           .sort((a, b) => {
             const orderKeys = Object.keys(FILE_CONFIG);
@@ -183,8 +178,6 @@ const createPresentationsArray = ({ allFile: { nodes } }: DataType, showHidden: 
       parsed.title,
       parsed.language,
       formatFileSize(sizeSource.size),
-      formatDate(dateSource.birthTime),
-      formatDate(dateSource.modifiedTime),
       downloadLinks,
     ];
   });
@@ -230,8 +223,8 @@ const PresentationsPage: React.FC<PageProps<DataType>> = ({ data, location }) =>
           <h2 id="presentations-heading">Presentations</h2>
           <Table
             data={createPresentationsArray(data, showHidden)}
-            header={['#', 'Topic', 'Title', 'Lang', 'Size', 'Created', 'Modified', 'Download']}
-            widthConfig={['5%', '15%', '15%', '10%', '10%', '15%', '15%', '15%']}
+            header={['#', 'Topic', 'Title', 'Lang', 'Size', 'Download']}
+            widthConfig={['5%', '20%', '20%', '10%', '15%', '30%']}
           />
         </section>
       </main>
@@ -245,14 +238,12 @@ export default PresentationsPage;
 
 export const query = graphql`
   {
-    allFile(filter: { sourceInstanceName: { eq: "files" } }, sort: { modifiedTime: DESC }) {
+    allStaticFile {
       nodes {
         name
         extension
         publicURL
         size
-        birthTime
-        modifiedTime
       }
     }
   }

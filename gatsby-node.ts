@@ -2,9 +2,64 @@
 import type { GatsbyNode } from 'gatsby';
 
 import path from 'path';
+import fs from 'fs';
 import { createFilePath } from 'gatsby-source-filesystem';
 
 const blogPost = path.resolve(`./src/templates/blog-post.tsx`);
+
+export const sourceNodes: GatsbyNode['sourceNodes'] = async ({ actions, createNodeId, createContentDigest }) => {
+  const { createNode } = actions;
+  const filesDir = path.resolve('./static/files');
+
+  if (!fs.existsSync(filesDir)) {
+    console.warn(`Files directory not found: ${filesDir}`);
+    return;
+  }
+
+  const getAllFiles = (dir: string, baseDir: string): Array<{ filePath: string; relativePath: string }> => {
+    const results: Array<{ filePath: string; relativePath: string }> = [];
+    const entries = fs.readdirSync(dir, { withFileTypes: true });
+
+    entries.forEach(entry => {
+      const fullPath = path.join(dir, entry.name);
+
+      if (entry.isDirectory()) {
+        results.push(...getAllFiles(fullPath, baseDir));
+      } else if (entry.isFile()) {
+        const relativePath = path.relative(baseDir, fullPath);
+        results.push({ filePath: fullPath, relativePath });
+      }
+    });
+
+    return results;
+  };
+
+  const allFiles = getAllFiles(filesDir, filesDir);
+
+  allFiles.forEach(({ filePath, relativePath }) => {
+    const stats = fs.statSync(filePath);
+    const fileName = path.basename(filePath);
+    const extension = path.extname(fileName).slice(1);
+    const nameWithoutExt = path.basename(fileName, path.extname(fileName));
+
+    const node = {
+      id: createNodeId(`static-file-${relativePath}`),
+      parent: null,
+      children: [],
+      internal: {
+        type: 'StaticFile',
+        contentDigest: createContentDigest({ relativePath, size: stats.size }),
+      },
+      name: nameWithoutExt,
+      extension,
+      publicURL: `/files/${relativePath.replace(/\\/g, '/')}`,
+      size: stats.size,
+      relativePath: relativePath.replace(/\\/g, '/'),
+    };
+
+    createNode(node);
+  });
+};
 
 export const createPages: GatsbyNode['createPages'] = async ({ graphql, actions, reporter }: any) => {
   const { createPage, createRedirect } = actions;
