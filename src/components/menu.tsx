@@ -10,6 +10,8 @@ const Menu: React.FC = () => {
   const structuredData: WithContext<SiteNavigationElement> = {
     '@context': 'https://schema.org',
     '@type': 'SiteNavigationElement',
+    name: 'Main Navigation',
+    description: 'Primary navigation menu for dawidrylko.com',
     mainEntityOfPage: {
       '@type': 'WebPage',
       '@id': siteUrl,
@@ -17,9 +19,10 @@ const Menu: React.FC = () => {
     about: menu.map((item, index) => ({
       '@type': 'ListItem',
       position: index + 1,
+      name: item.name,
       item: {
         '@type': 'WebPage',
-        url: item.url,
+        url: `${siteUrl}${item.url}`,
         name: item.name,
       },
     })),

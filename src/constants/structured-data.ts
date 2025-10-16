@@ -5,6 +5,8 @@ export const STRUCTURED_DATA = {
     '@context': 'https://schema.org',
     '@type': 'Person',
     name: SITE_METADATA.author.name,
+    givenName: 'Dawid',
+    familyName: 'Ryłko',
     description:
       'Dawid Ryłko is a Software Engineer with over 10 years of experience, specialising in end-to-end digital solutions. He designs scalable, secure, and resilient systems by combining frontend and backend development with infrastructure automation, AI integration, DevOps, and cybersecurity. Known for his strategic thinking and problem-solving skills, Dawid helps organisations build robust technologies that align with business goals and deliver long-term value.',
 

@@ -10,9 +10,22 @@ import Table from '../components/table';
 import { useSiteMetadata } from '../hooks/use-site-metadata';
 import { useStructuredData } from '../hooks/use-structured-data';
 
-const title = 'About';
-const description =
-  'Learn about Dawid Ryłko - experienced Software Engineer with expertise in scalable system design, AI integration, cybersecurity, and technology leadership. Discover his professional background, education, and philosophy behind building meaningful technology solutions.';
+const PAGE_METADATA = {
+  title: 'About',
+  description:
+    'Meet Dawid Ryłko—a Software Engineer with 10+ years of experience building scalable, secure, and resilient systems. Learn about his professional journey, technical expertise in full-stack development, AI integration, cybersecurity, educational background, and philosophy behind creating meaningful technology.',
+  keywords: [
+    'Dawid Ryłko',
+    'Software Engineer',
+    'full-stack developer',
+    'system architecture',
+    'AI integration',
+    'cybersecurity expert',
+    'scalable systems',
+    'technology leadership',
+    'software craftsmanship',
+  ],
+};
 
 const experience = [
   ['Silesian Solutions', 'Self-employed', 'Oct 2015 - Present', 'https://silesiansolutions.com'],
@@ -67,10 +80,15 @@ const BioPage: React.FC<PageProps> = ({ location }) => {
   const structuredData: WithContext<WebPage> = {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
-    headline: title,
+    name: PAGE_METADATA.title,
+    headline: PAGE_METADATA.title,
+    description: PAGE_METADATA.description,
+    author: person,
+    keywords: PAGE_METADATA.keywords.join(', '),
     about: {
       '@type': 'CreativeWork',
       name: 'Favourite Quote',
+      description: 'Philosophical quotes that inspire approach to technology and software craftsmanship',
       citation: citations.map(({ authorName, citation, text }) => ({
         '@type': 'Quotation',
         text,
@@ -113,10 +131,10 @@ const BioPage: React.FC<PageProps> = ({ location }) => {
   };
 
   return (
-    <Layout location={location} breadcrumbTitle={title}>
+    <Layout location={location} breadcrumbTitle={PAGE_METADATA.title}>
       <JsonLd<WebPage> item={structuredData} />
       <header>
-        <h1>{title}</h1>
+        <h1>{PAGE_METADATA.title}</h1>
       </header>
       <main>
         <section id="summary">
@@ -244,6 +262,6 @@ const BioPage: React.FC<PageProps> = ({ location }) => {
   );
 };
 
-export const Head: HeadFC = () => <Seo title={title} description={description} />;
+export const Head: HeadFC = () => <Seo title={PAGE_METADATA.title} description={PAGE_METADATA.description} />;
 
 export default BioPage;

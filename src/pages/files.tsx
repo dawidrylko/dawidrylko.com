@@ -7,6 +7,7 @@ import { graphql } from 'gatsby';
 import Layout from '../components/layout';
 import Seo from '../components/seo';
 import Table from '../components/table';
+import { useStructuredData } from '../hooks/use-structured-data';
 
 type FileNode = {
   name: string;
@@ -183,8 +184,21 @@ const createPresentationsArray = ({ allStaticFile: { nodes } }: DataType, showHi
   });
 };
 
-const title = 'Files';
-const description = 'Collection of files and materials available for download.';
+const PAGE_METADATA = {
+  title: 'Files',
+  description:
+    'Browse and download technical presentations, slides, and educational materials by Dawid Ryłko. Access professionally crafted resources covering software development, Node.js, TypeScript, and modern web technologies—available in multiple formats and languages.',
+  keywords: [
+    'technical presentations',
+    'software development slides',
+    'Node.js presentations',
+    'TypeScript materials',
+    'web development resources',
+    'programming slides',
+    'educational materials',
+    'tech conference presentations',
+  ],
+};
 
 const PresentationsPage: React.FC<PageProps<DataType>> = ({ data, location }) => {
   const [showHidden, setShowHidden] = React.useState(false);
@@ -204,19 +218,43 @@ const PresentationsPage: React.FC<PageProps<DataType>> = ({ data, location }) =>
     };
   }, []);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { person } = useStructuredData() as { person: any };
+
   const structuredData: WithContext<CollectionPage> = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
-    name: title,
-    description: description,
-    url: `${location.origin}${location.pathname}`,
+    name: PAGE_METADATA.title,
+    headline: PAGE_METADATA.title,
+    description: PAGE_METADATA.description,
+    author: person,
+    keywords: PAGE_METADATA.keywords.join(', '),
+    about: [
+      {
+        '@type': 'Thing',
+        name: 'Technical Presentations',
+        description:
+          'Educational materials and technical presentations covering software development, programming languages, and web technologies.',
+      },
+      {
+        '@type': 'Thing',
+        name: 'Educational Resources',
+        description: 'Professional learning materials for developers and technology enthusiasts.',
+      },
+    ],
+    mainEntity: {
+      '@type': 'ItemList',
+      name: 'Presentation Files',
+      description: 'Collection of downloadable technical presentations and educational materials',
+      numberOfItems: groupFilesByIdentity(data.allStaticFile.nodes).size,
+    },
   };
 
   return (
-    <Layout location={location} breadcrumbTitle={title}>
+    <Layout location={location} breadcrumbTitle={PAGE_METADATA.title}>
       <JsonLd<CollectionPage> item={structuredData} />
       <header>
-        <h1>{title}</h1>
+        <h1>{PAGE_METADATA.title}</h1>
       </header>
       <main>
         <section aria-labelledby="presentations-heading">
@@ -232,7 +270,7 @@ const PresentationsPage: React.FC<PageProps<DataType>> = ({ data, location }) =>
   );
 };
 
-export const Head: HeadFC = () => <Seo title={title} description={description} />;
+export const Head: HeadFC = () => <Seo title={PAGE_METADATA.title} description={PAGE_METADATA.description} />;
 
 export default PresentationsPage;
 

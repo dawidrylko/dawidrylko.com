@@ -1,10 +1,13 @@
 import type { HeadFC, PageProps } from 'gatsby';
 import * as React from 'react';
+import { JsonLd } from 'react-schemaorg';
+import { WithContext, CollectionPage } from 'schema-dts';
 import { graphql, Link } from 'gatsby';
 
 import Layout from '../components/layout';
 import Seo from '../components/seo';
 import Table from '../components/table';
+import { useStructuredData } from '../hooks/use-structured-data';
 
 type DataType = {
   nonBlogPages: { pageCount: number; pagePaths: string[] };
@@ -48,15 +51,59 @@ const createBlogPostsArray = ({ blogPosts: { postPaths } }: DataType) =>
       </Link>,
     ]);
 
-const title = 'Metadata';
-const description =
-  'Technical metadata and site statistics for dawidrylko.com, including build details, page counts, and structure overview.';
+const PAGE_METADATA = {
+  title: 'Metadata',
+  description:
+    'Technical metadata and comprehensive site statistics for dawidrylko.com. View build information, content inventory, page structure, and blog post directory—complete transparency into website architecture and content organization.',
+  keywords: [
+    'site metadata',
+    'website statistics',
+    'build information',
+    'site structure',
+    'content inventory',
+    'blog directory',
+    'technical details',
+    'website architecture',
+  ],
+};
 
 const MetadataPage: React.FC<PageProps<DataType>> = ({ data, location }) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { person } = useStructuredData() as { person: any };
+
+  const structuredData: WithContext<CollectionPage> = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: PAGE_METADATA.title,
+    headline: PAGE_METADATA.title,
+    description: PAGE_METADATA.description,
+    author: person,
+    keywords: PAGE_METADATA.keywords.join(', '),
+    about: [
+      {
+        '@type': 'Thing',
+        name: 'Site Information',
+        description: 'Technical metadata including build time, content statistics, and website configuration details.',
+      },
+      {
+        '@type': 'Thing',
+        name: 'Content Structure',
+        description: 'Complete inventory of static pages and blog posts with navigation paths.',
+      },
+    ],
+    mainEntity: {
+      '@type': 'ItemList',
+      name: 'Site Content Inventory',
+      description: 'Complete list of all pages and blog posts on the website',
+      numberOfItems: data.nonBlogPages.pageCount + data.blogPosts.postCount,
+    },
+  };
+
   return (
-    <Layout location={location} breadcrumbTitle={title}>
+    <Layout location={location} breadcrumbTitle={PAGE_METADATA.title}>
+      <JsonLd<CollectionPage> item={structuredData} />
       <header>
-        <h1>{title}</h1>
+        <h1>{PAGE_METADATA.title}</h1>
       </header>
       <main>
         <section id="site-info" aria-label="Site Information">
@@ -76,7 +123,7 @@ const MetadataPage: React.FC<PageProps<DataType>> = ({ data, location }) => {
   );
 };
 
-export const Head: HeadFC = () => <Seo title={title} description={description} />;
+export const Head: HeadFC = () => <Seo title={PAGE_METADATA.title} description={PAGE_METADATA.description} />;
 
 export default MetadataPage;
 

@@ -1,7 +1,7 @@
 import type { HeadFC, PageProps } from 'gatsby';
 import * as React from 'react';
 import { JsonLd } from 'react-schemaorg';
-import { WithContext, WebPage } from 'schema-dts';
+import { WithContext, WebPage, CollectionPage } from 'schema-dts';
 
 import Layout from '../components/layout';
 import Seo from '../components/seo';
@@ -71,46 +71,62 @@ const transformSetupData = (data: SetupItem[]): (string | React.ReactNode)[][] =
   });
 };
 
-const title = 'Setup';
-const description =
-  "Explore Dawid Ryłko's complete hardware and music setup: development workstation optimized for productivity and scalability, plus guitar equipment for creative expression and musical performance.";
+const PAGE_METADATA = {
+  title: 'Setup',
+  description:
+    "Discover Dawid Ryłko's professional hardware setup and creative toolkit. From a development workstation built for performance and scalability—featuring Mac mini M4, ultrawide monitor, and enterprise-grade NAS storage—to a complete acoustic guitar setup for musical expression.",
+  keywords: [
+    'developer workstation',
+    'Mac mini M4',
+    'development setup',
+    'programming hardware',
+    'NAS storage',
+    'guitar equipment',
+    'acoustic guitar setup',
+    'tech setup',
+    'software engineer workspace',
+  ],
+};
 
 const SetupPage: React.FC<PageProps> = ({ location }) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { person } = useStructuredData() as { person: any };
 
-  const structuredData: WithContext<WebPage> = {
+  const structuredData: WithContext<CollectionPage> = {
     '@context': 'https://schema.org',
-    '@type': 'WebPage',
-    name: title,
-    headline: title,
-    description: description,
-    mainEntity: {
-      ...person,
-    },
+    '@type': 'CollectionPage',
+    name: PAGE_METADATA.title,
+    headline: PAGE_METADATA.title,
+    description: PAGE_METADATA.description,
+    author: person,
+    keywords: PAGE_METADATA.keywords.join(', '),
     about: [
       {
         '@type': 'Thing',
         name: 'Hardware Setup',
-        description: 'Professional development workstation with premium peripherals and storage solutions',
+        description:
+          'Professional development workstation featuring Mac mini M4, ultrawide monitor, ergonomic peripherals, and enterprise-grade network storage for scalable software engineering.',
       },
       {
         '@type': 'Thing',
         name: 'Guitar Setup',
-        description: 'Acoustic guitar equipment for live performance and practice',
+        description:
+          'Complete acoustic guitar equipment including Takamine GD51CE-NAT with NUX amplifier for musical performance and creative expression.',
       },
     ],
-    speakable: {
-      '@type': 'SpeakableSpecification',
-      cssSelector: ['h1', 'h2'],
+    mainEntity: {
+      '@type': 'ItemList',
+      name: 'Equipment Collection',
+      description: 'Professional hardware and music equipment setup',
+      numberOfItems: hardwareSetup.length + guitarSetup.length,
     },
   };
 
   return (
-    <Layout location={location} breadcrumbTitle={title}>
+    <Layout location={location} breadcrumbTitle={PAGE_METADATA.title}>
       <JsonLd<WebPage> item={structuredData} />
       <header>
-        <h1>{title}</h1>
+        <h1>{PAGE_METADATA.title}</h1>
       </header>
       <main>
         <section id="hardware" aria-labelledby="hardware-heading">
@@ -137,6 +153,6 @@ const SetupPage: React.FC<PageProps> = ({ location }) => {
   );
 };
 
-export const Head: HeadFC = () => <Seo title={title} description={description} />;
+export const Head: HeadFC = () => <Seo title={PAGE_METADATA.title} description={PAGE_METADATA.description} />;
 
 export default SetupPage;

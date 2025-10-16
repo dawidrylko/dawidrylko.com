@@ -7,8 +7,10 @@ import { StaticImage } from 'gatsby-plugin-image';
 import Layout from '../components/layout';
 import Seo from '../components/seo';
 
-const title = 'Page Not Found';
-const description = 'The page you are looking for does not exist. Maybe it went out for a hot dog... 🌭';
+const PAGE_METADATA = {
+  title: 'Page Not Found',
+  description: 'The page you are looking for does not exist. Maybe it went out for a hot dog... 🌭',
+};
 
 const hotDogImage = {
   alt: 'Statue of a smiling hot dog character with arms, legs, and a face, sitting on a rock.',
@@ -19,22 +21,25 @@ const NotFoundPage: React.FC<PageProps> = ({ location }) => {
   const structuredData: WithContext<WebPage> = {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
-    headline: title,
+    name: PAGE_METADATA.title,
+    headline: PAGE_METADATA.title,
+    description: PAGE_METADATA.description,
     mainEntity: {
       '@type': 'CreativeWork',
-      description,
+      name: '404 Error',
+      description: PAGE_METADATA.description,
     },
   };
 
   return (
-    <Layout location={location} breadcrumbTitle={title}>
+    <Layout location={location} breadcrumbTitle={PAGE_METADATA.title}>
       <JsonLd<WebPage> item={structuredData} />
       <header>
-        <h1>{title}</h1>
+        <h1>{PAGE_METADATA.title}</h1>
       </header>
       <main>
         <section id="hot-dog" aria-label="Page not found message with hot dog image">
-          <p>{description}</p>
+          <p>{PAGE_METADATA.description}</p>
           <figure style={{ margin: 0 }}>
             <StaticImage src="../images/hot-dog.jpg" alt={hotDogImage.alt} placeholder="blurred" layout="fullWidth" />
             <figcaption>{hotDogImage.caption}</figcaption>
@@ -45,8 +50,6 @@ const NotFoundPage: React.FC<PageProps> = ({ location }) => {
   );
 };
 
-export const Head: HeadFC = () => (
-  <Seo title={title} description="This is a 404 page. It seems the page you were looking for does not exist." noIndex />
-);
+export const Head: HeadFC = () => <Seo title={PAGE_METADATA.title} description={PAGE_METADATA.description} noIndex />;
 
 export default NotFoundPage;

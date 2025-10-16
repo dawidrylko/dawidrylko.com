@@ -80,6 +80,9 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ location, customTitle }) => {
   const structuredData: WithContext<BreadcrumbList> = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
+    name: 'Breadcrumb Navigation',
+    description: 'Navigation path showing current location within the website hierarchy',
+    numberOfItems: breadcrumbs.length,
     itemListElement: breadcrumbs.map((item, index) => ({
       '@type': 'ListItem',
       position: index + 1,
@@ -87,6 +90,7 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ location, customTitle }) => {
       item: {
         '@type': 'WebPage',
         '@id': `${siteUrl}${item.url}`,
+        name: item.title,
       },
     })),
   };

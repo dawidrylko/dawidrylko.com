@@ -8,9 +8,21 @@ import Seo from '../components/seo';
 import { useSiteMetadata } from '../hooks/use-site-metadata';
 import { useStructuredData } from '../hooks/use-structured-data';
 
-const title = 'Contact';
-const description =
-  'Get in touch with Dawid Ryłko for software engineering projects, system architecture consulting, and technology collaboration. Available for projects requiring scalable, secure, and future-proof solutions.';
+const PAGE_METADATA = {
+  title: 'Contact',
+  description:
+    'Get in touch with Dawid Ryłko for software engineering projects, system architecture consulting, and technology collaboration. Available for scalable, secure, and future-proof solutions across the full technology stack—from frontend to backend, cloud infrastructure, AI integration, and cybersecurity.',
+  keywords: [
+    'contact Dawid Ryłko',
+    'software engineering services',
+    'system architecture consulting',
+    'technology collaboration',
+    'full-stack development',
+    'cloud infrastructure',
+    'AI integration',
+    'cybersecurity consulting',
+  ],
+};
 
 const ContactPage: React.FC<PageProps> = ({ location }) => {
   const { siteAuthor, siteSocial } = useSiteMetadata();
@@ -20,15 +32,19 @@ const ContactPage: React.FC<PageProps> = ({ location }) => {
   const structuredData: WithContext<WebPage> = {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
-    headline: title,
+    name: PAGE_METADATA.title,
+    headline: PAGE_METADATA.title,
+    description: PAGE_METADATA.description,
+    keywords: PAGE_METADATA.keywords.join(', '),
+    author: person,
     mainEntity: person,
   };
 
   return (
-    <Layout location={location} breadcrumbTitle={title}>
+    <Layout location={location} breadcrumbTitle={PAGE_METADATA.title}>
       <JsonLd<WebPage> item={structuredData} />
       <header>
-        <h1>{title}</h1>
+        <h1>{PAGE_METADATA.title}</h1>
       </header>
       <main>
         <section>
@@ -87,4 +103,4 @@ const ContactPage: React.FC<PageProps> = ({ location }) => {
 
 export default ContactPage;
 
-export const Head = () => <Seo title={title} description={description} />;
+export const Head = () => <Seo title={PAGE_METADATA.title} description={PAGE_METADATA.description} />;

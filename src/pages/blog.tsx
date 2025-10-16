@@ -34,9 +34,22 @@ type DataProps = {
   };
 };
 
-const title = 'Blog 🇵🇱';
-const description =
-  'Artykuły i wpisy na blogu Dawida Ryłko o programowaniu, technologiach, architekturze systemów i rozwoju oprogramowania. Praktyczne porady i spostrzeżenia ze świata IT.';
+const PAGE_METADATA = {
+  title: 'Blog 🇵🇱',
+  description:
+    'Artykuły i wpisy na blogu Dawida Ryłko o programowaniu, technologiach, architekturze systemów i rozwoju oprogramowania. Praktyczne porady, spostrzeżenia ze świata IT i nowoczesne podejście do tworzenia aplikacji webowych.',
+  keywords: [
+    'blog programistyczny',
+    'artykuły IT',
+    'rozwój oprogramowania',
+    'architektura systemów',
+    'JavaScript',
+    'TypeScript',
+    'Node.js',
+    'frontend development',
+    'backend development',
+  ],
+};
 
 const BlogIndex: React.FC<PageProps<DataProps>> = ({ data, location }) => {
   const { siteAuthor } = useSiteMetadata();
@@ -45,7 +58,7 @@ const BlogIndex: React.FC<PageProps<DataProps>> = ({ data, location }) => {
 
   if (posts.length === 0) {
     return (
-      <Layout location={location} breadcrumbTitle={title}>
+      <Layout location={location} breadcrumbTitle={PAGE_METADATA.title}>
         <p>Nie znaleziono wpisów.</p>
       </Layout>
     );
@@ -54,8 +67,12 @@ const BlogIndex: React.FC<PageProps<DataProps>> = ({ data, location }) => {
   const structuredData: WithContext<Blog> = {
     '@context': 'https://schema.org',
     '@type': 'Blog',
-    headline: title,
+    name: PAGE_METADATA.title,
+    headline: PAGE_METADATA.title,
+    description: PAGE_METADATA.description,
+    keywords: PAGE_METADATA.keywords.join(', '),
     author: person,
+    inLanguage: 'pl',
     blogPost: posts.map(post => {
       const img = getImage(post.frontmatter.featuredImg?.childImageSharp?.gatsbyImageData || null);
 
@@ -81,10 +98,10 @@ const BlogIndex: React.FC<PageProps<DataProps>> = ({ data, location }) => {
   };
 
   return (
-    <Layout location={location} breadcrumbTitle={title}>
+    <Layout location={location} breadcrumbTitle={PAGE_METADATA.title}>
       <JsonLd<Blog> item={structuredData} />
       <header>
-        <h1>{title}</h1>
+        <h1>{PAGE_METADATA.title}</h1>
       </header>
       <div className="rss">
         <StaticImage src="../images/rss.svg" alt="Ikona RSS" placeholder="blurred" width={20} height={20} />
@@ -132,7 +149,7 @@ const BlogIndex: React.FC<PageProps<DataProps>> = ({ data, location }) => {
 
 export default BlogIndex;
 
-export const Head = () => <Seo lang="pl" title={title} description={description} />;
+export const Head = () => <Seo lang="pl" title={PAGE_METADATA.title} description={PAGE_METADATA.description} />;
 
 export const query = graphql`
   {

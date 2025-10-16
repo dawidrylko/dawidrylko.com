@@ -47,6 +47,7 @@ const BlogPostTemplate: React.FC<PageProps<Data>> = ({ data, location, children 
     description: post.frontmatter.description || '',
     datePublished: post.frontmatter.dateOriginal,
     author: person,
+    inLanguage: 'pl',
     image: img
       ? {
           '@type': 'ImageObject',
