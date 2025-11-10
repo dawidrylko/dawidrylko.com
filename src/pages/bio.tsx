@@ -247,7 +247,7 @@ const BioPage: React.FC<PageProps> = ({ location }) => {
           <h2>Get in Touch</h2>
           <p>
             Interested in working together or have any questions?{' '}
-            <a href="/contact" title="Contact Dawid Ryłko">
+            <a href="/contact/" title="Contact Dawid Ryłko">
               Visit my contact page
             </a>{' '}
             or{' '}

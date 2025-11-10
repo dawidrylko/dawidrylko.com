@@ -71,7 +71,7 @@ const BlogPostTemplate: React.FC<PageProps<Data>> = ({ data, location, children 
             <span>{post.frontmatter.dateFormatted}</span>
             &nbsp;|&nbsp;
             <span>
-              <Link to="/bio">{siteAuthor?.name}</Link>
+              <Link to="/bio/">{siteAuthor?.name}</Link>
             </span>
           </small>
         </header>

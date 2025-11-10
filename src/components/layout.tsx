@@ -38,7 +38,7 @@ const Layout: React.FC<LayoutProps> = ({ location, children, breadcrumbTitle }) 
             Copyright © {new Date().getFullYear()} <a href={siteUrl}>{siteAuthor.name}</a>
           </div>
           <div className="footer-metadata">
-            <Link to="/metadata">Metadata</Link>
+            <Link to="/metadata/">Metadata</Link>
           </div>
         </footer>
       )}

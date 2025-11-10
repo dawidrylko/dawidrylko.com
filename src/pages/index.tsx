@@ -58,11 +58,11 @@ const BlogIndex: React.FC<PageProps> = ({ location }) => {
             meaningful impact.
           </p>
           <p>
-            Discover my <a href="/blog">latest articles</a> on software engineering, system architecture, and emerging
-            technologies, or learn more <a href="/bio">about my journey</a> and professional background.
+            Discover my <a href="/blog/">latest articles</a> on software engineering, system architecture, and emerging
+            technologies, or learn more <a href="/bio/">about my journey</a> and professional background.
           </p>
           <p>
-            Interested in working together? <a href="/contact">Get in touch</a> and let&apos;s create technology that
+            Interested in working together? <a href="/contact/">Get in touch</a> and let&apos;s create technology that
             lasts.
           </p>
         </section>

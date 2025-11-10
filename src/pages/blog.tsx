@@ -126,7 +126,7 @@ const BlogIndex: React.FC<PageProps<DataProps>> = ({ data, location }) => {
                     <span>{post.frontmatter.dateFormatted}</span>
                     &nbsp;|&nbsp;
                     <span>
-                      <Link to="/bio">{siteAuthor?.name}</Link>
+                      <Link to="/bio/">{siteAuthor?.name}</Link>
                     </span>
                   </small>
                 </header>

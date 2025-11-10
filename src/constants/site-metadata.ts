@@ -40,15 +40,15 @@ export const SITE_METADATA = {
     },
     {
       name: 'About',
-      url: '/bio',
+      url: '/bio/',
     },
     {
       name: 'Blog 🇵🇱',
-      url: '/blog',
+      url: '/blog/',
     },
     {
       name: 'Contact',
-      url: '/contact',
+      url: '/contact/',
     },
   ],
 };

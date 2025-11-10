@@ -66,7 +66,7 @@ export const createPages: GatsbyNode['createPages'] = async ({ graphql, actions,
 
   createRedirect({
     fromPath: '/resume',
-    toPath: '/bio',
+    toPath: '/bio/',
     isPermanent: true,
     redirectInBrowser: true,
   });
