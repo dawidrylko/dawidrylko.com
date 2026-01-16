@@ -12,7 +12,7 @@ readonly CYAN='\033[0;36m'
 readonly BOLD='\033[1m'
 readonly NC='\033[0m'
 
-readonly REQUIRED_AUTHOR="Dawid Ryłko"
+readonly REQUIRED_AUTHOR="Dawid Ryłko | dawidrylko.com"
 readonly PRESENTATIONS_DIR="static/files/presentations"
 readonly METADATA_CSV="${PRESENTATIONS_DIR}/metadata.csv"
 readonly SUPPORTED_EXTENSIONS=("pdf")
@@ -52,35 +52,55 @@ verify_metadata_csv() {
         log_error "Metadata CSV not found: $METADATA_CSV"
         echo ""
         echo "Create metadata.csv with format:"
-        echo '  filename,title'
-        echo '  js_01_node_pl,"JavaScript | Node.js..."'
+        echo '  filename,title,subject,keywords'
+        echo '  js_01_node_pl,"JavaScript | Node.js...","Node.js","JavaScript, Node.js, NPM"'
         exit 2
     fi
 
     local first_line
     first_line=$(head -n 1 "$METADATA_CSV")
-    if [[ "$first_line" != "filename,title" ]]; then
-        log_error "Invalid CSV format. Expected header: filename,title"
+    if [[ "$first_line" != "filename,title,subject,keywords" ]]; then
+        log_error "Invalid CSV format. Expected header: filename,title,subject,keywords"
         exit 2
     fi
 }
 
 load_metadata_csv() {
-    local line_number=0
     > "$TEMP_METADATA"
 
-    while IFS=, read -r filename title || [[ -n "$filename" ]]; do
-        line_number=$((line_number + 1))
-        [[ $line_number -eq 1 ]] && continue
-        [[ -z "$filename" ]] && continue
+    # Skip header and parse CSV with awk, handling quoted fields
+    tail -n +2 "$METADATA_CSV" | awk -F'"' '{
+        # Split by quotes: odd fields are outside quotes, even fields are inside quotes
+        # Format: filename,"title","subject","keywords"
+        # $1 = "filename,"
+        # $2 = "title"
+        # $3 = ","
+        # $4 = "subject"
+        # $5 = ","
+        # $6 = "keywords"
 
-        title=$(echo "$title" | sed 's/^"//; s/"$//')
-        echo "${filename}|${title}" >> "$TEMP_METADATA"
-    done < "$METADATA_CSV"
+        # Extract filename (remove trailing comma)
+        filename = $1
+        sub(/,$/, "", filename)
+
+        title = $2
+        subject = $4
+        keywords = $6
+
+        if (filename != "") {
+            printf "%s~~~%s~~~%s~~~%s\n", filename, title, subject, keywords
+        }
+    }' >> "$TEMP_METADATA"
 }
 
-get_title_for_filename() {
-    grep "^${1}|" "$TEMP_METADATA" 2>/dev/null | cut -d'|' -f2- || echo ""
+get_metadata_for_filename() {
+    grep "^${1}~~~" "$TEMP_METADATA" 2>/dev/null || echo ""
+}
+
+get_field_from_metadata() {
+    local metadata="$1"
+    local field_num="$2"
+    echo "$metadata" | awk -F'~~~' "{print \$${field_num}}"
 }
 
 get_basename_without_ext() {
@@ -95,23 +115,34 @@ get_basename_without_ext() {
 validate_and_fix_file() {
     local filepath="$1"
     local filename
+    local metadata
     local expected_title
+    local expected_subject
+    local expected_keywords
     local actual_title
     local actual_author
+    local actual_subject
+    local actual_keywords
     local status="OK"
     local action=""
 
     filename=$(get_basename_without_ext "$filepath")
-    expected_title=$(get_title_for_filename "$filename")
+    metadata=$(get_metadata_for_filename "$filename")
 
-    if [[ -z "$expected_title" ]]; then
+    if [[ -z "$metadata" ]]; then
         missing_csv_entries=$((missing_csv_entries + 1))
-        echo "${filepath}§MISSING§§§No CSV entry§${expected_title}" >> "$TEMP_RESULTS"
+        echo "${filepath}§MISSING§§§No CSV entry§" >> "$TEMP_RESULTS"
         return 1
     fi
 
+    expected_title=$(get_field_from_metadata "$metadata" 2)
+    expected_subject=$(get_field_from_metadata "$metadata" 3)
+    expected_keywords=$(get_field_from_metadata "$metadata" 4)
+
     actual_title=$(exiftool -Title -s3 "$filepath" 2>/dev/null || echo "")
     actual_author=$(exiftool -Author -s3 "$filepath" 2>/dev/null || echo "")
+    actual_subject=$(exiftool -Subject -s3 "$filepath" 2>/dev/null || echo "")
+    actual_keywords=$(exiftool -Keywords -s3 "$filepath" 2>/dev/null || echo "")
 
     local needs_fix=0
 
@@ -123,10 +154,20 @@ validate_and_fix_file() {
         needs_fix=1
     fi
 
+    if [[ -z "$actual_subject" || "$actual_subject" != "$expected_subject" ]]; then
+        needs_fix=1
+    fi
+
+    if [[ -z "$actual_keywords" || "$actual_keywords" != "$expected_keywords" ]]; then
+        needs_fix=1
+    fi
+
     if [[ $needs_fix -eq 1 ]]; then
         if exiftool \
             -Title="$expected_title" \
             -Author="$REQUIRED_AUTHOR" \
+            -Subject="$expected_subject" \
+            -Keywords="$expected_keywords" \
             -overwrite_original \
             "$filepath" >/dev/null 2>&1; then
             status="FIXED"
@@ -242,7 +283,17 @@ display_summary() {
 
     if [[ $fixed_files -gt 0 ]]; then
         log_success "Auto-fixed $fixed_files file(s)"
-        log_info "Fixed files have been updated. Please review and stage them."
+        log_info "Automatically staging fixed files..."
+
+        if [[ -f "$TEMP_RESULTS" ]]; then
+            while IFS='§' read -r filepath status actual_author actual_title action expected_title; do
+                if [[ "$status" == "FIXED" ]]; then
+                    git add "$filepath" 2>/dev/null || true
+                fi
+            done < "$TEMP_RESULTS"
+        fi
+
+        log_success "Fixed files have been staged for commit"
     fi
 
     log_success "All presentation files validated successfully!"
