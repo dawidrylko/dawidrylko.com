@@ -27,8 +27,8 @@ importers:
         specifier: ^5.15.0
         version: 5.15.0(gatsby@5.16.0(babel-eslint@10.1.0(eslint@9.39.2))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.3))
       gatsby-plugin-feed:
-        specifier: ^5.15.0
-        version: 5.15.0(gatsby@5.16.0(babel-eslint@10.1.0(eslint@9.39.2))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.3))(graphql@16.12.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: ^5.16.0
+        version: 5.16.0(gatsby@5.16.0(babel-eslint@10.1.0(eslint@9.39.2))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.3))(graphql@16.12.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       gatsby-plugin-google-gtag:
         specifier: ^5.16.0
         version: 5.16.0(gatsby@5.16.0(babel-eslint@10.1.0(eslint@9.39.2))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.3))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -3783,13 +3783,13 @@ packages:
     peerDependencies:
       gatsby: ^5.0.0-next
 
-  gatsby-plugin-feed@5.15.0:
-    resolution: {integrity: sha512-0DV4jel1pqboLyg33YHgZJ5sxLknZyxDmeSUOEcDkXcpDTbsAFYqLeNyId9wtl873s8slJh+1WzvS/mVCu22Bw==}
-    engines: {node: '>=18.0.0'}
+  gatsby-plugin-feed@5.16.0:
+    resolution: {integrity: sha512-oKRmIbZjUS6TRRZJVP3n79jlqY5B99n4ovLxOrdrkWobmyGpIxUBRwUcIx8mrKz/7k9wxci3cdbn7pY9K18p9A==}
+    engines: {node: '>=18.0.0 <26'}
     peerDependencies:
       gatsby: ^5.0.0-next
-      react: ^18.0.0 || ^0.0.0
-      react-dom: ^18.0.0 || ^0.0.0
+      react: ^18.0.0 || ^19.0.0 || ^0.0.0
+      react-dom: ^18.0.0 || ^19.0.0 || ^0.0.0
 
   gatsby-plugin-google-gtag@5.16.0:
     resolution: {integrity: sha512-UAUIiPowIDByfyOmhVH4YstA3yPlw4/1JWr3aLs0UWi1O3JE3qubGFSQ3glqtgxm5Fi0fvTkbiuHrRBlT6WD7A==}
@@ -12130,13 +12130,13 @@ snapshots:
       '@babel/runtime': 7.28.4
       gatsby: 5.16.0(babel-eslint@10.1.0(eslint@9.39.2))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.3)
 
-  gatsby-plugin-feed@5.15.0(gatsby@5.16.0(babel-eslint@10.1.0(eslint@9.39.2))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.3))(graphql@16.12.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  gatsby-plugin-feed@5.16.0(gatsby@5.16.0(babel-eslint@10.1.0(eslint@9.39.2))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.3))(graphql@16.12.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
-      '@babel/runtime': 7.28.4
+      '@babel/runtime': 7.28.6
       common-tags: 1.8.2
-      fs-extra: 11.3.2
+      fs-extra: 11.3.3
       gatsby: 5.16.0(babel-eslint@10.1.0(eslint@9.39.2))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.3)
-      gatsby-plugin-utils: 4.15.0(gatsby@5.16.0(babel-eslint@10.1.0(eslint@9.39.2))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.3))(graphql@16.12.0)
+      gatsby-plugin-utils: 4.16.0(gatsby@5.16.0(babel-eslint@10.1.0(eslint@9.39.2))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.3))(graphql@16.12.0)
       lodash.merge: 4.6.2
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
@@ -12282,9 +12282,9 @@ snapshots:
 
   gatsby-plugin-utils@4.15.0(gatsby@5.16.0(babel-eslint@10.1.0(eslint@9.39.2))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.3))(graphql@16.12.0):
     dependencies:
-      '@babel/runtime': 7.28.4
+      '@babel/runtime': 7.28.6
       fastq: 1.20.1
-      fs-extra: 11.3.2
+      fs-extra: 11.3.3
       gatsby: 5.16.0(babel-eslint@10.1.0(eslint@9.39.2))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.3)
       gatsby-core-utils: 4.16.0
       gatsby-sharp: 1.16.0
