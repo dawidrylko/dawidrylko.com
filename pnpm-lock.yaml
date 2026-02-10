@@ -24,8 +24,8 @@ importers:
         specifier: ^5.16.0
         version: 5.16.0(babel-eslint@10.1.0(eslint@9.39.2))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.3)
       gatsby-plugin-canonical-urls:
-        specifier: ^5.15.0
-        version: 5.15.0(gatsby@5.16.0(babel-eslint@10.1.0(eslint@9.39.2))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.3))
+        specifier: ^5.16.0
+        version: 5.16.0(gatsby@5.16.0(babel-eslint@10.1.0(eslint@9.39.2))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.3))
       gatsby-plugin-feed:
         specifier: ^5.16.0
         version: 5.16.0(gatsby@5.16.0(babel-eslint@10.1.0(eslint@9.39.2))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.3))(graphql@16.12.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -3777,9 +3777,9 @@ packages:
     peerDependencies:
       '@parcel/core': ^2.0.0
 
-  gatsby-plugin-canonical-urls@5.15.0:
-    resolution: {integrity: sha512-L3PAAWDuYQbaaFKqAyBedOGDVBIOtr0MJWnfnMrQSur2jHlDcOPaWEH0xd02j5xWw7D2MMj19w3cqkTj2/wfew==}
-    engines: {node: '>=18.0.0'}
+  gatsby-plugin-canonical-urls@5.16.0:
+    resolution: {integrity: sha512-vZZx4gSqAe5XmVyASE5J4U7fTXx1HLgyUEAtCr4Znmx8M1eT34UM5SOZrce3TFyj4mXrJBlAYtYhuieduCc0Gg==}
+    engines: {node: '>=18.0.0 <26'}
     peerDependencies:
       gatsby: ^5.0.0-next
 
@@ -12125,9 +12125,9 @@ snapshots:
       '@parcel/transformer-js': 2.8.3(@parcel/core@2.8.3)
       '@parcel/transformer-json': 2.8.3(@parcel/core@2.8.3)
 
-  gatsby-plugin-canonical-urls@5.15.0(gatsby@5.16.0(babel-eslint@10.1.0(eslint@9.39.2))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.3)):
+  gatsby-plugin-canonical-urls@5.16.0(gatsby@5.16.0(babel-eslint@10.1.0(eslint@9.39.2))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.3)):
     dependencies:
-      '@babel/runtime': 7.28.4
+      '@babel/runtime': 7.28.6
       gatsby: 5.16.0(babel-eslint@10.1.0(eslint@9.39.2))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.3)
 
   gatsby-plugin-feed@5.16.0(gatsby@5.16.0(babel-eslint@10.1.0(eslint@9.39.2))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(type-fest@0.21.3)(typescript@5.9.3))(graphql@16.12.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
