@@ -1,0 +1,29 @@
+packages:
+  - '.'
+
+overrides:
+  sharp: 0.33.3
+
+minimumReleaseAge: 0
+
+allowBuilds:
+  '@parcel/watcher': true
+  core-js: true
+  core-js-pure: true
+  es5-ext: true
+  gatsby: true
+  gatsby-cli: true
+  lmdb: true
+  msgpackr-extract: true
+  sharp: true
+
+onlyBuiltDependencies:
+  - '@parcel/watcher'
+  - core-js
+  - core-js-pure
+  - es5-ext
+  - gatsby
+  - gatsby-cli
+  - lmdb
+  - msgpackr-extract
+  - sharp
