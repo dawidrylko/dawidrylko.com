@@ -24,13 +24,17 @@ const desktopSetup: SetupItem[] = [
     'Iiyama G-Master GCB3481WQSU-B1, 34″, 3440×1440 (UWQHD), 180 Hz, USB hub',
     'https://www.ceneo.pl/173264024#crid=774128&pid=29997',
   ],
-  ['KVM Switch', 'Ugreen DisplayPort 1.4 KVM Switch, 8K@60 Hz, 2×PC sharing (display, USB peripherals)'],
+  [
+    'KVM Switch',
+    'Ugreen DisplayPort 1.4 KVM Switch, 8K@60 Hz, 2×PC sharing (display, USB peripherals)',
+    'https://www.ceneo.pl/194580048#crid=801625&pid=29997',
+  ],
   ['Hub', 'Ugreen USB-C Hub 7-in-1, DisplayPort 4K@60 Hz, USB-A 3.0, PD 100 W, SD ↔ microSD'],
   ['Mouse', 'Logitech MX Master 3S', 'https://www.ceneo.pl/134359846#crid=774131&pid=29997', 'Graphite'],
   ['Keyboard', 'NuPhy Air75 v1', void 0, 'Gateron G Pro Red switches'],
-  ['Microphone', 'Novox NC-1', void 0, 'USB-B, pop filter'],
+  ['Microphone', 'Novox NC-1', 'https://www.ceneo.pl/51510215#crid=801624&pid=29997', 'USB-B, pop filter'],
   ['Light Bar', 'Xiaomi Mi Computer Monitor Light Bar', 'https://www.ceneo.pl/103206620#crid=774129&pid=29997'],
-  ['Desk Frame', 'Silver Monkey EDF-180', 'https://www.ceneo.pl/174808555#crid=774135&pid=29997', 'White'],
+  ['Desk Frame', 'Silver Monkey EDF-180', 'https://www.ceneo.pl/174808545#crid=774135&pid=29997', 'White'],
   ['Desktop', 'Oak Rustic Desktop', void 0, '100 × 60 × 3 cm'],
 ];
 
