@@ -1,13 +1,13 @@
-import * as React from 'react';
+import type { FC, ReactNode } from 'react';
 
 type TableProps = {
-  data: (string | React.ReactNode)[][];
+  data: (string | ReactNode)[][];
   header?: string[];
   widthConfig?: string[];
   ariaLabel?: string;
 };
 
-const Table: React.FC<TableProps> = ({ data, header, widthConfig, ariaLabel }) => {
+const Table: FC<TableProps> = ({ data, header, widthConfig, ariaLabel }) => {
   return (
     <table aria-label={ariaLabel}>
       {header && (

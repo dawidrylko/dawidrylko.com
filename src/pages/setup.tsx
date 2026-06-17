@@ -1,6 +1,6 @@
 import type { HeadFC, PageProps } from 'gatsby';
 import { StaticImage } from 'gatsby-plugin-image';
-import * as React from 'react';
+import type { FC, ReactNode } from 'react';
 import { JsonLd } from 'react-schemaorg';
 import { WithContext, WebPage, CollectionPage } from 'schema-dts';
 
@@ -64,7 +64,7 @@ const image = {
   figcaption: `Photo by Dawid Ryłko, taken on January 3, 2026.`,
 };
 
-const transformSetupData = (data: SetupItem[]): (string | React.ReactNode)[][] => {
+const transformSetupData = (data: SetupItem[]): (string | ReactNode)[][] => {
   return data.map(([type, name, link, details]) => {
     const linkElement = link ? (
       <a href={link} target="_blank" rel="noopener noreferrer" aria-label={`View ${name} on external site`}>
@@ -144,7 +144,7 @@ const setupDiagram = `graph TD
   Monitor -- "USB-A ↔ USB-C<br/><small>Light Bar cable</small>" --> Lightbar
 `;
 
-const SetupPage: React.FC<PageProps> = ({ location }) => {
+const SetupPage: FC<PageProps> = ({ location }) => {
   const { person } = useStructuredData();
 
   const structuredData: WithContext<CollectionPage> = {

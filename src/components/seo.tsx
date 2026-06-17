@@ -1,4 +1,4 @@
-import * as React from 'react';
+import type { FC, ReactNode } from 'react';
 import { useSiteMetadata } from '../hooks/use-site-metadata';
 import { SITE_METADATA } from '../constants/site-metadata';
 
@@ -10,7 +10,7 @@ type SeoProps = {
   image?: string;
   article?: boolean;
   noIndex?: boolean;
-  children?: React.ReactNode;
+  children?: ReactNode;
 };
 
 // Square brand icon emitted by gatsby-plugin-manifest; used as the OG/Twitter
@@ -23,7 +23,7 @@ const OG_LOCALES: Record<string, string> = {
   pl: 'pl_PL',
 };
 
-const Seo: React.FC<SeoProps> = ({ lang, title, description, pathname, image, article, noIndex, children }) => {
+const Seo: FC<SeoProps> = ({ lang, title, description, pathname, image, article, noIndex, children }) => {
   const { siteUrl, siteTitle, siteDescription, siteSocial, siteAuthor } = useSiteMetadata();
 
   const metaLang = lang ?? SITE_METADATA.lang;

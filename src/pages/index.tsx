@@ -1,5 +1,5 @@
 import type { HeadFC, PageProps } from 'gatsby';
-import * as React from 'react';
+import type { FC } from 'react';
 import { JsonLd } from 'react-schemaorg';
 import { WithContext, WebPage } from 'schema-dts';
 
@@ -23,7 +23,7 @@ const PAGE_METADATA = {
   ],
 };
 
-const BlogIndex: React.FC<PageProps> = ({ location }) => {
+const BlogIndex: FC<PageProps> = ({ location }) => {
   const { person } = useStructuredData();
 
   const structuredData: WithContext<WebPage> = {

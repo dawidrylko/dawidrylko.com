@@ -1,6 +1,4 @@
-import type { ReactNode } from 'react';
-
-import * as React from 'react';
+import type { FC, ReactNode } from 'react';
 import { Link } from 'gatsby';
 import { useSiteMetadata } from '../hooks/use-site-metadata';
 import Bio from './bio';
@@ -15,7 +13,7 @@ type LayoutProps = {
 
 declare const __PATH_PREFIX__: string;
 
-const Layout: React.FC<LayoutProps> = ({ location, children, breadcrumbTitle }) => {
+const Layout: FC<LayoutProps> = ({ location, children, breadcrumbTitle }) => {
   const { siteUrl, siteAuthor } = useSiteMetadata();
   const rootPath = `${__PATH_PREFIX__}/`;
   const isRootPath = location.pathname === rootPath;

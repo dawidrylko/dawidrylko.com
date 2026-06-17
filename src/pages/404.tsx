@@ -1,4 +1,4 @@
-import * as React from 'react';
+import type { FC } from 'react';
 import { JsonLd } from 'react-schemaorg';
 import { WebPage, WithContext } from 'schema-dts';
 import type { HeadFC, PageProps } from 'gatsby';
@@ -17,7 +17,7 @@ const hotDogImage = {
   caption: 'Photo by Dawid Ryłko, taken on September 8, 2017, in Crete, Greece.',
 };
 
-const NotFoundPage: React.FC<PageProps> = ({ location }) => {
+const NotFoundPage: FC<PageProps> = ({ location }) => {
   const structuredData: WithContext<WebPage> = {
     '@context': 'https://schema.org',
     '@type': 'WebPage',

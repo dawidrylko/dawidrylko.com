@@ -1,4 +1,5 @@
-import * as React from 'react';
+import type { FC } from 'react';
+import { Fragment } from 'react';
 import { JsonLd } from 'react-schemaorg';
 import { WebPage, WithContext } from 'schema-dts';
 import type { PageProps, HeadFC } from 'gatsby';
@@ -72,7 +73,7 @@ const image = {
   figcaption: `Photo by Dawid Ryłko, taken on September 7, 2017, in Malia, Greece.`,
 };
 
-const BioPage: React.FC<PageProps> = ({ location }) => {
+const BioPage: FC<PageProps> = ({ location }) => {
   const { person } = useStructuredData();
   const { siteAuthor } = useSiteMetadata();
 
@@ -187,18 +188,18 @@ const BioPage: React.FC<PageProps> = ({ location }) => {
           </p>
         </section>
         <section id="quote">
-          {citations.map(({ authorName, citation, text }, index) => (
+          {citations.map(({ authorName, citation, text, extraDetails }, index) => (
             <blockquote key={index}>
               {text}
               <br />
               <cite>
                 - {authorName}, {citation}
               </cite>
-              {citations[index].extraDetails?.map(({ type, note }) => (
-                <React.Fragment key={type}>
+              {extraDetails?.map(({ type, note }) => (
+                <Fragment key={type}>
                   <br />
                   <small>{note}</small>
-                </React.Fragment>
+                </Fragment>
               ))}
             </blockquote>
           ))}

@@ -1,4 +1,5 @@
-import React, { useEffect, useId, useState } from 'react';
+import type { FC } from 'react';
+import { useEffect, useId, useState } from 'react';
 import mermaid from 'mermaid';
 import ErrorBoundary from './error-boundary';
 
@@ -25,13 +26,13 @@ const initializeMermaid = (): void => {
   mermaidInitialized = true;
 };
 
-const Fallback: React.FC<{ chart: string; ariaLabel: string }> = ({ chart, ariaLabel }) => (
+const Fallback: FC<{ chart: string; ariaLabel: string }> = ({ chart, ariaLabel }) => (
   <pre className="mermaid-diagram-fallback" role="img" aria-label={ariaLabel}>
     {chart}
   </pre>
 );
 
-const MermaidDiagramInner: React.FC<Required<MermaidDiagramProps>> = ({ chart, ariaLabel }) => {
+const MermaidDiagramInner: FC<Required<MermaidDiagramProps>> = ({ chart, ariaLabel }) => {
   // Unique, DOM-safe id per instance so mermaid-generated class names and
   // element ids never collide between diagrams on the same page.
   const id = `mermaid-${useId().replace(/[^a-zA-Z0-9]/g, '')}`;
@@ -80,7 +81,7 @@ const MermaidDiagramInner: React.FC<Required<MermaidDiagramProps>> = ({ chart, a
   );
 };
 
-const MermaidDiagram: React.FC<MermaidDiagramProps> = ({ chart, ariaLabel = 'Diagram' }) => (
+const MermaidDiagram: FC<MermaidDiagramProps> = ({ chart, ariaLabel = 'Diagram' }) => (
   <ErrorBoundary fallback={<Fallback chart={chart} ariaLabel={ariaLabel} />}>
     <MermaidDiagramInner chart={chart} ariaLabel={ariaLabel} />
   </ErrorBoundary>
