@@ -28,8 +28,9 @@ const config: GatsbyConfig = {
         short_name: SITE_METADATA.title,
         start_url: '/',
         background_color: '#ffffff',
+        theme_color: '#005b99',
         display: 'minimal-ui',
-        icon: 'src/images/logo.jpg',
+        icon: 'src/images/logo.png',
       },
     },
     {
@@ -147,20 +148,34 @@ const config: GatsbyConfig = {
                 }
               };
 
+              const getEnclosure = (gatsbyImageData: any) => {
+                // Prefer the fallback (jpeg/png) variant for broad feed-reader compatibility,
+                // falling back to the largest srcSet candidate when it is unavailable.
+                const fallbackSrc: string | undefined = gatsbyImageData?.images?.fallback?.src;
+                const srcSetSrc: string | undefined = gatsbyImageData?.images?.sources?.[0]?.srcSet
+                  ?.split(',')
+                  .pop()
+                  ?.trim()
+                  .split(' ')[0];
+                const src = fallbackSrc ?? srcSetSrc;
+
+                if (!src) {
+                  return undefined;
+                }
+
+                return {
+                  url: `${site.siteMetadata.siteUrl}${src}`,
+                  type: getImageMimeType(src),
+                  length: '0',
+                };
+              };
+
               return posts.nodes.map((node: any) => {
                 const url = `${site.siteMetadata.siteUrl}${node.fields.slug}`;
                 const description = node.frontmatter.description || node.excerpt;
                 const content = `<p>${description}</p><div style='margin-top: 50px; font-style: italic;'><strong><a href='${url}'>Czytaj dalej</a>.</strong></div><br /> <br />`;
                 const categories = node.frontmatter.tags || [];
-                const enclosure = node.frontmatter.featuredImg?.childImageSharp?.gatsbyImageData
-                  ? {
-                      url: `${site.siteMetadata.siteUrl}${node.frontmatter.featuredImg.childImageSharp.gatsbyImageData.images.fallback.src}`,
-                      type: getImageMimeType(
-                        node.frontmatter.featuredImg.childImageSharp.gatsbyImageData.images.fallback.src,
-                      ),
-                      length: '0',
-                    }
-                  : void 0;
+                const enclosure = getEnclosure(node.frontmatter.featuredImg?.childImageSharp?.gatsbyImageData);
 
                 const rssItem: any = {
                   title: node.frontmatter.title,
