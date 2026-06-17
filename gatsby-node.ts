@@ -4,8 +4,45 @@ import type { GatsbyNode } from 'gatsby';
 import path from 'path';
 import fs from 'fs';
 import { createFilePath } from 'gatsby-source-filesystem';
+import { z } from 'zod';
 
 const blogPost = path.resolve(`./src/templates/blog-post.tsx`);
+
+const frontmatterSchema = z
+  .object({
+    title: z.string({ error: 'title is required and must be a string' }).trim().min(1, 'title must not be empty'),
+    // Optional: most legacy .md posts have no description; RSS falls back to excerpt.
+    description: z
+      .string({ error: 'description must be a string' })
+      .trim()
+      .min(1, 'description must not be empty')
+      .optional(),
+    date: z
+      .union([z.string(), z.date()], { error: 'date is required' })
+      .refine(value => !Number.isNaN(new Date(value as string | Date).getTime()), 'date must be a valid date'),
+    tags: z
+      .array(z.string({ error: 'each tag must be a string' }).trim().min(1, 'tags must not contain empty values'), {
+        error: 'tags is required and must be an array',
+      })
+      .min(1, 'tags must contain at least one value'),
+    featuredImg: z.string({ error: 'featuredImg must be a string' }).trim().min(1).optional(),
+    featuredImgAlt: z.string({ error: 'featuredImgAlt must be a string' }).trim().min(1).optional(),
+  })
+  .refine(data => !data.featuredImg || Boolean(data.featuredImgAlt), {
+    error: 'featuredImgAlt is required when featuredImg is set',
+    path: ['featuredImgAlt'],
+  });
+
+const validateFrontmatter = (frontmatter: unknown, filePath: string, reporter: any): void => {
+  const result = frontmatterSchema.safeParse(frontmatter);
+
+  if (!result.success) {
+    const issues = result.error.issues
+      .map(issue => `  - ${issue.path.join('.') || '(root)'}: ${issue.message}`)
+      .join('\n');
+    reporter.panicOnBuild(`Invalid frontmatter in ${filePath}:\n${issues}`);
+  }
+};
 
 export const sourceNodes: GatsbyNode['sourceNodes'] = async ({ actions, createNodeId, createContentDigest }) => {
   const { createNode } = actions;
@@ -112,10 +149,15 @@ export const createPages: GatsbyNode['createPages'] = async ({ graphql, actions,
   }
 };
 
-export const onCreateNode: GatsbyNode['onCreateNode'] = ({ node, actions, getNode }) => {
+export const onCreateNode: GatsbyNode['onCreateNode'] = ({ node, actions, getNode, reporter }) => {
   if (node.internal.type !== `Mdx`) {
     return;
   }
+
+  const parent = node.parent ? getNode(node.parent) : undefined;
+  const sourceFilePath =
+    (parent?.absolutePath as string) ?? (node.internal.contentFilePath as string) ?? String(node.id);
+  validateFrontmatter((node as any).frontmatter, sourceFilePath, reporter);
 
   const { createNodeField } = actions;
   const filePath = createFilePath({ node, getNode });

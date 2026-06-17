@@ -53,6 +53,7 @@ Te fakty są potrzebne, gdy modyfikujesz szablony, `gatsby-node.ts`, RSS lub sit
 - **Style:** czyste CSS z custom properties (design tokens), bez preprocesorów; Montserrat (nagłówki), Merriweather (tekst).
 - **Dane strukturalne:** react-schemaorg + schema-dts (JSON-LD).
 - **Prettier (TS/TSX):** single quotes, średniki, 2 spacje, `printWidth: 120`, `arrowParens: avoid`.
+- **Komentarze:** tylko po angielsku i tylko te realnie wartościowe — wyjaśniaj „dlaczego”, a nie to, co kod już mówi sam.
 
 ## Czego nie zmieniać
 
