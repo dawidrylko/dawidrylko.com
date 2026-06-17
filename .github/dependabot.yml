@@ -23,8 +23,3 @@ updates:
     ignore:
       # Pinned to 0.13.3 for gatsby-remark-katex compatibility — do not bump.
       - dependency-name: 'katex'
-      # React 19 requires a coordinated migration; skip majors for now.
-      - dependency-name: 'react'
-        update-types: ['version-update:semver-major']
-      - dependency-name: 'react-dom'
-        update-types: ['version-update:semver-major']
