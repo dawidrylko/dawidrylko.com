@@ -2,13 +2,14 @@ import type { HeadFC, PageProps } from 'gatsby';
 import type { FC } from 'react';
 import { useEffect, useState } from 'react';
 import { JsonLd } from 'react-schemaorg';
-import { WithContext, CollectionPage } from 'schema-dts';
+import { CollectionPage } from 'schema-dts';
 import { graphql } from 'gatsby';
 
 import Layout from '../components/layout';
 import Seo from '../components/seo';
 import Table from '../components/table';
-import { useStructuredData } from '../hooks/use-structured-data';
+import { STRUCTURED_DATA } from '../constants/structured-data';
+import type { PageMetadata, StructuredData } from '../types';
 
 type FileNode = {
   name: string;
@@ -214,7 +215,7 @@ const PAGE_METADATA = {
     'educational materials',
     'tech conference presentations',
   ],
-};
+} satisfies PageMetadata;
 
 const PresentationsPage: FC<PageProps<DataType>> = ({ data, location }) => {
   const [showHidden, setShowHidden] = useState(false);
@@ -234,9 +235,9 @@ const PresentationsPage: FC<PageProps<DataType>> = ({ data, location }) => {
     };
   }, []);
 
-  const { person } = useStructuredData();
+  const { person } = STRUCTURED_DATA;
 
-  const structuredData: WithContext<CollectionPage> = {
+  const structuredData: StructuredData<CollectionPage> = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
     name: PAGE_METADATA.title,

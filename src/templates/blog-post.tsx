@@ -2,13 +2,14 @@ import type { FC } from 'react';
 import { Link, graphql, PageProps, HeadProps } from 'gatsby';
 import { GatsbyImage, getImage, IGatsbyImageData } from 'gatsby-plugin-image';
 import { JsonLd } from 'react-schemaorg';
-import { WithContext, BlogPosting } from 'schema-dts';
+import { BlogPosting } from 'schema-dts';
 
 import Layout from '../components/layout';
 import Seo from '../components/seo';
 import ErrorBoundary from '../components/error-boundary';
 import { useSiteMetadata } from '../hooks/use-site-metadata';
-import { useStructuredData } from '../hooks/use-structured-data';
+import { STRUCTURED_DATA } from '../constants/structured-data';
+import type { StructuredData } from '../types';
 
 type PostNode = {
   frontmatter: {
@@ -36,12 +37,12 @@ type Data = {
 
 const BlogPostTemplate: FC<PageProps<Data>> = ({ data, location, children }) => {
   const { siteAuthor } = useSiteMetadata();
-  const { person } = useStructuredData();
+  const { person } = STRUCTURED_DATA;
   const { previous, next, mdx: post } = data;
 
   const img = getImage(post.frontmatter.featuredImg?.childImageSharp?.gatsbyImageData || null);
 
-  const structuredData: WithContext<BlogPosting> = {
+  const structuredData: StructuredData<BlogPosting> = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
     headline: post.frontmatter.title,

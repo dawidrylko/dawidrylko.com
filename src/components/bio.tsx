@@ -3,11 +3,11 @@ import { JsonLd } from 'react-schemaorg';
 import { Person } from 'schema-dts';
 import { StaticImage } from 'gatsby-plugin-image';
 import { useSiteMetadata } from '../hooks/use-site-metadata';
-import { useStructuredData } from '../hooks/use-structured-data';
+import { STRUCTURED_DATA } from '../constants/structured-data';
 
 const Bio: FC = () => {
   const { siteAuthor, siteSocial } = useSiteMetadata();
-  const { person } = useStructuredData();
+  const { person } = STRUCTURED_DATA;
 
   return (
     <div className="bio">
