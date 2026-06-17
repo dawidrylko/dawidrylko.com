@@ -1,4 +1,4 @@
-import type { Person, WithContext } from 'schema-dts';
+import type { PersonStructuredData } from '../types';
 import { SITE_METADATA } from './site-metadata';
 
 export const STRUCTURED_DATA = {
@@ -72,4 +72,4 @@ export const STRUCTURED_DATA = {
     },
     sameAs: SITE_METADATA.social.map(social => social.url),
   },
-} satisfies { person: WithContext<Person> };
+} satisfies { person: PersonStructuredData };

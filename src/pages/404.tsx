@@ -1,16 +1,17 @@
 import * as React from 'react';
 import { JsonLd } from 'react-schemaorg';
-import { WebPage, WithContext } from 'schema-dts';
+import { WebPage } from 'schema-dts';
 import type { HeadFC, PageProps } from 'gatsby';
 import { StaticImage } from 'gatsby-plugin-image';
 
 import Layout from '../components/layout';
 import Seo from '../components/seo';
+import type { PageMetadata, StructuredData } from '../types';
 
 const PAGE_METADATA = {
   title: 'Page Not Found',
   description: 'The page you are looking for does not exist. Maybe it went out for a hot dog... 🌭',
-};
+} satisfies PageMetadata;
 
 const hotDogImage = {
   alt: 'Statue of a smiling hot dog character with arms, legs, and a face, sitting on a rock.',
@@ -18,7 +19,7 @@ const hotDogImage = {
 };
 
 const NotFoundPage: React.FC<PageProps> = ({ location }) => {
-  const structuredData: WithContext<WebPage> = {
+  const structuredData: StructuredData<WebPage> = {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
     name: PAGE_METADATA.title,

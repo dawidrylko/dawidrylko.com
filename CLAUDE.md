@@ -29,8 +29,9 @@ Przed zatwierdzeniem zmian uruchom `pnpm type:check` i `pnpm format:check`. Nie 
 src/components/    # Komponenty React (layout, bio, menu, seo, breadcrumbs, table, mermaid-diagram)
 src/pages/         # Strony Gatsby (index, blog, bio, contact, setup, metadata, files, 404)
 src/templates/     # blog-post.tsx — szablon posta
-src/hooks/         # useSiteMetadata, useStructuredData
+src/hooks/         # useSiteMetadata
 src/constants/     # site-metadata.ts, structured-data.ts, gtag.tsx
+src/types/         # Współdzielone typy (page-metadata, structured-data)
 src/styles/        # main.css (design tokens — CSS custom properties), normalize.css
 content/pl/        # Posty blogowe MDX
 static/files/      # Pliki statyczne (prezentacje PDF/KEY/PPTX, CV)

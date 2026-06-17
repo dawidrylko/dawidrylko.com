@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { JsonLd } from 'react-schemaorg';
-import { WebPage, WithContext } from 'schema-dts';
+import { WebPage } from 'schema-dts';
 import type { PageProps, HeadFC } from 'gatsby';
 import { StaticImage } from 'gatsby-plugin-image';
 
@@ -8,7 +8,8 @@ import Layout from '../components/layout';
 import Seo from '../components/seo';
 import Table from '../components/table';
 import { useSiteMetadata } from '../hooks/use-site-metadata';
-import { useStructuredData } from '../hooks/use-structured-data';
+import { STRUCTURED_DATA } from '../constants/structured-data';
+import type { PageMetadata, StructuredData } from '../types';
 
 const PAGE_METADATA = {
   title: 'About',
@@ -25,7 +26,7 @@ const PAGE_METADATA = {
     'technology leadership',
     'software craftsmanship',
   ],
-};
+} satisfies PageMetadata;
 
 const experience = [
   ['Silesian Solutions', 'Self-employed', 'Oct 2015 - Present', 'https://silesiansolutions.com'],
@@ -73,10 +74,10 @@ const image = {
 };
 
 const BioPage: React.FC<PageProps> = ({ location }) => {
-  const { person } = useStructuredData();
+  const { person } = STRUCTURED_DATA;
   const { siteAuthor } = useSiteMetadata();
 
-  const structuredData: WithContext<WebPage> = {
+  const structuredData: StructuredData<WebPage> = {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
     name: PAGE_METADATA.title,

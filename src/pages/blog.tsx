@@ -2,14 +2,15 @@ import type { HeadFC, PageProps } from 'gatsby';
 
 import * as React from 'react';
 import { JsonLd } from 'react-schemaorg';
-import { Blog, WithContext } from 'schema-dts';
+import { Blog } from 'schema-dts';
 import { Link, graphql } from 'gatsby';
 import { GatsbyImage, getImage, IGatsbyImageData, StaticImage } from 'gatsby-plugin-image';
 
 import Layout from '../components/layout';
 import Seo from '../components/seo';
 import { useSiteMetadata } from '../hooks/use-site-metadata';
-import { useStructuredData } from '../hooks/use-structured-data';
+import { STRUCTURED_DATA } from '../constants/structured-data';
+import type { PageMetadata, StructuredData } from '../types';
 
 type DataProps = {
   allMdx: {
@@ -49,11 +50,11 @@ const PAGE_METADATA = {
     'frontend development',
     'backend development',
   ],
-};
+} satisfies PageMetadata;
 
 const BlogIndex: React.FC<PageProps<DataProps>> = ({ data, location }) => {
   const { siteAuthor } = useSiteMetadata();
-  const { person } = useStructuredData();
+  const { person } = STRUCTURED_DATA;
   const posts = data?.allMdx.nodes;
 
   if (posts.length === 0) {
@@ -64,7 +65,7 @@ const BlogIndex: React.FC<PageProps<DataProps>> = ({ data, location }) => {
     );
   }
 
-  const structuredData: WithContext<Blog> = {
+  const structuredData: StructuredData<Blog> = {
     '@context': 'https://schema.org',
     '@type': 'Blog',
     name: PAGE_METADATA.title,

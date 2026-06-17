@@ -2,12 +2,13 @@ import type { HeadFC, PageProps } from 'gatsby';
 import { StaticImage } from 'gatsby-plugin-image';
 import * as React from 'react';
 import { JsonLd } from 'react-schemaorg';
-import { WithContext, WebPage, CollectionPage } from 'schema-dts';
+import { WebPage, CollectionPage } from 'schema-dts';
 
 import Layout from '../components/layout';
 import Seo from '../components/seo';
 import Table from '../components/table';
-import { useStructuredData } from '../hooks/use-structured-data';
+import { STRUCTURED_DATA } from '../constants/structured-data';
+import type { PageMetadata, StructuredData } from '../types';
 import MermaidDiagram from '../components/mermaid-diagram';
 
 type SetupItem = [type: string, name: string, link?: string, details?: string];
@@ -102,7 +103,7 @@ const PAGE_METADATA = {
     'tech setup',
     'software engineer workspace',
   ],
-};
+} satisfies PageMetadata;
 
 const setupDiagram = `graph TD
   subgraph PrimaryStation ["Primary Device Station"]
@@ -145,9 +146,9 @@ const setupDiagram = `graph TD
 `;
 
 const SetupPage: React.FC<PageProps> = ({ location }) => {
-  const { person } = useStructuredData();
+  const { person } = STRUCTURED_DATA;
 
-  const structuredData: WithContext<CollectionPage> = {
+  const structuredData: StructuredData<CollectionPage> = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
     name: PAGE_METADATA.title,

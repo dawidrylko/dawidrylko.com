@@ -1,13 +1,14 @@
 import type { HeadFC, PageProps } from 'gatsby';
 import * as React from 'react';
 import { JsonLd } from 'react-schemaorg';
-import { WithContext, CollectionPage } from 'schema-dts';
+import { CollectionPage } from 'schema-dts';
 import { graphql, Link } from 'gatsby';
 
 import Layout from '../components/layout';
 import Seo from '../components/seo';
 import Table from '../components/table';
-import { useStructuredData } from '../hooks/use-structured-data';
+import { STRUCTURED_DATA } from '../constants/structured-data';
+import type { PageMetadata, StructuredData } from '../types';
 
 type DataType = {
   nonBlogPages: { pageCount: number; pagePaths: string[] };
@@ -65,12 +66,12 @@ const PAGE_METADATA = {
     'technical details',
     'website architecture',
   ],
-};
+} satisfies PageMetadata;
 
 const MetadataPage: React.FC<PageProps<DataType>> = ({ data, location }) => {
-  const { person } = useStructuredData();
+  const { person } = STRUCTURED_DATA;
 
-  const structuredData: WithContext<CollectionPage> = {
+  const structuredData: StructuredData<CollectionPage> = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
     name: PAGE_METADATA.title,

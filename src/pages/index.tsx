@@ -1,11 +1,12 @@
 import type { HeadFC, PageProps } from 'gatsby';
 import * as React from 'react';
 import { JsonLd } from 'react-schemaorg';
-import { WithContext, WebPage } from 'schema-dts';
+import { WebPage } from 'schema-dts';
 
 import Layout from '../components/layout';
 import Seo from '../components/seo';
-import { useStructuredData } from '../hooks/use-structured-data';
+import { STRUCTURED_DATA } from '../constants/structured-data';
+import type { PageMetadata, StructuredData } from '../types';
 
 const PAGE_METADATA = {
   title: 'Home',
@@ -21,12 +22,12 @@ const PAGE_METADATA = {
     'technology blog',
     'full-stack development',
   ],
-};
+} satisfies PageMetadata;
 
 const BlogIndex: React.FC<PageProps> = ({ location }) => {
-  const { person } = useStructuredData();
+  const { person } = STRUCTURED_DATA;
 
-  const structuredData: WithContext<WebPage> = {
+  const structuredData: StructuredData<WebPage> = {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
     name: PAGE_METADATA.title,
