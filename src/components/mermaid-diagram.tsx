@@ -18,9 +18,16 @@ const initializeMermaid = (): void => {
     return;
   }
 
+  // Diagrams render to SVG with inline styles, so CSS cannot recolor them.
+  // Pick mermaid's built-in dark theme up front to match the OS preference.
+  const prefersDark =
+    typeof window !== 'undefined' && typeof window.matchMedia === 'function'
+      ? window.matchMedia('(prefers-color-scheme: dark)').matches
+      : false;
+
   mermaid.initialize({
     startOnLoad: false,
-    theme: 'default',
+    theme: prefersDark ? 'dark' : 'default',
     securityLevel: 'strict',
   });
   mermaidInitialized = true;

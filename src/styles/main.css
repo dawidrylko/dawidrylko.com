@@ -58,6 +58,25 @@
   --color-heading: #1a202c;
   --color-heading-black: black;
   --color-accent: #d1dce5;
+  --color-background: #ffffff;
+  /* Text rendered on top of --color-primary (e.g. table headers). */
+  --color-on-primary: #ffffff;
+}
+
+/* Dark theme: pure CSS, driven by the OS setting. Only the color tokens are
+   overridden here so every component that consumes them adapts automatically.
+   Palette tuned for WCAG AA contrast against --color-background. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-primary: #5eb3f0;
+    --color-text: #d8dee9;
+    --color-text-light: #a6b1c2;
+    --color-heading: #f0f3f8;
+    --color-heading-black: #ffffff;
+    --color-accent: #2a3340;
+    --color-background: #1a1f27;
+    --color-on-primary: #0b1f33;
+  }
 }
 
 /* HTML elements */
@@ -69,6 +88,9 @@
 }
 
 html {
+  /* Opt into native dark styling for scrollbars, form controls and the
+     default canvas so they match the themed background. */
+  color-scheme: light dark;
   line-height: var(--lineHeight-normal);
   font-size: var(--fontSize-root);
   -webkit-font-smoothing: antialiased;
@@ -80,6 +102,7 @@ body {
   font-family: var(--font-body);
   font-size: var(--fontSize-1);
   color: var(--color-text);
+  background: var(--color-background);
   overflow-x: hidden;
   word-wrap: break-word;
   hyphens: auto;
@@ -295,7 +318,7 @@ table td {
 
 table th {
   background-color: var(--color-primary);
-  color: white;
+  color: var(--color-on-primary);
   text-align: left;
 }
 
@@ -745,5 +768,82 @@ blockquote {
   h3,
   h4 {
     page-break-after: avoid;
+  }
+}
+
+/* Syntax highlighting in dark mode.
+
+   gatsby-browser imports prismjs/themes/prism.css (a light theme) after this
+   file, so these overrides are scoped with a leading `html` to win on
+   specificity. The palette is One Dark, tuned for WCAG AA contrast against the
+   dark code surface. */
+@media (prefers-color-scheme: dark) {
+  html code[class*='language-'],
+  html pre[class*='language-'] {
+    color: #e6e6e6;
+    /* The light theme paints a white text-shadow that smears on dark. */
+    text-shadow: none;
+  }
+
+  html pre[class*='language-'],
+  html :not(pre) > code[class*='language-'] {
+    background: #20262e;
+  }
+
+  html .token.comment,
+  html .token.prolog,
+  html .token.doctype,
+  html .token.cdata {
+    color: #8b95a7;
+  }
+
+  html .token.punctuation {
+    color: #abb2bf;
+  }
+
+  html .token.property,
+  html .token.tag,
+  html .token.boolean,
+  html .token.number,
+  html .token.constant,
+  html .token.symbol,
+  html .token.deleted {
+    color: #e06c75;
+  }
+
+  html .token.selector,
+  html .token.attr-name,
+  html .token.string,
+  html .token.char,
+  html .token.builtin,
+  html .token.inserted {
+    color: #98c379;
+  }
+
+  html .token.operator,
+  html .token.entity,
+  html .token.url,
+  html .language-css .token.string,
+  html .style .token.string {
+    color: #56b6c2;
+    /* Drop the semi-opaque white background the light theme adds. */
+    background: none;
+  }
+
+  html .token.atrule,
+  html .token.attr-value,
+  html .token.keyword {
+    color: #c678dd;
+  }
+
+  html .token.function,
+  html .token.class-name {
+    color: #61afef;
+  }
+
+  html .token.regex,
+  html .token.important,
+  html .token.variable {
+    color: #d19a66;
   }
 }
