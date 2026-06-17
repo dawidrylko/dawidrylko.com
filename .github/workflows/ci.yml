@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        check: ['type:check', 'format:check']
+        check: ['type:check', 'format:check', 'lint:check']
         node: ['24']
 
     steps:
