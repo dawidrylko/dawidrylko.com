@@ -8,11 +8,10 @@ import { z } from 'zod';
 
 const blogPost = path.resolve(`./src/templates/blog-post.tsx`);
 
-// Walidacja frontmatteru postów (MDX/MD). Build ma failować z czytelnym
-// komunikatem, gdy brakuje wymaganego pola lub gdy featuredImg nie ma alt-textu.
 const frontmatterSchema = z
   .object({
     title: z.string({ error: 'title is required and must be a string' }).trim().min(1, 'title must not be empty'),
+    // Optional: most legacy .md posts have no description; RSS falls back to excerpt.
     description: z
       .string({ error: 'description must be a string' })
       .trim()
