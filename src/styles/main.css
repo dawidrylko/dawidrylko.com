@@ -678,5 +678,72 @@ blockquote {
 }
 
 .footer-metadata a {
+  /* Intentionally low-contrast (color-accent on white): the "Metadata"
+     link is a deliberate easter-egg exception, not standard body content,
+     so it is exempt from the WCAG AA token audit. */
   color: var(--color-accent);
+}
+
+/* Accessibility */
+
+/* Visible keyboard focus for all interactive elements. Browsers hide the
+   default outline inconsistently, so make it explicit and high-contrast. */
+:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Respect the user's request to minimise motion (vestibular disorders).
+   Near-instant durations rather than 0 so animation/transition end events
+   still fire for any JS that relies on them. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Print styles: drop interactive chrome, ensure black-on-white text and
+   expose link targets that are lost on paper. */
+@media print {
+  body {
+    color: #000;
+    background: #fff;
+  }
+
+  .menu,
+  .breadcrumbs,
+  .rss,
+  .footer {
+    display: none;
+  }
+
+  a {
+    color: #000;
+    text-decoration: underline;
+  }
+
+  a[href^='http']::after {
+    content: ' (' attr(href) ')';
+    font-size: var(--fontSize-0);
+    word-wrap: break-word;
+  }
+
+  pre,
+  blockquote,
+  table,
+  img {
+    page-break-inside: avoid;
+  }
+
+  h2,
+  h3,
+  h4 {
+    page-break-after: avoid;
+  }
 }
