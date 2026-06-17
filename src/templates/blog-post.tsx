@@ -6,6 +6,7 @@ import { WithContext, BlogPosting, Person } from 'schema-dts';
 
 import Layout from '../components/layout';
 import Seo from '../components/seo';
+import ErrorBoundary from '../components/error-boundary';
 import { useSiteMetadata } from '../hooks/use-site-metadata';
 import { useStructuredData } from '../hooks/use-structured-data';
 
@@ -76,7 +77,9 @@ const BlogPostTemplate: React.FC<PageProps<Data>> = ({ data, location, children 
           </small>
         </header>
         {img && <GatsbyImage image={img} alt={post.frontmatter.featuredImgAlt || ''} />}
-        <section>{children}</section>
+        <ErrorBoundary fallback={<p>Nie udało się wyświetlić tej części treści.</p>}>
+          <section>{children}</section>
+        </ErrorBoundary>
       </article>
       <nav className="blog-post-nav">
         <ul

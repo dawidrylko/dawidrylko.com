@@ -201,7 +201,7 @@ const SetupPage: React.FC<PageProps> = ({ location }) => {
         </section>
 
         <section id="diagram" aria-labelledby="diagram-heading">
-          <MermaidDiagram chart={setupDiagram} />
+          <MermaidDiagram chart={setupDiagram} ariaLabel="Hardware setup workflow diagram" />
         </section>
 
         <figure style={{ margin: '0' }}>
