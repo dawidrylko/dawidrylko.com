@@ -1,6 +1,6 @@
 import type { HeadFC, PageProps } from 'gatsby';
 
-import * as React from 'react';
+import type { FC } from 'react';
 import { JsonLd } from 'react-schemaorg';
 import { Blog, WithContext } from 'schema-dts';
 import { Link, graphql } from 'gatsby';
@@ -51,7 +51,7 @@ const PAGE_METADATA = {
   ],
 };
 
-const BlogIndex: React.FC<PageProps<DataProps>> = ({ data, location }) => {
+const BlogIndex: FC<PageProps<DataProps>> = ({ data, location }) => {
   const { siteAuthor } = useSiteMetadata();
   const { person } = useStructuredData();
   const posts = data?.allMdx.nodes;

@@ -1,11 +1,11 @@
-import * as React from 'react';
+import type { FC } from 'react';
 import { JsonLd } from 'react-schemaorg';
 import { Person } from 'schema-dts';
 import { StaticImage } from 'gatsby-plugin-image';
 import { useSiteMetadata } from '../hooks/use-site-metadata';
 import { useStructuredData } from '../hooks/use-structured-data';
 
-const Bio: React.FC = () => {
+const Bio: FC = () => {
   const { siteAuthor, siteSocial } = useSiteMetadata();
   const { person } = useStructuredData();
 

@@ -1,5 +1,6 @@
 import type { HeadFC, PageProps } from 'gatsby';
-import * as React from 'react';
+import type { FC } from 'react';
+import { useEffect, useState } from 'react';
 import { JsonLd } from 'react-schemaorg';
 import { WithContext, CollectionPage } from 'schema-dts';
 import { graphql } from 'gatsby';
@@ -57,8 +58,15 @@ const parseFileName = (fileName: string): ParsedFileName | null => {
   }
 
   const topic = parts[0];
-  const order = parseInt(parts[1], 10);
-  const language = parts[parts.length - 1].toLowerCase();
+  const orderRaw = parts[1];
+  const languageRaw = parts[parts.length - 1];
+
+  if (topic === undefined || orderRaw === undefined || languageRaw === undefined) {
+    return null;
+  }
+
+  const order = parseInt(orderRaw, 10);
+  const language = languageRaw.toLowerCase();
   const title = parts.slice(2, -1).join('_');
 
   return {
@@ -102,12 +110,15 @@ const createPresentationsArray = ({ allStaticFile: { nodes } }: DataType, showHi
     const filesA = groupedFiles.get(keyA);
     const filesB = groupedFiles.get(keyB);
 
-    if (!filesA || !filesB) {
+    const firstA = filesA?.[0];
+    const firstB = filesB?.[0];
+
+    if (!firstA || !firstB) {
       return 0;
     }
 
-    const parsedA = parseFileName(filesA[0].name);
-    const parsedB = parseFileName(filesB[0].name);
+    const parsedA = parseFileName(firstA.name);
+    const parsedB = parseFileName(firstB.name);
 
     if (!parsedA || !parsedB) {
       return 0;
@@ -123,13 +134,18 @@ const createPresentationsArray = ({ allStaticFile: { nodes } }: DataType, showHi
   let index = 1;
 
   return sortedEntries.map(([, files]) => {
-    const parsed = parseFileName(files[0].name);
+    const firstFile = files[0];
+    if (!firstFile) {
+      return [];
+    }
+
+    const parsed = parseFileName(firstFile.name);
     if (!parsed) {
       return [];
     }
 
     const pdfFile = files.find(f => f.extension.toLowerCase() === 'pdf');
-    const sizeSource = pdfFile || files[0];
+    const sizeSource = pdfFile ?? firstFile;
 
     const downloadLinks = (
       <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
@@ -200,10 +216,10 @@ const PAGE_METADATA = {
   ],
 };
 
-const PresentationsPage: React.FC<PageProps<DataType>> = ({ data, location }) => {
-  const [showHidden, setShowHidden] = React.useState(false);
+const PresentationsPage: FC<PageProps<DataType>> = ({ data, location }) => {
+  const [showHidden, setShowHidden] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.metaKey && e.shiftKey && e.key === '.') {
         e.preventDefault();

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import type { FC } from 'react';
 import { JsonLd } from 'react-schemaorg';
 import { BreadcrumbList, WithContext } from 'schema-dts';
 import { Link } from 'gatsby';
@@ -16,7 +16,7 @@ type BreadcrumbsProps = {
   customTitle: string;
 };
 
-const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ location, customTitle }) => {
+const Breadcrumbs: FC<BreadcrumbsProps> = ({ location, customTitle }) => {
   const { siteUrl, menu } = useSiteMetadata();
 
   const generateBreadcrumbs = (): BreadcrumbItem[] => {
