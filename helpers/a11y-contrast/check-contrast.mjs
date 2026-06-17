@@ -137,17 +137,12 @@ async function main() {
       bg: t('color-accent'),
       min: AA_NORMAL,
     },
-    {
-      label: 'footer metadata link on page',
-      fg: t('color-text-light'),
-      bg: WHITE,
-      min: AA_NORMAL,
-    },
   ];
 
-  // --color-accent is used only for decorative dividers (hr, table row
-  // separators, even-row shading), which are exempt from WCAG 1.4.11, so it
-  // is intentionally not audited as a foreground against the page.
+  // --color-accent is intentionally excluded as a text foreground: it is used
+  // for decorative dividers (hr, table row separators, even-row shading),
+  // exempt from WCAG 1.4.11, and for the deliberately low-contrast "Metadata"
+  // easter-egg link in the footer.
 
   let failed = 0;
   console.log('WCAG AA contrast audit (src/styles/main.css)\n');

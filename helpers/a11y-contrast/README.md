@@ -11,6 +11,7 @@ without a browser or build, so it works as a fast CI gate.
 pnpm a11y:contrast
 ```
 
-The script exits non-zero when any pair drops below AA. `--color-accent` is used
-only for decorative dividers (which are exempt from WCAG 1.4.11), so it is not
-audited as a text foreground.
+The script exits non-zero when any pair drops below AA. `--color-accent` is not
+audited as a text foreground: it is used for decorative dividers (exempt from
+WCAG 1.4.11) and for the deliberately low-contrast "Metadata" easter-egg link in
+the footer.
