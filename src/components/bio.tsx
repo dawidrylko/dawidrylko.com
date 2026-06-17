@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { JsonLd } from 'react-schemaorg';
-import { Person, WithContext } from 'schema-dts';
+import { Person } from 'schema-dts';
 import { StaticImage } from 'gatsby-plugin-image';
 import { useSiteMetadata } from '../hooks/use-site-metadata';
 import { useStructuredData } from '../hooks/use-structured-data';
 
 const Bio: React.FC = () => {
   const { siteAuthor, siteSocial } = useSiteMetadata();
-  const { person } = useStructuredData() as { person: WithContext<Person> };
+  const { person } = useStructuredData();
 
   return (
     <div className="bio">

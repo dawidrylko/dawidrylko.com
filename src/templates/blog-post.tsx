@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Link, graphql, PageProps, HeadProps } from 'gatsby';
 import { GatsbyImage, getImage, IGatsbyImageData } from 'gatsby-plugin-image';
 import { JsonLd } from 'react-schemaorg';
-import { WithContext, BlogPosting, Person } from 'schema-dts';
+import { WithContext, BlogPosting } from 'schema-dts';
 
 import Layout from '../components/layout';
 import Seo from '../components/seo';
@@ -36,7 +36,7 @@ type Data = {
 
 const BlogPostTemplate: React.FC<PageProps<Data>> = ({ data, location, children }) => {
   const { siteAuthor } = useSiteMetadata();
-  const { person } = useStructuredData() as { person: WithContext<Person> };
+  const { person } = useStructuredData();
   const { previous, next, mdx: post } = data;
 
   const img = getImage(post.frontmatter.featuredImg?.childImageSharp?.gatsbyImageData || null);

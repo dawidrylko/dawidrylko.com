@@ -145,8 +145,7 @@ const setupDiagram = `graph TD
 `;
 
 const SetupPage: React.FC<PageProps> = ({ location }) => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { person } = useStructuredData() as { person: any };
+  const { person } = useStructuredData();
 
   const structuredData: WithContext<CollectionPage> = {
     '@context': 'https://schema.org',

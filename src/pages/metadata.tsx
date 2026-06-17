@@ -68,8 +68,7 @@ const PAGE_METADATA = {
 };
 
 const MetadataPage: React.FC<PageProps<DataType>> = ({ data, location }) => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { person } = useStructuredData() as { person: any };
+  const { person } = useStructuredData();
 
   const structuredData: WithContext<CollectionPage> = {
     '@context': 'https://schema.org',

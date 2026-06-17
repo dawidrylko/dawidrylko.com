@@ -26,8 +26,7 @@ const PAGE_METADATA = {
 
 const ContactPage: React.FC<PageProps> = ({ location }) => {
   const { siteAuthor, siteSocial } = useSiteMetadata();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { person } = useStructuredData() as { person: any };
+  const { person } = useStructuredData();
 
   const structuredData: WithContext<WebPage> = {
     '@context': 'https://schema.org',

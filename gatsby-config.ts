@@ -1,7 +1,44 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { GatsbyConfig } from 'gatsby';
 import { GTAG } from './src/constants/gtag';
 import { SITE_METADATA } from './src/constants/site-metadata';
+
+type GatsbyImageData = {
+  images?: {
+    fallback?: { src?: string };
+    sources?: Array<{ srcSet?: string }>;
+  };
+};
+
+type FeedQuery = {
+  site: { siteMetadata: { siteUrl: string } };
+  posts: {
+    nodes: Array<{
+      fields: { slug: string };
+      frontmatter: {
+        title: string;
+        description?: string;
+        date: string;
+        tags?: string[];
+        featuredImg?: { childImageSharp?: { gatsbyImageData?: GatsbyImageData } };
+      };
+      excerpt: string;
+    }>;
+  };
+};
+
+type RssEnclosure = { url: string; type: string; length: string };
+
+type RssItem = {
+  title: string;
+  description: string;
+  url: string;
+  guid: string;
+  author: string;
+  date: string;
+  custom_elements: Array<Record<string, unknown>>;
+  categories?: string[];
+  enclosure?: RssEnclosure;
+};
 
 const config: GatsbyConfig = {
   siteMetadata: {
@@ -130,7 +167,7 @@ const config: GatsbyConfig = {
                 }
               }
             `,
-            serialize: ({ query: { site, posts } }: any) => {
+            serialize: ({ query: { site, posts } }: { query: FeedQuery }) => {
               const getImageMimeType = (src: string): string => {
                 const extension = src.split('.').pop()?.toLowerCase();
                 switch (extension) {
@@ -148,7 +185,7 @@ const config: GatsbyConfig = {
                 }
               };
 
-              const getEnclosure = (gatsbyImageData: any) => {
+              const getEnclosure = (gatsbyImageData: GatsbyImageData | undefined): RssEnclosure | undefined => {
                 // Prefer the fallback (jpeg/png) variant for broad feed-reader compatibility,
                 // falling back to the largest srcSet candidate when it is unavailable.
                 const fallbackSrc: string | undefined = gatsbyImageData?.images?.fallback?.src;
@@ -170,14 +207,14 @@ const config: GatsbyConfig = {
                 };
               };
 
-              return posts.nodes.map((node: any) => {
+              return posts.nodes.map((node): RssItem => {
                 const url = `${site.siteMetadata.siteUrl}${node.fields.slug}`;
                 const description = node.frontmatter.description || node.excerpt;
                 const content = `<p>${description}</p><div style='margin-top: 50px; font-style: italic;'><strong><a href='${url}'>Czytaj dalej</a>.</strong></div><br /> <br />`;
                 const categories = node.frontmatter.tags || [];
                 const enclosure = getEnclosure(node.frontmatter.featuredImg?.childImageSharp?.gatsbyImageData);
 
-                const rssItem: any = {
+                const rssItem: RssItem = {
                   title: node.frontmatter.title,
                   description,
                   url,

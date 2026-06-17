@@ -60,7 +60,7 @@ const MermaidDiagramInner: React.FC<Required<MermaidDiagramProps>> = ({ chart, a
       }
     };
 
-    renderChart();
+    void renderChart();
 
     return () => {
       cancelled = true;

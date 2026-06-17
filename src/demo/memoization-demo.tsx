@@ -173,7 +173,7 @@ const MemoizationDemo: React.FC = () => {
               {horcruxList.map(horcrux => (
                 <button
                   key={horcrux}
-                  onClick={() => viewHorcrux(horcrux)}
+                  onClick={() => void viewHorcrux(horcrux)}
                   disabled={loadingHorcruxes.has(horcrux)}
                   className={`harry-potter-horcrux-btn ${loadingHorcruxes.has(horcrux) ? `harry-potter-loading` : ``}`}
                 >

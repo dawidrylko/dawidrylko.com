@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import type { GatsbyNode } from 'gatsby';
+import type { GatsbyNode, Reporter } from 'gatsby';
 
 import path from 'path';
 import fs from 'fs';
@@ -19,7 +18,7 @@ const frontmatterSchema = z
       .optional(),
     date: z
       .union([z.string(), z.date()], { error: 'date is required' })
-      .refine(value => !Number.isNaN(new Date(value as string | Date).getTime()), 'date must be a valid date'),
+      .refine(value => !Number.isNaN(new Date(value).getTime()), 'date must be a valid date'),
     tags: z
       .array(z.string({ error: 'each tag must be a string' }).trim().min(1, 'tags must not contain empty values'), {
         error: 'tags is required and must be an array',
@@ -33,7 +32,7 @@ const frontmatterSchema = z
     path: ['featuredImgAlt'],
   });
 
-const validateFrontmatter = (frontmatter: unknown, filePath: string, reporter: any): void => {
+const validateFrontmatter = (frontmatter: unknown, filePath: string, reporter: Reporter): void => {
   const result = frontmatterSchema.safeParse(frontmatter);
 
   if (!result.success) {
@@ -44,7 +43,7 @@ const validateFrontmatter = (frontmatter: unknown, filePath: string, reporter: a
   }
 };
 
-export const sourceNodes: GatsbyNode['sourceNodes'] = async ({ actions, createNodeId, createContentDigest }) => {
+export const sourceNodes: GatsbyNode['sourceNodes'] = ({ actions, createNodeId, createContentDigest }) => {
   const { createNode } = actions;
   const filesDir = path.resolve('./static/files');
 
@@ -94,11 +93,22 @@ export const sourceNodes: GatsbyNode['sourceNodes'] = async ({ actions, createNo
       relativePath: relativePath.replace(/\\/g, '/'),
     };
 
-    createNode(node);
+    void createNode(node);
   });
 };
 
-export const createPages: GatsbyNode['createPages'] = async ({ graphql, actions, reporter }: any) => {
+type AllMdxQuery = {
+  allMdx: {
+    nodes: Array<{
+      id: string;
+      fields: { slug: string };
+      internal: { contentFilePath: string };
+    }>;
+  };
+};
+
+export const createPages: GatsbyNode['createPages'] = async gatsbyApi => {
+  const { actions, reporter } = gatsbyApi;
   const { createPage, createRedirect } = actions;
 
   createRedirect({
@@ -108,7 +118,7 @@ export const createPages: GatsbyNode['createPages'] = async ({ graphql, actions,
     redirectInBrowser: true,
   });
 
-  const result = await graphql(`
+  const result = await gatsbyApi.graphql<AllMdxQuery>(`
     query AllMdx {
       allMdx(sort: { frontmatter: { date: ASC } }, limit: 1000) {
         nodes {
@@ -124,29 +134,27 @@ export const createPages: GatsbyNode['createPages'] = async ({ graphql, actions,
     }
   `);
 
-  if (result.errors) {
-    reporter.panicOnBuild(`There was an error loading your blog posts`, result.errors);
+  if (result.errors || !result.data) {
+    reporter.panicOnBuild(`There was an error loading your blog posts`, result.errors as Error | Error[] | undefined);
     return;
   }
 
-  const posts: any[] = result.data.allMdx.nodes;
+  const posts = result.data.allMdx.nodes;
 
-  if (posts.length > 0) {
-    posts.forEach((post, index) => {
-      const previousPostId = index === 0 ? null : posts[index - 1].id;
-      const nextPostId = index === posts.length - 1 ? null : posts[index + 1].id;
+  posts.forEach((post, index) => {
+    const previousPostId = index === 0 ? null : posts[index - 1].id;
+    const nextPostId = index === posts.length - 1 ? null : posts[index + 1].id;
 
-      createPage({
-        path: post.fields.slug,
-        component: `${blogPost}?__contentFilePath=${post.internal.contentFilePath}`,
-        context: {
-          id: post.id,
-          previousPostId,
-          nextPostId,
-        },
-      });
+    createPage({
+      path: post.fields.slug,
+      component: `${blogPost}?__contentFilePath=${post.internal.contentFilePath}`,
+      context: {
+        id: post.id,
+        previousPostId,
+        nextPostId,
+      },
     });
-  }
+  });
 };
 
 export const onCreateNode: GatsbyNode['onCreateNode'] = ({ node, actions, getNode, reporter }) => {
@@ -157,7 +165,7 @@ export const onCreateNode: GatsbyNode['onCreateNode'] = ({ node, actions, getNod
   const parent = node.parent ? getNode(node.parent) : undefined;
   const sourceFilePath =
     (parent?.absolutePath as string) ?? (node.internal.contentFilePath as string) ?? String(node.id);
-  validateFrontmatter((node as any).frontmatter, sourceFilePath, reporter);
+  validateFrontmatter((node as { frontmatter?: unknown }).frontmatter, sourceFilePath, reporter);
 
   const { createNodeField } = actions;
   const filePath = createFilePath({ node, getNode });
