@@ -142,8 +142,8 @@ export const createPages: GatsbyNode['createPages'] = async gatsbyApi => {
   const posts = result.data.allMdx.nodes;
 
   posts.forEach((post, index) => {
-    const previousPostId = index === 0 ? null : posts[index - 1].id;
-    const nextPostId = index === posts.length - 1 ? null : posts[index + 1].id;
+    const previousPostId = index === 0 ? null : (posts[index - 1]?.id ?? null);
+    const nextPostId = index === posts.length - 1 ? null : (posts[index + 1]?.id ?? null);
 
     createPage({
       path: post.fields.slug,

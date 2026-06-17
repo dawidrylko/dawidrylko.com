@@ -1,5 +1,5 @@
 import type { HeadFC, PageProps } from 'gatsby';
-import * as React from 'react';
+import type { FC } from 'react';
 import { JsonLd } from 'react-schemaorg';
 import { WebPage } from 'schema-dts';
 
@@ -25,7 +25,7 @@ const PAGE_METADATA = {
   ],
 } satisfies PageMetadata;
 
-const ContactPage: React.FC<PageProps> = ({ location }) => {
+const ContactPage: FC<PageProps> = ({ location }) => {
   const { siteAuthor, siteSocial } = useSiteMetadata();
   const { person } = STRUCTURED_DATA;
 

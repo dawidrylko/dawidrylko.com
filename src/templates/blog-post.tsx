@@ -1,4 +1,4 @@
-import * as React from 'react';
+import type { FC } from 'react';
 import { Link, graphql, PageProps, HeadProps } from 'gatsby';
 import { GatsbyImage, getImage, IGatsbyImageData } from 'gatsby-plugin-image';
 import { JsonLd } from 'react-schemaorg';
@@ -35,7 +35,7 @@ type Data = {
   next: PostNode;
 };
 
-const BlogPostTemplate: React.FC<PageProps<Data>> = ({ data, location, children }) => {
+const BlogPostTemplate: FC<PageProps<Data>> = ({ data, location, children }) => {
   const { siteAuthor } = useSiteMetadata();
   const { person } = STRUCTURED_DATA;
   const { previous, next, mdx: post } = data;
@@ -112,7 +112,7 @@ const BlogPostTemplate: React.FC<PageProps<Data>> = ({ data, location, children 
   );
 };
 
-export const Head: React.FC<HeadProps<Data>> = ({ data: { mdx: post }, location }) => (
+export const Head: FC<HeadProps<Data>> = ({ data: { mdx: post }, location }) => (
   <Seo
     lang="pl"
     title={post.frontmatter.title}

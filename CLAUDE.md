@@ -49,7 +49,7 @@ Te fakty są potrzebne, gdy modyfikujesz szablony, `gatsby-node.ts`, RSS lub sit
 
 ## Konwencje kodu
 
-- **Komponenty:** `React.FC` z interfejsem TypeScript, nazwy PascalCase.
+- **Komponenty:** typ `FC` (named import z `react`) z interfejsem TypeScript, nazwy PascalCase. Automatic JSX runtime (`jsx: react-jsx` + `jsxRuntime: 'automatic'` w gatsby-config) — bez `import * as React`; hooki, `Fragment`, `ReactNode` itp. importuj imiennie.
 - **Pliki:** kebab-case (np. `mermaid-diagram.tsx`). **Stałe:** UPPER_SNAKE_CASE.
 - **Style:** czyste CSS z custom properties (design tokens), bez preprocesorów; Montserrat (nagłówki), Merriweather (tekst).
 - **Dane strukturalne:** react-schemaorg + schema-dts (JSON-LD).

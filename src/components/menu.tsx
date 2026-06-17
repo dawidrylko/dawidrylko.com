@@ -1,10 +1,10 @@
-import * as React from 'react';
+import type { FC } from 'react';
 import { JsonLd } from 'react-schemaorg';
 import { SiteNavigationElement, WithContext } from 'schema-dts';
 import { Link } from 'gatsby';
 import { useSiteMetadata } from '../hooks/use-site-metadata';
 
-const Menu: React.FC = () => {
+const Menu: FC = () => {
   const { menu, siteUrl } = useSiteMetadata();
 
   const structuredData: WithContext<SiteNavigationElement> = {

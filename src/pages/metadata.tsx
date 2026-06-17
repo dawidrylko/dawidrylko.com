@@ -1,5 +1,5 @@
 import type { HeadFC, PageProps } from 'gatsby';
-import * as React from 'react';
+import type { FC } from 'react';
 import { JsonLd } from 'react-schemaorg';
 import { CollectionPage } from 'schema-dts';
 import { graphql, Link } from 'gatsby';
@@ -68,7 +68,7 @@ const PAGE_METADATA = {
   ],
 } satisfies PageMetadata;
 
-const MetadataPage: React.FC<PageProps<DataType>> = ({ data, location }) => {
+const MetadataPage: FC<PageProps<DataType>> = ({ data, location }) => {
   const { person } = STRUCTURED_DATA;
 
   const structuredData: StructuredData<CollectionPage> = {

@@ -41,6 +41,10 @@ type RssItem = {
 };
 
 const config: GatsbyConfig = {
+  // Compile JSX with the automatic runtime so React no longer needs to be in
+  // scope. This mirrors `jsx: react-jsx` in tsconfig (which only governs tsc);
+  // Gatsby's Babel pipeline defaults to the classic runtime otherwise.
+  jsxRuntime: 'automatic',
   siteMetadata: {
     siteUrl: `${SITE_METADATA.url}/`,
     siteTitle: SITE_METADATA.title,

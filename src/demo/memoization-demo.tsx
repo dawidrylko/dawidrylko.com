@@ -18,7 +18,8 @@
  * "After all, to the well-organised mind, death is but the next great adventure."
  * And to the well-organised code, performance is but a cached memory.
  */
-import React, { useState, useCallback, useRef } from 'react';
+import type { FC } from 'react';
+import { useState, useCallback, useRef } from 'react';
 
 enum LogType {
   Processing,
@@ -63,7 +64,7 @@ const HORCRUX_DATA = new Map<string, string[]>([
 
 const WELCOME_MESSAGE = `🔮 Welcome to the Pensieve. Select a Horcrux to view its memories...`;
 
-const MemoizationDemo: React.FC = () => {
+const MemoizationDemo: FC = () => {
   const [logEntries, setLogEntries] = useState<LogEntry[]>([
     { id: 0, message: WELCOME_MESSAGE, type: LogType.Result, timestamp: Date.now(), isFinished: true },
   ]);
