@@ -1,4 +1,4 @@
-import type { PageProps } from 'gatsby';
+import type { HeadFC, PageProps } from 'gatsby';
 import * as React from 'react';
 import { JsonLd } from 'react-schemaorg';
 import { WithContext, WebPage } from 'schema-dts';
@@ -103,4 +103,6 @@ const ContactPage: React.FC<PageProps> = ({ location }) => {
 
 export default ContactPage;
 
-export const Head = () => <Seo title={PAGE_METADATA.title} description={PAGE_METADATA.description} />;
+export const Head: HeadFC = ({ location }) => (
+  <Seo title={PAGE_METADATA.title} description={PAGE_METADATA.description} pathname={location.pathname} />
+);

@@ -1,4 +1,4 @@
-import type { PageProps } from 'gatsby';
+import type { HeadFC, PageProps } from 'gatsby';
 import * as React from 'react';
 import { JsonLd } from 'react-schemaorg';
 import { WithContext, WebPage } from 'schema-dts';
@@ -73,4 +73,4 @@ const BlogIndex: React.FC<PageProps> = ({ location }) => {
 
 export default BlogIndex;
 
-export const Head = () => <Seo />;
+export const Head: HeadFC = ({ location }) => <Seo pathname={location.pathname} />;

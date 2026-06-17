@@ -111,8 +111,15 @@ const BlogPostTemplate: React.FC<PageProps<Data>> = ({ data, location, children 
   );
 };
 
-export const Head: React.FC<HeadProps<Data>> = ({ data: { mdx: post } }) => (
-  <Seo lang="pl" title={post.frontmatter.title} description={post.frontmatter.description || ''} />
+export const Head: React.FC<HeadProps<Data>> = ({ data: { mdx: post }, location }) => (
+  <Seo
+    lang="pl"
+    title={post.frontmatter.title}
+    description={post.frontmatter.description || ''}
+    pathname={location.pathname}
+    image={post.frontmatter.featuredImg?.childImageSharp?.gatsbyImageData?.images?.fallback?.src}
+    article
+  />
 );
 
 export default BlogPostTemplate;

@@ -1,4 +1,4 @@
-import type { PageProps } from 'gatsby';
+import type { HeadFC, PageProps } from 'gatsby';
 
 import * as React from 'react';
 import { JsonLd } from 'react-schemaorg';
@@ -145,7 +145,9 @@ const BlogIndex: React.FC<PageProps<DataProps>> = ({ data, location }) => {
 
 export default BlogIndex;
 
-export const Head = () => <Seo lang="pl" title={PAGE_METADATA.title} description={PAGE_METADATA.description} />;
+export const Head: HeadFC = ({ location }) => (
+  <Seo lang="pl" title={PAGE_METADATA.title} description={PAGE_METADATA.description} pathname={location.pathname} />
+);
 
 export const query = graphql`
   {
