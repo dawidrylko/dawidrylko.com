@@ -132,11 +132,7 @@ const BlogIndex: React.FC<PageProps<DataProps>> = ({ data, location }) => {
                 </header>
                 <section>
                   {img && <GatsbyImage image={img} alt={post.frontmatter.featuredImgAlt || ''} />}
-                  <p
-                    dangerouslySetInnerHTML={{
-                      __html: description || '',
-                    }}
-                  />
+                  <p>{description}</p>
                 </section>
               </article>
             </li>
