@@ -645,6 +645,30 @@ blockquote {
   }
 }
 
+/* Mermaid diagrams */
+
+.mermaid-diagram {
+  display: flex;
+  justify-content: center;
+  margin: var(--spacing-6) 0;
+}
+
+.mermaid-diagram svg {
+  max-width: 100%;
+  height: auto;
+}
+
+.mermaid-diagram-fallback {
+  overflow-x: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mermaid-diagram svg * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
 /* Footer */
 
 .footer {
