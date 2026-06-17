@@ -23,3 +23,23 @@ updates:
     ignore:
       # Pinned to 0.13.3 for gatsby-remark-katex compatibility — do not bump.
       - dependency-name: 'katex'
+
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+      time: '03:00'
+      timezone: 'Europe/Warsaw'
+    open-pull-requests-limit: 1
+    assignees:
+      - 'dawidrylko'
+    rebase-strategy: 'auto'
+    commit-message:
+      prefix: 'ci'
+      include: 'scope'
+    groups:
+      all-actions:
+        applies-to: version-updates
+        patterns:
+          - '*'
