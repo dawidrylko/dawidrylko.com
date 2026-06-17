@@ -86,6 +86,9 @@ importers:
       schema-dts:
         specifier: ^2.0.0
         version: 2.0.0(typescript@6.0.3)
+      web-vitals:
+        specifier: ^5.3.0
+        version: 5.3.0
       zod:
         specifier: ^4.4.3
         version: 4.4.3
@@ -6752,6 +6755,9 @@ packages:
 
   web-namespaces@1.1.4:
     resolution: {integrity: sha512-wYxSGajtmoP4WxfejAPIr4l0fVh+jeMXZb08wNc0tMg6xsfZXj3cECqIK0G7ZAqUq0PP8WlMDtaOGVBTAWztNw==}
+
+  web-vitals@5.3.0:
+    resolution: {integrity: sha512-q6LWsLatGYZp5VGBIOvbTj6JBV2nOmC8KvWztXBmwJcfFAzhwKwbOxhUH306XY3CcaZDUlSmSuNPBsCn0bFu+g==}
 
   webidl-conversions@3.0.1:
     resolution: {integrity: sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ==}
@@ -15209,6 +15215,8 @@ snapshots:
   weak-lru-cache@1.2.2: {}
 
   web-namespaces@1.1.4: {}
+
+  web-vitals@5.3.0: {}
 
   webidl-conversions@3.0.1: {}
 

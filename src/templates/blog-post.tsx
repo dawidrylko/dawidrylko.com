@@ -117,6 +117,8 @@ export const Head: React.FC<HeadProps<Data>> = ({ data: { mdx: post }, location 
     title={post.frontmatter.title}
     description={post.frontmatter.description || ''}
     pathname={location.pathname}
+    image={post.frontmatter.featuredImg?.childImageSharp?.gatsbyImageData?.images?.fallback?.src}
+    article
   />
 );
 
