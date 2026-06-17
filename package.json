@@ -20,6 +20,7 @@
     "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,md}\"",
     "lint:fix": "eslint . --fix",
     "lint:check": "eslint .",
+    "a11y:contrast": "node helpers/a11y-contrast/check-contrast.mjs",
     "prepare": "husky"
   },
   "dependencies": {
