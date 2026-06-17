@@ -1,0 +1,5 @@
+# Code owners are automatically requested for review on pull requests.
+# This replaces the Dependabot `reviewers` option, which GitHub retired in August 2025.
+# Docs: https://docs.github.com/articles/about-code-owners
+
+* @dawidrylko

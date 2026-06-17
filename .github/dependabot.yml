@@ -1,28 +1,29 @@
 version: 2
 updates:
-  - package-ecosystem: 'pnpm'
+  - package-ecosystem: 'npm' # covers npm/yarn/pnpm; resolved via pnpm-lock.yaml
     directory: '/'
     schedule:
       interval: 'weekly'
+      day: 'monday'
       time: '03:00'
-    open-pull-requests-limit: 10
+      timezone: 'Europe/Warsaw'
+    # Single grouped PR for every weekly version update.
+    open-pull-requests-limit: 1
     assignees:
       - 'dawidrylko'
-    reviewers:
-      - 'dawidrylko'
-    rebase-strategy: auto
+    rebase-strategy: 'auto'
+    commit-message:
+      prefix: 'chore'
+      include: 'scope'
     groups:
-      lint:
-        dependency-type: 'development'
+      all-dependencies:
+        applies-to: version-updates
         patterns:
-          - '@eslint/*'
-          - 'eslint*'
-      typescript:
-        dependency-type: 'development'
-        patterns:
-          - '@types/*'
+          - '*'
     ignore:
+      # Pinned to 0.13.3 for gatsby-remark-katex compatibility — do not bump.
       - dependency-name: 'katex'
+      # React 19 requires a coordinated migration; skip majors for now.
       - dependency-name: 'react'
         update-types: ['version-update:semver-major']
       - dependency-name: 'react-dom'
