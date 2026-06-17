@@ -86,7 +86,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # Notifications run after a successful deploy; a failure here must never
+      # roll back or block the already-published build, so they are non-blocking.
       - name: Notify Google via Indexing API
+        continue-on-error: true
         env:
           GOOGLE_JSON_KEY_FILE: ${{ secrets.GOOGLE_JSON_KEY_FILE }}
         working-directory: '.github/scripts'
@@ -94,6 +97,7 @@ jobs:
         run: ./google.sh
 
       - name: Notify Bing via URL Submission API
+        continue-on-error: true
         env:
           BING_API_KEY: ${{ secrets.BING_API_KEY }}
         working-directory: '.github/scripts'
