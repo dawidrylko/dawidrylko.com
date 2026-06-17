@@ -50,6 +50,8 @@ const NotFoundPage: React.FC<PageProps> = ({ location }) => {
   );
 };
 
-export const Head: HeadFC = () => <Seo title={PAGE_METADATA.title} description={PAGE_METADATA.description} noIndex />;
+export const Head: HeadFC = ({ location }) => (
+  <Seo title={PAGE_METADATA.title} description={PAGE_METADATA.description} pathname={location.pathname} noIndex />
+);
 
 export default NotFoundPage;

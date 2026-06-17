@@ -262,6 +262,8 @@ const BioPage: React.FC<PageProps> = ({ location }) => {
   );
 };
 
-export const Head: HeadFC = () => <Seo title={PAGE_METADATA.title} description={PAGE_METADATA.description} />;
+export const Head: HeadFC = ({ location }) => (
+  <Seo title={PAGE_METADATA.title} description={PAGE_METADATA.description} pathname={location.pathname} />
+);
 
 export default BioPage;
