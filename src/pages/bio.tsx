@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { JsonLd } from 'react-schemaorg';
-import { Person, WebPage, WithContext } from 'schema-dts';
+import { WebPage, WithContext } from 'schema-dts';
 import type { PageProps, HeadFC } from 'gatsby';
 import { StaticImage } from 'gatsby-plugin-image';
 
@@ -73,8 +73,7 @@ const image = {
 };
 
 const BioPage: React.FC<PageProps> = ({ location }) => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { person } = useStructuredData() as { person: WithContext<Person> } as { person: any };
+  const { person } = useStructuredData();
   const { siteAuthor } = useSiteMetadata();
 
   const structuredData: WithContext<WebPage> = {

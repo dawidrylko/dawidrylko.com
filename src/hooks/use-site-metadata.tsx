@@ -21,7 +21,7 @@ type SiteMetadata = {
 };
 
 export const useSiteMetadata = (): SiteMetadata => {
-  const data = useStaticQuery(graphql`
+  const data = useStaticQuery<{ site: { siteMetadata: SiteMetadata } }>(graphql`
     query SiteMetadata {
       site {
         siteMetadata {

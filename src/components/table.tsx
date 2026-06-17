@@ -9,12 +9,12 @@ type TableProps = {
 
 const Table: React.FC<TableProps> = ({ data, header, widthConfig, ariaLabel }) => {
   return (
-    <table role="table" aria-label={ariaLabel}>
+    <table aria-label={ariaLabel}>
       {header && (
         <thead>
-          <tr role="row">
+          <tr>
             {header.map((item, index) => (
-              <th key={index} scope="col" role="columnheader">
+              <th key={index} scope="col">
                 {item}
               </th>
             ))}
@@ -23,9 +23,9 @@ const Table: React.FC<TableProps> = ({ data, header, widthConfig, ariaLabel }) =
       )}
       <tbody>
         {data.map((row, rowIndex) => (
-          <tr key={rowIndex} role="row">
+          <tr key={rowIndex}>
             {row.map((cell, cellIndex) => (
-              <td key={cellIndex} width={widthConfig?.[cellIndex]} role="cell">
+              <td key={cellIndex} width={widthConfig?.[cellIndex]}>
                 {cell}
               </td>
             ))}

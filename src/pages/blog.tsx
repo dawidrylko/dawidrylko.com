@@ -2,7 +2,7 @@ import type { HeadFC, PageProps } from 'gatsby';
 
 import * as React from 'react';
 import { JsonLd } from 'react-schemaorg';
-import { Person, Blog, WithContext } from 'schema-dts';
+import { Blog, WithContext } from 'schema-dts';
 import { Link, graphql } from 'gatsby';
 import { GatsbyImage, getImage, IGatsbyImageData, StaticImage } from 'gatsby-plugin-image';
 
@@ -53,7 +53,7 @@ const PAGE_METADATA = {
 
 const BlogIndex: React.FC<PageProps<DataProps>> = ({ data, location }) => {
   const { siteAuthor } = useSiteMetadata();
-  const { person } = useStructuredData() as { person: WithContext<Person> };
+  const { person } = useStructuredData();
   const posts = data?.allMdx.nodes;
 
   if (posts.length === 0) {

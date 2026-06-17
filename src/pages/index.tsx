@@ -24,8 +24,7 @@ const PAGE_METADATA = {
 };
 
 const BlogIndex: React.FC<PageProps> = ({ location }) => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { person } = useStructuredData() as { person: any };
+  const { person } = useStructuredData();
 
   const structuredData: WithContext<WebPage> = {
     '@context': 'https://schema.org',
