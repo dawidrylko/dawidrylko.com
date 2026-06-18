@@ -11,7 +11,7 @@ import { glob } from 'astro/loaders';
 const posts = defineCollection({
   loader: glob({
     pattern: '**/*.{md,mdx}',
-    base: '../content/pl',
+    base: 'content/pl',
     generateId: ({ entry }) =>
       entry
         .replace(/\.mdx?$/, '')

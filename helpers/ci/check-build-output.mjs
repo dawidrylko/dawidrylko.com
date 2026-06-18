@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Build-output contract for the Gatsby production build (public/).
+ * Build-output contract for the Astro production build (dist/).
  *
  * Asserts that the artifacts the site depends on for SEO and distribution are
  * actually emitted and well-formed. This is a fast, zero-dependency smoke test
@@ -25,14 +25,14 @@ import { fileURLToPath } from 'node:url';
 import { dirname, resolve, join } from 'node:path';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const PUBLIC_DIR = resolve(__dirname, '../../public');
+const OUTPUT_DIR = resolve(__dirname, '../../dist');
 
 const problems = [];
 const fail = msg => problems.push(msg);
 
 async function exists(relPath) {
   try {
-    await access(join(PUBLIC_DIR, relPath));
+    await access(join(OUTPUT_DIR, relPath));
     return true;
   } catch {
     return false;
@@ -40,22 +40,15 @@ async function exists(relPath) {
 }
 
 async function read(relPath) {
-  return readFile(join(PUBLIC_DIR, relPath), 'utf8');
+  return readFile(join(OUTPUT_DIR, relPath), 'utf8');
 }
 
 /** All these files must be present in the build output. */
 async function checkRequiredFiles() {
-  const required = [
-    'index.html',
-    '404.html',
-    'rss.xml',
-    'sitemap-index.xml',
-    'sitemap-0.xml',
-    'manifest.webmanifest',
-  ];
+  const required = ['index.html', '404.html', 'rss.xml', 'sitemap-index.xml', 'sitemap-0.xml', 'manifest.webmanifest'];
   for (const file of required) {
     if (!(await exists(file))) {
-      fail(`missing required artifact: public/${file}`);
+      fail(`missing required artifact: dist/${file}`);
     }
   }
 }
@@ -99,18 +92,18 @@ async function checkSocialMeta() {
 
   for (const page of pages) {
     if (!(await exists(page))) {
-      fail(`cannot check social meta: public/${page} is missing`);
+      fail(`cannot check social meta: dist/${page} is missing`);
       continue;
     }
     const html = await read(page);
     for (const prop of requiredOg) {
       if (!new RegExp(`property="${prop}"`).test(html)) {
-        fail(`public/${page} is missing Open Graph meta "${prop}"`);
+        fail(`dist/${page} is missing Open Graph meta "${prop}"`);
       }
     }
     for (const name of requiredTwitter) {
       if (!new RegExp(`name="${name}"`).test(html)) {
-        fail(`public/${page} is missing Twitter Card meta "${name}"`);
+        fail(`dist/${page} is missing Twitter Card meta "${name}"`);
       }
     }
   }
@@ -118,7 +111,7 @@ async function checkSocialMeta() {
 
 async function main() {
   if (!(await exists('.'))) {
-    console.error(`Build output not found at ${PUBLIC_DIR}. Run "pnpm build" first.`);
+    console.error(`Build output not found at ${OUTPUT_DIR}. Run "pnpm build" first.`);
     process.exit(1);
   }
 
@@ -127,7 +120,7 @@ async function main() {
   await checkManifest();
   await checkSocialMeta();
 
-  console.log('Build-output contract (public/)\n');
+  console.log('Build-output contract (dist/)\n');
   if (problems.length > 0) {
     for (const problem of problems) console.error(`  ✗ ${problem}`);
     console.error(`\nBuild-output contract failed: ${problems.length} problem(s).`);

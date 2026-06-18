@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Regression contract for the Astro build (astro/dist).
+ * Regression contract for the Astro build (dist/).
  *
  * Locks in the rendering fixes verified during the live migration QA so they
  * cannot silently regress. Zero-dependency smoke test that runs in CI against
@@ -21,7 +21,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, resolve, join } from 'node:path';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const DIST_DIR = process.argv[2] ? resolve(process.cwd(), process.argv[2]) : resolve(__dirname, '../../astro/dist');
+const DIST_DIR = process.argv[2] ? resolve(process.cwd(), process.argv[2]) : resolve(__dirname, '../../dist');
 
 const problems = [];
 const fail = msg => problems.push(msg);
@@ -48,9 +48,7 @@ async function readAllCss() {
   } catch {
     return '';
   }
-  const css = await Promise.all(
-    files.filter(f => f.endsWith('.css')).map(f => readFile(join(assetsDir, f), 'utf8')),
-  );
+  const css = await Promise.all(files.filter(f => f.endsWith('.css')).map(f => readFile(join(assetsDir, f), 'utf8')));
   return css.join('\n');
 }
 
@@ -145,7 +143,7 @@ async function main() {
   await checkDemoHydration();
   await checkBlogThumbnail();
 
-  console.log('Astro build-output regression contract (astro/dist)\n');
+  console.log('Astro build-output regression contract (dist/)\n');
   if (problems.length > 0) {
     for (const problem of problems) console.error(`  ✗ ${problem}`);
     console.error(`\nRegression contract failed: ${problems.length} problem(s).`);

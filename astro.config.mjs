@@ -7,18 +7,17 @@ import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import webmanifest from './src/integrations/webmanifest';
 
-// Astro migration PoC. Mirrors the Gatsby site's content pipeline:
+// Content pipeline (migrated from Gatsby):
 //   - MDX with remark-math + rehype-katex (KaTeX, build-time SSR)
 //   - Shiki syntax highlighting with light/dark themes (replaces Prism)
 //   - React islands for interactive components (Mermaid, embedded demos)
 // https://docs.astro.build/en/reference/configuration-reference/
 export default defineConfig({
   site: 'https://dawidrylko.com',
-  // Match Gatsby's trailing-slash URLs so links/redirects stay identical.
+  // Trailing-slash URLs preserved from the Gatsby site so links/redirects match.
   trailingSlash: 'always',
-  // Reuse the existing Gatsby static/ tree (resume PDFs, /files, robots.txt,
-  // CNAME) so the same assets are served at the same paths.
-  publicDir: '../static',
+  // Static assets (resume PDFs, /files, robots.txt, CNAME) served from static/.
+  publicDir: 'static',
   // Ported from Gatsby's createRedirect (/resume → /bio/). In the static
   // output Astro emits a meta-refresh redirect page.
   redirects: {
@@ -37,10 +36,5 @@ export default defineConfig({
     shikiConfig: {
       themes: { light: 'github-light', dark: 'github-dark' },
     },
-  },
-  vite: {
-    // Posts live in ../content/pl and one post imports a demo from ../src/demo,
-    // both outside the Astro project root — allow Vite to read the repo root.
-    server: { fs: { allow: ['..'] } },
   },
 });

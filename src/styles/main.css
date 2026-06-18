@@ -283,6 +283,19 @@ li > ul {
   margin-top: calc(var(--spacing-8) / 2);
 }
 
+/* Prose lists need room for outside markers; the global ul/ol reset removes
+   padding for the layout lists (menu, bio, posts), so re-add it for post body
+   content only, where markers would otherwise be clipped by the wrapper's
+   overflow-x: hidden. */
+.blog-post section ul,
+.blog-post section ol {
+  padding-left: var(--spacing-6);
+  /* Keep markers in the gutter beside the text. Without this, the mobile
+     `list-style-position: inside` rule below drops the marker onto its own line
+     above loose (<li><p>…</p>) items. */
+  list-style-position: outside;
+}
+
 blockquote {
   color: var(--color-text-light);
   margin-left: calc(-1 * var(--spacing-6));
@@ -377,9 +390,15 @@ a:focus {
   align-items: center;
 }
 
-.post-list-item section .gatsby-image-wrapper {
+.post-list-item section picture {
   flex: 0 0 150px;
   margin-right: var(--spacing-4);
+}
+
+.post-list-item section picture img {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
 .bio {
@@ -532,7 +551,7 @@ blockquote {
 /* Media queries */
 
 @media screen and (max-width: 600px) {
-  .post-list-item section .gatsby-image-wrapper {
+  .post-list-item section picture {
     display: none;
   }
 }
@@ -583,7 +602,7 @@ blockquote {
 
 .breadcrumbs ol {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
   margin: var(--spacing-0);
   padding: var(--spacing-0);
@@ -773,11 +792,23 @@ blockquote {
 
 /* Syntax highlighting in dark mode.
 
-   gatsby-browser imports prismjs/themes/prism.css (a light theme) after this
-   file, so these overrides are scoped with a leading `html` to win on
-   specificity. The palette is One Dark, tuned for WCAG AA contrast against the
-   dark code surface. */
+   Astro/Shiki emits dual-theme code blocks: the light palette is inlined and the
+   dark palette is exposed via --shiki-dark / --shiki-dark-bg custom properties.
+   Activate the dark variant under prefers-color-scheme: dark. The Prism rules
+   below are inert under Shiki but left in place harmlessly. */
 @media (prefers-color-scheme: dark) {
+  .astro-code {
+    background-color: var(--shiki-dark-bg) !important;
+  }
+
+  .astro-code,
+  .astro-code span {
+    color: var(--shiki-dark) !important;
+    font-style: var(--shiki-dark-font-style) !important;
+    font-weight: var(--shiki-dark-font-weight) !important;
+    text-decoration: var(--shiki-dark-text-decoration) !important;
+  }
+
   html code[class*='language-'],
   html pre[class*='language-'] {
     color: #e6e6e6;

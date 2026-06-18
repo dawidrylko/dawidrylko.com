@@ -1,29 +1,16 @@
-packages:
-  - '.'
-
-overrides:
-  sharp: 0.33.3
-
-minimumReleaseAge: 0
+packages: []
 
 allowBuilds:
-  '@parcel/watcher': true
-  core-js: true
-  core-js-pure: true
-  es5-ext: true
-  gatsby: true
-  gatsby-cli: true
-  lmdb: true
-  msgpackr-extract: true
+  esbuild: true
   sharp: true
 
+# Mirror the Gatsby root workspace. The CI runner's pnpm enforces a nonzero
+# minimumReleaseAge supply-chain policy; the root disables it, so this isolated
+# Astro root must too or `pnpm install --frozen-lockfile` rejects freshly
+# published deps (e.g. astro itself). The current pnpm also reads native-build
+# allowlists from here rather than package.json's (now ignored) "pnpm" field.
+minimumReleaseAge: 0
+
 onlyBuiltDependencies:
-  - '@parcel/watcher'
-  - core-js
-  - core-js-pure
-  - es5-ext
-  - gatsby
-  - gatsby-cli
-  - lmdb
-  - msgpackr-extract
+  - esbuild
   - sharp

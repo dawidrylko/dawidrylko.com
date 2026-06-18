@@ -131,8 +131,7 @@ function auditTheme(name, tokens) {
     const pass = ratio >= AA_NORMAL;
     if (!pass) failed += 1;
     console.log(
-      `  ${pass ? '✓' : '✗'} ${label}: ${ratio.toFixed(2)}:1 ` +
-        `(${fg} on ${bg}, needs ${AA_NORMAL.toFixed(1)}:1)`,
+      `  ${pass ? '✓' : '✗'} ${label}: ${ratio.toFixed(2)}:1 ` + `(${fg} on ${bg}, needs ${AA_NORMAL.toFixed(1)}:1)`,
     );
   }
   console.log('');

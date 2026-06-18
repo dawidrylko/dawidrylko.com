@@ -1,11 +1,7 @@
 node_modules/
-.cache/
-public
-src/gatsby-types.d.ts
+dist/
+.astro/
+pnpm-lock.yaml
 
-# Astro migration: isolated project with its own Prettier config + plugin.
-astro/
-
-package.json
-package-lock.json
-tsconfig.json
+# Authored blog content — never reformat posts or their code samples.
+content/

@@ -20,7 +20,7 @@ import { dirname, resolve, join } from 'node:path';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = resolve(__dirname, '../..');
 const CONTENT_DIR = resolve(REPO_ROOT, 'content/pl');
-const DIST_DIR = process.argv[2] ? resolve(process.cwd(), process.argv[2]) : resolve(REPO_ROOT, 'astro/dist');
+const DIST_DIR = process.argv[2] ? resolve(process.cwd(), process.argv[2]) : resolve(REPO_ROOT, 'dist');
 
 const DATE_PREFIX = /^\d{4}-\d{2}-\d{2}--/;
 
