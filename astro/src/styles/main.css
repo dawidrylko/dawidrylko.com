@@ -283,6 +283,15 @@ li > ul {
   margin-top: calc(var(--spacing-8) / 2);
 }
 
+/* Prose lists need room for outside markers; the global ul/ol reset removes
+   padding for the layout lists (menu, bio, posts), so re-add it for post body
+   content only, where markers would otherwise be clipped by the wrapper's
+   overflow-x: hidden. */
+.blog-post section ul,
+.blog-post section ol {
+  padding-left: var(--spacing-8);
+}
+
 blockquote {
   color: var(--color-text-light);
   margin-left: calc(-1 * var(--spacing-6));
@@ -589,12 +598,18 @@ blockquote {
 
 .breadcrumbs ol {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  overflow-x: auto;
   align-items: center;
   margin: var(--spacing-0);
   padding: var(--spacing-0);
   list-style: none;
   gap: var(--spacing-1);
+  scrollbar-width: none;
+}
+
+.breadcrumbs ol::-webkit-scrollbar {
+  display: none;
 }
 
 .breadcrumbs li {
@@ -611,7 +626,7 @@ blockquote {
 
 .breadcrumbs li:not(:first-child) {
   min-width: 0;
-  flex: 1 1 auto;
+  flex: 0 0 auto;
 }
 
 .breadcrumbs a,
@@ -779,11 +794,23 @@ blockquote {
 
 /* Syntax highlighting in dark mode.
 
-   gatsby-browser imports prismjs/themes/prism.css (a light theme) after this
-   file, so these overrides are scoped with a leading `html` to win on
-   specificity. The palette is One Dark, tuned for WCAG AA contrast against the
-   dark code surface. */
+   Astro/Shiki emits dual-theme code blocks: the light palette is inlined and the
+   dark palette is exposed via --shiki-dark / --shiki-dark-bg custom properties.
+   Activate the dark variant under prefers-color-scheme: dark. The Prism rules
+   below are inert under Shiki but left in place harmlessly. */
 @media (prefers-color-scheme: dark) {
+  .astro-code {
+    background-color: var(--shiki-dark-bg) !important;
+  }
+
+  .astro-code,
+  .astro-code span {
+    color: var(--shiki-dark) !important;
+    font-style: var(--shiki-dark-font-style) !important;
+    font-weight: var(--shiki-dark-font-weight) !important;
+    text-decoration: var(--shiki-dark-text-decoration) !important;
+  }
+
   html code[class*='language-'],
   html pre[class*='language-'] {
     color: #e6e6e6;

@@ -4,7 +4,7 @@ name: TEMP Astro Production Deploy
 # manual verification before cutover. Triggered by pushing this file on the
 # migration branch (and manual dispatch). Production is restored by re-running
 # the Gatsby cd.yml. Remove this workflow once verification is done.
-# Re-trigger: redeploy after fixing blog thumbnails and setup Mermaid.
+# Re-trigger: redeploy after dark code blocks, list markers, breadcrumbs, demo.
 on:
   workflow_dispatch:
   push:
