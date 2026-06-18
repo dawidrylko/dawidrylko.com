@@ -1,0 +1,33 @@
+---
+import { getCollection, render } from 'astro:content';
+import PostLayout from '../layouts/PostLayout.astro';
+
+export async function getStaticPaths() {
+  // Phase 0/1 spike: render a representative subset that exercises the whole
+  // content pipeline — KaTeX math, multi-language code, colocated + featured
+  // images, and an interactive React component imported inside MDX. Phase 2
+  // will switch this to render the full collection.
+  // NOTE: getStaticPaths runs in an isolated scope, so this set lives inside it.
+  const pocSlugs = new Set([
+    'od-tablicy-do-mapy-harry-potter-i-transmutacja', // KaTeX block math ($$) + code + images
+    'domino-tiling', // multi-language code + featuredImg
+    'memoizacja-harry-potter-i-myslodsiewnia', // imports a React demo island in MDX
+  ]);
+  const all = await getCollection('posts');
+  return all.filter(post => pocSlugs.has(post.id)).map(post => ({ params: { slug: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const { title, description, date, featuredImg, featuredImgAlt } = post.data;
+---
+
+<PostLayout
+  title={title}
+  description={description}
+  date={date}
+  featuredImg={featuredImg}
+  featuredImgAlt={featuredImgAlt}
+>
+  <Content />
+</PostLayout>

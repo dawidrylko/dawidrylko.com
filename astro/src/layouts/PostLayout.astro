@@ -1,0 +1,28 @@
+---
+import type { ImageMetadata } from 'astro';
+import 'katex/dist/katex.min.css';
+import { Image } from 'astro:assets';
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  date: Date;
+  featuredImg?: ImageMetadata;
+  featuredImgAlt?: string;
+}
+
+const { title, description, date, featuredImg, featuredImgAlt } = Astro.props;
+const dateFormatted = date.toLocaleDateString('pl-PL', { year: 'numeric', month: 'long', day: 'numeric' });
+---
+
+<BaseLayout title={title} description={description}>
+  <article>
+    <header>
+      <h1>{title}</h1>
+      <p><time datetime={date.toISOString()}>{dateFormatted}</time></p>
+      {featuredImg && <Image src={featuredImg} alt={featuredImgAlt ?? ''} />}
+    </header>
+    <slot />
+  </article>
+</BaseLayout>

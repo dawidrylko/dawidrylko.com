@@ -1,0 +1,36 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Mermaid from '../components/Mermaid.tsx';
+
+const POC_SLUGS = new Set([
+  'od-tablicy-do-mapy-harry-potter-i-transmutacja',
+  'domino-tiling',
+  'memoizacja-harry-potter-i-myslodsiewnia',
+]);
+
+const all = (await getCollection('posts')).sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+const rendered = all.filter(post => POC_SLUGS.has(post.id));
+
+const chart = 'graph LR; Gatsby[Gatsby 5] --> Astro[Astro 6]; Astro --> Pages[GitHub Pages];';
+---
+
+<BaseLayout title="Astro PoC — dawidrylko.com" description="Astro migration spike for dawidrylko.com">
+  <h1>Astro migration PoC</h1>
+  <p>
+    Collection loaded <strong>{all.length}</strong> posts from <code>../content/pl</code>. Representative posts rendered
+    in this spike:
+  </p>
+  <ul>
+    {
+      rendered.map(post => (
+        <li>
+          <a href={`/${post.id}/`}>{post.data.title}</a>
+        </li>
+      ))
+    }
+  </ul>
+
+  <h2>Mermaid (React island)</h2>
+  <Mermaid client:visible chart={chart} />
+</BaseLayout>
