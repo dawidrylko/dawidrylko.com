@@ -24,6 +24,12 @@ export default defineConfig({
     '/resume': '/bio/',
   },
   integrations: [mdx(), react(), sitemap()],
+  // Responsive images (stable in Astro 6): every <Image>/<Picture> and Markdown
+  // image gets a srcset + sizes + responsive styles automatically. Replaces
+  // Gatsby's gatsbyImageData FULL_WIDTH responsive output.
+  image: {
+    layout: 'constrained',
+  },
   markdown: {
     remarkPlugins: [remarkMath],
     rehypePlugins: [rehypeKatex],

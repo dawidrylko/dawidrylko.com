@@ -1,5 +1,5 @@
 ---
-import { Image } from 'astro:assets';
+import { Picture } from 'astro:assets';
 import PageLayout from '../layouts/PageLayout.astro';
 import JsonLd from '../components/JsonLd.astro';
 import hotDog from '../assets/hot-dog.jpg';
@@ -41,7 +41,7 @@ const structuredData = {
   <section id="hot-dog" aria-label="Page not found message with hot dog image">
     <p>{PAGE_METADATA.description}</p>
     <figure style="margin: 0;">
-      <Image src={hotDog} alt={hotDogImage.alt} />
+      <Picture src={hotDog} formats={['avif', 'webp']} layout="full-width" alt={hotDogImage.alt} />
       <figcaption>{hotDogImage.caption}</figcaption>
     </figure>
   </section>

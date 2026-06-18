@@ -1,5 +1,5 @@
 ---
-import { Image } from 'astro:assets';
+import { Picture } from 'astro:assets';
 import PageLayout from '../layouts/PageLayout.astro';
 import JsonLd from '../components/JsonLd.astro';
 import Mermaid from '../components/Mermaid.tsx';
@@ -215,7 +215,7 @@ const sections: { id: string; heading: string; ariaLabel: string; items: SetupIt
     </section>
 
     <figure style="margin: 0;">
-      <Image src={hardwareSetup} alt={image.alt} />
+      <Picture src={hardwareSetup} formats={['avif', 'webp']} layout="full-width" alt={image.alt} />
       <figcaption>{image.figcaption}</figcaption>
     </figure>
 

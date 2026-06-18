@@ -1,6 +1,6 @@
 ---
 import { getCollection, render } from 'astro:content';
-import { Image } from 'astro:assets';
+import { Picture, getImage } from 'astro:assets';
 import PageLayout from '../layouts/PageLayout.astro';
 import JsonLd from '../components/JsonLd.astro';
 import { SITE_METADATA } from '../data/site-metadata';
@@ -34,6 +34,9 @@ const { title, description, date, featuredImg, featuredImgAlt } = post.data;
 const dateFormatted = date.toLocaleDateString('pl-PL', { year: 'numeric', month: 'long', day: '2-digit' });
 const { person } = STRUCTURED_DATA;
 
+// Open Graph wants a bounded image, not the raw (often multi-thousand-px) source.
+const ogImage = featuredImg ? (await getImage({ src: featuredImg, width: 1200, format: 'webp' })).src : undefined;
+
 const structuredData = {
   '@context': 'https://schema.org',
   '@type': 'BlogPosting',
@@ -42,7 +45,7 @@ const structuredData = {
   datePublished: date.toISOString(),
   author: person,
   inLanguage: 'pl',
-  image: featuredImg ? { '@type': 'ImageObject', url: featuredImg.src, description: featuredImgAlt || '' } : undefined,
+  image: featuredImg ? { '@type': 'ImageObject', url: ogImage, description: featuredImgAlt || '' } : undefined,
   mainEntityOfPage: {
     '@type': 'WebPage',
     '@id': new URL(Astro.url.pathname, SITE_METADATA.url).href,
@@ -50,14 +53,7 @@ const structuredData = {
 };
 ---
 
-<PageLayout
-  breadcrumbTitle={title}
-  title={title}
-  description={description || ''}
-  image={featuredImg?.src}
-  article
-  lang="pl"
->
+<PageLayout breadcrumbTitle={title} title={title} description={description || ''} image={ogImage} article lang="pl">
   <JsonLd data={structuredData} />
   <article class="blog-post">
     <header>
@@ -68,7 +64,11 @@ const structuredData = {
         <span><a href="/bio/">{SITE_METADATA.author.name}</a></span>
       </small>
     </header>
-    {featuredImg && <Image src={featuredImg} alt={featuredImgAlt ?? ''} />}
+    {
+      featuredImg && (
+        <Picture src={featuredImg} formats={['avif', 'webp']} layout="full-width" alt={featuredImgAlt ?? ''} />
+      )
+    }
     <section>
       <Content />
     </section>

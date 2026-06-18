@@ -1,6 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
-import { Image } from 'astro:assets';
+import { Image, Picture } from 'astro:assets';
 import PageLayout from '../layouts/PageLayout.astro';
 import JsonLd from '../components/JsonLd.astro';
 import rssIcon from '../assets/rss.svg';
@@ -74,7 +74,7 @@ const structuredData = {
     <h1>{PAGE_METADATA.title}</h1>
   </header>
   <div class="rss">
-    <Image src={rssIcon} alt="Ikona RSS" width={20} height={20} />
+    <Image src={rssIcon} alt="Ikona RSS" width={20} height={20} layout="fixed" />
     <a href="/rss.xml" type="application/rss+xml">Subskrybuj kanał RSS</a>
   </div>
   <ol class="posts">
@@ -95,7 +95,9 @@ const structuredData = {
               </small>
             </header>
             <section>
-              {post.data.featuredImg && <Image src={post.data.featuredImg} alt={post.data.featuredImgAlt || ''} />}
+              {post.data.featuredImg && (
+                <Picture src={post.data.featuredImg} formats={['avif', 'webp']} alt={post.data.featuredImgAlt || ''} />
+              )}
               <p>{description}</p>
             </section>
           </article>
