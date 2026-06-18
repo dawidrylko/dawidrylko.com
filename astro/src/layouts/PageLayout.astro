@@ -1,4 +1,7 @@
 ---
+import '@fontsource-variable/montserrat/index.css';
+import '@fontsource/merriweather/index.css';
+import 'katex/dist/katex.min.css';
 import '../styles/normalize.css';
 import '../styles/main.css';
 import Seo from '../components/Seo.astro';
@@ -6,6 +9,7 @@ import Menu from '../components/Menu.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import Bio from '../components/Bio.astro';
 import { SITE_METADATA } from '../data/site-metadata';
+import { GTAG } from '../data/gtag';
 
 // Port of src/components/layout.tsx — the chrome shared by every page (header
 // with menu, main content, breadcrumbs, bio, footer) plus the document <head>.
@@ -36,6 +40,11 @@ const year = new Date().getFullYear();
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="canonical" href={canonical} />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="theme-color" content="#005b99" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="alternate" type="application/rss+xml" title={SITE_METADATA.title} href="/rss.xml" />
     <Seo
       title={title}
       description={description}
@@ -45,6 +54,24 @@ const year = new Date().getFullYear();
       noIndex={noIndex}
       lang={metaLang}
     />
+
+    {/* Google Analytics 4 — production builds only. */}
+    {
+      import.meta.env.PROD && (
+        <>
+          <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${GTAG}`} />
+          <script
+            is:inline
+            set:html={`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${GTAG}');`}
+          />
+        </>
+      )
+    }
+
+    {/* Core Web Vitals → GA4 (no-ops without gtag, e.g. in dev). */}
+    <script>
+      import '../scripts/web-vitals';
+    </script>
   </head>
   <body>
     <div class="global-wrapper" data-is-root-path={isRootPath}>

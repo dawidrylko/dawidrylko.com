@@ -5,6 +5,7 @@ import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
+import webmanifest from './src/integrations/webmanifest';
 
 // Astro migration PoC. Mirrors the Gatsby site's content pipeline:
 //   - MDX with remark-math + rehype-katex (KaTeX, build-time SSR)
@@ -23,7 +24,7 @@ export default defineConfig({
   redirects: {
     '/resume': '/bio/',
   },
-  integrations: [mdx(), react(), sitemap()],
+  integrations: [mdx(), react(), sitemap(), webmanifest()],
   // Responsive images (stable in Astro 6): every <Image>/<Picture> and Markdown
   // image gets a srcset + sizes + responsive styles automatically. Replaces
   // Gatsby's gatsbyImageData FULL_WIDTH responsive output.
