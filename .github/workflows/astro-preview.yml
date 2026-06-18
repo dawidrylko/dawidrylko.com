@@ -47,6 +47,9 @@ jobs:
       - name: Check URL parity with content/pl
         run: node helpers/ci/check-astro-url-parity.mjs
 
+      - name: Verify build-output regression contract
+        run: node helpers/ci/check-astro-build-output.mjs
+
       - name: Check internal links
         run: pnpm dlx linkinator astro/dist --recurse --skip "^https?://(?!localhost)"
 
