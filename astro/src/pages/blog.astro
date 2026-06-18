@@ -96,7 +96,13 @@ const structuredData = {
             </header>
             <section>
               {post.data.featuredImg && (
-                <Picture src={post.data.featuredImg} formats={['avif', 'webp']} alt={post.data.featuredImgAlt || ''} />
+                <Picture
+                  src={post.data.featuredImg}
+                  formats={['avif', 'webp']}
+                  width={150}
+                  densities={[1, 2]}
+                  alt={post.data.featuredImgAlt || ''}
+                />
               )}
               <p>{description}</p>
             </section>

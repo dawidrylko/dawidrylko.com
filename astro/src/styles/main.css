@@ -377,9 +377,15 @@ a:focus {
   align-items: center;
 }
 
-.post-list-item section .gatsby-image-wrapper {
+.post-list-item section picture {
   flex: 0 0 150px;
   margin-right: var(--spacing-4);
+}
+
+.post-list-item section picture img {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
 .bio {
@@ -532,7 +538,7 @@ blockquote {
 /* Media queries */
 
 @media screen and (max-width: 600px) {
-  .post-list-item section .gatsby-image-wrapper {
+  .post-list-item section picture {
     display: none;
   }
 }

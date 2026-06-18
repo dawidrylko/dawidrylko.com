@@ -211,7 +211,7 @@ const sections: { id: string; heading: string; ariaLabel: string; items: SetupIt
     </section>
 
     <section id="diagram" aria-labelledby="diagram-heading">
-      <Mermaid client:visible chart={setupDiagram} ariaLabel="Hardware setup workflow diagram" />
+      <Mermaid client:load chart={setupDiagram} ariaLabel="Hardware setup workflow diagram" />
     </section>
 
     <figure style="margin: 0;">
