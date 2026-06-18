@@ -3,33 +3,25 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Mermaid from '../components/Mermaid.tsx';
 
-const POC_SLUGS = new Set([
-  'od-tablicy-do-mapy-harry-potter-i-transmutacja',
-  'domino-tiling',
-  'memoizacja-harry-potter-i-myslodsiewnia',
-]);
-
-const all = (await getCollection('posts')).sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
-const rendered = all.filter(post => POC_SLUGS.has(post.id));
+// Temporary navigation aid listing every post (newest first, like Gatsby's
+// blog listing). The full blog/index parity comes in Phase 3.
+const posts = (await getCollection('posts')).sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 
 const chart = 'graph LR; Gatsby[Gatsby 5] --> Astro[Astro 6]; Astro --> Pages[GitHub Pages];';
 ---
 
 <BaseLayout title="Astro PoC — dawidrylko.com" description="Astro migration spike for dawidrylko.com">
-  <h1>Astro migration PoC</h1>
-  <p>
-    Collection loaded <strong>{all.length}</strong> posts from <code>../content/pl</code>. Representative posts rendered
-    in this spike:
-  </p>
-  <ul>
+  <h1>Astro migration — all posts</h1>
+  <p>Routing <strong>{posts.length}</strong> posts from <code>../content/pl</code> at their original URLs.</p>
+  <ol>
     {
-      rendered.map(post => (
+      posts.map(post => (
         <li>
           <a href={`/${post.id}/`}>{post.data.title}</a>
         </li>
       ))
     }
-  </ul>
+  </ol>
 
   <h2>Mermaid (React island)</h2>
   <Mermaid client:visible chart={chart} />

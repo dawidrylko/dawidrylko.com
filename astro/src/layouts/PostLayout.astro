@@ -13,7 +13,8 @@ interface Props {
 }
 
 const { title, description, date, featuredImg, featuredImgAlt } = Astro.props;
-const dateFormatted = date.toLocaleDateString('pl-PL', { year: 'numeric', month: 'long', day: 'numeric' });
+// Matches Gatsby's moment format "DD MMMM YYYY" (locale pl), e.g. "05 czerwca 2016".
+const dateFormatted = date.toLocaleDateString('pl-PL', { year: 'numeric', month: 'long', day: '2-digit' });
 ---
 
 <BaseLayout title={title} description={description}>
