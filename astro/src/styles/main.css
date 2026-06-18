@@ -289,7 +289,11 @@ li > ul {
    overflow-x: hidden. */
 .blog-post section ul,
 .blog-post section ol {
-  padding-left: var(--spacing-8);
+  padding-left: var(--spacing-6);
+  /* Keep markers in the gutter beside the text. Without this, the mobile
+     `list-style-position: inside` rule below drops the marker onto its own line
+     above loose (<li><p>…</p>) items. */
+  list-style-position: outside;
 }
 
 blockquote {
@@ -599,17 +603,11 @@ blockquote {
 .breadcrumbs ol {
   display: flex;
   flex-wrap: nowrap;
-  overflow-x: auto;
   align-items: center;
   margin: var(--spacing-0);
   padding: var(--spacing-0);
   list-style: none;
   gap: var(--spacing-1);
-  scrollbar-width: none;
-}
-
-.breadcrumbs ol::-webkit-scrollbar {
-  display: none;
 }
 
 .breadcrumbs li {
@@ -626,7 +624,7 @@ blockquote {
 
 .breadcrumbs li:not(:first-child) {
   min-width: 0;
-  flex: 0 0 auto;
+  flex: 1 1 auto;
 }
 
 .breadcrumbs a,
