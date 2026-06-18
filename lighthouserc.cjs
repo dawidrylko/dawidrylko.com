@@ -23,7 +23,6 @@ module.exports = {
         'http://localhost:9000/contact/',
         'http://localhost:9000/setup/',
         'http://localhost:9000/metadata/',
-        'http://localhost:9000/404.html',
       ],
       numberOfRuns: 1,
       settings: {

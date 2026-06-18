@@ -3,6 +3,11 @@ name: Continuous Integration
 on:
   pull_request:
 
+# Least-privilege default for GITHUB_TOKEN across all jobs; none of them write
+# to the repo (dependency-review only needs to read the dependency graph).
+permissions:
+  contents: read
+
 concurrency:
   group: 'ci-${{ github.event.pull_request.number }}'
   cancel-in-progress: true
