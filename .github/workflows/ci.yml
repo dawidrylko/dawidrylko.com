@@ -59,3 +59,54 @@ jobs:
 
       - name: Audit design-token contrast (WCAG AA)
         run: node helpers/a11y-contrast/check-contrast.mjs
+
+  # Astro migration project (astro/) — an isolated pnpm root that builds in
+  # parallel with the Gatsby site. Production stays on Gatsby until cutover.
+  astro:
+    name: Astro
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: latest
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: 'astro/.nvmrc'
+          cache: 'pnpm'
+          cache-dependency-path: 'astro/pnpm-lock.yaml'
+
+      - name: Install dependencies
+        working-directory: astro
+        run: pnpm install --frozen-lockfile
+
+      - name: Type check
+        working-directory: astro
+        run: pnpm run type:check
+
+      - name: Lint
+        working-directory: astro
+        run: pnpm run lint:check
+
+      - name: Format check
+        working-directory: astro
+        run: pnpm run format:check
+
+      - name: Build
+        working-directory: astro
+        run: pnpm run build
+
+      - name: Audit design-token contrast (WCAG AA)
+        run: node helpers/a11y-contrast/check-contrast.mjs astro/src/styles/main.css
+
+      - name: Check URL parity with content/pl
+        run: node helpers/ci/check-astro-url-parity.mjs
+
+      - name: Check internal links
+        run: pnpm dlx linkinator astro/dist --recurse --skip "^https?://(?!localhost)"

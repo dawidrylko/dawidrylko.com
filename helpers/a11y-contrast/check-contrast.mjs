@@ -15,7 +15,9 @@ import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const CSS_PATH = resolve(__dirname, '../../src/styles/main.css');
+// Defaults to the Gatsby stylesheet; an optional CLI arg points the audit at
+// another copy (e.g. the Astro migration's verbatim `astro/src/styles/main.css`).
+const CSS_PATH = process.argv[2] ? resolve(process.cwd(), process.argv[2]) : resolve(__dirname, '../../src/styles/main.css');
 
 const AA_NORMAL = 4.5; // normal-size text
 
@@ -145,7 +147,7 @@ async function main() {
   // easter-egg link in the footer.
 
   let failed = 0;
-  console.log('WCAG AA contrast audit (src/styles/main.css)\n');
+  console.log(`WCAG AA contrast audit (${process.argv[2] ?? 'src/styles/main.css'})\n`);
   for (const { label, fg, bg, min } of pairs) {
     const ratio = contrastRatio(fg, bg);
     const pass = ratio >= min;

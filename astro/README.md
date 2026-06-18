@@ -1,9 +1,10 @@
-# Astro migration (PoC) — dawidrylko.com
+# Astro migration — dawidrylko.com
 
-Spike for roadmap **point 14** (Gatsby → Astro). This project lives **alongside**
-the Gatsby site and is **not** wired into production — the live site stays on
-Gatsby until the cutover phase. It implements **Phase 0 (PoC)** and **Phase 1
-(scaffold/config)** of the migration plan.
+Roadmap **point 14** (Gatsby → Astro). This project lives **alongside** the
+Gatsby site and is **not** wired into production — the live site stays on Gatsby
+until the cutover phase (Phase 7). **Phases 0–6** of the migration plan are
+implemented: PoC, scaffold/config, full routing, layout/components/SEO, images,
+RSS/manifest/web-vitals, and CI (build + preview).
 
 ## What this validates
 
@@ -38,6 +39,20 @@ pnpm lint:check
 pnpm format:check
 ```
 
+## CI / preview
+
+On every pull request the `astro` job in `.github/workflows/ci.yml` installs
+this project, runs `type:check` / `lint:check` / `format:check` / `build`, then
+audits the design-token contrast (`astro/src/styles/main.css`), checks URL
+parity with `content/pl`, and link-checks `astro/dist`. The Gatsby CI/CD is
+untouched — production keeps deploying from Gatsby.
+
+`.github/workflows/astro-preview.yml` (manual, **Actions → Run workflow**) runs
+the same build + verification and uploads `astro/dist` as a downloadable
+`astro-preview-dist` artifact. It does **not** deploy to GitHub Pages: the repo
+serves a single Pages site on the custom domain, so a live Astro deploy waits
+for cutover (Phase 7).
+
 ## Findings to carry into the next phases
 
 - **`sharp` must be a direct dependency** here. Astro's optional transitive `sharp`
@@ -53,6 +68,7 @@ pnpm format:check
 - **`markdown.remarkPlugins`/`rehypePlugins` are deprecated in Astro 6** (works, but
   emits a warning). Migrate to the `@astrojs/markdown-remark` `unified()` config in
   Phase 1 follow-up.
-- Still **TODO in later phases** (not part of this PoC): full routing for all posts
-  (Phase 2), layout/components/SEO/JSON-LD parity (Phase 3), RSS + manifest + web
-  vitals (Phase 5), and CI/CD wiring (Phase 6).
+- Still **TODO — Phase 7 (cutover)**: switch `cd.yml` to `astro build` + upload
+  `dist/`, move the search-engine notify scripts over, remove Gatsby
+  dependencies/files, update `CLAUDE.md` (stack/commands), and flip the live
+  GitHub Pages deploy to Astro.

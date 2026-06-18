@@ -3,6 +3,9 @@ node_modules/
 public
 src/gatsby-types.d.ts
 
+# Astro migration: isolated project with its own Prettier config + plugin.
+astro/
+
 package.json
 package-lock.json
 tsconfig.json
