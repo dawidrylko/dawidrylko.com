@@ -4,6 +4,7 @@ name: TEMP Astro Production Deploy
 # manual verification before cutover. Triggered by pushing this file on the
 # migration branch (and manual dispatch). Production is restored by re-running
 # the Gatsby cd.yml. Remove this workflow once verification is done.
+# Re-trigger: retry after disabling pnpm minimumReleaseAge in the Astro root.
 on:
   workflow_dispatch:
   push:

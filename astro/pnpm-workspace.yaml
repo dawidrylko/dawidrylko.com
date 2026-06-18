@@ -1,1 +1,12 @@
 packages: []
+
+# Mirror the Gatsby root workspace. The CI runner's pnpm enforces a nonzero
+# minimumReleaseAge supply-chain policy; the root disables it, so this isolated
+# Astro root must too or `pnpm install --frozen-lockfile` rejects freshly
+# published deps (e.g. astro itself). The current pnpm also reads native-build
+# allowlists from here rather than package.json's (now ignored) "pnpm" field.
+minimumReleaseAge: 0
+
+onlyBuiltDependencies:
+  - esbuild
+  - sharp
