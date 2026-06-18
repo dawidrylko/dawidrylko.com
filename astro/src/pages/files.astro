@@ -1,0 +1,252 @@
+---
+import fs from 'node:fs';
+import path from 'node:path';
+import PageLayout from '../layouts/PageLayout.astro';
+import JsonLd from '../components/JsonLd.astro';
+import { STRUCTURED_DATA } from '../data/structured-data';
+
+// Replaces Gatsby's custom `StaticFile` sourceNodes: read the same static/files
+// tree from disk at build time. publicDir ('../static') serves these at /files.
+type FileNode = { name: string; extension: string; publicURL: string; size: number };
+
+const filesDir = path.resolve(process.cwd(), '../static/files');
+
+const readFilesRecursively = (dir: string, baseDir: string): FileNode[] => {
+  if (!fs.existsSync(dir)) {
+    return [];
+  }
+  return fs.readdirSync(dir, { withFileTypes: true }).flatMap(entry => {
+    const fullPath = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      return readFilesRecursively(fullPath, baseDir);
+    }
+    const relativePath = path.relative(baseDir, fullPath).replace(/\\/g, '/');
+    return [
+      {
+        name: path.basename(entry.name, path.extname(entry.name)),
+        extension: path.extname(entry.name).slice(1),
+        publicURL: `/files/${relativePath}`,
+        size: fs.statSync(fullPath).size,
+      },
+    ];
+  });
+};
+
+const nodes = readFilesRecursively(filesDir, filesDir).filter(node => node.extension !== 'csv');
+
+type FileAction = 'download' | 'open';
+type FileConfig = { icon: string; type: string; action: FileAction; hidden: boolean };
+
+const FILE_CONFIG: Record<string, FileConfig[]> = {
+  pdf: [
+    { icon: '↗️', type: 'PDF', action: 'open', hidden: false },
+    { icon: '📄', type: 'PDF', action: 'download', hidden: false },
+  ],
+  key: [{ icon: '🎨', type: 'Keynote', action: 'download', hidden: true }],
+  ppt: [{ icon: '📊', type: 'PowerPoint', action: 'download', hidden: true }],
+  pptx: [{ icon: '📊', type: 'PowerPoint', action: 'download', hidden: true }],
+};
+
+type ParsedFileName = { topic: string; order: number; title: string; language: string };
+
+const parseFileName = (fileName: string): ParsedFileName | null => {
+  const parts = fileName.split('_');
+  if (parts.length < 4) {
+    return null;
+  }
+  const [topic, orderRaw] = parts;
+  const languageRaw = parts[parts.length - 1];
+  if (topic === undefined || orderRaw === undefined || languageRaw === undefined) {
+    return null;
+  }
+  return {
+    topic,
+    order: parseInt(orderRaw, 10),
+    title: parts.slice(2, -1).join('_'),
+    language: languageRaw.toUpperCase(),
+  };
+};
+
+const formatFileSize = (bytes: number): string => {
+  if (bytes === 0) return '0 B';
+  const k = 1024;
+  const sizes = ['B', 'KB', 'MB', 'GB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return `${parseFloat((bytes / Math.pow(k, i)).toFixed(2))} ${sizes[i]}`;
+};
+
+const groupFilesByIdentity = (files: FileNode[]): Map<string, FileNode[]> =>
+  files.reduce((map, file) => {
+    const parsed = parseFileName(file.name);
+    if (!parsed) {
+      return map;
+    }
+    const key = `${parsed.topic}_${String(parsed.order).padStart(2, '0')}_${parsed.title}`;
+    map.set(key, [...(map.get(key) || []), file]);
+    return map;
+  }, new Map<string, FileNode[]>());
+
+const getFileMetadata = (extension: string): FileConfig[] =>
+  FILE_CONFIG[extension.toLowerCase()] || [
+    { icon: '📎', type: extension.toUpperCase(), action: 'download', hidden: false },
+  ];
+
+// Phase 3 renders the default view (showHidden = false). The Gatsby
+// cmd+shift+. toggle that reveals Keynote/PowerPoint variants is an interactive
+// island deferred to a later pass.
+const showHidden = false;
+
+const grouped = groupFilesByIdentity(nodes);
+const sortedEntries = Array.from(grouped.entries()).sort(([keyA], [keyB]) => {
+  const a = parseFileName(grouped.get(keyA)?.[0]?.name ?? '');
+  const b = parseFileName(grouped.get(keyB)?.[0]?.name ?? '');
+  if (!a || !b) return 0;
+  return a.topic !== b.topic ? a.topic.localeCompare(b.topic) : a.order - b.order;
+});
+
+const orderKeys = Object.keys(FILE_CONFIG);
+const rows = sortedEntries
+  .map(([, files], index) => {
+    const parsed = parseFileName(files[0]?.name ?? '');
+    if (!parsed || !files[0]) return null;
+    const pdfFile = files.find(f => f.extension.toLowerCase() === 'pdf');
+    const sizeSource = pdfFile ?? files[0];
+    const links = [...files]
+      .sort((a, b) => {
+        const ia = orderKeys.indexOf(a.extension.toLowerCase());
+        const ib = orderKeys.indexOf(b.extension.toLowerCase());
+        return (ia === -1 ? Infinity : ia) - (ib === -1 ? Infinity : ib);
+      })
+      .flatMap(file =>
+        getFileMetadata(file.extension)
+          .filter(config => !config.hidden || showHidden)
+          .map(config => ({
+            href: file.publicURL,
+            icon: config.icon,
+            action: config.action,
+            type: config.type,
+            size: formatFileSize(file.size),
+            title: parsed.title,
+            download: `${parsed.title} - Dawid Ryłko - dawidrylko.com.${file.extension}`,
+          })),
+      );
+    return {
+      index: index + 1,
+      topic: parsed.topic.toUpperCase(),
+      title: parsed.title,
+      language: parsed.language,
+      size: formatFileSize(sizeSource.size),
+      links,
+    };
+  })
+  .filter((row): row is NonNullable<typeof row> => row !== null);
+
+const PAGE_METADATA = {
+  title: 'Files',
+  description:
+    'Browse and download technical presentations, slides, and educational materials by Dawid Ryłko. Access professionally crafted resources covering software development, Node.js, TypeScript, and modern web technologies—available in multiple formats and languages.',
+  keywords: [
+    'technical presentations',
+    'software development slides',
+    'Node.js presentations',
+    'TypeScript materials',
+    'web development resources',
+    'programming slides',
+    'educational materials',
+    'tech conference presentations',
+  ],
+};
+
+const { person } = STRUCTURED_DATA;
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: PAGE_METADATA.title,
+  headline: PAGE_METADATA.title,
+  description: PAGE_METADATA.description,
+  author: person,
+  keywords: PAGE_METADATA.keywords.join(', '),
+  about: [
+    {
+      '@type': 'Thing',
+      name: 'Technical Presentations',
+      description:
+        'Educational materials and technical presentations covering software development, programming languages, and web technologies.',
+    },
+    {
+      '@type': 'Thing',
+      name: 'Educational Resources',
+      description: 'Professional learning materials for developers and technology enthusiasts.',
+    },
+  ],
+  mainEntity: {
+    '@type': 'ItemList',
+    name: 'Presentation Files',
+    description: 'Collection of downloadable technical presentations and educational materials',
+    numberOfItems: grouped.size,
+  },
+};
+---
+
+<PageLayout breadcrumbTitle={PAGE_METADATA.title} title={PAGE_METADATA.title} description={PAGE_METADATA.description}>
+  <JsonLd data={structuredData} />
+  <header>
+    <h1>{PAGE_METADATA.title}</h1>
+  </header>
+  <main>
+    <section aria-labelledby="presentations-heading">
+      <h2 id="presentations-heading">Presentations</h2>
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Topic</th>
+            <th scope="col">Title</th>
+            <th scope="col">Lang</th>
+            <th scope="col">Size</th>
+            <th scope="col">Download</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            rows.map(row => (
+              <tr>
+                <td style="width: 5%;">{row.index}</td>
+                <td style="width: 20%;">{row.topic}</td>
+                <td style="width: 20%;">{row.title}</td>
+                <td style="width: 10%;">{row.language}</td>
+                <td style="width: 15%;">{row.size}</td>
+                <td style="width: 30%;">
+                  <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    {row.links.map(link =>
+                      link.action === 'open' ? (
+                        <a
+                          href={link.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label={`Open ${link.title} ${link.type} in new tab`}
+                          title={`Open ${link.type} in new tab (${link.size})`}
+                        >
+                          {link.icon}
+                        </a>
+                      ) : (
+                        <a
+                          href={link.href}
+                          download={link.download}
+                          aria-label={`Download ${link.title} as ${link.type}`}
+                          title={`Download ${link.type} (${link.size})`}
+                        >
+                          {link.icon}
+                        </a>
+                      ),
+                    )}
+                  </div>
+                </td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </section>
+  </main>
+</PageLayout>

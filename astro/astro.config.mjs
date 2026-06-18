@@ -15,6 +15,9 @@ export default defineConfig({
   site: 'https://dawidrylko.com',
   // Match Gatsby's trailing-slash URLs so links/redirects stay identical.
   trailingSlash: 'always',
+  // Reuse the existing Gatsby static/ tree (resume PDFs, /files, robots.txt,
+  // CNAME) so the same assets are served at the same paths.
+  publicDir: '../static',
   // Ported from Gatsby's createRedirect (/resume → /bio/). In the static
   // output Astro emits a meta-refresh redirect page.
   redirects: {

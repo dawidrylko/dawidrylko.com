@@ -1,35 +1,110 @@
-import { useEffect, useId, useState } from 'react';
+import type { FC } from 'react';
+import { Component, useEffect, useId, useState } from 'react';
+import type { ReactNode } from 'react';
 import mermaid from 'mermaid';
 
-mermaid.initialize({ startOnLoad: false });
+// React island ported from the Gatsby src/components/mermaid-diagram.tsx:
+// per-instance rendering via mermaid.render, single initialization with
+// startOnLoad disabled, OS dark-theme detection and an error fallback.
 
-// React island that renders a single Mermaid diagram client-side. Mirrors the
-// per-instance, error-tolerant approach the Gatsby component adopted (roadmap #1):
-// each instance renders its own SVG and falls back to the source on parse errors.
-export default function Mermaid({ chart }: { chart: string }) {
-  const [svg, setSvg] = useState('');
-  const [failed, setFailed] = useState(false);
-  const id = `mermaid-${useId().replace(/[:]/g, '')}`;
+interface MermaidProps {
+  chart: string;
+  ariaLabel?: string;
+}
+
+let mermaidInitialized = false;
+
+const initializeMermaid = (): void => {
+  if (mermaidInitialized) {
+    return;
+  }
+
+  const prefersDark =
+    typeof window !== 'undefined' && typeof window.matchMedia === 'function'
+      ? window.matchMedia('(prefers-color-scheme: dark)').matches
+      : false;
+
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: prefersDark ? 'dark' : 'default',
+    securityLevel: 'strict',
+  });
+  mermaidInitialized = true;
+};
+
+const Fallback: FC<{ chart: string; ariaLabel: string }> = ({ chart, ariaLabel }) => (
+  <pre className="mermaid-diagram-fallback" role="img" aria-label={ariaLabel}>
+    {chart}
+  </pre>
+);
+
+const MermaidInner: FC<Required<MermaidProps>> = ({ chart, ariaLabel }) => {
+  const id = `mermaid-${useId().replace(/[^a-zA-Z0-9]/g, '')}`;
+  const [svg, setSvg] = useState<string | null>(null);
+  const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
-    let active = true;
-    mermaid
-      .render(id, chart)
-      .then(result => active && setSvg(result.svg))
-      .catch(() => active && setFailed(true));
+    let cancelled = false;
+    setHasError(false);
+    setSvg(null);
+
+    const renderChart = async (): Promise<void> => {
+      try {
+        initializeMermaid();
+        const { svg: renderedSvg } = await mermaid.render(id, chart);
+        if (!cancelled) {
+          setSvg(renderedSvg);
+        }
+      } catch {
+        document.getElementById(id)?.remove();
+        document.getElementById(`d${id}`)?.remove();
+        if (!cancelled) {
+          setHasError(true);
+        }
+      }
+    };
+
+    void renderChart();
+
     return () => {
-      active = false;
+      cancelled = true;
     };
   }, [chart, id]);
 
-  if (failed) {
-    return (
-      <pre role="img" aria-label="Mermaid diagram source">
-        {chart}
-      </pre>
-    );
+  if (hasError) {
+    return <Fallback chart={chart} ariaLabel={ariaLabel} />;
   }
 
-  // svg is produced by mermaid from trusted, author-controlled diagram source.
-  return <div role="img" aria-label="Mermaid diagram" dangerouslySetInnerHTML={{ __html: svg }} />;
+  if (!svg) {
+    return null;
+  }
+
+  return (
+    <div className="mermaid-diagram" role="img" aria-label={ariaLabel} dangerouslySetInnerHTML={{ __html: svg }} />
+  );
+};
+
+interface BoundaryProps {
+  children: ReactNode;
+  fallback: ReactNode;
 }
+
+class ErrorBoundary extends Component<BoundaryProps, { hasError: boolean }> {
+  state = { hasError: false };
+
+  static getDerivedStateFromError(): { hasError: boolean } {
+    return { hasError: true };
+  }
+
+  render(): ReactNode {
+    return this.state.hasError ? this.props.fallback : this.props.children;
+  }
+}
+
+const Mermaid: FC<MermaidProps> = ({ chart, ariaLabel = 'Diagram' }) => (
+  <ErrorBoundary fallback={<Fallback chart={chart} ariaLabel={ariaLabel} />}>
+    <MermaidInner chart={chart} ariaLabel={ariaLabel} />
+  </ErrorBoundary>
+);
+
+export default Mermaid;

@@ -1,0 +1,44 @@
+---
+import { SITE_METADATA } from '../data/site-metadata';
+import JsonLd from './JsonLd.astro';
+
+// Port of src/components/menu.tsx (nav + SiteNavigationElement JSON-LD).
+const menu = SITE_METADATA.menu;
+const siteUrl = `${SITE_METADATA.url}/`;
+
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'SiteNavigationElement',
+  name: 'Main Navigation',
+  description: 'Primary navigation menu for dawidrylko.com',
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': siteUrl,
+  },
+  about: menu.map((item, index) => ({
+    '@type': 'ListItem',
+    position: index + 1,
+    name: item.name,
+    item: {
+      '@type': 'WebPage',
+      url: `${siteUrl}${item.url}`,
+      name: item.name,
+    },
+  })),
+};
+---
+
+<JsonLd data={structuredData} />
+<nav class="menu">
+  <ul>
+    {
+      menu.map(item => (
+        <li>
+          <a href={item.url}>
+            <span>{item.name}</span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>

@@ -1,0 +1,38 @@
+---
+// Port of src/components/table.tsx for plain string cells (e.g. the bio page).
+// Pages with rich cells (links, icons) render their own <table> with the same
+// structure.
+interface Props {
+  data: string[][];
+  header?: string[];
+  widthConfig?: string[];
+  ariaLabel?: string;
+}
+
+const { data, header, widthConfig, ariaLabel } = Astro.props;
+---
+
+<table aria-label={ariaLabel}>
+  {
+    header && (
+      <thead>
+        <tr>
+          {header.map(item => (
+            <th scope="col">{item}</th>
+          ))}
+        </tr>
+      </thead>
+    )
+  }
+  <tbody>
+    {
+      data.map(row => (
+        <tr>
+          {row.map((cell, cellIndex) => (
+            <td style={widthConfig?.[cellIndex] ? `width: ${widthConfig[cellIndex]};` : undefined}>{cell}</td>
+          ))}
+        </tr>
+      ))
+    }
+  </tbody>
+</table>

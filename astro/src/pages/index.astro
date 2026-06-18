@@ -1,28 +1,59 @@
 ---
-import { getCollection } from 'astro:content';
-import BaseLayout from '../layouts/BaseLayout.astro';
-import Mermaid from '../components/Mermaid.tsx';
+import PageLayout from '../layouts/PageLayout.astro';
+import JsonLd from '../components/JsonLd.astro';
+import { STRUCTURED_DATA } from '../data/structured-data';
 
-// Temporary navigation aid listing every post (newest first, like Gatsby's
-// blog listing). The full blog/index parity comes in Phase 3.
-const posts = (await getCollection('posts')).sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+const PAGE_METADATA = {
+  title: 'Home',
+  description:
+    'Dawid Ryłko - Software Engineer specializing in scalable, secure, and resilient systems. Explore articles on software engineering, system architecture, and emerging technologies. Available for collaboration on meaningful technology projects.',
+  keywords: [
+    'Dawid Ryłko',
+    'Software Engineer',
+    'scalable systems',
+    'secure systems',
+    'system architecture',
+    'software engineering',
+    'technology blog',
+    'full-stack development',
+  ],
+};
 
-const chart = 'graph LR; Gatsby[Gatsby 5] --> Astro[Astro 6]; Astro --> Pages[GitHub Pages];';
+const { person } = STRUCTURED_DATA;
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: PAGE_METADATA.title,
+  headline: 'Dawid Ryłko - Software Engineer',
+  description: PAGE_METADATA.description,
+  keywords: PAGE_METADATA.keywords.join(', '),
+  author: person,
+  about: {
+    '@type': 'Thing',
+    name: 'Software Engineering',
+    description: 'Designing and building scalable, secure, and future-proof systems that address real-world challenges',
+  },
+  mainEntity: person,
+};
 ---
 
-<BaseLayout title="Astro PoC — dawidrylko.com" description="Astro migration spike for dawidrylko.com">
-  <h1>Astro migration — all posts</h1>
-  <p>Routing <strong>{posts.length}</strong> posts from <code>../content/pl</code> at their original URLs.</p>
-  <ol>
-    {
-      posts.map(post => (
-        <li>
-          <a href={`/${post.id}/`}>{post.data.title}</a>
-        </li>
-      ))
-    }
-  </ol>
-
-  <h2>Mermaid (React island)</h2>
-  <Mermaid client:visible chart={chart} />
-</BaseLayout>
+<PageLayout breadcrumbTitle={PAGE_METADATA.title}>
+  <JsonLd data={structuredData} />
+  <header>
+    <h1>Hi, I'm Dawid Ryłko</h1>
+  </header>
+  <section>
+    <p>
+      I'm a <strong>Software Engineer</strong> passionate about designing and building{' '}
+      <strong>scalable, secure, and future-proof systems</strong> that address real-world challenges and drive meaningful
+      impact.
+    </p>
+    <p>
+      Discover my <a href="/blog/">latest articles</a> on software engineering, system architecture, and emerging technologies,
+      or learn more <a href="/bio/">about my journey</a> and professional background.
+    </p>
+    <p>
+      Interested in working together? <a href="/contact/">Get in touch</a> and let's create technology that lasts.
+    </p>
+  </section>
+</PageLayout>

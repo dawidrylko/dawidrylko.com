@@ -1,6 +1,10 @@
 ---
 import { getCollection, render } from 'astro:content';
-import PostLayout from '../layouts/PostLayout.astro';
+import { Image } from 'astro:assets';
+import PageLayout from '../layouts/PageLayout.astro';
+import JsonLd from '../components/JsonLd.astro';
+import { SITE_METADATA } from '../data/site-metadata';
+import { STRUCTURED_DATA } from '../data/structured-data';
 
 export async function getStaticPaths() {
   // Replicates Gatsby's createPages exactly: posts ordered by frontmatter date
@@ -26,16 +30,49 @@ export async function getStaticPaths() {
 const { post, previous, next } = Astro.props;
 const { Content } = await render(post);
 const { title, description, date, featuredImg, featuredImgAlt } = post.data;
+
+const dateFormatted = date.toLocaleDateString('pl-PL', { year: 'numeric', month: 'long', day: '2-digit' });
+const { person } = STRUCTURED_DATA;
+
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: title,
+  description: description || '',
+  datePublished: date.toISOString(),
+  author: person,
+  inLanguage: 'pl',
+  image: featuredImg ? { '@type': 'ImageObject', url: featuredImg.src, description: featuredImgAlt || '' } : undefined,
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': new URL(Astro.url.pathname, SITE_METADATA.url).href,
+  },
+};
 ---
 
-<PostLayout
+<PageLayout
+  breadcrumbTitle={title}
   title={title}
-  description={description}
-  date={date}
-  featuredImg={featuredImg}
-  featuredImgAlt={featuredImgAlt}
+  description={description || ''}
+  image={featuredImg?.src}
+  article
+  lang="pl"
 >
-  <Content />
+  <JsonLd data={structuredData} />
+  <article class="blog-post">
+    <header>
+      <h1>{title}</h1>
+      <small>
+        <span>{dateFormatted}</span>
+        &nbsp;|&nbsp;
+        <span><a href="/bio/">{SITE_METADATA.author.name}</a></span>
+      </small>
+    </header>
+    {featuredImg && <Image src={featuredImg} alt={featuredImgAlt ?? ''} />}
+    <section>
+      <Content />
+    </section>
+  </article>
 
   <nav class="blog-post-nav">
     <ul style="display: flex; flex-wrap: wrap; justify-content: space-between; list-style: none; padding: 0;">
@@ -59,4 +96,4 @@ const { title, description, date, featuredImg, featuredImgAlt } = post.data;
       </li>
     </ul>
   </nav>
-</PostLayout>
+</PageLayout>
