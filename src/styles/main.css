@@ -265,11 +265,13 @@ li > ul {
 }
 
 /* Prose lists need room for outside markers; the global ul/ol reset removes
-   padding for the layout lists (menu, bio, posts), so re-add it for post body
-   content only, where markers would otherwise be clipped by the wrapper's
-   overflow-x: hidden. */
-.blog-post section ul,
-.blog-post section ol {
+   padding for the layout lists (menu, bio, posts), so re-add it for in-page
+   content lists — blog post bodies plus the bio/contact sections — where the
+   markers would otherwise be clipped by the wrapper's overflow-x: hidden. The
+   layout lists (.tags, .posts, .pagination, menu, bio) live outside any
+   `main section`, so they keep their reset. */
+main section ul,
+main section ol {
   padding-left: var(--spacing-6);
 
   /* Keep markers in the gutter beside the text. Without this, the mobile
@@ -597,6 +599,12 @@ a:focus {
 }
 
 /* Previous/next post navigation: spread the two links across the row. */
+.blog-post-nav {
+  /* Separate the nav from the tag list above it (the tags carry only a top
+     margin, so without this they sit flush against the prev/next links). */
+  margin-top: var(--spacing-8);
+}
+
 .blog-post-nav ul {
   display: flex;
   flex-wrap: wrap;
@@ -891,6 +899,10 @@ a:focus {
      whole page (notably on phones) — it scrolls within its own box instead. */
   max-width: 100%;
   overflow-x: auto;
+
+  /* Fade the finished diagram in so the swap from skeleton to SVG is not a hard
+     pop. Runs once, when the SVG first mounts. */
+  animation: mermaid-diagram-fade-in 0.3s ease-in;
 }
 
 .mermaid-diagram svg {
@@ -906,6 +918,47 @@ a:focus {
   overflow-x: auto;
 }
 
+/* Loading placeholder shown (and server-rendered) while the diagram is being
+   built on the client. Reserving height up front keeps the content below from
+   jumping when the SVG replaces it, and the shimmer signals progress. */
+.mermaid-diagram-skeleton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 20rem;
+  margin: var(--spacing-6) 0;
+  border-radius: var(--spacing-2);
+  background-image: linear-gradient(
+    100deg,
+    var(--color-accent) 25%,
+    var(--color-background) 50%,
+    var(--color-accent) 75%
+  );
+  background-size: 200% 100%;
+  animation: mermaid-skeleton-shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes mermaid-skeleton-shimmer {
+  from {
+    background-position: 200% 0;
+  }
+
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@keyframes mermaid-diagram-fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .mermaid-diagram svg * {
     animation: none !important;
@@ -919,6 +972,10 @@ a:focus {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
+
+  /* Match the breathing room the bio has around its dividers so the footer is
+     not flush against the rule above it. */
+  margin-top: var(--spacing-8);
 }
 
 .footer-metadata a {
