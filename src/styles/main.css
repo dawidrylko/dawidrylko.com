@@ -720,10 +720,10 @@ blockquote {
 }
 
 .footer-metadata a {
-  /* Intentionally low-contrast (color-accent on white): the "Metadata"
-     link is a deliberate easter-egg exception, not standard body content,
-     so it is exempt from the WCAG AA token audit. */
-  color: var(--color-accent);
+  /* The "Metadata" easter-egg stays understated, but uses the muted text token
+     (WCAG AA in both themes) rather than --color-accent (~1.4:1) so it is not an
+     accessibility failure. */
+  color: var(--color-text-light);
 }
 
 /* Accessibility */
