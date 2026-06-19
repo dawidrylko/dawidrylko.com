@@ -12,7 +12,7 @@ interface Props {
 const { data, header, widthConfig, ariaLabel } = Astro.props;
 ---
 
-<table aria-label={ariaLabel}>
+<table aria-label={ariaLabel} tabindex="0">
   {
     widthConfig && (
       <colgroup>

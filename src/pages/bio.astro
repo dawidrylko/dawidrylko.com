@@ -179,11 +179,17 @@ const structuredData = createPageSchema({
       data={experience.map(([company, position, duration]) => [company, position, duration])}
       header={['Company', 'Position', 'Duration']}
       widthConfig={['35%', '35%', '30%']}
+      ariaLabel="Professional experience"
     />
   </section>
   <section id="education">
     <h2>Education</h2>
-    <Table data={education} header={['Institution', 'Degree', 'Field of Study']} widthConfig={['35%', '35%', '30%']} />
+    <Table
+      data={education}
+      header={['Institution', 'Degree', 'Field of Study']}
+      widthConfig={['35%', '35%', '30%']}
+      ariaLabel="Education"
+    />
   </section>
   <section id="download">
     <h2>Download My Full CV</h2>

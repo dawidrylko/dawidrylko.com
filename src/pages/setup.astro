@@ -181,7 +181,7 @@ const sections: { id: string; heading: string; ariaLabel: string; items: SetupIt
   <main>
     <section id="desktop" aria-labelledby="desktop-heading">
       <h2 id="desktop-heading">Desktop Setup</h2>
-      <table aria-label="Desktop hardware and equipment specifications">
+      <table aria-label="Desktop hardware and equipment specifications" tabindex="0">
         <colgroup><col class="col-w-30" /><col class="col-w-70" /></colgroup>
         <thead><tr><th scope="col">Type</th><th scope="col">Full Name</th></tr></thead>
         <tbody>
@@ -218,7 +218,7 @@ const sections: { id: string; heading: string; ariaLabel: string; items: SetupIt
         .map(({ id, heading, ariaLabel, items }) => (
           <section id={id} aria-labelledby={`${id}-heading`}>
             <h2 id={`${id}-heading`}>{heading}</h2>
-            <table aria-label={ariaLabel}>
+            <table aria-label={ariaLabel} tabindex="0">
               <colgroup>
                 <>
                   <col class="col-w-30" />
