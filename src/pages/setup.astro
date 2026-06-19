@@ -1,10 +1,12 @@
 ---
-import { Picture } from 'astro:assets';
 import PageLayout from '../layouts/PageLayout.astro';
 import JsonLd from '../components/JsonLd.astro';
+import Figure from '../components/Figure.astro';
+import ExternalLink from '../components/ExternalLink.astro';
 import Mermaid from '../components/Mermaid.tsx';
 import hardwareSetup from '../assets/hardware-setup.jpg';
-import { STRUCTURED_DATA } from '../data/structured-data';
+import { createPageSchema } from '../lib/page-metadata';
+import type { PageMetadata } from '../types';
 
 type SetupItem = [type: string, name: string, link?: string, details?: string];
 
@@ -60,7 +62,7 @@ const image = {
   figcaption: `Photo by Dawid Ryłko, taken on January 3, 2026.`,
 };
 
-const PAGE_METADATA = {
+const PAGE_METADATA: PageMetadata = {
   title: 'Setup',
   description:
     "Discover Dawid Ryłko's professional development workstation with segmented hardware stations and connection graph. Includes Mac mini M4 setup, ultrawide monitor, KVM switching, NAS storage and acoustic guitar equipment.",
@@ -120,41 +122,39 @@ const setupDiagram = `graph TD
   Monitor -- "USB-A ↔ USB-C<br/><small>Light Bar cable</small>" --> Lightbar
 `;
 
-const { person } = STRUCTURED_DATA;
-const structuredData = {
-  '@context': 'https://schema.org',
-  '@type': 'CollectionPage',
-  name: PAGE_METADATA.title,
-  headline: PAGE_METADATA.title,
+const structuredData = createPageSchema({
+  type: 'CollectionPage',
+  title: PAGE_METADATA.title,
   description: PAGE_METADATA.description,
-  author: person,
-  keywords: PAGE_METADATA.keywords.join(', '),
-  about: [
-    {
-      '@type': 'Thing',
-      name: 'Development Workstation',
-      description:
-        'Segmented hardware setup with device stations, KVM switching, ultrawide monitor and enterprise-grade NAS storage.',
+  keywords: PAGE_METADATA.keywords,
+  extra: {
+    about: [
+      {
+        '@type': 'Thing',
+        name: 'Development Workstation',
+        description:
+          'Segmented hardware setup with device stations, KVM switching, ultrawide monitor and enterprise-grade NAS storage.',
+      },
+      {
+        '@type': 'Thing',
+        name: 'Hardware Topology',
+        description:
+          'Connection graph presenting data, video and power paths between computers, hub, KVM, monitor and peripherals.',
+      },
+      {
+        '@type': 'Thing',
+        name: 'Guitar Setup',
+        description: 'Acoustic guitar equipment with amplifier and accessories for recording and practice.',
+      },
+    ],
+    mainEntity: {
+      '@type': 'ItemList',
+      name: 'Equipment Collection',
+      description: 'Desktop hardware, peripherals, network storage and music equipment',
+      numberOfItems: desktopSetup.length + additionalEquipment.length + guitarSetup.length,
     },
-    {
-      '@type': 'Thing',
-      name: 'Hardware Topology',
-      description:
-        'Connection graph presenting data, video and power paths between computers, hub, KVM, monitor and peripherals.',
-    },
-    {
-      '@type': 'Thing',
-      name: 'Guitar Setup',
-      description: 'Acoustic guitar equipment with amplifier and accessories for recording and practice.',
-    },
-  ],
-  mainEntity: {
-    '@type': 'ItemList',
-    name: 'Equipment Collection',
-    description: 'Desktop hardware, peripherals, network storage and music equipment',
-    numberOfItems: desktopSetup.length + additionalEquipment.length + guitarSetup.length,
   },
-};
+});
 
 const sections: { id: string; heading: string; ariaLabel: string; items: SetupItem[] }[] = [
   {
@@ -181,23 +181,19 @@ const sections: { id: string; heading: string; ariaLabel: string; items: SetupIt
   <main>
     <section id="desktop" aria-labelledby="desktop-heading">
       <h2 id="desktop-heading">Desktop Setup</h2>
-      <table aria-label="Desktop hardware and equipment specifications">
+      <table aria-label="Desktop hardware and equipment specifications" tabindex="0">
+        <colgroup><col class="col-w-30" /><col class="col-w-70" /></colgroup>
         <thead><tr><th scope="col">Type</th><th scope="col">Full Name</th></tr></thead>
         <tbody>
           {
             desktopSetup.map(([type, name, link, details]) => (
               <tr>
-                <td style="width: 30%;">{type}</td>
-                <td style="width: 70%;">
+                <td>{type}</td>
+                <td>
                   {link ? (
-                    <a
-                      href={link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={`View ${name} on external site`}
-                    >
+                    <ExternalLink href={link} follow aria-label={`View ${name} on external site`}>
                       {name}
-                    </a>
+                    </ExternalLink>
                   ) : (
                     name
                   )}
@@ -214,10 +210,7 @@ const sections: { id: string; heading: string; ariaLabel: string; items: SetupIt
       <Mermaid client:load chart={setupDiagram} ariaLabel="Hardware setup workflow diagram" />
     </section>
 
-    <figure style="margin: 0;">
-      <Picture src={hardwareSetup} formats={['avif', 'webp']} layout="full-width" alt={image.alt} />
-      <figcaption>{image.figcaption}</figcaption>
-    </figure>
+    <Figure src={hardwareSetup} alt={image.alt} caption={image.figcaption} />
 
     {
       sections
@@ -225,7 +218,13 @@ const sections: { id: string; heading: string; ariaLabel: string; items: SetupIt
         .map(({ id, heading, ariaLabel, items }) => (
           <section id={id} aria-labelledby={`${id}-heading`}>
             <h2 id={`${id}-heading`}>{heading}</h2>
-            <table aria-label={ariaLabel}>
+            <table aria-label={ariaLabel} tabindex="0">
+              <colgroup>
+                <>
+                  <col class="col-w-30" />
+                  <col class="col-w-70" />
+                </>
+              </colgroup>
               <thead>
                 <tr>
                   <>
@@ -237,17 +236,12 @@ const sections: { id: string; heading: string; ariaLabel: string; items: SetupIt
               <tbody>
                 {items.map(([type, name, link, details]) => (
                   <tr>
-                    <td style="width: 30%;">{type}</td>
-                    <td style="width: 70%;">
+                    <td>{type}</td>
+                    <td>
                       {link ? (
-                        <a
-                          href={link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          aria-label={`View ${name} on external site`}
-                        >
+                        <ExternalLink href={link} follow aria-label={`View ${name} on external site`}>
                           {name}
-                        </a>
+                        </ExternalLink>
                       ) : (
                         name
                       )}

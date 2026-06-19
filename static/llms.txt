@@ -1,0 +1,27 @@
+# Dawid Ryłko
+
+> Personal website and blog of Dawid Ryłko, a Software Engineer specialising in
+> scalable, secure, and resilient systems. The blog (in Polish) covers software
+> engineering, system architecture, algorithms, and emerging technologies.
+
+This site is built with Astro and hosted on GitHub Pages. Content is welcome to
+be read, cited, and summarised by AI/LLM crawlers.
+
+## Core pages
+
+- [Home](https://dawidrylko.com/): introduction and entry points.
+- [About](https://dawidrylko.com/bio/): professional background, experience, education, and philosophy.
+- [Blog](https://dawidrylko.com/blog/): all articles (in Polish), with search and tag filtering.
+- [Contact](https://dawidrylko.com/contact/): how to get in touch.
+- [Setup](https://dawidrylko.com/setup/): hardware and workstation overview.
+
+## Feeds & metadata
+
+- [RSS feed](https://dawidrylko.com/rss.xml): full-text feed of all blog posts.
+- [Sitemap](https://dawidrylko.com/sitemap-index.xml): canonical list of all URLs.
+
+## Contact
+
+- Email: hello@dawid.dev
+- GitHub: https://github.com/dawidrylko
+- LinkedIn: https://www.linkedin.com/in/dawidrylko

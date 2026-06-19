@@ -3,7 +3,8 @@ import { getCollection } from 'astro:content';
 import PageLayout from '../layouts/PageLayout.astro';
 import JsonLd from '../components/JsonLd.astro';
 import { SITE_METADATA } from '../data/site-metadata';
-import { STRUCTURED_DATA } from '../data/structured-data';
+import { createPageSchema } from '../lib/page-metadata';
+import type { PageMetadata } from '../types';
 
 // Static (non-blog) routes provided by src/pages. The Gatsby version queried
 // allSitePage; here the set is explicit since it changes rarely.
@@ -28,7 +29,7 @@ const siteInfo: [string, string][] = [
   ['Blog posts', blogPaths.length.toString()],
 ];
 
-const PAGE_METADATA = {
+const PAGE_METADATA: PageMetadata = {
   title: 'Metadata',
   description:
     'Technical metadata and comprehensive site statistics for dawidrylko.com. View build information, content inventory, page structure, and blog post directory—complete transparency into website architecture and content organization.',
@@ -44,34 +45,32 @@ const PAGE_METADATA = {
   ],
 };
 
-const { person } = STRUCTURED_DATA;
-const structuredData = {
-  '@context': 'https://schema.org',
-  '@type': 'CollectionPage',
-  name: PAGE_METADATA.title,
-  headline: PAGE_METADATA.title,
+const structuredData = createPageSchema({
+  type: 'CollectionPage',
+  title: PAGE_METADATA.title,
   description: PAGE_METADATA.description,
-  author: person,
-  keywords: PAGE_METADATA.keywords.join(', '),
-  about: [
-    {
-      '@type': 'Thing',
-      name: 'Site Information',
-      description: 'Technical metadata including build time, content statistics, and website configuration details.',
+  keywords: PAGE_METADATA.keywords,
+  extra: {
+    about: [
+      {
+        '@type': 'Thing',
+        name: 'Site Information',
+        description: 'Technical metadata including build time, content statistics, and website configuration details.',
+      },
+      {
+        '@type': 'Thing',
+        name: 'Content Structure',
+        description: 'Complete inventory of static pages and blog posts with navigation paths.',
+      },
+    ],
+    mainEntity: {
+      '@type': 'ItemList',
+      name: 'Site Content Inventory',
+      description: 'Complete list of all pages and blog posts on the website',
+      numberOfItems: staticPages.length + blogPaths.length,
     },
-    {
-      '@type': 'Thing',
-      name: 'Content Structure',
-      description: 'Complete inventory of static pages and blog posts with navigation paths.',
-    },
-  ],
-  mainEntity: {
-    '@type': 'ItemList',
-    name: 'Site Content Inventory',
-    description: 'Complete list of all pages and blog posts on the website',
-    numberOfItems: staticPages.length + blogPaths.length,
   },
-};
+});
 ---
 
 <PageLayout breadcrumbTitle={PAGE_METADATA.title} title={PAGE_METADATA.title} description={PAGE_METADATA.description}>
@@ -82,14 +81,15 @@ const structuredData = {
   <main>
     <section id="site-info" aria-label="Site Information">
       <h2>Site Information</h2>
-      <table>
+      <table aria-label="Site information" tabindex="0">
+        <colgroup><col class="col-w-30" /><col class="col-w-70" /></colgroup>
         <thead><tr><th scope="col">Property</th><th scope="col">Value</th></tr></thead>
         <tbody>
           {
             siteInfo.map(([prop, value]) => (
               <tr>
-                <td style="width: 30%;">{prop}</td>
-                <td style="width: 70%;">{value}</td>
+                <td>{prop}</td>
+                <td>{value}</td>
               </tr>
             ))
           }
@@ -98,14 +98,15 @@ const structuredData = {
     </section>
     <section id="pages" aria-label="Pages">
       <h2>Pages</h2>
-      <table>
+      <table aria-label="Pages" tabindex="0">
+        <colgroup><col class="col-w-10" /><col class="col-w-90" /></colgroup>
         <thead><tr><th scope="col">#</th><th scope="col">Path</th></tr></thead>
         <tbody>
           {
             staticPages.map((p, i) => (
               <tr>
-                <td style="width: 10%;">{i + 1}</td>
-                <td style="width: 90%;">
+                <td>{i + 1}</td>
+                <td>
                   <a href={p}>{p}</a>
                 </td>
               </tr>
@@ -116,14 +117,15 @@ const structuredData = {
     </section>
     <section id="blog-posts" aria-label="Blog Posts">
       <h2>Blog Posts</h2>
-      <table>
+      <table aria-label="Blog posts" tabindex="0">
+        <colgroup><col class="col-w-10" /><col class="col-w-90" /></colgroup>
         <thead><tr><th scope="col">#</th><th scope="col">Path</th></tr></thead>
         <tbody>
           {
             blogPaths.map((p, i) => (
               <tr>
-                <td style="width: 10%;">{i + 1}</td>
-                <td style="width: 90%;">
+                <td>{i + 1}</td>
+                <td>
                   <a href={p}>{p}</a>
                 </td>
               </tr>

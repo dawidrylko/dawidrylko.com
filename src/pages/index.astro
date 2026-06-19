@@ -2,8 +2,10 @@
 import PageLayout from '../layouts/PageLayout.astro';
 import JsonLd from '../components/JsonLd.astro';
 import { STRUCTURED_DATA } from '../data/structured-data';
+import { createPageSchema } from '../lib/page-metadata';
+import type { PageMetadata } from '../types';
 
-const PAGE_METADATA = {
+const PAGE_METADATA: PageMetadata = {
   title: 'Home',
   description:
     'Dawid Ryłko - Software Engineer specializing in scalable, secure, and resilient systems. Explore articles on software engineering, system architecture, and emerging technologies. Available for collaboration on meaningful technology projects.',
@@ -20,21 +22,21 @@ const PAGE_METADATA = {
 };
 
 const { person } = STRUCTURED_DATA;
-const structuredData = {
-  '@context': 'https://schema.org',
-  '@type': 'WebPage',
-  name: PAGE_METADATA.title,
+const structuredData = createPageSchema({
+  title: PAGE_METADATA.title,
   headline: 'Dawid Ryłko - Software Engineer',
   description: PAGE_METADATA.description,
-  keywords: PAGE_METADATA.keywords.join(', '),
-  author: person,
-  about: {
-    '@type': 'Thing',
-    name: 'Software Engineering',
-    description: 'Designing and building scalable, secure, and future-proof systems that address real-world challenges',
+  keywords: PAGE_METADATA.keywords,
+  extra: {
+    about: {
+      '@type': 'Thing',
+      name: 'Software Engineering',
+      description:
+        'Designing and building scalable, secure, and future-proof systems that address real-world challenges',
+    },
+    mainEntity: person,
   },
-  mainEntity: person,
-};
+});
 ---
 
 <PageLayout breadcrumbTitle={PAGE_METADATA.title}>

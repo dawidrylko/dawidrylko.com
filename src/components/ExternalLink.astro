@@ -1,0 +1,15 @@
+---
+// Outbound link that opens in a new tab with a safe `rel`. `noopener noreferrer`
+// is always set; `nofollow` is added unless `follow` is true. Any extra
+// attributes (title, aria-label, class…) pass through to the anchor.
+interface Props {
+  href: string;
+  follow?: boolean;
+  [key: string]: unknown;
+}
+
+const { href, follow = false, ...rest } = Astro.props;
+const rel = follow ? 'noopener noreferrer' : 'noopener noreferrer nofollow';
+---
+
+<a href={href} target="_blank" rel={rel} {...rest}><slot /></a>

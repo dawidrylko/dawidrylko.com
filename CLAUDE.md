@@ -16,10 +16,18 @@ pnpm format:write   # Prettier — formatowanie
 pnpm format:check   # Prettier — sprawdzenie
 pnpm lint:fix       # ESLint — napraw
 pnpm lint:check     # ESLint — sprawdź
+pnpm lint:css       # Stylelint — sprawdź CSS
+pnpm lint:css:fix   # Stylelint — napraw CSS
 pnpm a11y:contrast  # audyt kontrastu design-tokenów (WCAG AA)
+pnpm test           # testy jednostkowe (Vitest, jednorazowo)
+pnpm test:watch     # Vitest w trybie watch
+pnpm test:coverage  # Vitest + pokrycie (v8)
+pnpm test:e2e       # testy e2e + a11y (Playwright) na zbudowanym dist/
 ```
 
-Przed zatwierdzeniem zmian uruchom `pnpm type:check`, `pnpm lint:check` i `pnpm format:check`. Nie pisz ani nie uruchamiaj testów jednostkowych — projekt nie ma frameworka testowego.
+Przed zatwierdzeniem zmian uruchom `pnpm type:check`, `pnpm lint:check`, `pnpm lint:css`, `pnpm format:check` i `pnpm test`.
+
+**Testy:** projekt ma framework testowy. **Vitest** pokrywa logikę bezframeworkową w `src/lib` (pliki `*.test.ts` obok kodu; wirtualny moduł `astro:content` jest aliasowany do `test/mocks/`). **Playwright** (`e2e/*.spec.ts`) uruchamia testy e2e i skan dostępności `@axe-core/playwright` na podglądzie `dist/` (`astro preview`); wymaga przeglądarki `pnpm exec playwright install chromium`. Dodając lub zmieniając czystą logikę w `src/lib`, dopisz testy jednostkowe.
 
 ## Stos i struktura
 
@@ -28,11 +36,13 @@ Przed zatwierdzeniem zmian uruchom `pnpm type:check`, `pnpm lint:check` i `pnpm 
 - **Build:** statyczny, wyjście w `dist/` (publicDir: `static/`).
 
 ```
-src/components/    # .astro (Seo, Menu, Breadcrumbs, Bio, Table, JsonLd) + wyspy React .tsx (Mermaid)
+src/components/    # .astro (Seo, Menu, Breadcrumbs, Bio, Table, JsonLd, ExternalLink, Figure) + wyspy React .tsx (Mermaid)
 src/layouts/       # PageLayout.astro (chrome: head/Seo, header, breadcrumbs, bio, footer)
 src/pages/         # index, blog, bio, contact, setup, metadata, files, 404, [...slug].astro, rss.xml.ts
 src/data/          # site-metadata.ts, structured-data.ts, gtag.ts
-src/lib/           # excerpt.ts
+src/lib/           # excerpt.ts, inline-markdown.ts, blog.ts, date.ts, page-metadata.ts (+ *.test.ts)
+src/types.ts       # współdzielone typy (PageMetadata, NavLink)
+e2e/               # testy Playwright (smoke, search, a11y); test/mocks/ — stuby dla Vitest
 src/integrations/  # webmanifest.ts (generuje manifest + ikony przez sharp w astro:build:done)
 src/scripts/       # web-vitals.ts (klienckie raportowanie do GA4)
 src/assets/        # obrazy przetwarzane przez astro:assets
@@ -51,14 +61,14 @@ Potrzebne przy modyfikacji `[...slug].astro`, `content.config.ts`, RSS (`rss.xml
 
 - Post to katalog `content/pl/YYYY-MM-DD--slug-po-polsku/index.mdx` (część katalogów ma też strony wtórne, np. `.../ng-help.md`).
 - Slug URL powstaje w `content.config.ts` (`generateId`: usunięcie rozszerzenia, `/index`, oraz prefiksu daty `replace(/.*--/, '')`): `2025-12-26--od-tablicy-do-mapy` → `/od-tablicy-do-mapy/`. **URL-e muszą zostać zachowane** (SEO) — pilnuje tego `helpers/ci/check-astro-url-parity.mjs`.
-- Frontmatter: `title`, `description`, `date`, `tags`, opcjonalnie `featuredImg` + `featuredImgAlt` (gdy jest `featuredImg`, `featuredImgAlt` jest wymagany — reguła w schemacie zod).
+- Frontmatter: `title`, `description`, `date`, `tags`, opcjonalnie `updatedDate` (mapuje się na `dateModified` / `article:modified_time`), `featuredImg` + `featuredImgAlt` (gdy jest `featuredImg`, `featuredImgAlt` jest wymagany — reguła w schemacie zod).
 - Renderowanie MDX: **Shiki** (kod, motyw jasny/ciemny), **KaTeX** (matematyka, `remark-math` + `rehype-katex`), **Mermaid** (diagram jako wyspa React `client:*`).
 
 ## Konwencje kodu
 
 - **Komponenty:** statyczne pisz jako `.astro`; React (`.tsx`) tylko dla realnej interaktywności, jawnie hydratowany dyrektywą `client:*` (np. `client:load`, `client:visible`). Wyspy React: typ `FC`, nazwy PascalCase, importy hooków imienne.
 - **Pliki:** komponenty `.astro` PascalCase; skrypty/dane kebab-case. **Stałe:** UPPER_SNAKE_CASE.
-- **Style:** czyste CSS z custom properties (design tokens), bez preprocesorów; Montserrat (nagłówki), Merriweather (tekst). Dark mode automatyczny przez `prefers-color-scheme` (bez przełącznika JS).
+- **Style:** czyste CSS z custom properties (design tokens), bez preprocesorów; lintowane przez **Stylelint** (`stylelint-config-standard`, `normalize.css` wykluczony). Montserrat (nagłówki), Merriweather (tekst). Dark mode automatyczny przez `prefers-color-scheme` (bez przełącznika JS).
 - **Dane strukturalne:** JSON-LD przez `JsonLd.astro` (zwykłe obiekty, bez schema-dts).
 - **Prettier:** single quotes, średniki, 2 spacje, `printWidth: 120`, `arrowParens: avoid`, plugin `prettier-plugin-astro`.
 - **Komentarze:** tylko po angielsku i tylko te realnie wartościowe — wyjaśniaj „dlaczego”, a nie to, co kod już mówi sam.

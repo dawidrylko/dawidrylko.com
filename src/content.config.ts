@@ -26,6 +26,8 @@ const posts = defineCollection({
         title: z.string(),
         description: z.string().optional(),
         date: z.coerce.date(),
+        // Optional last-modified date; surfaces as dateModified / article:modified_time.
+        updatedDate: z.coerce.date().optional(),
         tags: z.array(z.string()).min(1),
         featuredImg: image().optional(),
         featuredImgAlt: z.string().optional(),

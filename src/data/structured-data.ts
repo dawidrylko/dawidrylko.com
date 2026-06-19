@@ -7,6 +7,7 @@ export const STRUCTURED_DATA = {
   person: {
     '@context': 'https://schema.org',
     '@type': 'Person',
+    '@id': `${SITE_METADATA.url}/#person`,
     name: SITE_METADATA.author.name,
     givenName: 'Dawid',
     familyName: 'Ryłko',
@@ -59,5 +60,26 @@ export const STRUCTURED_DATA = {
       email: SITE_METADATA.author.email,
     },
     sameAs: SITE_METADATA.social.map(social => social.url),
+  },
+  // Site-wide WebSite node emitted on every page by the layout. The SearchAction
+  // advertises the blog search to engines (sitelinks searchbox); the publisher
+  // links back to the Person node by @id to avoid duplicating the full object.
+  website: {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    '@id': `${SITE_METADATA.url}/#website`,
+    url: `${SITE_METADATA.url}/`,
+    name: SITE_METADATA.title,
+    description: SITE_METADATA.description.en,
+    inLanguage: ['en', 'pl'],
+    publisher: { '@id': `${SITE_METADATA.url}/#person` },
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: {
+        '@type': 'EntryPoint',
+        urlTemplate: `${SITE_METADATA.url}/blog/?q={search_term_string}`,
+      },
+      'query-input': 'required name=search_term_string',
+    },
   },
 };

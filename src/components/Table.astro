@@ -12,7 +12,16 @@ interface Props {
 const { data, header, widthConfig, ariaLabel } = Astro.props;
 ---
 
-<table aria-label={ariaLabel}>
+<table aria-label={ariaLabel} tabindex="0">
+  {
+    widthConfig && (
+      <colgroup>
+        {widthConfig.map(width => (
+          <col class={`col-w-${width.replace('%', '').trim()}`} />
+        ))}
+      </colgroup>
+    )
+  }
   {
     header && (
       <thead>
@@ -28,8 +37,8 @@ const { data, header, widthConfig, ariaLabel } = Astro.props;
     {
       data.map(row => (
         <tr>
-          {row.map((cell, cellIndex) => (
-            <td style={widthConfig?.[cellIndex] ? `width: ${widthConfig[cellIndex]};` : undefined}>{cell}</td>
+          {row.map(cell => (
+            <td>{cell}</td>
           ))}
         </tr>
       ))
