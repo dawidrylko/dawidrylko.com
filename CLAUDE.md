@@ -16,6 +16,8 @@ pnpm format:write   # Prettier — formatowanie
 pnpm format:check   # Prettier — sprawdzenie
 pnpm lint:fix       # ESLint — napraw
 pnpm lint:check     # ESLint — sprawdź
+pnpm lint:css       # Stylelint — sprawdź CSS
+pnpm lint:css:fix   # Stylelint — napraw CSS
 pnpm a11y:contrast  # audyt kontrastu design-tokenów (WCAG AA)
 pnpm test           # testy jednostkowe (Vitest, jednorazowo)
 pnpm test:watch     # Vitest w trybie watch
@@ -23,7 +25,7 @@ pnpm test:coverage  # Vitest + pokrycie (v8)
 pnpm test:e2e       # testy e2e + a11y (Playwright) na zbudowanym dist/
 ```
 
-Przed zatwierdzeniem zmian uruchom `pnpm type:check`, `pnpm lint:check`, `pnpm format:check` i `pnpm test`.
+Przed zatwierdzeniem zmian uruchom `pnpm type:check`, `pnpm lint:check`, `pnpm lint:css`, `pnpm format:check` i `pnpm test`.
 
 **Testy:** projekt ma framework testowy. **Vitest** pokrywa logikę bezframeworkową w `src/lib` (pliki `*.test.ts` obok kodu; wirtualny moduł `astro:content` jest aliasowany do `test/mocks/`). **Playwright** (`e2e/*.spec.ts`) uruchamia testy e2e i skan dostępności `@axe-core/playwright` na podglądzie `dist/` (`astro preview`); wymaga przeglądarki `pnpm exec playwright install chromium`. Dodając lub zmieniając czystą logikę w `src/lib`, dopisz testy jednostkowe.
 
@@ -66,7 +68,7 @@ Potrzebne przy modyfikacji `[...slug].astro`, `content.config.ts`, RSS (`rss.xml
 
 - **Komponenty:** statyczne pisz jako `.astro`; React (`.tsx`) tylko dla realnej interaktywności, jawnie hydratowany dyrektywą `client:*` (np. `client:load`, `client:visible`). Wyspy React: typ `FC`, nazwy PascalCase, importy hooków imienne.
 - **Pliki:** komponenty `.astro` PascalCase; skrypty/dane kebab-case. **Stałe:** UPPER_SNAKE_CASE.
-- **Style:** czyste CSS z custom properties (design tokens), bez preprocesorów; Montserrat (nagłówki), Merriweather (tekst). Dark mode automatyczny przez `prefers-color-scheme` (bez przełącznika JS).
+- **Style:** czyste CSS z custom properties (design tokens), bez preprocesorów; lintowane przez **Stylelint** (`stylelint-config-standard`, `normalize.css` wykluczony). Montserrat (nagłówki), Merriweather (tekst). Dark mode automatyczny przez `prefers-color-scheme` (bez przełącznika JS).
 - **Dane strukturalne:** JSON-LD przez `JsonLd.astro` (zwykłe obiekty, bez schema-dts).
 - **Prettier:** single quotes, średniki, 2 spacje, `printWidth: 120`, `arrowParens: avoid`, plugin `prettier-plugin-astro`.
 - **Komentarze:** tylko po angielsku i tylko te realnie wartościowe — wyjaśniaj „dlaczego”, a nie to, co kod już mówi sam.

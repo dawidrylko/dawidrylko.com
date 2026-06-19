@@ -28,11 +28,11 @@
   --spacing-24: 6rem;
   --spacing-32: 8rem;
   --fontFamily-sans:
-    'MontserratVariable', system-ui, -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif,
+    'MontserratVariable', system-ui, -apple-system, blinkmacsystemfont,
+    'Segoe UI', roboto, 'Helvetica Neue', arial, 'Noto Sans', sans-serif,
     'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   --fontFamily-serif:
-    'Merriweather', 'Georgia', Cambria, 'Times New Roman', Times, serif;
+    'Merriweather', 'Georgia', cambria, 'Times New Roman', times, serif;
   --font-body: var(--fontFamily-serif);
   --font-heading: var(--fontFamily-sans);
   --fontWeight-normal: 400;
@@ -43,6 +43,7 @@
   --lineHeight-tight: 1.1;
   --lineHeight-normal: 1.5;
   --lineHeight-relaxed: 1.625;
+
   /* 1.200 Minor Third Type Scale */
   --fontSize-0: 0.833rem;
   --fontSize-1: 1rem;
@@ -58,9 +59,10 @@
   --color-heading: #1a202c;
   --color-heading-black: black;
   --color-accent: #d1dce5;
-  --color-background: #ffffff;
+  --color-background: #fff;
+
   /* Text rendered on top of --color-primary (e.g. table headers). */
-  --color-on-primary: #ffffff;
+  --color-on-primary: #fff;
 }
 
 /* Dark theme: pure CSS, driven by the OS setting. Only the color tokens are
@@ -72,7 +74,7 @@
     --color-text: #d8dee9;
     --color-text-light: #a6b1c2;
     --color-heading: #f0f3f8;
-    --color-heading-black: #ffffff;
+    --color-heading-black: #fff;
     --color-accent: #2a3340;
     --color-background: #1a1f27;
     --color-on-primary: #0b1f33;
@@ -82,8 +84,8 @@
 /* HTML elements */
 
 *,
-:after,
-:before {
+::after,
+::before {
   box-sizing: border-box;
 }
 
@@ -104,7 +106,7 @@ body {
   color: var(--color-text);
   background: var(--color-background);
   overflow-x: hidden;
-  word-wrap: break-word;
+  overflow-wrap: break-word;
   hyphens: auto;
 }
 
@@ -127,9 +129,8 @@ h6 {
   margin-bottom: var(--spacing-6);
   line-height: var(--lineHeight-tight);
   letter-spacing: -0.025em;
-  word-wrap: break-word;
-  hyphens: auto;
   overflow-wrap: break-word;
+  hyphens: auto;
 }
 
 h2,
@@ -167,7 +168,7 @@ h6 {
   font-size: var(--fontSize-1);
 }
 
-@media (max-width: 768px) {
+@media (width <= 768px) {
   h1 {
     font-size: var(--fontSize-5);
   }
@@ -185,7 +186,7 @@ h6 {
   }
 }
 
-@media (max-width: 480px) {
+@media (width <= 480px) {
   h1 {
     font-size: var(--fontSize-4);
   }
@@ -221,11 +222,12 @@ h6 > a {
 
 p {
   line-height: var(--lineHeight-relaxed);
+
   --baseline-multiplier: 0.179;
   --x-height-multiplier: 0.35;
+
   margin: var(--spacing-0) var(--spacing-0) var(--spacing-8) var(--spacing-0);
   padding: var(--spacing-0);
-  word-wrap: break-word;
   overflow-wrap: break-word;
 }
 
@@ -240,18 +242,22 @@ code {
 }
 
 table {
-  overflow-x: auto;
   display: block;
+  overflow-x: auto;
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: var(--spacing-8);
+  font-size: var(--fontSize-0);
   white-space: nowrap;
 }
 
 pre {
   overflow-x: auto;
-  word-wrap: normal;
+  overflow-wrap: normal;
 }
 
 code {
-  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 ul,
@@ -290,6 +296,7 @@ li > ul {
 .blog-post section ul,
 .blog-post section ol {
   padding-left: var(--spacing-6);
+
   /* Keep markers in the gutter beside the text. Without this, the mobile
      `list-style-position: inside` rule below drops the marker onto its own line
      above loose (<li><p>…</p>) items. */
@@ -305,6 +312,7 @@ blockquote {
   font-size: var(--fontSize-2);
   font-style: italic;
   margin-bottom: var(--spacing-8);
+  overflow: auto;
 }
 
 blockquote > :last-child {
@@ -314,13 +322,6 @@ blockquote > :last-child {
 blockquote > ul,
 blockquote > ol {
   list-style-position: inside;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: var(--spacing-8);
-  font-size: var(--fontSize-0);
 }
 
 table th,
@@ -378,7 +379,7 @@ a:focus {
   max-width: var(--maxWidth-wrapper);
   padding: var(--spacing-10) var(--spacing-5);
   overflow-x: hidden;
-  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .post-list-item {
@@ -426,7 +427,7 @@ a:focus {
   object-fit: cover;
 }
 
-@media screen and (min-width: 600px) {
+@media screen and (width >= 600px) {
   .post-list-item section {
     flex-direction: row;
     align-items: center;
@@ -449,56 +450,69 @@ a:focus {
   margin-top: var(--spacing-10);
   margin-bottom: var(--spacing-10);
 }
+
 .bio .avatar {
   margin-right: var(--spacing-4);
   margin-bottom: var(--spacing-0);
   min-width: 60px;
   border-radius: 100%;
 }
+
 .bio .name {
   font-weight: var(--fontWeight-bold);
   margin-bottom: var(--spacing-0);
 }
+
 .bio .job-title {
   font-size: var(--fontSize-0);
   margin-bottom: var(--spacing-0);
 }
+
 .bio ul {
   font-size: var(--fontSize-0);
   margin: var(--spacing-0);
 }
+
 .bio ul li {
   display: inline;
 }
+
 .bio ul li:not(:last-child)::after {
   content: '•';
   margin: 0 var(--spacing-1);
 }
+
 /* Media queries */
-@media screen and (max-width: 600px) {
+@media screen and (width <= 600px) {
   .bio {
     align-items: center;
     flex-direction: column;
   }
+
   .bio .avatar {
     margin-bottom: var(--spacing-4);
   }
+
   .bio .name {
     text-align: center;
   }
+
   .bio .job-title {
     text-align: center;
   }
+
   .bio ul {
     display: flex;
     flex-wrap: wrap;
     gap: var(--spacing-1);
     justify-content: center;
   }
+
   .bio ul li {
     display: inline-flex;
     margin: 0;
   }
+
   .bio ul li:not(:last-child)::after {
     content: '';
     margin: 0 var(--spacing-1);
@@ -512,6 +526,7 @@ a:focus {
 .header {
   margin-bottom: var(--spacing-8);
 }
+
 .header-title {
   font-weight: var(--fontWeight-bold);
   font-family: var(--font-heading);
@@ -519,9 +534,8 @@ a:focus {
   display: block;
   margin-bottom: var(--spacing-4);
   color: var(--color-heading-black);
-  word-wrap: break-word;
-  hyphens: auto;
   overflow-wrap: break-word;
+  hyphens: auto;
 }
 
 .menu {
@@ -546,6 +560,7 @@ a:focus {
   margin: 0 var(--spacing-2);
   color: var(--color-text-light);
 }
+
 .blog-post header {
   margin-bottom: var(--spacing-4);
 }
@@ -583,10 +598,6 @@ a:focus {
 .math.math-display .katex-display {
   padding: 1em;
   margin: 0.5em 0;
-  overflow: auto;
-}
-
-blockquote {
   overflow: auto;
 }
 
@@ -733,11 +744,12 @@ blockquote {
 
 /* Media queries */
 
-@media (max-width: 42rem) {
+@media (width <= 42rem) {
   blockquote {
     padding: var(--spacing-0) var(--spacing-0) var(--spacing-0) var(--spacing-4);
     margin-left: var(--spacing-0);
   }
+
   ul,
   ol {
     list-style-position: inside;
@@ -749,7 +761,7 @@ blockquote {
 }
 
 /* Extra small devices */
-@media (max-width: 320px) {
+@media (width <= 320px) {
   .global-wrapper {
     padding: var(--spacing-6) var(--spacing-3);
   }
@@ -770,6 +782,7 @@ blockquote {
     font-size: var(--fontSize-1);
   }
 }
+
 /* Breadcrumbs */
 
 .breadcrumbs {
@@ -813,7 +826,7 @@ blockquote {
   transition:
     background-color 0.2s ease,
     color 0.2s ease;
-  word-break: break-word;
+  overflow-wrap: break-word;
   hyphens: auto;
   max-width: 100%;
   overflow: hidden;
@@ -854,13 +867,13 @@ blockquote {
 }
 
 /* High contrast mode support */
-@media (prefers-contrast: high) {
+@media (prefers-contrast: more) {
   .breadcrumbs a {
     text-decoration: underline;
   }
 
   .breadcrumbs li.active span {
-    outline: 1px solid currentColor;
+    outline: 1px solid currentcolor;
   }
 }
 
@@ -870,6 +883,7 @@ blockquote {
   display: flex;
   justify-content: center;
   margin: var(--spacing-6) 0;
+
   /* Safety net: keep a wide diagram from pushing horizontal scroll onto the
      whole page (notably on phones) — it scrolls within its own box instead. */
   max-width: 100%;
@@ -879,6 +893,7 @@ blockquote {
 .mermaid-diagram svg {
   max-width: 100%;
   height: auto;
+
   /* Flex children default to min-width: auto, which would let the SVG keep its
      intrinsic width and overrun max-width: 100% on narrow viewports. */
   min-width: 0;
@@ -957,20 +972,20 @@ blockquote {
   a[href^='http']::after {
     content: ' (' attr(href) ')';
     font-size: var(--fontSize-0);
-    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
 
   pre,
   blockquote,
   table,
   img {
-    page-break-inside: avoid;
+    break-inside: avoid;
   }
 
   h2,
   h3,
   h4 {
-    page-break-after: avoid;
+    break-after: avoid;
   }
 }
 
@@ -996,6 +1011,7 @@ blockquote {
   html code[class*='language-'],
   html pre[class*='language-'] {
     color: #e6e6e6;
+
     /* The light theme paints a white text-shadow that smears on dark. */
     text-shadow: none;
   }
@@ -1041,6 +1057,7 @@ blockquote {
   html .language-css .token.string,
   html .style .token.string {
     color: #56b6c2;
+
     /* Drop the semi-opaque white background the light theme adds. */
     background: none;
   }

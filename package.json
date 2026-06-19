@@ -18,6 +18,8 @@
     "format:write": "prettier --write \"**/*.{astro,ts,tsx,js,mjs,json,md}\"",
     "lint:check": "eslint .",
     "lint:fix": "eslint . --fix",
+    "lint:css": "stylelint \"src/**/*.css\"",
+    "lint:css:fix": "stylelint \"src/**/*.css\" --fix",
     "a11y:contrast": "node helpers/a11y-contrast/check-contrast.mjs",
     "test": "vitest run",
     "test:watch": "vitest",
@@ -52,17 +54,21 @@
     "astro": "^6.4.8",
     "eslint": "^10.5.0",
     "eslint-plugin-astro": "^1.7.0",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
     "globals": "^17.6.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.6",
     "prettier": "^3.8.4",
     "prettier-plugin-astro": "^0.14.1",
+    "stylelint": "^17.13.0",
+    "stylelint-config-standard": "^40.0.0",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.61.1",
     "vitest": "^4.1.9"
   },
   "lint-staged": {
     "**/*.{astro,ts,tsx,js,mjs,json,md}": "prettier --write",
-    "**/*.{astro,ts,tsx,js,mjs}": "eslint --fix"
+    "**/*.{astro,ts,tsx,js,mjs}": "eslint --fix",
+    "src/**/*.css": "stylelint --fix"
   }
 }
