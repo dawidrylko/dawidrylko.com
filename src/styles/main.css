@@ -339,6 +339,16 @@ table tr:nth-child(even) {
   background-color: var(--color-accent);
 }
 
+/* Files page: Keynote/PowerPoint download variants are hidden until the
+   cmd/ctrl+shift+. shortcut adds .show-hidden-variants to the table. */
+.presentations-table .file-link.is-hidden-variant {
+  display: none;
+}
+
+.presentations-table.show-hidden-variants .file-link.is-hidden-variant {
+  display: inline;
+}
+
 /* Link */
 
 a {
@@ -854,11 +864,18 @@ blockquote {
   display: flex;
   justify-content: center;
   margin: var(--spacing-6) 0;
+  /* Safety net: keep a wide diagram from pushing horizontal scroll onto the
+     whole page (notably on phones) — it scrolls within its own box instead. */
+  max-width: 100%;
+  overflow-x: auto;
 }
 
 .mermaid-diagram svg {
   max-width: 100%;
   height: auto;
+  /* Flex children default to min-width: auto, which would let the SVG keep its
+     intrinsic width and overrun max-width: 100% on narrow viewports. */
+  min-width: 0;
 }
 
 .mermaid-diagram-fallback {

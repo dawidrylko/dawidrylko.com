@@ -9,7 +9,10 @@ import { STRUCTURED_DATA } from '../data/structured-data';
 // tree from disk at build time. publicDir ('../static') serves these at /files.
 type FileNode = { name: string; extension: string; publicURL: string; size: number };
 
-const filesDir = path.resolve(process.cwd(), '../static/files');
+// publicDir is 'static' (astro.config.mjs), relative to the project root, which
+// is process.cwd() during the build. The leading '../' here was a leftover
+// Gatsby assumption that resolved outside the repo, so no files were ever read.
+const filesDir = path.resolve(process.cwd(), 'static/files');
 
 const readFilesRecursively = (dir: string, baseDir: string): FileNode[] => {
   if (!fs.existsSync(dir)) {
@@ -91,11 +94,6 @@ const getFileMetadata = (extension: string): FileConfig[] =>
     { icon: '📎', type: extension.toUpperCase(), action: 'download', hidden: false },
   ];
 
-// Phase 3 renders the default view (showHidden = false). The Gatsby
-// cmd+shift+. toggle that reveals Keynote/PowerPoint variants is an interactive
-// island deferred to a later pass.
-const showHidden = false;
-
 const grouped = groupFilesByIdentity(nodes);
 const sortedEntries = Array.from(grouped.entries()).sort(([keyA], [keyB]) => {
   const a = parseFileName(grouped.get(keyA)?.[0]?.name ?? '');
@@ -118,17 +116,18 @@ const rows = sortedEntries
         return (ia === -1 ? Infinity : ia) - (ib === -1 ? Infinity : ib);
       })
       .flatMap(file =>
-        getFileMetadata(file.extension)
-          .filter(config => !config.hidden || showHidden)
-          .map(config => ({
-            href: file.publicURL,
-            icon: config.icon,
-            action: config.action,
-            type: config.type,
-            size: formatFileSize(file.size),
-            title: parsed.title,
-            download: `${parsed.title} - Dawid Ryłko - dawidrylko.com.${file.extension}`,
-          })),
+        getFileMetadata(file.extension).map(config => ({
+          href: file.publicURL,
+          icon: config.icon,
+          action: config.action,
+          type: config.type,
+          // Keynote/PowerPoint variants are rendered but CSS-hidden by default;
+          // the cmd/ctrl+shift+. shortcut reveals them (see the inline script).
+          hidden: config.hidden,
+          size: formatFileSize(file.size),
+          title: parsed.title,
+          download: `${parsed.title} - Dawid Ryłko - dawidrylko.com.${file.extension}`,
+        })),
       );
     return {
       index: index + 1,
@@ -196,7 +195,7 @@ const structuredData = {
   <main>
     <section aria-labelledby="presentations-heading">
       <h2 id="presentations-heading">Presentations</h2>
-      <table>
+      <table class="presentations-table" data-presentations>
         <thead>
           <tr>
             <th scope="col">#</th>
@@ -221,6 +220,7 @@ const structuredData = {
                     {row.links.map(link =>
                       link.action === 'open' ? (
                         <a
+                          class:list={['file-link', { 'is-hidden-variant': link.hidden }]}
                           href={link.href}
                           target="_blank"
                           rel="noopener noreferrer"
@@ -231,6 +231,7 @@ const structuredData = {
                         </a>
                       ) : (
                         <a
+                          class:list={['file-link', { 'is-hidden-variant': link.hidden }]}
                           href={link.href}
                           download={link.download}
                           aria-label={`Download ${link.title} as ${link.type}`}
@@ -249,4 +250,21 @@ const structuredData = {
       </table>
     </section>
   </main>
+
+  <!-- Ported from the Gatsby files page: cmd/ctrl+shift+. toggles the hidden
+       Keynote/PowerPoint download variants. Kept as an is:inline script so the
+       behaviour lives in the page (no React island needed) and stays assertable
+       by the build-output regression contract. -->
+  <script is:inline>
+    (function () {
+      const table = document.querySelector('[data-presentations]');
+      if (!table) return;
+      document.addEventListener('keydown', function (event) {
+        if ((event.metaKey || event.ctrlKey) && event.shiftKey && event.key === '.') {
+          event.preventDefault();
+          table.classList.toggle('show-hidden-variants');
+        }
+      });
+    })();
+  </script>
 </PageLayout>
