@@ -76,4 +76,5 @@ Hook uruchamia kolejno: `lint-staged` (Prettier + ESLint na staged) → `pnpm ty
 ## Git i pull requesty
 
 - Pisz commity oraz tytuły i opisy PR **po angielsku**, w formacie **Conventional Commits** (`docs:`, `feat:`, `fix:`, …).
-- **Nie dodawaj atrybucji AI** — żadnych `Co-Authored-By`, `Claude-Session` ani stopek typu „Generated with Claude Code” w commitach i opisach PR.
+- **Nie dodawaj atrybucji AI** — żadnych `Co-Authored-By`, `Claude-Session` ani stopek typu „Generated with Claude Code” w commitach i opisach PR. Pilnuje tego CI (`helpers/ci/check-no-ai-attribution.mjs`).
+- **Po zmianie zakresu pilnuj zgodności opisu z treścią** — gdy po rebase, squashu lub odrzuceniu commitów zmieni się faktyczna zawartość gałęzi, zaktualizuj tytuł i opis commita oraz PR-a, tak aby opisywały tylko to, co realnie zostaje w diffie. Nie zostawiaj opisu sprzed zmiany zakresu.

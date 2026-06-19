@@ -46,6 +46,31 @@ jobs:
       - name: Run ${{ matrix.check }}
         run: pnpm run ${{ matrix.check }}
 
+  # Blocks AI attribution (Co-Authored-By: Claude, Claude-Session, "Generated
+  # with Claude Code", …) in commit messages and the PR title/description, per
+  # CLAUDE.md. Zero deps, no build. fetch-depth: 0 so base..head resolves.
+  attribution:
+    name: No AI attribution
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Check commit messages and PR title/description
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_BODY: ${{ github.event.pull_request.body }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: node helpers/ci/check-no-ai-attribution.mjs
+
   # Design-token contrast (WCAG AA) for both light and dark themes. Pure static
   # palette check — zero deps, no build — independent of the lighthouse audit.
   contrast:
