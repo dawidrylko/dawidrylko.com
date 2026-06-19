@@ -13,6 +13,8 @@
  * Plus site-wide structured-data guarantees:
  *
  *   - blog post pages carry a BlogPosting JSON-LD node
+ *   - blog post pages declare og:type=article + article:published_time
+ *   - every page emits a WebSite JSON-LD node (site-wide search action)
  *
  * Redirect stubs (meta-refresh pages such as /resume/) are skipped. Zero
  * dependencies; runs against the built output, it does NOT rebuild. Exits
@@ -56,6 +58,17 @@ function ldJsonBlocks(html) {
   return [...html.matchAll(/<script[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)].map(m => m[1]);
 }
 
+/** Root @type(s) of a JSON-LD block, ignoring nodes nested inside it. */
+function rootTypes(block) {
+  try {
+    const data = JSON.parse(block);
+    const nodes = Array.isArray(data) ? data : [data];
+    return nodes.flatMap(node => (node && node['@type'] ? [node['@type']] : []));
+  } catch {
+    return [];
+  }
+}
+
 function checkPage(page, html) {
   // Redirect stubs have no real <head> chrome — skip them.
   if (/http-equiv="refresh"/i.test(html)) return null;
@@ -90,18 +103,42 @@ async function main() {
   if (pages.length === 0) fail('no HTML pages found in dist');
 
   let postsWithBlogPosting = 0;
+  let pagesWithWebSite = 0;
+  let indexablePages = 0;
   for (const page of pages) {
     const rel = relative(DIST_DIR, page);
     const html = await readFile(page, 'utf8');
     const checked = checkPage(rel, html);
-    if (checked && ldJsonBlocks(checked).some(b => b.includes('"BlogPosting"'))) {
+    if (!checked) continue;
+
+    indexablePages += 1;
+    const types = ldJsonBlocks(checked).flatMap(rootTypes);
+    if (types.includes('WebSite')) pagesWithWebSite += 1;
+
+    // Only individual post pages have a root BlogPosting node; blog listing pages
+    // nest BlogPosting items inside a Blog node and must not be treated as posts.
+    if (types.includes('BlogPosting')) {
       postsWithBlogPosting += 1;
+      // A post page must present itself as an article with a publish date, or
+      // social/LLM crawlers lose the post's timeline.
+      if (!/<meta[^>]*property="og:type"[^>]*content="article"/.test(checked)) {
+        fail(`${rel}: BlogPosting page is missing og:type=article`);
+      }
+      if (!/<meta[^>]*property="article:published_time"[^>]*content="[^"]+"/.test(checked)) {
+        fail(`${rel}: BlogPosting page is missing article:published_time`);
+      }
     }
   }
 
   // The blog has published posts, so at least one BlogPosting node must ship.
   if (postsWithBlogPosting === 0) {
     fail('no page emits a BlogPosting JSON-LD node (blog structured data regressed)');
+  }
+
+  // The WebSite node (with its search action) is emitted by the shared layout,
+  // so every indexable page must carry it.
+  if (pagesWithWebSite !== indexablePages) {
+    fail(`WebSite JSON-LD missing on ${indexablePages - pagesWithWebSite} of ${indexablePages} page(s)`);
   }
 
   console.log('SEO / structured-data contract (dist/)\n');

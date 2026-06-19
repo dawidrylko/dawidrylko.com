@@ -1,4 +1,36 @@
 User-agent: *
 Allow: /
 
+# AI / LLM crawlers are explicitly welcome (same open posture as above; listed
+# so the intent is unambiguous to operators that look for a named user-agent).
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
 Sitemap: https://dawidrylko.com/sitemap-index.xml

@@ -61,7 +61,7 @@ Potrzebne przy modyfikacji `[...slug].astro`, `content.config.ts`, RSS (`rss.xml
 
 - Post to katalog `content/pl/YYYY-MM-DD--slug-po-polsku/index.mdx` (część katalogów ma też strony wtórne, np. `.../ng-help.md`).
 - Slug URL powstaje w `content.config.ts` (`generateId`: usunięcie rozszerzenia, `/index`, oraz prefiksu daty `replace(/.*--/, '')`): `2025-12-26--od-tablicy-do-mapy` → `/od-tablicy-do-mapy/`. **URL-e muszą zostać zachowane** (SEO) — pilnuje tego `helpers/ci/check-astro-url-parity.mjs`.
-- Frontmatter: `title`, `description`, `date`, `tags`, opcjonalnie `featuredImg` + `featuredImgAlt` (gdy jest `featuredImg`, `featuredImgAlt` jest wymagany — reguła w schemacie zod).
+- Frontmatter: `title`, `description`, `date`, `tags`, opcjonalnie `updatedDate` (mapuje się na `dateModified` / `article:modified_time`), `featuredImg` + `featuredImgAlt` (gdy jest `featuredImg`, `featuredImgAlt` jest wymagany — reguła w schemacie zod).
 - Renderowanie MDX: **Shiki** (kod, motyw jasny/ciemny), **KaTeX** (matematyka, `remark-math` + `rehype-katex`), **Mermaid** (diagram jako wyspa React `client:*`).
 
 ## Konwencje kodu

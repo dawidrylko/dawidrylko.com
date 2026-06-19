@@ -1,0 +1,13 @@
+/* TEAM */
+Software Engineer: Dawid Ryłko
+Contact: hello [at] dawid.dev
+GitHub: @dawidrylko
+LinkedIn: in/dawidrylko
+Location: Poland
+
+/* SITE */
+Last update: 2026
+Language: English (chrome), Polish (blog)
+Standards: HTML5, CSS3, JSON-LD
+Components: Astro, React, TypeScript, MDX
+Hosting: GitHub Pages

@@ -30,22 +30,43 @@ export async function getStaticPaths() {
 
 const { post, previous, next } = Astro.props;
 const { Content } = await render(post);
-const { title, description, date, tags, featuredImg, featuredImgAlt } = post.data;
+const { title, description, date, updatedDate, tags, featuredImg, featuredImgAlt } = post.data;
 
 const dateFormatted = formatPolishDate(date);
 const { person } = STRUCTURED_DATA;
 
+const publishedTime = toISODate(date);
+const modifiedTime = updatedDate ? toISODate(updatedDate) : undefined;
+
 // Open Graph wants a bounded image, not the raw (often multi-thousand-px) source.
 const ogImage = featuredImg ? (await getImage({ src: featuredImg, width: 1200, format: 'webp' })).src : undefined;
+// Preserve the source aspect ratio so OG image dimensions are accurate.
+const ogImageWidth = featuredImg ? 1200 : undefined;
+const ogImageHeight = featuredImg ? Math.round((1200 * featuredImg.height) / featuredImg.width) : undefined;
+
+// Approximate word count from the raw Markdown body (strips fenced code first).
+const wordCount = post.body
+  ? post.body
+      .replace(/```[\s\S]*?```/g, ' ')
+      .trim()
+      .split(/\s+/)
+      .filter(Boolean).length
+  : undefined;
 
 const structuredData = {
   '@context': 'https://schema.org',
   '@type': 'BlogPosting',
   headline: title,
   description: description || '',
-  datePublished: toISODate(date),
+  datePublished: publishedTime,
+  dateModified: modifiedTime ?? publishedTime,
   author: person,
+  publisher: { '@id': `${SITE_METADATA.url}/#person` },
   inLanguage: 'pl',
+  keywords: tags.join(', '),
+  articleSection: tags[0],
+  ...(wordCount ? { wordCount } : {}),
+  isPartOf: { '@type': 'Blog', '@id': `${SITE_METADATA.url}/blog/#blog`, name: 'Blog' },
   image: featuredImg ? { '@type': 'ImageObject', url: ogImage, description: featuredImgAlt || '' } : undefined,
   mainEntityOfPage: {
     '@type': 'WebPage',
@@ -60,7 +81,13 @@ const structuredData = {
   title={title}
   description={description || ''}
   image={ogImage}
+  imageAlt={featuredImgAlt}
+  imageWidth={ogImageWidth}
+  imageHeight={ogImageHeight}
   article
+  publishedTime={publishedTime}
+  modifiedTime={modifiedTime}
+  tags={tags}
   lang="pl"
 >
   <JsonLd data={structuredData} />
