@@ -12,6 +12,9 @@
  *   - blog-list thumbnails render at a bounded (600px) size, not full-res
  *   - post-body list markers stay outside (not dropped onto their own line)
  *   - breadcrumbs truncate on one line (no horizontal-scroll fallback)
+ *   - the /files/ page lists presentations (static/files is read from disk)
+ *   - the /files/ cmd/ctrl+shift+. hidden-variant toggle ships and is wired up
+ *   - the /setup/ Mermaid diagram cannot push page-level horizontal scroll
  *
  * Exits non-zero listing every contract that fails.
  */
@@ -118,6 +121,53 @@ async function checkDemoHydration() {
   }
 }
 
+async function checkFilesPage() {
+  if (!(await exists('files/index.html'))) {
+    fail('cannot check files page: files/index.html missing');
+    return;
+  }
+  const html = await read('files/index.html');
+  // The page reads static/files from disk at build time. A wrong base path
+  // (the old Gatsby '../static/files') resolves outside the repo and renders an
+  // empty table — assert at least one real download link made it into the page.
+  if (!/href="\/files\/[^"]+"/.test(html)) {
+    fail('files page lists no downloadable files (static/files not read — check the base path)');
+  }
+  if (!/download="/.test(html)) {
+    fail('files page has no download links (presentation rows did not render)');
+  }
+}
+
+async function checkFilesHiddenToggle() {
+  if (!(await exists('files/index.html'))) {
+    fail('cannot check files toggle: files/index.html missing');
+    return;
+  }
+  const html = await read('files/index.html');
+  // Hidden Keynote/PowerPoint variants must be in the DOM (CSS-hidden), and the
+  // cmd/ctrl+shift+. keyboard handler must ship inline to reveal them.
+  if (!/is-hidden-variant/.test(html)) {
+    fail('files page is missing hidden Keynote/PowerPoint variants (cmd+shift+. has nothing to reveal)');
+  }
+  if (!/show-hidden-variants/.test(html) || !/shiftKey/.test(html) || !/metaKey/.test(html)) {
+    fail('files page cmd/ctrl+shift+. toggle script did not ship inline');
+  }
+}
+
+async function checkMermaidOverflow(css) {
+  // The Mermaid SVG is a flex child; without min-width: 0 (and an overflow
+  // guard on the container) a wide diagram overruns max-width: 100% and pushes
+  // page-level horizontal scroll on phones (the /setup/ regression).
+  const container = css.match(/\.mermaid-diagram\{([^}]*)\}/);
+  const svg = css.match(/\.mermaid-diagram svg\{([^}]*)\}/);
+  if (!container || !/overflow-x:\s*auto/.test(container[1])) {
+    fail('.mermaid-diagram is missing overflow-x: auto (diagram can push page horizontal scroll)');
+  }
+  if (!svg || !/min-width:\s*0/.test(svg[1])) {
+    fail('.mermaid-diagram svg is missing min-width: 0 (flex child can overrun max-width on mobile)');
+  }
+}
+
 async function checkBlogThumbnail() {
   if (!(await exists('blog/index.html'))) {
     fail('cannot check blog thumbnails: blog/index.html missing');
@@ -145,8 +195,11 @@ async function main() {
   await checkListMarkers(css);
   await checkBreadcrumbs(css);
   await checkSetupMermaid();
+  await checkMermaidOverflow(css);
   await checkDemoHydration();
   await checkBlogThumbnail();
+  await checkFilesPage();
+  await checkFilesHiddenToggle();
 
   console.log('Astro build-output regression contract (dist/)\n');
   if (problems.length > 0) {
@@ -154,7 +207,9 @@ async function main() {
     console.error(`\nRegression contract failed: ${problems.length} problem(s).`);
     process.exit(1);
   }
-  console.log('  ✓ code dark theme, Mermaid + demo hydration, thumbnails, list markers, breadcrumbs.');
+  console.log(
+    '  ✓ code dark theme, Mermaid hydration + overflow, demo hydration, thumbnails, list markers, breadcrumbs, files listing + toggle.',
+  );
 }
 
 main().catch(err => {
