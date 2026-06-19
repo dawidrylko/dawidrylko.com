@@ -1,10 +1,13 @@
 ---
 import PageLayout from '../layouts/PageLayout.astro';
 import JsonLd from '../components/JsonLd.astro';
+import ExternalLink from '../components/ExternalLink.astro';
 import { SITE_METADATA } from '../data/site-metadata';
 import { STRUCTURED_DATA } from '../data/structured-data';
+import { createPageSchema } from '../lib/page-metadata';
+import type { PageMetadata } from '../types';
 
-const PAGE_METADATA = {
+const PAGE_METADATA: PageMetadata = {
   title: 'Contact',
   description:
     'Get in touch with Dawid Ryłko for software engineering projects, system architecture consulting, and technology collaboration. Available for scalable, secure, and future-proof solutions across the full technology stack—from frontend to backend, cloud infrastructure, AI integration, and cybersecurity.',
@@ -24,16 +27,12 @@ const author = SITE_METADATA.author;
 const social = SITE_METADATA.social;
 const { person } = STRUCTURED_DATA;
 
-const structuredData = {
-  '@context': 'https://schema.org',
-  '@type': 'WebPage',
-  name: PAGE_METADATA.title,
-  headline: PAGE_METADATA.title,
+const structuredData = createPageSchema({
+  title: PAGE_METADATA.title,
   description: PAGE_METADATA.description,
-  keywords: PAGE_METADATA.keywords.join(', '),
-  author: person,
-  mainEntity: person,
-};
+  keywords: PAGE_METADATA.keywords,
+  extra: { mainEntity: person },
+});
 ---
 
 <PageLayout breadcrumbTitle={PAGE_METADATA.title} title={PAGE_METADATA.title} description={PAGE_METADATA.description}>
@@ -77,14 +76,9 @@ const structuredData = {
           .filter(({ name }) => ['GitHub', 'Twitter', 'Linkedin'].includes(name))
           .map(({ name, url, follow }) => (
             <li>
-              <a
-                href={url}
-                target="_blank"
-                rel={follow ? 'noopener noreferrer' : 'noopener noreferrer nofollow'}
-                title={`Find Dawid Ryłko on ${name}`}
-              >
+              <ExternalLink href={url} follow={follow} title={`Find Dawid Ryłko on ${name}`}>
                 {name}
-              </a>
+              </ExternalLink>
             </li>
           ))
       }

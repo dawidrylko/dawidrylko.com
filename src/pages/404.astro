@@ -1,10 +1,12 @@
 ---
-import { Picture } from 'astro:assets';
 import PageLayout from '../layouts/PageLayout.astro';
 import JsonLd from '../components/JsonLd.astro';
+import Figure from '../components/Figure.astro';
 import hotDog from '../assets/hot-dog.jpg';
+import { createPageSchema } from '../lib/page-metadata';
+import type { PageMetadata } from '../types';
 
-const PAGE_METADATA = {
+const PAGE_METADATA: PageMetadata = {
   title: 'Page Not Found',
   description: 'The page you are looking for does not exist. Maybe it went out for a hot dog... 🌭',
 };
@@ -14,18 +16,18 @@ const hotDogImage = {
   caption: 'Photo by Dawid Ryłko, taken on September 8, 2017, in Crete, Greece.',
 };
 
-const structuredData = {
-  '@context': 'https://schema.org',
-  '@type': 'WebPage',
-  name: PAGE_METADATA.title,
-  headline: PAGE_METADATA.title,
+const structuredData = createPageSchema({
+  title: PAGE_METADATA.title,
   description: PAGE_METADATA.description,
-  mainEntity: {
-    '@type': 'CreativeWork',
-    name: '404 Error',
-    description: PAGE_METADATA.description,
+  withAuthor: false,
+  extra: {
+    mainEntity: {
+      '@type': 'CreativeWork',
+      name: '404 Error',
+      description: PAGE_METADATA.description,
+    },
   },
-};
+});
 ---
 
 <PageLayout
@@ -40,9 +42,6 @@ const structuredData = {
   </header>
   <section id="hot-dog" aria-label="Page not found message with hot dog image">
     <p>{PAGE_METADATA.description}</p>
-    <figure style="margin: 0;">
-      <Picture src={hotDog} formats={['avif', 'webp']} layout="full-width" alt={hotDogImage.alt} />
-      <figcaption>{hotDogImage.caption}</figcaption>
-    </figure>
+    <Figure src={hotDog} alt={hotDogImage.alt} caption={hotDogImage.caption} />
   </section>
 </PageLayout>

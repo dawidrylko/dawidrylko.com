@@ -2,6 +2,7 @@ import { getImage } from 'astro:assets';
 import { getBlogPosts } from '../../lib/blog';
 import { excerpt } from '../../lib/excerpt';
 import { inlineMarkdown } from '../../lib/inline-markdown';
+import { formatPolishDate } from '../../lib/date';
 
 // Static search index consumed by the client-side blog search. Covers every
 // listed post so search spans the whole archive, not just the current page.
@@ -27,7 +28,7 @@ export async function GET() {
         description: plainDescription,
         descriptionHtml: inlineMarkdown(plainDescription),
         tags,
-        dateFormatted: date.toLocaleDateString('pl-PL', { year: 'numeric', month: 'long', day: '2-digit' }),
+        dateFormatted: formatPolishDate(date),
         url: `/${post.id}/`,
         ...(img ? { img } : {}),
       };

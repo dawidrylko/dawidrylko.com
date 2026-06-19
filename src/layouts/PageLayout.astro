@@ -10,12 +10,13 @@ import Breadcrumbs from '../components/Breadcrumbs.astro';
 import Bio from '../components/Bio.astro';
 import { SITE_METADATA } from '../data/site-metadata';
 import { GTAG } from '../data/gtag';
+import type { NavLink } from '../types';
 
 // Port of src/components/layout.tsx — the chrome shared by every page (header
 // with menu, main content, breadcrumbs, bio, footer) plus the document <head>.
 interface Props {
   breadcrumbTitle: string;
-  breadcrumbParents?: { name: string; url: string }[];
+  breadcrumbParents?: NavLink[];
   title?: string;
   description?: string;
   image?: string;

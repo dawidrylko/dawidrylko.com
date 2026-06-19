@@ -1,6 +1,7 @@
 ---
 import { SITE_METADATA } from '../data/site-metadata';
 import JsonLd from './JsonLd.astro';
+import type { NavLink } from '../types';
 
 // Port of src/components/breadcrumbs.tsx. Builds the trail from the current
 // pathname, mapping known menu segments to their labels and using the page's
@@ -10,7 +11,7 @@ interface Props {
   // Extra ancestor crumbs inserted between Home and the path-derived trail.
   // Used e.g. by blog posts (URL is /slug/, but the trail should read
   // Home › Blog › Post) without changing the post URL.
-  parents?: { name: string; url: string }[];
+  parents?: NavLink[];
 }
 
 const { customTitle, parents = [] } = Astro.props;

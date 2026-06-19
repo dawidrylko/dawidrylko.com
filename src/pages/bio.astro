@@ -1,13 +1,16 @@
 ---
-import { Picture } from 'astro:assets';
 import PageLayout from '../layouts/PageLayout.astro';
 import JsonLd from '../components/JsonLd.astro';
 import Table from '../components/Table.astro';
+import Figure from '../components/Figure.astro';
+import ExternalLink from '../components/ExternalLink.astro';
 import motto from '../assets/motto.jpg';
 import { SITE_METADATA } from '../data/site-metadata';
 import { STRUCTURED_DATA } from '../data/structured-data';
+import { createPageSchema } from '../lib/page-metadata';
+import type { PageMetadata } from '../types';
 
-const PAGE_METADATA = {
+const PAGE_METADATA: PageMetadata = {
   title: 'About',
   description:
     'Meet Dawid Ryłko—a Software Engineer with 10+ years of experience building scalable, secure, and resilient systems. Learn about his professional journey, technical expertise in full-stack development, AI integration, cybersecurity, educational background, and philosophy behind creating meaningful technology.',
@@ -67,40 +70,38 @@ const image = {
 
 const { person } = STRUCTURED_DATA;
 
-const structuredData = {
-  '@context': 'https://schema.org',
-  '@type': 'WebPage',
-  name: PAGE_METADATA.title,
-  headline: PAGE_METADATA.title,
+const structuredData = createPageSchema({
+  title: PAGE_METADATA.title,
   description: PAGE_METADATA.description,
-  author: person,
-  keywords: PAGE_METADATA.keywords.join(', '),
-  about: {
-    '@type': 'CreativeWork',
-    name: 'Favourite Quote',
-    description: 'Philosophical quotes that inspire approach to technology and software craftsmanship',
-    citation: citations.map(({ authorName, citation, text }) => ({
-      '@type': 'Quotation',
-      text,
-      author: { '@type': 'Person', name: authorName },
-      citation,
-    })),
+  keywords: PAGE_METADATA.keywords,
+  extra: {
+    about: {
+      '@type': 'CreativeWork',
+      name: 'Favourite Quote',
+      description: 'Philosophical quotes that inspire approach to technology and software craftsmanship',
+      citation: citations.map(({ authorName, citation, text }) => ({
+        '@type': 'Quotation',
+        text,
+        author: { '@type': 'Person', name: authorName },
+        citation,
+      })),
+    },
+    mainEntity: {
+      ...person,
+      worksFor: experience.map(([company, , , url]) => ({ '@type': 'Organization', name: company, url: url || '' })),
+      alumniOf: education.map(([institution]) => ({ '@type': 'EducationalOrganization', name: institution })),
+    },
+    potentialAction: {
+      '@type': 'Action',
+      name: 'Download My Full CV',
+      description: 'Download a detailed overview of Dawid Ryłko’s experience and skills in PDF format.',
+      target: [
+        { '@type': 'EntryPoint', urlTemplate: '/resume-en.pdf', actionPlatform: 'https://schema.org/DownloadAction' },
+        { '@type': 'EntryPoint', urlTemplate: '/resume-pl.pdf', actionPlatform: 'https://schema.org/DownloadAction' },
+      ],
+    },
   },
-  mainEntity: {
-    ...person,
-    worksFor: experience.map(([company, , , url]) => ({ '@type': 'Organization', name: company, url: url || '' })),
-    alumniOf: education.map(([institution]) => ({ '@type': 'EducationalOrganization', name: institution })),
-  },
-  potentialAction: {
-    '@type': 'Action',
-    name: 'Download My Full CV',
-    description: 'Download a detailed overview of Dawid Ryłko’s experience and skills in PDF format.',
-    target: [
-      { '@type': 'EntryPoint', urlTemplate: '/resume-en.pdf', actionPlatform: 'https://schema.org/DownloadAction' },
-      { '@type': 'EntryPoint', urlTemplate: '/resume-pl.pdf', actionPlatform: 'https://schema.org/DownloadAction' },
-    ],
-  },
-};
+});
 ---
 
 <PageLayout breadcrumbTitle={PAGE_METADATA.title} title={PAGE_METADATA.title} description={PAGE_METADATA.description}>
@@ -114,15 +115,14 @@ const structuredData = {
       <strong>scalable, secure, and resilient systems</strong>. With{' '}
       <time>over 10 years of professional experience</time> in the <strong>technology industry</strong>, I specialise in
       designing and delivering{' '}
-      <a href="https://silesiansolutions.com/" target="_blank" rel="noopener noreferrer"
-        ><strong>end-to-end digital solutions</strong></a
+      <ExternalLink href="https://silesiansolutions.com/" follow
+        ><strong>end-to-end digital solutions</strong></ExternalLink
       >. From intuitive <strong>frontend experiences</strong> and high-performance <strong>backend systems</strong> to{
         ' '
       }
       <strong>infrastructure automation</strong>, <strong>AI-driven innovation</strong>, and{' '}
-      <a href="https://cyberkatalog.pl/" target="_blank" rel="noopener noreferrer nofollow"
-        ><strong>cybersecurity</strong></a
-      >, I build technology with purpose.
+      <ExternalLink href="https://cyberkatalog.pl/"><strong>cybersecurity</strong></ExternalLink>, I build technology
+      with purpose.
     </p>
     <p>
       My mission is to create <strong>technology that truly matters</strong> - solutions that are <strong
@@ -136,13 +136,13 @@ const structuredData = {
     </p>
     <p>
       You can explore my open-source work on{' '}
-      <a href="https://github.com/dawidrylko" target="_blank" rel="noopener noreferrer nofollow">GitHub</a>, share ideas
-      with me on <a href="https://twitter.com/dawidrylko" target="_blank" rel="noopener noreferrer nofollow">Twitter</a
-      >, or connect professionally on{' '}
-      <a href="https://www.linkedin.com/in/dawidrylko" target="_blank" rel="noopener noreferrer nofollow">LinkedIn</a>.
-      Visit my personal site at{' '}
-      <a href="https://dawid.dev" target="_blank" rel="noopener noreferrer">dawid.dev</a> to see experiments, articles, and
-      insights on technology and software craftsmanship.
+      <ExternalLink href="https://github.com/dawidrylko">GitHub</ExternalLink>, share ideas with me on{' '}
+      <ExternalLink href="https://twitter.com/dawidrylko">Twitter</ExternalLink>, or connect professionally on{' '}
+      <ExternalLink href="https://www.linkedin.com/in/dawidrylko">LinkedIn</ExternalLink>. Visit my personal site at{
+        ' '
+      }
+      <ExternalLink href="https://dawid.dev" follow>dawid.dev</ExternalLink> to see experiments, articles, and insights on
+      technology and software craftsmanship.
     </p>
   </section>
   <section id="philosophy">
@@ -172,10 +172,7 @@ const structuredData = {
       ))
     }
   </section>
-  <figure style="margin: 0;">
-    <Picture src={motto} formats={['avif', 'webp']} layout="full-width" alt={image.alt} />
-    <figcaption>{image.figcaption}</figcaption>
-  </figure>
+  <Figure src={motto} alt={image.alt} caption={image.figcaption} />
   <section id="experience">
     <h2>Experience</h2>
     <Table

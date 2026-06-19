@@ -4,6 +4,7 @@ import avatar from '../assets/avatar.jpeg';
 import { SITE_METADATA } from '../data/site-metadata';
 import { STRUCTURED_DATA } from '../data/structured-data';
 import JsonLd from './JsonLd.astro';
+import ExternalLink from './ExternalLink.astro';
 
 // Port of src/components/bio.tsx (author card + Person JSON-LD).
 const author = SITE_METADATA.author;
@@ -24,9 +25,9 @@ const { person } = STRUCTURED_DATA;
       {
         social.map(({ name, url, follow }) => (
           <li>
-            <a href={url} target="_blank" rel={follow ? 'noopener noreferrer' : 'noopener noreferrer nofollow'}>
+            <ExternalLink href={url} follow={follow}>
               {name}
-            </a>
+            </ExternalLink>
           </li>
         ))
       }

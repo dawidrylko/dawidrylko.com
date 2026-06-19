@@ -10,6 +10,7 @@ import { STRUCTURED_DATA } from '../../data/structured-data';
 import { excerpt } from '../../lib/excerpt';
 import { inlineMarkdown } from '../../lib/inline-markdown';
 import { getBlogPosts, POSTS_PER_PAGE } from '../../lib/blog';
+import { formatPolishDate, toISODate } from '../../lib/date';
 
 const PAGE_METADATA = {
   title: 'Blog 🇵🇱',
@@ -48,7 +49,7 @@ const { person } = STRUCTURED_DATA;
 const items = page.data.map(post => {
   const description = post.data.description || excerpt(post.body ?? '');
   const descriptionHtml = inlineMarkdown(description);
-  const dateFormatted = post.data.date.toLocaleDateString('pl-PL', { year: 'numeric', month: 'long', day: '2-digit' });
+  const dateFormatted = formatPolishDate(post.data.date);
   return { post, description, descriptionHtml, dateFormatted };
 });
 
@@ -71,7 +72,7 @@ const structuredData = {
     '@type': 'BlogPosting',
     headline: post.data.title,
     description,
-    datePublished: post.data.date.toISOString(),
+    datePublished: toISODate(post.data.date),
     author: { '@type': 'Person', name: author.name },
     image: post.data.featuredImg
       ? { '@type': 'ImageObject', url: post.data.featuredImg.src, description: post.data.featuredImgAlt || '' }

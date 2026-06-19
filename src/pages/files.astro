@@ -3,7 +3,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import PageLayout from '../layouts/PageLayout.astro';
 import JsonLd from '../components/JsonLd.astro';
-import { STRUCTURED_DATA } from '../data/structured-data';
+import { createPageSchema } from '../lib/page-metadata';
+import type { PageMetadata } from '../types';
 
 // Replaces Gatsby's custom `StaticFile` sourceNodes: read the same static/files
 // tree from disk at build time. publicDir ('../static') serves these at /files.
@@ -140,7 +141,7 @@ const rows = sortedEntries
   })
   .filter((row): row is NonNullable<typeof row> => row !== null);
 
-const PAGE_METADATA = {
+const PAGE_METADATA: PageMetadata = {
   title: 'Files',
   description:
     'Browse and download technical presentations, slides, and educational materials by Dawid Ryłko. Access professionally crafted resources covering software development, Node.js, TypeScript, and modern web technologies—available in multiple formats and languages.',
@@ -156,35 +157,33 @@ const PAGE_METADATA = {
   ],
 };
 
-const { person } = STRUCTURED_DATA;
-const structuredData = {
-  '@context': 'https://schema.org',
-  '@type': 'CollectionPage',
-  name: PAGE_METADATA.title,
-  headline: PAGE_METADATA.title,
+const structuredData = createPageSchema({
+  type: 'CollectionPage',
+  title: PAGE_METADATA.title,
   description: PAGE_METADATA.description,
-  author: person,
-  keywords: PAGE_METADATA.keywords.join(', '),
-  about: [
-    {
-      '@type': 'Thing',
-      name: 'Technical Presentations',
-      description:
-        'Educational materials and technical presentations covering software development, programming languages, and web technologies.',
+  keywords: PAGE_METADATA.keywords,
+  extra: {
+    about: [
+      {
+        '@type': 'Thing',
+        name: 'Technical Presentations',
+        description:
+          'Educational materials and technical presentations covering software development, programming languages, and web technologies.',
+      },
+      {
+        '@type': 'Thing',
+        name: 'Educational Resources',
+        description: 'Professional learning materials for developers and technology enthusiasts.',
+      },
+    ],
+    mainEntity: {
+      '@type': 'ItemList',
+      name: 'Presentation Files',
+      description: 'Collection of downloadable technical presentations and educational materials',
+      numberOfItems: grouped.size,
     },
-    {
-      '@type': 'Thing',
-      name: 'Educational Resources',
-      description: 'Professional learning materials for developers and technology enthusiasts.',
-    },
-  ],
-  mainEntity: {
-    '@type': 'ItemList',
-    name: 'Presentation Files',
-    description: 'Collection of downloadable technical presentations and educational materials',
-    numberOfItems: grouped.size,
   },
-};
+});
 ---
 
 <PageLayout breadcrumbTitle={PAGE_METADATA.title} title={PAGE_METADATA.title} description={PAGE_METADATA.description}>
