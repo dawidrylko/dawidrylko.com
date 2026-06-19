@@ -1,0 +1,114 @@
+---
+import { getCollection } from 'astro:content';
+import { Image, Picture } from 'astro:assets';
+import PageLayout from '../layouts/PageLayout.astro';
+import JsonLd from '../components/JsonLd.astro';
+import rssIcon from '../assets/rss.svg';
+import { SITE_METADATA } from '../data/site-metadata';
+import { STRUCTURED_DATA } from '../data/structured-data';
+import { excerpt } from '../lib/excerpt';
+
+const PAGE_METADATA = {
+  title: 'Blog 🇵🇱',
+  description:
+    'Artykuły i wpisy na blogu Dawida Ryłko o programowaniu, technologiach, architekturze systemów i rozwoju oprogramowania. Praktyczne porady, spostrzeżenia ze świata IT i nowoczesne podejście do tworzenia aplikacji webowych.',
+  keywords: [
+    'blog programistyczny',
+    'artykuły IT',
+    'rozwój oprogramowania',
+    'architektura systemów',
+    'JavaScript',
+    'TypeScript',
+    'Node.js',
+    'frontend development',
+    'backend development',
+  ],
+};
+
+// Blog index only lists top-level posts (index.{md,mdx}); secondary pages such
+// as .../ng-help are routed but not listed, matching Gatsby's allMdx listing.
+const posts = (await getCollection('posts'))
+  .filter(post => !post.id.includes('/'))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+const author = SITE_METADATA.author;
+const { person } = STRUCTURED_DATA;
+
+const items = posts.map(post => {
+  const description = post.data.description || excerpt(post.body ?? '');
+  const dateFormatted = post.data.date.toLocaleDateString('pl-PL', { year: 'numeric', month: 'long', day: '2-digit' });
+  return { post, description, dateFormatted };
+});
+
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'Blog',
+  name: PAGE_METADATA.title,
+  headline: PAGE_METADATA.title,
+  description: PAGE_METADATA.description,
+  keywords: PAGE_METADATA.keywords.join(', '),
+  author: person,
+  inLanguage: 'pl',
+  blogPost: items.map(({ post, description }) => ({
+    '@type': 'BlogPosting',
+    headline: post.data.title,
+    description,
+    datePublished: post.data.date.toISOString(),
+    author: { '@type': 'Person', name: author.name },
+    image: post.data.featuredImg
+      ? { '@type': 'ImageObject', url: post.data.featuredImg.src, description: post.data.featuredImgAlt || '' }
+      : undefined,
+    url: `${SITE_METADATA.url}/${post.id}/`,
+  })),
+};
+---
+
+<PageLayout
+  breadcrumbTitle={PAGE_METADATA.title}
+  title={PAGE_METADATA.title}
+  description={PAGE_METADATA.description}
+  lang="pl"
+>
+  <JsonLd data={structuredData} />
+  <header>
+    <h1>{PAGE_METADATA.title}</h1>
+  </header>
+  <div class="rss">
+    <Image src={rssIcon} alt="Ikona RSS" width={20} height={20} layout="fixed" />
+    <a href="/rss.xml" type="application/rss+xml">Subskrybuj kanał RSS</a>
+  </div>
+  <ol class="posts">
+    {
+      items.map(({ post, description, dateFormatted }) => (
+        <li>
+          <article class="post-list-item">
+            <header>
+              <h2>
+                <a href={`/${post.id}/`}>{post.data.title}</a>
+              </h2>
+              <small>
+                <span>{dateFormatted}</span>
+                &nbsp;|&nbsp;
+                <span>
+                  <a href="/bio/">{author.name}</a>
+                </span>
+              </small>
+            </header>
+            <section>
+              {post.data.featuredImg && (
+                <Picture
+                  src={post.data.featuredImg}
+                  formats={['avif', 'webp']}
+                  width={150}
+                  densities={[1, 2]}
+                  alt={post.data.featuredImgAlt || ''}
+                />
+              )}
+              <p>{description}</p>
+            </section>
+          </article>
+        </li>
+      ))
+    }
+  </ol>
+</PageLayout>

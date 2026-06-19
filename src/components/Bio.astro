@@ -1,0 +1,35 @@
+---
+import { Image } from 'astro:assets';
+import avatar from '../assets/avatar.jpeg';
+import { SITE_METADATA } from '../data/site-metadata';
+import { STRUCTURED_DATA } from '../data/structured-data';
+import JsonLd from './JsonLd.astro';
+
+// Port of src/components/bio.tsx (author card + Person JSON-LD).
+const author = SITE_METADATA.author;
+const social = SITE_METADATA.social;
+const { person } = STRUCTURED_DATA;
+---
+
+<div class="bio">
+  <JsonLd data={person} />
+  <Image class="avatar" src={avatar} width={60} height={60} layout="fixed" alt="Profile picture" />
+  <div>
+    <p class="name">{author.name}</p>
+    <p class="job-title">{author.jobTitle}</p>
+    <ul>
+      <li>
+        <a href={`mailto:${author.email}`}>Email</a>
+      </li>
+      {
+        social.map(({ name, url, follow }) => (
+          <li>
+            <a href={url} target="_blank" rel={follow ? 'noopener noreferrer' : 'noopener noreferrer nofollow'}>
+              {name}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</div>

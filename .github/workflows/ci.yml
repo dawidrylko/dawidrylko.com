@@ -47,8 +47,7 @@ jobs:
         run: pnpm run ${{ matrix.check }}
 
   # Design-token contrast (WCAG AA) for both light and dark themes. Pure static
-  # palette check — zero deps, no build — so it stays independent of the
-  # rendered-page audit in the lighthouse job.
+  # palette check — zero deps, no build — independent of the lighthouse audit.
   contrast:
     name: Contrast (WCAG AA)
     runs-on: ubuntu-latest
@@ -78,9 +77,9 @@ jobs:
         with:
           fail-on-severity: high
 
-  # Single production build. Owns "does it compile and build" (incl. the zod
-  # frontmatter validation in gatsby-node) and produces the artifact every
-  # downstream job reuses — so the build is never duplicated.
+  # Single production build (astro build, incl. the zod frontmatter validation
+  # in the content collection) producing the dist/ artifact every downstream
+  # job reuses — so the build is never duplicated.
   build:
     name: Build
     runs-on: ubuntu-latest
@@ -108,12 +107,13 @@ jobs:
       - name: Upload build output
         uses: actions/upload-artifact@v4
         with:
-          name: public
-          path: public
+          name: dist
+          path: dist
           retention-days: 1
 
-  # The build-output contract: required artifacts (RSS, sitemap, manifest, core
-  # pages) and social-share meta exist and are well-formed.
+  # Build-output contracts on dist/: required distribution artifacts (RSS,
+  # sitemap, manifest, core pages, social meta), URL parity with content/pl,
+  # and the rendering-regression contract from the migration QA.
   build-contract:
     name: Build-output contract
     runs-on: ubuntu-latest
@@ -130,11 +130,17 @@ jobs:
       - name: Download build output
         uses: actions/download-artifact@v4
         with:
-          name: public
-          path: public
+          name: dist
+          path: dist
 
-      - name: Verify build-output contract
+      - name: Verify distribution contract
         run: node helpers/ci/check-build-output.mjs
+
+      - name: Verify URL parity with content/pl
+        run: node helpers/ci/check-astro-url-parity.mjs
+
+      - name: Verify rendering-regression contract
+        run: node helpers/ci/check-astro-build-output.mjs
 
   # Internal link integrity across the built site (catches broken links and
   # broken redirects). External URLs are skipped to keep the gate deterministic.
@@ -159,11 +165,11 @@ jobs:
       - name: Download build output
         uses: actions/download-artifact@v4
         with:
-          name: public
-          path: public
+          name: dist
+          path: dist
 
       - name: Check internal links
-        run: pnpm dlx linkinator@6.1.2 public --recurse --skip "^https?://(?!localhost)"
+        run: pnpm dlx linkinator@6.1.2 dist --recurse --skip "^https?://(?!localhost)"
 
   # Rendered-page audit (Lighthouse) of the app-owned pages: accessibility and
   # SEO are gated; performance and best-practices are advisory. ubuntu-latest
@@ -189,12 +195,12 @@ jobs:
       - name: Download build output
         uses: actions/download-artifact@v4
         with:
-          name: public
-          path: public
+          name: dist
+          path: dist
 
       - name: Serve build output
         run: |
-          pnpm dlx http-server@14.1.1 public -p 9000 -s &
+          pnpm dlx http-server@14.1.1 dist -p 9000 -s &
           npx --yes wait-on@8.0.1 http://localhost:9000/ --timeout 30000
 
       - name: Run Lighthouse CI

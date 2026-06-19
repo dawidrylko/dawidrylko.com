@@ -1,0 +1,97 @@
+---
+import { SITE_METADATA } from '../data/site-metadata';
+import JsonLd from './JsonLd.astro';
+
+// Port of src/components/breadcrumbs.tsx. Builds the trail from the current
+// pathname, mapping known menu segments to their labels and using the page's
+// custom title for the active (last) crumb.
+interface Props {
+  customTitle: string;
+}
+
+const { customTitle } = Astro.props;
+const siteUrl = `${SITE_METADATA.url}/`;
+const menu = SITE_METADATA.menu;
+const pathname = Astro.url.pathname;
+
+type Crumb = { name: string; title: string; url: string; isActive: boolean };
+
+function buildCrumbs(): Crumb[] {
+  const segments = pathname.split('/').filter(Boolean);
+  const crumbs: Crumb[] = [{ name: '🏠', title: 'Home', url: '/', isActive: pathname === '/' }];
+
+  if (pathname === '/') {
+    return crumbs;
+  }
+
+  const pathMap = menu.reduce<Record<string, string>>((acc, item) => {
+    acc[item.url.replace('/', '')] = item.name;
+    return acc;
+  }, {});
+
+  let currentPath = '';
+  segments.forEach((segment, index) => {
+    currentPath += '/' + segment;
+    // Trailing slash keeps crumb hrefs canonical under trailingSlash: 'always',
+    // so relative links inside nested pages resolve correctly.
+    const url = `${currentPath}/`;
+    const isLast = index === segments.length - 1;
+    if (isLast) {
+      crumbs.push({ name: customTitle, title: customTitle, url, isActive: true });
+    } else {
+      const name = pathMap[segment] || segment.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+      crumbs.push({ name, title: name, url, isActive: false });
+    }
+  });
+
+  return crumbs;
+}
+
+const crumbs = buildCrumbs();
+const show = crumbs.length > 1;
+
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  name: 'Breadcrumb Navigation',
+  description: 'Navigation path showing current location within the website hierarchy',
+  numberOfItems: crumbs.length,
+  itemListElement: crumbs.map((item, index) => ({
+    '@type': 'ListItem',
+    position: index + 1,
+    name: item.name,
+    item: { '@type': 'WebPage', '@id': `${siteUrl}${item.url}`, name: item.title },
+  })),
+};
+---
+
+{
+  show && (
+    <>
+      <JsonLd data={structuredData} />
+      <hr />
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <ol>
+          {crumbs.map((item, index) => (
+            <li class={item.isActive ? 'active' : ''}>
+              {item.isActive ? (
+                <span aria-current="page" title={item.title}>
+                  {item.name}
+                </span>
+              ) : (
+                <a href={item.url} title={item.title}>
+                  {item.name}
+                </a>
+              )}
+              {index < crumbs.length - 1 && (
+                <span class="separator" aria-hidden="true">
+                  {' / '}
+                </span>
+              )}
+            </li>
+          ))}
+        </ol>
+      </nav>
+    </>
+  )
+}

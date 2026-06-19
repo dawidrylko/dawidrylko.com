@@ -1,0 +1,264 @@
+---
+import { Picture } from 'astro:assets';
+import PageLayout from '../layouts/PageLayout.astro';
+import JsonLd from '../components/JsonLd.astro';
+import Mermaid from '../components/Mermaid.tsx';
+import hardwareSetup from '../assets/hardware-setup.jpg';
+import { STRUCTURED_DATA } from '../data/structured-data';
+
+type SetupItem = [type: string, name: string, link?: string, details?: string];
+
+const desktopSetup: SetupItem[] = [
+  [
+    'Computer',
+    'Mac mini 2024, Apple M4, 16 GB RAM, 256 GB SSD, Gigabit Ethernet',
+    'https://www.ceneo.pl/175355357#crid=774126&pid=29997',
+  ],
+  ['Dock', 'RayCue ALL-in-One Charger Dock For Mac Mini M4'],
+  [
+    'Monitor',
+    'Iiyama G-Master GCB3481WQSU-B1, 34″, 3440×1440 (UWQHD), 180 Hz, USB hub',
+    'https://www.ceneo.pl/173264024#crid=774128&pid=29997',
+  ],
+  [
+    'KVM Switch',
+    'Ugreen DisplayPort 1.4 KVM Switch, 8K@60 Hz, 2×PC sharing (display, USB peripherals)',
+    'https://www.ceneo.pl/194580048#crid=801625&pid=29997',
+  ],
+  ['Hub', 'Ugreen USB-C Hub 7-in-1, DisplayPort 4K@60 Hz, USB-A 3.0, PD 100 W, SD ↔ microSD'],
+  ['Mouse', 'Logitech MX Master 3S', 'https://www.ceneo.pl/134359846#crid=774131&pid=29997', 'Graphite'],
+  ['Keyboard', 'NuPhy Air75 v1', undefined, 'Gateron G Pro Red switches'],
+  ['Microphone', 'Novox NC-1', 'https://www.ceneo.pl/51510215#crid=801624&pid=29997', 'USB-B, pop filter'],
+  ['Light Bar', 'Xiaomi Mi Computer Monitor Light Bar', 'https://www.ceneo.pl/103206620#crid=774129&pid=29997'],
+  ['Desk Frame', 'Silver Monkey EDF-180', 'https://www.ceneo.pl/174808545#crid=774135&pid=29997', 'White'],
+  ['Desktop', 'Oak Rustic Desktop', undefined, '100 × 60 × 3 cm'],
+];
+
+const additionalEquipment: SetupItem[] = [
+  ['NAS', 'Synology DiskStation DS423+', 'https://www.ceneo.pl/149801785#crid=774138&pid=29997'],
+  [
+    'Storage',
+    'WD Red Plus, 4 TB, HDD, SATA III, 5400 RPM',
+    'https://www.ceneo.pl/143972868#crid=774140&pid=29997',
+    'Data, 2 pcs',
+  ],
+  ['Storage', 'WD Red SN700, 500 GB, M.2 NVMe', 'https://www.ceneo.pl/119197771#crid=774139&pid=29997', 'Cache, 2 pcs'],
+  ['Printer', 'Brother HL-L2352DW'],
+];
+
+const guitarSetup: SetupItem[] = [
+  ['Guitar', 'Takamine GD51CE-NAT', 'https://www.ceneo.pl/26674392#crid=777442&pid=29997', 'Natural, high gloss'],
+  ['Case', 'Gator 6 & 12-String Dreadnought Case', undefined, 'Black'],
+  ['Amplifier', 'NUX AC-25', 'https://www.ceneo.pl/123440796#crid=777443&pid=29997', '280 × 218 × 220 mm'],
+  ['Cable', 'Fender Del. Cable Angle Plug 4,5m TN', 'https://www.ceneo.pl/85130757#crid=777445&pid=29997', '4.5 m'],
+  ['Strap', 'Minotaur Suede Guitar Strap Camel', undefined, 'Caramel, Length adjustable 105 - 150 cm'],
+  ['Capo', 'Shubb C1', 'https://www.ceneo.pl/119647588#crid=777444&pid=29997'],
+];
+
+const image = {
+  alt: `Home office workspace featuring a Computer: Mac mini 2024 (Apple M4, 16 GB RAM, 256 GB SSD) mounted in a RayCue ALL-in-One Charger Dock for Mac mini M4, connected to an Iiyama G-Master GCB3481WQSU-B1 34″ UWQHD 180 Hz Monitor with a Xiaomi Mi Computer Monitor Light Bar. On the desk are a NuPhy Air75 Keyboard with Gateron G Pro Red switches, a Logitech MX Master 3S Mouse (Graphite), and a Novox NC-1 USB microphone on a stand. The setup includes a Ugreen DP 1.4 KVM Switch, Ugreen USB-C to DisplayPort 1.4 cables, Thunderbolt 5 USB-C cables, and is placed on an Oak Rustic Desktop mounted on a Silver Monkey EDF-180 desk frame. Part of the workspace ecosystem includes a Synology DiskStation DS423+ NAS with WD Red Plus and WD Red SN700 storage, and a Brother HL-L2352DW printer.`,
+  figcaption: `Photo by Dawid Ryłko, taken on January 3, 2026.`,
+};
+
+const PAGE_METADATA = {
+  title: 'Setup',
+  description:
+    "Discover Dawid Ryłko's professional development workstation with segmented hardware stations and connection graph. Includes Mac mini M4 setup, ultrawide monitor, KVM switching, NAS storage and acoustic guitar equipment.",
+  keywords: [
+    'developer workstation',
+    'hardware topology',
+    'KVM setup',
+    'Mac mini M4',
+    'development setup',
+    'programming hardware',
+    'NAS storage',
+    'connection diagram',
+    'guitar equipment',
+    'acoustic guitar setup',
+    'tech setup',
+    'software engineer workspace',
+  ],
+};
+
+const setupDiagram = `graph TD
+  subgraph PrimaryStation ["Primary Device Station"]
+    Computer
+    Dock
+    Dock -- "USB-C ↔ USB-C<br/><small>Dock cable</small>" --> Computer
+  end
+
+  subgraph SecondaryStation ["Secondary Device Station"]
+    Secondary["Secondary Device"]
+    Hub
+    Secondary -- "USB-C ↔ USB-C<br/><small>Thunderbolt 5, 80 Gbps, PD 240 W, 16K@30 Hz, 0.5 m extension</small>" --> Hub
+  end
+
+  KVM
+
+  subgraph Peripherals
+    Mouse
+    Keyboard
+    Microphone
+    Lightbar["Light Bar"]
+  end
+
+  Monitor
+
+  Computer -- "USB-C ↔ DisplayPort 1.4<br/><small>Ugreen, 32.4 Gbps, 8K@60 Hz, 1 m</small>" --> KVM
+  Computer -- "USB-C ↔ USB-C<br/><small>Thunderbolt 5, 80 Gbps, PD 240 W, 16K@30 Hz, 1 m</small>" --> KVM
+
+  Hub -- "DisplayPort ↔ DisplayPort<br/><small>Monitor cable</small>" --> KVM
+  Hub -- "USB-C ↔ USB-C<br/><small>Thunderbolt 5, 80 Gbps, PD 240 W, 16K@30 Hz, 0.5 m</small>" --> KVM
+
+  KVM -- "DisplayPort ↔ DisplayPort<br/><small>Monitor cable</small>" --> Monitor
+  KVM -- "USB-A ↔ USB-B<br/><small>Monitor cable</small>" --> Monitor
+
+  Mouse -- "USB dongle" --> KVM
+  Keyboard -- "USB-C ↔ USB-A<br/><small>Keyboard cable</small>" --> KVM
+  Microphone -- "USB-B ↔ USB-C<br/><small>2 m</small>" --> KVM
+
+  Monitor -- "USB-A ↔ USB-C<br/><small>Light Bar cable</small>" --> Lightbar
+`;
+
+const { person } = STRUCTURED_DATA;
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: PAGE_METADATA.title,
+  headline: PAGE_METADATA.title,
+  description: PAGE_METADATA.description,
+  author: person,
+  keywords: PAGE_METADATA.keywords.join(', '),
+  about: [
+    {
+      '@type': 'Thing',
+      name: 'Development Workstation',
+      description:
+        'Segmented hardware setup with device stations, KVM switching, ultrawide monitor and enterprise-grade NAS storage.',
+    },
+    {
+      '@type': 'Thing',
+      name: 'Hardware Topology',
+      description:
+        'Connection graph presenting data, video and power paths between computers, hub, KVM, monitor and peripherals.',
+    },
+    {
+      '@type': 'Thing',
+      name: 'Guitar Setup',
+      description: 'Acoustic guitar equipment with amplifier and accessories for recording and practice.',
+    },
+  ],
+  mainEntity: {
+    '@type': 'ItemList',
+    name: 'Equipment Collection',
+    description: 'Desktop hardware, peripherals, network storage and music equipment',
+    numberOfItems: desktopSetup.length + additionalEquipment.length + guitarSetup.length,
+  },
+};
+
+const sections: { id: string; heading: string; ariaLabel: string; items: SetupItem[] }[] = [
+  {
+    id: 'desktop',
+    heading: 'Desktop Setup',
+    ariaLabel: 'Desktop hardware and equipment specifications',
+    items: desktopSetup,
+  },
+  {
+    id: 'additional',
+    heading: 'Additional Equipment',
+    ariaLabel: 'Additional equipment specifications',
+    items: additionalEquipment,
+  },
+  { id: 'guitar', heading: 'Guitar Setup', ariaLabel: 'Guitar and music equipment specifications', items: guitarSetup },
+];
+---
+
+<PageLayout breadcrumbTitle={PAGE_METADATA.title} title={PAGE_METADATA.title} description={PAGE_METADATA.description}>
+  <JsonLd data={structuredData} />
+  <header>
+    <h1>{PAGE_METADATA.title}</h1>
+  </header>
+  <main>
+    <section id="desktop" aria-labelledby="desktop-heading">
+      <h2 id="desktop-heading">Desktop Setup</h2>
+      <table aria-label="Desktop hardware and equipment specifications">
+        <thead><tr><th scope="col">Type</th><th scope="col">Full Name</th></tr></thead>
+        <tbody>
+          {
+            desktopSetup.map(([type, name, link, details]) => (
+              <tr>
+                <td style="width: 30%;">{type}</td>
+                <td style="width: 70%;">
+                  {link ? (
+                    <a
+                      href={link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`View ${name} on external site`}
+                    >
+                      {name}
+                    </a>
+                  ) : (
+                    name
+                  )}
+                  {details && ` (${details})`}
+                </td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </section>
+
+    <section id="diagram" aria-labelledby="diagram-heading">
+      <Mermaid client:load chart={setupDiagram} ariaLabel="Hardware setup workflow diagram" />
+    </section>
+
+    <figure style="margin: 0;">
+      <Picture src={hardwareSetup} formats={['avif', 'webp']} layout="full-width" alt={image.alt} />
+      <figcaption>{image.figcaption}</figcaption>
+    </figure>
+
+    {
+      sections
+        .filter(s => s.id !== 'desktop')
+        .map(({ id, heading, ariaLabel, items }) => (
+          <section id={id} aria-labelledby={`${id}-heading`}>
+            <h2 id={`${id}-heading`}>{heading}</h2>
+            <table aria-label={ariaLabel}>
+              <thead>
+                <tr>
+                  <>
+                    <th scope="col">Type</th>
+                    <th scope="col">Full Name</th>
+                  </>
+                </tr>
+              </thead>
+              <tbody>
+                {items.map(([type, name, link, details]) => (
+                  <tr>
+                    <td style="width: 30%;">{type}</td>
+                    <td style="width: 70%;">
+                      {link ? (
+                        <a
+                          href={link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label={`View ${name} on external site`}
+                        >
+                          {name}
+                        </a>
+                      ) : (
+                        name
+                      )}
+                      {details && ` (${details})`}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </section>
+        ))
+    }
+  </main>
+</PageLayout>

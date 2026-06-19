@@ -98,9 +98,8 @@ function contrastRatio(a, b) {
  * background is the --color-background token (body uses it in both themes).
  *
  * --color-accent is intentionally excluded as a text foreground: it is used
- * for decorative dividers (hr, table row separators, even-row shading),
- * exempt from WCAG 1.4.11, and for the deliberately low-contrast "Metadata"
- * easter-egg link in the footer.
+ * for decorative dividers (hr, table row separators, even-row shading), which
+ * are exempt from WCAG 1.4.11.
  */
 function buildPairs(t) {
   const bg = t('color-background');
@@ -131,8 +130,7 @@ function auditTheme(name, tokens) {
     const pass = ratio >= AA_NORMAL;
     if (!pass) failed += 1;
     console.log(
-      `  ${pass ? '✓' : '✗'} ${label}: ${ratio.toFixed(2)}:1 ` +
-        `(${fg} on ${bg}, needs ${AA_NORMAL.toFixed(1)}:1)`,
+      `  ${pass ? '✓' : '✗'} ${label}: ${ratio.toFixed(2)}:1 ` + `(${fg} on ${bg}, needs ${AA_NORMAL.toFixed(1)}:1)`,
     );
   }
   console.log('');

@@ -1,0 +1,99 @@
+---
+import { getCollection, render } from 'astro:content';
+import { Picture, getImage } from 'astro:assets';
+import PageLayout from '../layouts/PageLayout.astro';
+import JsonLd from '../components/JsonLd.astro';
+import { SITE_METADATA } from '../data/site-metadata';
+import { STRUCTURED_DATA } from '../data/structured-data';
+
+export async function getStaticPaths() {
+  // Replicates Gatsby's createPages exactly: posts ordered by frontmatter date
+  // ASC (oldest first); "previous" is the older neighbour (posts[i-1]) and
+  // "next" is the newer one (posts[i+1]). Logic lives inside getStaticPaths
+  // because Astro runs it in an isolated scope.
+  const posts = (await getCollection('posts')).sort((a, b) => a.data.date.getTime() - b.data.date.getTime());
+
+  return posts.map((post, index) => {
+    const older = index > 0 ? posts[index - 1] : undefined;
+    const newer = index < posts.length - 1 ? posts[index + 1] : undefined;
+    return {
+      params: { slug: post.id },
+      props: {
+        post,
+        previous: older ? { slug: older.id, title: older.data.title } : null,
+        next: newer ? { slug: newer.id, title: newer.data.title } : null,
+      },
+    };
+  });
+}
+
+const { post, previous, next } = Astro.props;
+const { Content } = await render(post);
+const { title, description, date, featuredImg, featuredImgAlt } = post.data;
+
+const dateFormatted = date.toLocaleDateString('pl-PL', { year: 'numeric', month: 'long', day: '2-digit' });
+const { person } = STRUCTURED_DATA;
+
+// Open Graph wants a bounded image, not the raw (often multi-thousand-px) source.
+const ogImage = featuredImg ? (await getImage({ src: featuredImg, width: 1200, format: 'webp' })).src : undefined;
+
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: title,
+  description: description || '',
+  datePublished: date.toISOString(),
+  author: person,
+  inLanguage: 'pl',
+  image: featuredImg ? { '@type': 'ImageObject', url: ogImage, description: featuredImgAlt || '' } : undefined,
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': new URL(Astro.url.pathname, SITE_METADATA.url).href,
+  },
+};
+---
+
+<PageLayout breadcrumbTitle={title} title={title} description={description || ''} image={ogImage} article lang="pl">
+  <JsonLd data={structuredData} />
+  <article class="blog-post">
+    <header>
+      <h1>{title}</h1>
+      <small>
+        <span>{dateFormatted}</span>
+        &nbsp;|&nbsp;
+        <span><a href="/bio/">{SITE_METADATA.author.name}</a></span>
+      </small>
+    </header>
+    {
+      featuredImg && (
+        <Picture src={featuredImg} formats={['avif', 'webp']} layout="full-width" alt={featuredImgAlt ?? ''} />
+      )
+    }
+    <section>
+      <Content />
+    </section>
+  </article>
+
+  <nav class="blog-post-nav">
+    <ul style="display: flex; flex-wrap: wrap; justify-content: space-between; list-style: none; padding: 0;">
+      <li>
+        {
+          previous && (
+            <a href={`/${previous.slug}/`} rel="prev">
+              ← {previous.title}
+            </a>
+          )
+        }
+      </li>
+      <li>
+        {
+          next && (
+            <a href={`/${next.slug}/`} rel="next">
+              {next.title} →
+            </a>
+          )
+        }
+      </li>
+    </ul>
+  </nav>
+</PageLayout>
