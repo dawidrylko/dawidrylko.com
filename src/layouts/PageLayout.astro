@@ -15,6 +15,7 @@ import { GTAG } from '../data/gtag';
 // with menu, main content, breadcrumbs, bio, footer) plus the document <head>.
 interface Props {
   breadcrumbTitle: string;
+  breadcrumbParents?: { name: string; url: string }[];
   title?: string;
   description?: string;
   image?: string;
@@ -23,7 +24,7 @@ interface Props {
   lang?: string;
 }
 
-const { breadcrumbTitle, title, description, image, article, noIndex, lang } = Astro.props;
+const { breadcrumbTitle, breadcrumbParents, title, description, image, article, noIndex, lang } = Astro.props;
 
 const metaLang = lang ?? SITE_METADATA.lang;
 const pathname = Astro.url.pathname;
@@ -80,7 +81,7 @@ const year = new Date().getFullYear();
         <Menu />
       </header>
       <main><slot /></main>
-      <Breadcrumbs customTitle={breadcrumbTitle} />
+      <Breadcrumbs customTitle={breadcrumbTitle} parents={breadcrumbParents} />
       <hr />
       <Bio />
       <hr />

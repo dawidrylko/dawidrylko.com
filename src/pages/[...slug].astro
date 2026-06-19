@@ -53,7 +53,15 @@ const structuredData = {
 };
 ---
 
-<PageLayout breadcrumbTitle={title} title={title} description={description || ''} image={ogImage} article lang="pl">
+<PageLayout
+  breadcrumbTitle={title}
+  breadcrumbParents={[{ name: 'Blog 🇵🇱', url: '/blog/' }]}
+  title={title}
+  description={description || ''}
+  image={ogImage}
+  article
+  lang="pl"
+>
   <JsonLd data={structuredData} />
   <article class="blog-post">
     <header>

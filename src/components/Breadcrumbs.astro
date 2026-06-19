@@ -7,9 +7,13 @@ import JsonLd from './JsonLd.astro';
 // custom title for the active (last) crumb.
 interface Props {
   customTitle: string;
+  // Extra ancestor crumbs inserted between Home and the path-derived trail.
+  // Used e.g. by blog posts (URL is /slug/, but the trail should read
+  // Home › Blog › Post) without changing the post URL.
+  parents?: { name: string; url: string }[];
 }
 
-const { customTitle } = Astro.props;
+const { customTitle, parents = [] } = Astro.props;
 const siteUrl = `${SITE_METADATA.url}/`;
 const menu = SITE_METADATA.menu;
 const pathname = Astro.url.pathname;
@@ -22,6 +26,11 @@ function buildCrumbs(): Crumb[] {
 
   if (pathname === '/') {
     return crumbs;
+  }
+
+  // Injected ancestors (e.g. Blog for a post) come right after Home.
+  for (const parent of parents) {
+    crumbs.push({ name: parent.name, title: parent.name, url: parent.url, isActive: false });
   }
 
   const pathMap = menu.reduce<Record<string, string>>((acc, item) => {

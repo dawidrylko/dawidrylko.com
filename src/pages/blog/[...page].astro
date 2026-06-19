@@ -8,6 +8,7 @@ import rssIcon from '../../assets/rss.svg';
 import { SITE_METADATA } from '../../data/site-metadata';
 import { STRUCTURED_DATA } from '../../data/structured-data';
 import { excerpt } from '../../lib/excerpt';
+import { inlineMarkdown } from '../../lib/inline-markdown';
 import { getBlogPosts, POSTS_PER_PAGE } from '../../lib/blog';
 
 const PAGE_METADATA = {
@@ -46,8 +47,9 @@ const { person } = STRUCTURED_DATA;
 
 const items = page.data.map(post => {
   const description = post.data.description || excerpt(post.body ?? '');
+  const descriptionHtml = inlineMarkdown(description);
   const dateFormatted = post.data.date.toLocaleDateString('pl-PL', { year: 'numeric', month: 'long', day: '2-digit' });
-  return { post, description, dateFormatted };
+  return { post, description, descriptionHtml, dateFormatted };
 });
 
 // Build a stable href for any page number (page 1 keeps the bare /blog/ URL).
@@ -107,7 +109,7 @@ const structuredData = {
 
   <ol id="blog-posts" class="posts">
     {
-      items.map(({ post, description, dateFormatted }) => (
+      items.map(({ post, descriptionHtml, dateFormatted }) => (
         <li>
           <article class="post-list-item">
             <header>
@@ -134,7 +136,7 @@ const structuredData = {
                   />
                 </a>
               )}
-              <p>{description}</p>
+              <p set:html={descriptionHtml} />
             </section>
           </article>
         </li>
@@ -191,6 +193,7 @@ const structuredData = {
   type SearchItem = {
     title: string;
     description: string;
+    descriptionHtml: string;
     tags: string[];
     dateFormatted: string;
     url: string;
@@ -264,7 +267,9 @@ const structuredData = {
           section.appendChild(thumbLink);
         }
         const p = document.createElement('p');
-        p.textContent = item.description;
+        // descriptionHtml is built at build time by inlineMarkdown (HTML-escaped),
+        // so it is safe to assign as innerHTML here.
+        p.innerHTML = item.descriptionHtml;
         section.appendChild(p);
 
         article.append(header, section);
