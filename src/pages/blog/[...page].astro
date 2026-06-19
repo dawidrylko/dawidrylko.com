@@ -1,0 +1,310 @@
+---
+import type { GetStaticPaths, Page } from 'astro';
+import type { CollectionEntry } from 'astro:content';
+import { Image, Picture } from 'astro:assets';
+import PageLayout from '../../layouts/PageLayout.astro';
+import JsonLd from '../../components/JsonLd.astro';
+import rssIcon from '../../assets/rss.svg';
+import { SITE_METADATA } from '../../data/site-metadata';
+import { STRUCTURED_DATA } from '../../data/structured-data';
+import { excerpt } from '../../lib/excerpt';
+import { getBlogPosts, POSTS_PER_PAGE } from '../../lib/blog';
+
+const PAGE_METADATA = {
+  title: 'Blog 🇵🇱',
+  description:
+    'Artykuły i wpisy na blogu Dawida Ryłko o programowaniu, technologiach, architekturze systemów i rozwoju oprogramowania. Praktyczne porady, spostrzeżenia ze świata IT i nowoczesne podejście do tworzenia aplikacji webowych.',
+  keywords: [
+    'blog programistyczny',
+    'artykuły IT',
+    'rozwój oprogramowania',
+    'architektura systemów',
+    'JavaScript',
+    'TypeScript',
+    'Node.js',
+    'frontend development',
+    'backend development',
+  ],
+};
+
+// Page 1 lives at /blog/ (empty rest param); subsequent pages at /blog/2/, …
+// so the canonical blog URL is preserved.
+export const getStaticPaths = (async ({ paginate }) => {
+  const posts = await getBlogPosts();
+  return paginate(posts, { pageSize: POSTS_PER_PAGE });
+}) satisfies GetStaticPaths;
+
+interface Props {
+  page: Page<CollectionEntry<'posts'>>;
+}
+
+const { page } = Astro.props;
+const isFirstPage = page.currentPage === 1;
+
+const author = SITE_METADATA.author;
+const { person } = STRUCTURED_DATA;
+
+const items = page.data.map(post => {
+  const description = post.data.description || excerpt(post.body ?? '');
+  const dateFormatted = post.data.date.toLocaleDateString('pl-PL', { year: 'numeric', month: 'long', day: '2-digit' });
+  return { post, description, dateFormatted };
+});
+
+// Build a stable href for any page number (page 1 keeps the bare /blog/ URL).
+const pageHref = (n: number) => (n === 1 ? '/blog/' : `/blog/${n}/`);
+
+const pageTitle = isFirstPage ? PAGE_METADATA.title : `${PAGE_METADATA.title} — strona ${page.currentPage}`;
+const breadcrumbTitle = isFirstPage ? PAGE_METADATA.title : `Strona ${page.currentPage}`;
+
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'Blog',
+  name: PAGE_METADATA.title,
+  headline: PAGE_METADATA.title,
+  description: PAGE_METADATA.description,
+  keywords: PAGE_METADATA.keywords.join(', '),
+  author: person,
+  inLanguage: 'pl',
+  blogPost: items.map(({ post, description }) => ({
+    '@type': 'BlogPosting',
+    headline: post.data.title,
+    description,
+    datePublished: post.data.date.toISOString(),
+    author: { '@type': 'Person', name: author.name },
+    image: post.data.featuredImg
+      ? { '@type': 'ImageObject', url: post.data.featuredImg.src, description: post.data.featuredImgAlt || '' }
+      : undefined,
+    url: `${SITE_METADATA.url}/${post.id}/`,
+  })),
+};
+---
+
+<PageLayout breadcrumbTitle={breadcrumbTitle} title={pageTitle} description={PAGE_METADATA.description} lang="pl">
+  <JsonLd data={structuredData} />
+  <header>
+    <h1>{PAGE_METADATA.title}</h1>
+  </header>
+  <div class="rss">
+    <Image src={rssIcon} alt="Ikona RSS" width={20} height={20} layout="fixed" />
+    <a href="/rss.xml" type="application/rss+xml">Subskrybuj kanał RSS</a>
+  </div>
+
+  <search class="blog-search">
+    <label for="blog-search-input">Szukaj wpisów</label>
+    <input
+      type="search"
+      id="blog-search-input"
+      name="q"
+      placeholder="Szukaj po tytule, opisie lub tagach…"
+      autocomplete="off"
+      aria-describedby="blog-search-status"
+    />
+    <p id="blog-search-status" class="blog-search-status" role="status" aria-live="polite"></p>
+  </search>
+
+  {/* Client-side search results (hydrated from /blog/search.json), hidden until the user types. */}
+  <ol id="blog-search-results" class="posts" hidden></ol>
+
+  <ol id="blog-posts" class="posts">
+    {
+      items.map(({ post, description, dateFormatted }) => (
+        <li>
+          <article class="post-list-item">
+            <header>
+              <h2>
+                <a href={`/${post.id}/`}>{post.data.title}</a>
+              </h2>
+              <small>
+                <span>{dateFormatted}</span>
+                &nbsp;|&nbsp;
+                <span>
+                  <a href="/bio/">{author.name}</a>
+                </span>
+              </small>
+            </header>
+            <section>
+              {post.data.featuredImg && (
+                <a href={`/${post.id}/`} class="post-thumb" aria-hidden="true" tabindex="-1">
+                  <Picture
+                    src={post.data.featuredImg}
+                    formats={['avif', 'webp']}
+                    width={600}
+                    sizes="(min-width: 37.5rem) 200px, 100vw"
+                    alt={post.data.featuredImgAlt || ''}
+                  />
+                </a>
+              )}
+              <p>{description}</p>
+            </section>
+          </article>
+        </li>
+      ))
+    }
+  </ol>
+
+  {
+    page.lastPage > 1 && (
+      <nav class="pagination" aria-label="Nawigacja po stronach bloga" id="blog-pagination">
+        {page.url.prev ? (
+          <a class="pagination-edge" href={page.url.prev} rel="prev">
+            ← <span>Poprzednia</span>
+          </a>
+        ) : (
+          <span class="pagination-edge is-disabled" aria-hidden="true">
+            ← <span>Poprzednia</span>
+          </span>
+        )}
+
+        <ol class="pagination-pages">
+          {Array.from({ length: page.lastPage }, (_, i) => i + 1).map(n => (
+            <li>
+              {n === page.currentPage ? (
+                <span class="is-current" aria-current="page">
+                  {n}
+                </span>
+              ) : (
+                <a href={pageHref(n)} aria-label={`Strona ${n}`}>
+                  {n}
+                </a>
+              )}
+            </li>
+          ))}
+        </ol>
+
+        {page.url.next ? (
+          <a class="pagination-edge" href={page.url.next} rel="next">
+            <span>Następna</span> →
+          </a>
+        ) : (
+          <span class="pagination-edge is-disabled" aria-hidden="true">
+            <span>Następna</span> →
+          </span>
+        )}
+      </nav>
+    )
+  }
+</PageLayout>
+
+<script>
+  // Progressive-enhancement search across ALL posts (not just the current page).
+  // The index is fetched once, lazily, on first interaction.
+  type SearchItem = {
+    title: string;
+    description: string;
+    tags: string[];
+    dateFormatted: string;
+    url: string;
+    img?: { src: string; alt: string };
+  };
+
+  const input = document.getElementById('blog-search-input') as HTMLInputElement | null;
+  const status = document.getElementById('blog-search-status');
+  const results = document.getElementById('blog-search-results');
+  const posts = document.getElementById('blog-posts');
+  const pagination = document.getElementById('blog-pagination');
+
+  if (input && status && results && posts) {
+    let index: SearchItem[] | null = null;
+
+    // Diacritic- and case-insensitive haystack (handles Polish ł, which is not a
+    // decomposable combining mark).
+    const normalize = (value: string) =>
+      value
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/ł/g, 'l');
+
+    // Polish plural: 1 → wpis, 2–4 → wpisy, otherwise wpisów.
+    const pluralize = (n: number) => {
+      const mod10 = n % 10;
+      const mod100 = n % 100;
+      if (n === 1) return 'wpis';
+      if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return 'wpisy';
+      return 'wpisów';
+    };
+
+    const loadIndex = async () => {
+      if (index) return index;
+      const res = await fetch('/blog/search.json');
+      index = (await res.json()) as SearchItem[];
+      return index;
+    };
+
+    const renderResults = (matches: SearchItem[]) => {
+      results.replaceChildren();
+      for (const item of matches) {
+        const li = document.createElement('li');
+        const article = document.createElement('article');
+        article.className = 'post-list-item';
+
+        const header = document.createElement('header');
+        const h2 = document.createElement('h2');
+        const titleLink = document.createElement('a');
+        titleLink.href = item.url;
+        titleLink.textContent = item.title;
+        h2.appendChild(titleLink);
+        const small = document.createElement('small');
+        small.textContent = item.dateFormatted;
+        header.append(h2, small);
+
+        const section = document.createElement('section');
+        if (item.img) {
+          const thumbLink = document.createElement('a');
+          thumbLink.href = item.url;
+          thumbLink.className = 'post-thumb';
+          thumbLink.setAttribute('aria-hidden', 'true');
+          thumbLink.tabIndex = -1;
+          const img = document.createElement('img');
+          img.src = item.img.src;
+          img.alt = item.img.alt;
+          img.loading = 'lazy';
+          img.decoding = 'async';
+          thumbLink.appendChild(img);
+          section.appendChild(thumbLink);
+        }
+        const p = document.createElement('p');
+        p.textContent = item.description;
+        section.appendChild(p);
+
+        article.append(header, section);
+        li.appendChild(article);
+        results.appendChild(li);
+      }
+    };
+
+    const search = async (query: string) => {
+      const q = query.trim();
+      if (!q) {
+        results.hidden = true;
+        results.replaceChildren();
+        posts.hidden = false;
+        if (pagination) pagination.hidden = false;
+        status.textContent = '';
+        return;
+      }
+
+      const data = await loadIndex();
+      const terms = normalize(q).split(/\s+/).filter(Boolean);
+      const matches = data.filter(item => {
+        const haystack = normalize(`${item.title} ${item.description} ${item.tags.join(' ')}`);
+        return terms.every(term => haystack.includes(term));
+      });
+
+      posts.hidden = true;
+      if (pagination) pagination.hidden = true;
+      renderResults(matches);
+      results.hidden = false;
+      status.textContent =
+        matches.length === 0
+          ? `Brak wyników dla „${q}”.`
+          : `Znaleziono ${matches.length} ${pluralize(matches.length)} dla „${q}”.`;
+    };
+
+    let debounce: ReturnType<typeof setTimeout>;
+    input.addEventListener('input', () => {
+      clearTimeout(debounce);
+      debounce = setTimeout(() => void search(input.value), 120);
+    });
+  }
+</script>

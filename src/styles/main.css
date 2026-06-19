@@ -385,20 +385,46 @@ a:focus {
   margin-bottom: var(--spacing-4);
 }
 
+/* Mobile-first post card: thumbnail stacks above the excerpt, then sits beside
+   it from 600px up. */
 .post-list-item section {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  gap: var(--spacing-4);
+  align-items: stretch;
 }
 
-.post-list-item section picture {
-  flex: 0 0 150px;
-  margin-right: var(--spacing-4);
+.post-thumb {
+  display: block;
+  width: 100%;
+  border-radius: var(--spacing-2);
+  overflow: hidden;
 }
 
-.post-list-item section picture img {
+.post-thumb img,
+.post-thumb picture img {
   display: block;
   width: 100%;
   height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+@media screen and (min-width: 600px) {
+  .post-list-item section {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .post-thumb {
+    flex: 0 0 200px;
+    width: 200px;
+  }
+
+  .post-thumb img,
+  .post-thumb picture img {
+    aspect-ratio: 4 / 3;
+  }
 }
 
 .bio {
@@ -548,13 +574,148 @@ blockquote {
   overflow: auto;
 }
 
-/* Media queries */
+/* Blog search */
 
-@media screen and (max-width: 600px) {
-  .post-list-item section picture {
-    display: none;
+.blog-search {
+  display: block;
+  margin: var(--spacing-6) var(--spacing-0);
+}
+
+.blog-search label {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: var(--fontSize-0);
+  font-weight: var(--fontWeight-bold);
+  color: var(--color-heading);
+  margin-bottom: var(--spacing-2);
+}
+
+.blog-search input {
+  width: 100%;
+  font-family: var(--font-body);
+  font-size: var(--fontSize-1);
+  color: var(--color-text);
+  background: var(--color-background);
+  padding: var(--spacing-3) var(--spacing-4);
+  border: 1px solid var(--color-accent);
+  border-radius: var(--spacing-2);
+}
+
+.blog-search input:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+  border-color: var(--color-primary);
+}
+
+.blog-search-status {
+  font-size: var(--fontSize-0);
+  color: var(--color-text-light);
+  margin: var(--spacing-2) var(--spacing-0) var(--spacing-0);
+  min-height: 1.5em;
+}
+
+/* Pagination */
+
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-2) var(--spacing-4);
+  margin-top: var(--spacing-10);
+}
+
+.pagination-pages {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--spacing-2);
+  margin: var(--spacing-0);
+  padding: var(--spacing-0);
+  list-style: none;
+  order: 3;
+  flex-basis: 100%;
+}
+
+.pagination-pages li {
+  margin: var(--spacing-0);
+  list-style: none;
+}
+
+.pagination-pages a,
+.pagination-pages .is-current {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  padding: var(--spacing-1) var(--spacing-2);
+  border-radius: var(--spacing-1);
+  text-decoration: none;
+  font-family: var(--font-heading);
+  font-size: var(--fontSize-0);
+}
+
+.pagination-pages a {
+  color: var(--color-primary);
+}
+
+.pagination-pages a:hover,
+.pagination-pages a:focus {
+  background-color: var(--color-accent);
+}
+
+.pagination-pages .is-current {
+  background-color: var(--color-primary);
+  color: var(--color-on-primary);
+  font-weight: var(--fontWeight-bold);
+}
+
+.pagination-edge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-1);
+  min-height: 2.75rem;
+  padding: var(--spacing-1) var(--spacing-3);
+  border-radius: var(--spacing-1);
+  text-decoration: none;
+  font-family: var(--font-heading);
+  font-size: var(--fontSize-0);
+  color: var(--color-primary);
+}
+
+.pagination-edge:first-child {
+  order: 1;
+  margin-right: auto;
+}
+
+.pagination-edge:last-child {
+  order: 2;
+  margin-left: auto;
+}
+
+.pagination-edge:hover,
+.pagination-edge:focus {
+  background-color: var(--color-accent);
+}
+
+.pagination-edge.is-disabled {
+  color: var(--color-text-light);
+  opacity: 0.5;
+}
+
+@media screen and (min-width: 600px) {
+  .pagination-pages {
+    order: 2;
+    flex-basis: auto;
+  }
+
+  .pagination-edge:last-child {
+    order: 3;
   }
 }
+
+/* Media queries */
 
 @media (max-width: 42rem) {
   blockquote {
