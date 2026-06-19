@@ -10,7 +10,7 @@
  * page at each `dist/<slug>/index.html`.
  *
  * Zero dependencies so it runs as a fast CI gate. Exits non-zero on any
- * mismatch. Optional arg overrides the dist directory (default `astro/dist`).
+ * mismatch. Optional arg overrides the dist directory (default `dist`).
  */
 
 import { readdir, access } from 'node:fs/promises';
