@@ -81,6 +81,14 @@
   }
 }
 
+/* Responsive strategy: mobile-first. Base rules target the smallest screen and
+   `min-width` media queries layer on enhancements for larger viewports. CSS
+   custom properties cannot be used inside @media, so the breakpoint scale is a
+   documented convention — keep these literal values in sync:
+     sm = 30rem  (480px)  — large phones and up
+     md = 48rem  (768px)  — tablets and up
+   Headings use clamp() for fluid scaling instead of stepped breakpoints. */
+
 /* HTML elements */
 
 *,
@@ -142,22 +150,25 @@ h6 {
   color: var(--color-heading);
 }
 
+/* Fluid headings: scale smoothly between the previous small-screen and desktop
+   sizes. clamp()'s min/max anchor the extremes to the old stepped values, so the
+   smallest and largest viewports render as before; only mid-range is fluid. */
 h1 {
   font-weight: var(--fontWeight-black);
-  font-size: var(--fontSize-6);
+  font-size: clamp(1.44rem, 0.69rem + 3.74vw, 2.488rem);
   color: var(--color-heading-black);
 }
 
 h2 {
-  font-size: var(--fontSize-5);
+  font-size: clamp(1.2rem, 0.575rem + 3.12vw, 2.074rem);
 }
 
 h3 {
-  font-size: var(--fontSize-4);
+  font-size: clamp(1rem, 0.48rem + 2.6vw, 1.728rem);
 }
 
 h4 {
-  font-size: var(--fontSize-3);
+  font-size: clamp(1rem, 0.686rem + 1.57vw, 1.44rem);
 }
 
 h5 {
@@ -166,42 +177,6 @@ h5 {
 
 h6 {
   font-size: var(--fontSize-1);
-}
-
-@media (width <= 768px) {
-  h1 {
-    font-size: var(--fontSize-5);
-  }
-
-  h2 {
-    font-size: var(--fontSize-4);
-  }
-
-  h3 {
-    font-size: var(--fontSize-3);
-  }
-
-  h4 {
-    font-size: var(--fontSize-2);
-  }
-}
-
-@media (width <= 480px) {
-  h1 {
-    font-size: var(--fontSize-4);
-  }
-
-  h2 {
-    font-size: var(--fontSize-3);
-  }
-
-  h3 {
-    font-size: var(--fontSize-2);
-  }
-
-  h4 {
-    font-size: var(--fontSize-1);
-  }
 }
 
 h1 > a {
@@ -340,6 +315,49 @@ table tr:nth-child(even) {
   background-color: var(--color-accent);
 }
 
+/* Column width hints applied to <col> elements so width values stay out of
+   inline styles. Tables scroll horizontally on small screens (table is
+   display: block; overflow-x: auto above), so these only shape proportions
+   where there is room. */
+.col-w-5 {
+  width: 5%;
+}
+
+.col-w-10 {
+  width: 10%;
+}
+
+.col-w-15 {
+  width: 15%;
+}
+
+.col-w-20 {
+  width: 20%;
+}
+
+.col-w-30 {
+  width: 30%;
+}
+
+.col-w-35 {
+  width: 35%;
+}
+
+.col-w-70 {
+  width: 70%;
+}
+
+.col-w-90 {
+  width: 90%;
+}
+
+/* Download actions cell on the files page: keep icons in a row. */
+.file-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
 /* Files page: Keynote/PowerPoint download variants are hidden until the
    cmd/ctrl+shift+. shortcut adds .show-hidden-variants to the table. */
 .presentations-table .file-link.is-hidden-variant {
@@ -377,9 +395,15 @@ a:focus {
 .global-wrapper {
   margin: var(--spacing-0) auto;
   max-width: var(--maxWidth-wrapper);
-  padding: var(--spacing-10) var(--spacing-5);
+  padding: var(--spacing-8) var(--spacing-4);
   overflow-x: hidden;
   overflow-wrap: break-word;
+}
+
+@media (width >= 48rem) {
+  .global-wrapper {
+    padding: var(--spacing-10) var(--spacing-5);
+  }
 }
 
 .post-list-item {
@@ -403,7 +427,7 @@ a:focus {
 }
 
 /* Mobile-first post card: thumbnail stacks above the excerpt, then sits beside
-   it from 600px up. */
+   it from the sm breakpoint up. */
 .post-list-item section {
   display: flex;
   flex-direction: column;
@@ -427,7 +451,7 @@ a:focus {
   object-fit: cover;
 }
 
-@media screen and (width >= 600px) {
+@media (width >= 30rem) {
   .post-list-item section {
     flex-direction: row;
     align-items: center;
@@ -444,16 +468,19 @@ a:focus {
   }
 }
 
+/* Mobile-first author card: stacked and centred on phones; horizontal from the
+   sm breakpoint up. */
 .bio {
   display: flex;
+  flex-direction: column;
   align-items: center;
   margin-top: var(--spacing-10);
   margin-bottom: var(--spacing-10);
 }
 
 .bio .avatar {
-  margin-right: var(--spacing-4);
-  margin-bottom: var(--spacing-0);
+  margin-right: var(--spacing-0);
+  margin-bottom: var(--spacing-4);
   min-width: 60px;
   border-radius: 100%;
 }
@@ -461,65 +488,60 @@ a:focus {
 .bio .name {
   font-weight: var(--fontWeight-bold);
   margin-bottom: var(--spacing-0);
+  text-align: center;
 }
 
 .bio .job-title {
   font-size: var(--fontSize-0);
   margin-bottom: var(--spacing-0);
+  text-align: center;
 }
 
 .bio ul {
   font-size: var(--fontSize-0);
   margin: var(--spacing-0);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-1);
+  justify-content: center;
 }
 
 .bio ul li {
-  display: inline;
+  display: inline-flex;
+  margin: 0;
 }
 
 .bio ul li:not(:last-child)::after {
-  content: '•';
+  content: '';
   margin: 0 var(--spacing-1);
 }
 
-/* Media queries */
-@media screen and (width <= 600px) {
+@media (width >= 30rem) {
   .bio {
+    flex-direction: row;
     align-items: center;
-    flex-direction: column;
   }
 
   .bio .avatar {
-    margin-bottom: var(--spacing-4);
+    margin-right: var(--spacing-4);
+    margin-bottom: var(--spacing-0);
   }
 
-  .bio .name {
-    text-align: center;
-  }
-
+  .bio .name,
   .bio .job-title {
-    text-align: center;
+    text-align: left;
   }
 
   .bio ul {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--spacing-1);
-    justify-content: center;
+    display: block;
   }
 
   .bio ul li {
-    display: inline-flex;
-    margin: 0;
+    display: inline;
   }
 
   .bio ul li:not(:last-child)::after {
-    content: '';
-    margin: 0 var(--spacing-1);
-  }
-
-  .global-wrapper {
-    padding: var(--spacing-8) var(--spacing-4);
+    content: '•';
   }
 }
 
@@ -530,7 +552,7 @@ a:focus {
 .header-title {
   font-weight: var(--fontWeight-bold);
   font-family: var(--font-heading);
-  font-size: var(--fontSize-4);
+  font-size: clamp(1.2rem, 0.823rem + 1.89vw, 1.728rem);
   display: block;
   margin-bottom: var(--spacing-4);
   color: var(--color-heading-black);
@@ -574,8 +596,14 @@ a:focus {
   margin-bottom: var(--spacing-8);
 }
 
+/* Previous/next post navigation: spread the two links across the row. */
 .blog-post-nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  list-style: none;
   margin: var(--spacing-0);
+  padding: var(--spacing-0);
 }
 
 .rss {
@@ -744,42 +772,17 @@ a:focus {
 
 /* Media queries */
 
-@media (width <= 42rem) {
+/* From the md breakpoint up, prose lists pull their markers into the gutter and
+   blockquotes hang into the left margin. */
+@media (width >= 48rem) {
   blockquote {
-    padding: var(--spacing-0) var(--spacing-0) var(--spacing-0) var(--spacing-4);
-    margin-left: var(--spacing-0);
+    margin-left: calc(-1 * var(--spacing-6));
+    padding-left: var(--spacing-6);
   }
 
   ul,
   ol {
-    list-style-position: inside;
-  }
-
-  .header-title {
-    font-size: var(--fontSize-3);
-  }
-}
-
-/* Extra small devices */
-@media (width <= 320px) {
-  .global-wrapper {
-    padding: var(--spacing-6) var(--spacing-3);
-  }
-
-  .header-title {
-    font-size: var(--fontSize-2);
-  }
-
-  h1 {
-    font-size: var(--fontSize-3);
-  }
-
-  h2 {
-    font-size: var(--fontSize-2);
-  }
-
-  h3 {
-    font-size: var(--fontSize-1);
+    list-style-position: outside;
   }
 }
 

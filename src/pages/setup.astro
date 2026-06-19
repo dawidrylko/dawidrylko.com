@@ -182,13 +182,14 @@ const sections: { id: string; heading: string; ariaLabel: string; items: SetupIt
     <section id="desktop" aria-labelledby="desktop-heading">
       <h2 id="desktop-heading">Desktop Setup</h2>
       <table aria-label="Desktop hardware and equipment specifications">
+        <colgroup><col class="col-w-30" /><col class="col-w-70" /></colgroup>
         <thead><tr><th scope="col">Type</th><th scope="col">Full Name</th></tr></thead>
         <tbody>
           {
             desktopSetup.map(([type, name, link, details]) => (
               <tr>
-                <td style="width: 30%;">{type}</td>
-                <td style="width: 70%;">
+                <td>{type}</td>
+                <td>
                   {link ? (
                     <ExternalLink href={link} follow aria-label={`View ${name} on external site`}>
                       {name}
@@ -218,6 +219,12 @@ const sections: { id: string; heading: string; ariaLabel: string; items: SetupIt
           <section id={id} aria-labelledby={`${id}-heading`}>
             <h2 id={`${id}-heading`}>{heading}</h2>
             <table aria-label={ariaLabel}>
+              <colgroup>
+                <>
+                  <col class="col-w-30" />
+                  <col class="col-w-70" />
+                </>
+              </colgroup>
               <thead>
                 <tr>
                   <>
@@ -229,8 +236,8 @@ const sections: { id: string; heading: string; ariaLabel: string; items: SetupIt
               <tbody>
                 {items.map(([type, name, link, details]) => (
                   <tr>
-                    <td style="width: 30%;">{type}</td>
-                    <td style="width: 70%;">
+                    <td>{type}</td>
+                    <td>
                       {link ? (
                         <ExternalLink href={link} follow aria-label={`View ${name} on external site`}>
                           {name}

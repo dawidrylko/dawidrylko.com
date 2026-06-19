@@ -82,13 +82,14 @@ const structuredData = createPageSchema({
     <section id="site-info" aria-label="Site Information">
       <h2>Site Information</h2>
       <table>
+        <colgroup><col class="col-w-30" /><col class="col-w-70" /></colgroup>
         <thead><tr><th scope="col">Property</th><th scope="col">Value</th></tr></thead>
         <tbody>
           {
             siteInfo.map(([prop, value]) => (
               <tr>
-                <td style="width: 30%;">{prop}</td>
-                <td style="width: 70%;">{value}</td>
+                <td>{prop}</td>
+                <td>{value}</td>
               </tr>
             ))
           }
@@ -98,13 +99,14 @@ const structuredData = createPageSchema({
     <section id="pages" aria-label="Pages">
       <h2>Pages</h2>
       <table>
+        <colgroup><col class="col-w-10" /><col class="col-w-90" /></colgroup>
         <thead><tr><th scope="col">#</th><th scope="col">Path</th></tr></thead>
         <tbody>
           {
             staticPages.map((p, i) => (
               <tr>
-                <td style="width: 10%;">{i + 1}</td>
-                <td style="width: 90%;">
+                <td>{i + 1}</td>
+                <td>
                   <a href={p}>{p}</a>
                 </td>
               </tr>
@@ -116,13 +118,14 @@ const structuredData = createPageSchema({
     <section id="blog-posts" aria-label="Blog Posts">
       <h2>Blog Posts</h2>
       <table>
+        <colgroup><col class="col-w-10" /><col class="col-w-90" /></colgroup>
         <thead><tr><th scope="col">#</th><th scope="col">Path</th></tr></thead>
         <tbody>
           {
             blogPaths.map((p, i) => (
               <tr>
-                <td style="width: 10%;">{i + 1}</td>
-                <td style="width: 90%;">
+                <td>{i + 1}</td>
+                <td>
                   <a href={p}>{p}</a>
                 </td>
               </tr>

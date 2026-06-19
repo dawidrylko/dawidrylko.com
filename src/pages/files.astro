@@ -195,6 +195,14 @@ const structuredData = createPageSchema({
     <section aria-labelledby="presentations-heading">
       <h2 id="presentations-heading">Presentations</h2>
       <table class="presentations-table" data-presentations>
+        <colgroup>
+          <col class="col-w-5" />
+          <col class="col-w-20" />
+          <col class="col-w-20" />
+          <col class="col-w-10" />
+          <col class="col-w-15" />
+          <col class="col-w-30" />
+        </colgroup>
         <thead>
           <tr>
             <th scope="col">#</th>
@@ -209,13 +217,13 @@ const structuredData = createPageSchema({
           {
             rows.map(row => (
               <tr>
-                <td style="width: 5%;">{row.index}</td>
-                <td style="width: 20%;">{row.topic}</td>
-                <td style="width: 20%;">{row.title}</td>
-                <td style="width: 10%;">{row.language}</td>
-                <td style="width: 15%;">{row.size}</td>
-                <td style="width: 30%;">
-                  <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <td>{row.index}</td>
+                <td>{row.topic}</td>
+                <td>{row.title}</td>
+                <td>{row.language}</td>
+                <td>{row.size}</td>
+                <td>
+                  <div class="file-actions">
                     {row.links.map(link =>
                       link.action === 'open' ? (
                         <a
