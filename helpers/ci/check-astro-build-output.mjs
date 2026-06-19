@@ -10,7 +10,7 @@
  *   - the /setup/ Mermaid diagram hydrates (client:load island)
  *   - the memoization post's interactive demo hydrates (client:visible island)
  *   - blog-list thumbnails render at a bounded (600px) size, not full-res
- *   - post-body list markers stay outside (not dropped onto their own line)
+ *   - content list markers stay outside (not dropped onto their own line / clipped)
  *   - breadcrumbs truncate on one line (no horizontal-scroll fallback)
  *   - the /files/ page lists presentations (static/files is read from disk)
  *   - the /files/ cmd/ctrl+shift+. hidden-variant toggle ships and is wired up
@@ -79,8 +79,15 @@ async function checkCodeDarkTheme(css) {
 }
 
 async function checkListMarkers(css) {
-  if (!/\.blog-post section ul[^{]*\{[^}]*list-style-position:\s*outside/.test(css)) {
-    fail('post-body lists missing list-style-position: outside (markers regressed inside)');
+  // Content lists (blog post bodies plus the bio/contact sections) re-add the
+  // gutter the global ul/ol reset strips and keep markers outside, so the
+  // wrapper's overflow-x: hidden does not clip them onto their own line / off
+  // the left edge.
+  if (!/main section ul[^{]*\{[^}]*list-style-position:\s*outside/.test(css)) {
+    fail('content lists missing list-style-position: outside (markers regressed inside)');
+  }
+  if (!/main section ul[^{]*\{[^}]*padding-left/.test(css)) {
+    fail('content lists missing padding-left gutter (outside markers would be clipped)');
   }
 }
 
