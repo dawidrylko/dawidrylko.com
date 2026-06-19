@@ -666,24 +666,18 @@ blockquote {
 }
 
 .pagination {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: var(--spacing-2) var(--spacing-4);
   margin-top: var(--spacing-10);
 }
 
 .pagination-pages {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   justify-content: center;
   gap: var(--spacing-2);
   margin: var(--spacing-0);
   padding: var(--spacing-0);
   list-style: none;
-  order: 3;
-  flex-basis: 100%;
 }
 
 .pagination-pages li {
@@ -691,8 +685,11 @@ blockquote {
   list-style: none;
 }
 
+/* Page numbers and the prev/next arrows share one button shape so the arrows
+   read as part of the pagination control rather than floating beside it. */
 .pagination-pages a,
-.pagination-pages .is-current {
+.pagination-pages .is-current,
+.pagination-edge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -705,12 +702,15 @@ blockquote {
   font-size: var(--fontSize-0);
 }
 
-.pagination-pages a {
+.pagination-pages a,
+.pagination-edge {
   color: var(--color-primary);
 }
 
 .pagination-pages a:hover,
-.pagination-pages a:focus {
+.pagination-pages a:focus,
+.pagination-edge:hover,
+.pagination-edge:focus {
   background-color: var(--color-accent);
 }
 
@@ -720,48 +720,9 @@ blockquote {
   font-weight: var(--fontWeight-bold);
 }
 
-.pagination-edge {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--spacing-1);
-  min-height: 2.75rem;
-  padding: var(--spacing-1) var(--spacing-3);
-  border-radius: var(--spacing-1);
-  text-decoration: none;
-  font-family: var(--font-heading);
-  font-size: var(--fontSize-0);
-  color: var(--color-primary);
-}
-
-.pagination-edge:first-child {
-  order: 1;
-  margin-right: auto;
-}
-
-.pagination-edge:last-child {
-  order: 2;
-  margin-left: auto;
-}
-
-.pagination-edge:hover,
-.pagination-edge:focus {
-  background-color: var(--color-accent);
-}
-
 .pagination-edge.is-disabled {
   color: var(--color-text-light);
   opacity: 0.5;
-}
-
-@media screen and (min-width: 600px) {
-  .pagination-pages {
-    order: 2;
-    flex-basis: auto;
-  }
-
-  .pagination-edge:last-child {
-    order: 3;
-  }
 }
 
 /* Media queries */
