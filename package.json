@@ -19,6 +19,10 @@
     "lint:check": "eslint .",
     "lint:fix": "eslint . --fix",
     "a11y:contrast": "node helpers/a11y-contrast/check-contrast.mjs",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:e2e": "playwright test",
     "prepare": "husky"
   },
   "dependencies": {
@@ -39,9 +43,12 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.9",
+    "@axe-core/playwright": "^4.11.3",
     "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.61.0",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
+    "@vitest/coverage-v8": "^4.1.9",
     "astro": "^6.4.8",
     "eslint": "^10.5.0",
     "eslint-plugin-astro": "^1.7.0",
@@ -51,7 +58,8 @@
     "prettier": "^3.8.4",
     "prettier-plugin-astro": "^0.14.1",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.61.1"
+    "typescript-eslint": "^8.61.1",
+    "vitest": "^4.1.9"
   },
   "lint-staged": {
     "**/*.{astro,ts,tsx,js,mjs,json,md}": "prettier --write",

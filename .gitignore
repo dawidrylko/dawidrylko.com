@@ -2,6 +2,12 @@ node_modules/
 dist/
 .astro/
 
+# Test output
+coverage/
+playwright-report/
+test-results/
+.playwright/
+
 # Draft
 draft/
 
