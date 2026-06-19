@@ -9,7 +9,7 @@
  *   - code blocks ship Shiki's dark palette and it is activated in dark mode
  *   - the /setup/ Mermaid diagram hydrates (client:load island)
  *   - the memoization post's interactive demo hydrates (client:visible island)
- *   - blog-list thumbnails render at the small (150px) size, not full-res
+ *   - blog-list thumbnails render at a bounded (600px) size, not full-res
  *   - post-body list markers stay outside (not dropped onto their own line)
  *   - breadcrumbs truncate on one line (no horizontal-scroll fallback)
  *
@@ -124,8 +124,13 @@ async function checkBlogThumbnail() {
     return;
   }
   const html = await read('blog/index.html');
-  if (!/<img[^>]*width="150"/.test(html) || !/srcset="[^"]*150w/.test(html)) {
-    fail('blog-list thumbnail not rendered at 150px (full-res image regressed)');
+  // Mobile-first thumbnails: rendered inside a .post-thumb link, sourced at a
+  // bounded 600px width (responsive srcset) rather than the full-res original.
+  if (!/class="post-thumb"/.test(html)) {
+    fail('blog-list thumbnail wrapper (.post-thumb) missing');
+  }
+  if (!/<img[^>]*width="600"/.test(html) || !/srcset="[^"]*600w/.test(html)) {
+    fail('blog-list thumbnail not rendered at the bounded 600px size (full-res image regressed)');
   }
 }
 
