@@ -29,7 +29,7 @@ export async function getStaticPaths() {
 
 const { post, previous, next } = Astro.props;
 const { Content } = await render(post);
-const { title, description, date, featuredImg, featuredImgAlt } = post.data;
+const { title, description, date, tags, featuredImg, featuredImgAlt } = post.data;
 
 const dateFormatted = date.toLocaleDateString('pl-PL', { year: 'numeric', month: 'long', day: '2-digit' });
 const { person } = STRUCTURED_DATA;
@@ -80,6 +80,17 @@ const structuredData = {
     <section>
       <Content />
     </section>
+    <ul class="tags" aria-label="Tagi">
+      {
+        tags.map(tag => (
+          <li>
+            <a class="tag" href={`/blog/?q=${encodeURIComponent(tag)}`}>
+              #{tag}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
   </article>
 
   <nav class="blog-post-nav">

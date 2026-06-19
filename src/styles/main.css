@@ -614,7 +614,46 @@ blockquote {
   min-height: 1.5em;
 }
 
+/* Tags */
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2);
+  margin: var(--spacing-4) var(--spacing-0) var(--spacing-0);
+  padding: var(--spacing-0);
+  list-style: none;
+}
+
+.tags li {
+  margin: var(--spacing-0);
+  list-style: none;
+}
+
+.tag {
+  display: inline-block;
+  font-family: var(--font-heading);
+  font-size: var(--fontSize-0);
+  line-height: 1.2;
+  padding: var(--spacing-1) var(--spacing-2);
+  border: 1px solid var(--color-accent);
+  border-radius: var(--spacing-1);
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.tag:hover,
+.tag:focus {
+  background-color: var(--color-accent);
+}
+
 /* Pagination */
+
+/* Beats the [hidden] reset's display:none being overridden by .pagination's
+   display:flex, so the client-side search can fully hide pagination. */
+.pagination[hidden] {
+  display: none;
+}
 
 .pagination {
   display: flex;

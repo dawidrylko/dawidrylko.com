@@ -34,7 +34,7 @@ function buildCrumbs(): Crumb[] {
   }
 
   const pathMap = menu.reduce<Record<string, string>>((acc, item) => {
-    acc[item.url.replace('/', '')] = item.name;
+    acc[item.url.replace(/\//g, '')] = item.name;
     return acc;
   }, {});
 
