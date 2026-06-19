@@ -138,6 +138,15 @@ const structuredData = {
               )}
               <p set:html={descriptionHtml} />
             </section>
+            <ul class="tags" aria-label="Tagi">
+              {post.data.tags.map(tag => (
+                <li>
+                  <a class="tag" href={`/blog/?q=${encodeURIComponent(tag)}`} data-tag={tag}>
+                    #{tag}
+                  </a>
+                </li>
+              ))}
+            </ul>
           </article>
         </li>
       ))
@@ -148,12 +157,12 @@ const structuredData = {
     page.lastPage > 1 && (
       <nav class="pagination" aria-label="Nawigacja po stronach bloga" id="blog-pagination">
         {page.url.prev ? (
-          <a class="pagination-edge" href={page.url.prev} rel="prev">
-            ← <span>Poprzednia</span>
+          <a class="pagination-edge" href={page.url.prev} rel="prev" aria-label="Poprzednia strona">
+            ←
           </a>
         ) : (
           <span class="pagination-edge is-disabled" aria-hidden="true">
-            ← <span>Poprzednia</span>
+            ←
           </span>
         )}
 
@@ -174,12 +183,12 @@ const structuredData = {
         </ol>
 
         {page.url.next ? (
-          <a class="pagination-edge" href={page.url.next} rel="next">
-            <span>Następna</span> →
+          <a class="pagination-edge" href={page.url.next} rel="next" aria-label="Następna strona">
+            →
           </a>
         ) : (
           <span class="pagination-edge is-disabled" aria-hidden="true">
-            <span>Następna</span> →
+            →
           </span>
         )}
       </nav>
@@ -273,13 +282,40 @@ const structuredData = {
         section.appendChild(p);
 
         article.append(header, section);
+
+        if (item.tags.length) {
+          const tags = document.createElement('ul');
+          tags.className = 'tags';
+          tags.setAttribute('aria-label', 'Tagi');
+          for (const tag of item.tags) {
+            const tagLi = document.createElement('li');
+            const tagLink = document.createElement('a');
+            tagLink.className = 'tag';
+            tagLink.href = `/blog/?q=${encodeURIComponent(tag)}`;
+            tagLink.dataset.tag = tag;
+            tagLink.textContent = `#${tag}`;
+            tagLi.appendChild(tagLink);
+            tags.appendChild(tagLi);
+          }
+          article.appendChild(tags);
+        }
+
         li.appendChild(article);
         results.appendChild(li);
       }
     };
 
+    // Keep the URL in sync so a search is shareable and survives a reload.
+    const syncUrl = (query: string) => {
+      const url = new URL(location.href);
+      if (query) url.searchParams.set('q', query);
+      else url.searchParams.delete('q');
+      history.replaceState(null, '', url);
+    };
+
     const search = async (query: string) => {
       const q = query.trim();
+      syncUrl(q);
       if (!q) {
         results.hidden = true;
         results.replaceChildren();
@@ -311,5 +347,25 @@ const structuredData = {
       clearTimeout(debounce);
       debounce = setTimeout(() => void search(input.value), 120);
     });
+
+    // Tag chips (in the list and in search results) drive the same search box
+    // instead of reloading the page.
+    document.addEventListener('click', event => {
+      const target = event.target as HTMLElement;
+      const tagLink = target.closest<HTMLElement>('[data-tag]');
+      if (!tagLink) return;
+      event.preventDefault();
+      const tag = tagLink.dataset.tag ?? '';
+      input.value = tag;
+      void search(tag);
+      input.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    });
+
+    // Honour ?q= on load so tag links from a post (and shared URLs) run a search.
+    const initialQuery = new URLSearchParams(location.search).get('q');
+    if (initialQuery) {
+      input.value = initialQuery;
+      void search(initialQuery);
+    }
   }
 </script>
