@@ -156,17 +156,18 @@ const structuredData = {
   {
     page.lastPage > 1 && (
       <nav class="pagination" aria-label="Nawigacja po stronach bloga" id="blog-pagination">
-        {page.url.prev ? (
-          <a class="pagination-edge" href={page.url.prev} rel="prev" aria-label="Poprzednia strona">
-            ←
-          </a>
-        ) : (
-          <span class="pagination-edge is-disabled" aria-hidden="true">
-            ←
-          </span>
-        )}
-
         <ol class="pagination-pages">
+          <li>
+            {page.url.prev ? (
+              <a class="pagination-edge" href={page.url.prev} rel="prev" aria-label="Poprzednia strona">
+                ←
+              </a>
+            ) : (
+              <span class="pagination-edge is-disabled" aria-hidden="true">
+                ←
+              </span>
+            )}
+          </li>
           {Array.from({ length: page.lastPage }, (_, i) => i + 1).map(n => (
             <li>
               {n === page.currentPage ? (
@@ -180,17 +181,18 @@ const structuredData = {
               )}
             </li>
           ))}
+          <li>
+            {page.url.next ? (
+              <a class="pagination-edge" href={page.url.next} rel="next" aria-label="Następna strona">
+                →
+              </a>
+            ) : (
+              <span class="pagination-edge is-disabled" aria-hidden="true">
+                →
+              </span>
+            )}
+          </li>
         </ol>
-
-        {page.url.next ? (
-          <a class="pagination-edge" href={page.url.next} rel="next" aria-label="Następna strona">
-            →
-          </a>
-        ) : (
-          <span class="pagination-edge is-disabled" aria-hidden="true">
-            →
-          </span>
-        )}
       </nav>
     )
   }
