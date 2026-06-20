@@ -109,6 +109,26 @@ async function checkSocialMeta() {
   }
 }
 
+/** The critical heading/body fonts must be preloaded as woff2 (LCP/CLS gate). */
+async function checkFontPreload() {
+  const page = 'index.html';
+  if (!(await exists(page))) {
+    fail(`cannot check font preload: dist/${page} is missing`);
+    return;
+  }
+  const html = await read(page);
+  const preloads = html.match(/<link[^>]*rel="preload"[^>]*>/g) ?? [];
+  const fontPreloads = preloads.filter(tag => /as="font"/.test(tag) && /type="font\/woff2"/.test(tag));
+  if (fontPreloads.length < 2) {
+    fail(`dist/${page} should preload the heading and body woff2 fonts (found ${fontPreloads.length})`);
+  }
+  for (const tag of fontPreloads) {
+    if (!/crossorigin/.test(tag)) {
+      fail(`a font preload on dist/${page} is missing the "crossorigin" attribute: ${tag}`);
+    }
+  }
+}
+
 async function main() {
   if (!(await exists('.'))) {
     console.error(`Build output not found at ${OUTPUT_DIR}. Run "pnpm build" first.`);
@@ -119,6 +139,7 @@ async function main() {
   await checkRss();
   await checkManifest();
   await checkSocialMeta();
+  await checkFontPreload();
 
   console.log('Build-output contract (dist/)\n');
   if (problems.length > 0) {
@@ -126,7 +147,7 @@ async function main() {
     console.error(`\nBuild-output contract failed: ${problems.length} problem(s).`);
     process.exit(1);
   }
-  console.log('  ✓ core pages, RSS, sitemap, manifest and social meta all present.');
+  console.log('  ✓ core pages, RSS, sitemap, manifest, social meta and font preload all present.');
 }
 
 main().catch(err => {

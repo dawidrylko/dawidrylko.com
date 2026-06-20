@@ -1,6 +1,20 @@
 ---
-import '@fontsource-variable/montserrat/index.css';
-import '@fontsource/merriweather/index.css';
+// Scope web fonts to the weights/subsets actually used instead of the full
+// barrels. Montserrat (headings) ships as one variable font; wght.css carries
+// the upright axis only (drops the unused italic file) and the @font-face rules
+// are unicode-range scoped, so the browser fetches just the needed subset.
+// Merriweather (body) is static, so we import only weights 400/700 for the
+// latin + latin-ext (Polish) subsets — dropping the unused 300/900/italic files.
+import '@fontsource-variable/montserrat/wght.css';
+import '@fontsource/merriweather/latin-400.css';
+import '@fontsource/merriweather/latin-700.css';
+import '@fontsource/merriweather/latin-ext-400.css';
+import '@fontsource/merriweather/latin-ext-700.css';
+// woff2 URLs for the above-the-fold latin subsets, preloaded in <head> below.
+// Importing the asset yields the same hashed URL the @font-face rules resolve
+// to, so the preload hits the exact file the CSS requests (no double download).
+import merriweatherBody from '@fontsource/merriweather/files/merriweather-latin-400-normal.woff2';
+import montserratHeading from '@fontsource-variable/montserrat/files/montserrat-latin-wght-normal.woff2';
 import 'katex/dist/katex.min.css';
 import '../styles/normalize.css';
 import '../styles/main.css';
@@ -80,6 +94,12 @@ const { website } = STRUCTURED_DATA;
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="alternate" type="application/rss+xml" title={SITE_METADATA.title} href="/rss.xml" />
     <link rel="author" href="/humans.txt" />
+    {
+      /* Preload the above-the-fold latin subsets so the critical heading/body
+      fonts are fetched before CSS is parsed, cutting LCP and swap-driven CLS. */
+    }
+    <link rel="preload" href={merriweatherBody} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={montserratHeading} as="font" type="font/woff2" crossorigin />
     <Seo
       title={title}
       description={description}
