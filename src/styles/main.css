@@ -598,6 +598,11 @@ a:focus {
   margin-bottom: var(--spacing-8);
 }
 
+/* "Powiązane wpisy": shared-tag suggestions below the article body. */
+.related {
+  margin-top: var(--spacing-12);
+}
+
 /* Previous/next post navigation: spread the two links across the row. */
 .blog-post-nav {
   /* Separate the nav from the tag list above it (the tags carry only a top

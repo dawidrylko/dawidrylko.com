@@ -3,12 +3,14 @@ import { getCollection, render } from 'astro:content';
 import { Picture, getImage } from 'astro:assets';
 import PageLayout from '../layouts/PageLayout.astro';
 import JsonLd from '../components/JsonLd.astro';
+import PostListItem from '../components/PostListItem.astro';
 import { SITE_METADATA } from '../data/site-metadata';
 import { STRUCTURED_DATA } from '../data/structured-data';
 import { formatPolishDate, toISODate } from '../lib/date';
 import { slugifyTag } from '../lib/tags';
 import { countWords, readingTimeMinutes } from '../lib/reading-time';
 import { plPlural } from '../lib/pl-plural';
+import { relatedPosts } from '../lib/related-posts';
 
 export async function getStaticPaths() {
   // Replicates Gatsby's createPages exactly: posts ordered by frontmatter date
@@ -16,6 +18,9 @@ export async function getStaticPaths() {
   // "next" is the newer one (posts[i+1]). Logic lives inside getStaticPaths
   // because Astro runs it in an isolated scope.
   const posts = (await getCollection('posts')).sort((a, b) => a.data.date.getTime() - b.data.date.getTime());
+  // Related posts are drawn from top-level entries only (secondary pages such as
+  // .../ng-help never appear in listings).
+  const topLevel = posts.filter(entry => !entry.id.includes('/'));
 
   return posts.map((post, index) => {
     const older = index > 0 ? posts[index - 1] : undefined;
@@ -26,12 +31,13 @@ export async function getStaticPaths() {
         post,
         previous: older ? { slug: older.id, title: older.data.title } : null,
         next: newer ? { slug: newer.id, title: newer.data.title } : null,
+        related: relatedPosts(post, topLevel, 3),
       },
     };
   });
 }
 
-const { post, previous, next } = Astro.props;
+const { post, previous, next, related } = Astro.props;
 const { Content, headings } = await render(post);
 
 // Table of contents from the post's h2/h3 headings (ids come from rehype-slug).
@@ -147,6 +153,19 @@ const structuredData = {
       }
     </ul>
   </article>
+
+  {
+    related.length > 0 && (
+      <section class="related" aria-label="Powiązane wpisy">
+        <h2>Powiązane wpisy</h2>
+        <ol class="posts">
+          {related.map(relatedPost => (
+            <PostListItem post={relatedPost} />
+          ))}
+        </ol>
+      </section>
+    )
+  }
 
   <nav class="blog-post-nav">
     <ul>
