@@ -2,6 +2,8 @@
 import PageLayout from '../layouts/PageLayout.astro';
 import JsonLd from '../components/JsonLd.astro';
 import ExternalLink from '../components/ExternalLink.astro';
+import Faq from '../components/Faq.astro';
+import type { FaqItem } from '../lib/structured-content';
 import { SITE_METADATA } from '../data/site-metadata';
 import { STRUCTURED_DATA } from '../data/structured-data';
 import { createPageSchema } from '../lib/page-metadata';
@@ -33,6 +35,34 @@ const structuredData = createPageSchema({
   keywords: PAGE_METADATA.keywords,
   extra: { mainEntity: person },
 });
+
+// Questions derived from this page's own copy: the kind of work, the stack,
+// response time, the preferred channel and where else to find me.
+const faqItems: FaqItem[] = [
+  {
+    question: 'What kind of projects do you take on?',
+    answer:
+      'Innovative technology projects that call for a thoughtful approach and a long-term vision — meaningful, reliable solutions that make a real impact, whether you are starting from scratch or improving an existing platform.',
+  },
+  {
+    question: 'Which parts of the technology stack do you cover?',
+    answer:
+      'The entire stack: user-friendly **frontend interfaces**, robust **backend systems**, **cloud infrastructure**, **AI-driven features** and advanced **security implementations** — all built to be scalable, maintainable and designed to last.',
+  },
+  {
+    question: 'How quickly will you respond?',
+    answer: 'I usually respond within 24 hours on business days.',
+  },
+  {
+    question: 'What is the best way to reach you?',
+    answer: `The best way to get in touch is by email: [${author.email}](mailto:${author.email}).`,
+  },
+  {
+    question: 'Where else can I find you online?',
+    answer:
+      'You can connect with me on professional and developer platforms, including **GitHub**, **X (Twitter)** and **LinkedIn**.',
+  },
+];
 ---
 
 <PageLayout breadcrumbTitle={PAGE_METADATA.title} title={PAGE_METADATA.title} description={PAGE_METADATA.description}>
@@ -84,4 +114,5 @@ const structuredData = createPageSchema({
       }
     </ul>
   </section>
+  <Faq items={faqItems} title="Frequently Asked Questions" />
 </PageLayout>
