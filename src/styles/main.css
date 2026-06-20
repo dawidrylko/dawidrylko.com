@@ -598,6 +598,36 @@ a:focus {
   margin-bottom: var(--spacing-8);
 }
 
+/* Share row: static intent links plus a copy-link button, below the tag list. */
+.share {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--spacing-2);
+  margin-top: var(--spacing-4);
+}
+
+.share-label {
+  font-family: var(--font-heading);
+  color: var(--color-text-light);
+}
+
+.share-link {
+  padding: var(--spacing-1) var(--spacing-3);
+  font-family: var(--font-heading);
+  font-size: var(--fontSize-0);
+  color: var(--color-primary);
+  border: 1px solid var(--color-accent);
+  border-radius: var(--spacing-2);
+  background: none;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.share-link:hover {
+  border-color: var(--color-primary);
+}
+
 /* "Powiązane wpisy": shared-tag suggestions below the article body. */
 .related {
   margin-top: var(--spacing-12);
