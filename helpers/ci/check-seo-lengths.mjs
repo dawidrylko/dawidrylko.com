@@ -30,9 +30,11 @@ const TITLE_MAX_LENGTH = 60;
 const DESCRIPTION_MAX_LENGTH = 160;
 
 // First path segment of every app-owned route. The homepage is '' (index.html);
-// blog covers the listing and its pagination (blog/, blog/2/, …). Everything
-// else (top-level post slugs, 404) is author content and only warned about.
-const OWNED_SEGMENTS = new Set(['', 'bio', 'contact', 'setup', 'metadata', 'files', 'blog']);
+// blog covers the listing and its pagination (blog/, blog/2/, …); tags covers
+// the tag index and each archive (titles/descriptions are app-generated from a
+// short tag label). Everything else (top-level post slugs, 404) is author
+// content and only warned about.
+const OWNED_SEGMENTS = new Set(['', 'bio', 'contact', 'setup', 'metadata', 'files', 'blog', 'tags']);
 
 const problems = [];
 const warnings = [];

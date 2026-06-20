@@ -6,6 +6,7 @@ import JsonLd from '../components/JsonLd.astro';
 import { SITE_METADATA } from '../data/site-metadata';
 import { STRUCTURED_DATA } from '../data/structured-data';
 import { formatPolishDate, toISODate } from '../lib/date';
+import { slugifyTag } from '../lib/tags';
 
 export async function getStaticPaths() {
   // Replicates Gatsby's createPages exactly: posts ordered by frontmatter date
@@ -118,7 +119,7 @@ const structuredData = {
       {
         tags.map(tag => (
           <li>
-            <a class="tag" href={`/blog/?q=${encodeURIComponent(tag)}`}>
+            <a class="tag" href={`/tags/${slugifyTag(tag)}/`}>
               #{tag}
             </a>
           </li>

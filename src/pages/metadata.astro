@@ -8,7 +8,7 @@ import type { PageMetadata } from '../types';
 
 // Static (non-blog) routes provided by src/pages. The Gatsby version queried
 // allSitePage; here the set is explicit since it changes rarely.
-const staticPages = ['/', '/404.html', '/bio/', '/blog/', '/contact/', '/files/', '/metadata/', '/setup/'];
+const staticPages = ['/', '/404.html', '/bio/', '/blog/', '/contact/', '/files/', '/metadata/', '/setup/', '/tags/'];
 
 const blogPaths = (await getCollection('posts'))
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())

@@ -1,0 +1,62 @@
+---
+import PageLayout from '../../layouts/PageLayout.astro';
+import JsonLd from '../../components/JsonLd.astro';
+import { SITE_METADATA } from '../../data/site-metadata';
+import { createPageSchema } from '../../lib/page-metadata';
+import { getTags } from '../../lib/tags';
+import type { PageMetadata } from '../../types';
+
+const tags = await getTags();
+
+const PAGE_METADATA: PageMetadata = {
+  title: 'Tagi',
+  description:
+    'Wszystkie tagi bloga Dawida Ryłko — przeglądaj wpisy o programowaniu, technologiach i wytwarzaniu oprogramowania według tematu.',
+  keywords: ['tagi', 'tematy', 'kategorie', 'blog programistyczny', 'artykuły IT'],
+};
+
+const structuredData = createPageSchema({
+  type: 'CollectionPage',
+  title: PAGE_METADATA.title,
+  description: PAGE_METADATA.description,
+  keywords: PAGE_METADATA.keywords,
+  extra: {
+    mainEntity: {
+      '@type': 'ItemList',
+      name: 'Tagi bloga',
+      numberOfItems: tags.length,
+      itemListElement: tags.map((tag, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: tag.tag,
+        url: `${SITE_METADATA.url}/tags/${tag.slug}/`,
+      })),
+    },
+  },
+});
+---
+
+<PageLayout
+  breadcrumbTitle={PAGE_METADATA.title}
+  breadcrumbParents={[{ name: 'Blog 🇵🇱', url: '/blog/' }]}
+  title={PAGE_METADATA.title}
+  description={PAGE_METADATA.description}
+  lang="pl"
+>
+  <JsonLd data={structuredData} />
+  <header>
+    <h1>{PAGE_METADATA.title}</h1>
+  </header>
+  <p>Przeglądaj {tags.length} tagów i wybierz temat, który Cię interesuje.</p>
+  <ul class="tags tag-cloud" aria-label="Wszystkie tagi">
+    {
+      tags.map(tag => (
+        <li>
+          <a class="tag" href={`/tags/${tag.slug}/`}>
+            #{tag.tag} <span class="tag-count">({tag.count})</span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</PageLayout>
