@@ -236,6 +236,13 @@ table {
   margin-bottom: var(--spacing-8);
   font-size: var(--fontSize-0);
   white-space: nowrap;
+
+  /* Match the rounded corners of the other media boxes (images, code, TOC,
+     figures). The block-level scroll container (overflow-x: auto) clips the
+     header/zebra cell backgrounds to the radius, and the border traces the
+     rounded edge. */
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-pill);
 }
 
 pre {
@@ -300,10 +307,15 @@ main section .tags {
   padding-left: var(--spacing-0);
 }
 
+/* The accent bar sits at the content's left edge. Earlier this pulled the
+   blockquote left by --spacing-6 on every screen, but on mobile the wrapper
+   padding is only --spacing-4, so the bar fell outside the wrapper's
+   overflow-x: hidden and was clipped. Keep the bar flush with the content edge
+   at every breakpoint instead. */
 blockquote {
   color: var(--color-text-light);
-  margin-left: calc(-1 * var(--spacing-6));
-  margin-right: var(--spacing-8);
+  margin-left: var(--spacing-0);
+  margin-right: var(--spacing-0);
   padding: var(--spacing-0) var(--spacing-0) var(--spacing-0) var(--spacing-6);
   border-left: var(--spacing-1) solid var(--color-primary);
   font-size: var(--fontSize-2);
@@ -335,6 +347,13 @@ table th {
 
 table tr:nth-child(even) {
   background-color: var(--color-accent);
+}
+
+/* The outer rounded border already closes the table, so drop the last row's
+   cell borders to avoid a straight line doubling up inside the rounded corners. */
+table tr:last-child th,
+table tr:last-child td {
+  border-bottom: 0;
 }
 
 /* Column width hints applied to <col> elements so width values stay out of
@@ -502,8 +521,10 @@ a:focus {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: var(--spacing-10);
-  margin-bottom: var(--spacing-10);
+
+  /* Uniform gap around the page rules: the bio and the footer below both use
+     --spacing-6 so the chrome above the footer is evenly, tightly spaced. */
+  margin-block: var(--spacing-6);
 }
 
 .bio .avatar {
@@ -620,17 +641,26 @@ a:focus {
   font-family: var(--font-heading);
 }
 
-.blog-post .gatsby-image-wrapper:not(footer .gatsby-image-wrapper) {
+/* The featured image sits between the header and the TOC/body. <picture> is
+   inline by default, so make it a block and give it the canonical block gap
+   (--spacing-8) shared by paragraphs, lists, tables, code and the TOC — without
+   it the image butts straight against the TOC. */
+.blog-post > picture {
+  display: block;
   margin-bottom: var(--spacing-8);
 }
 
-/* Share row: static intent links plus a copy-link button, below the tag list. */
+/* Share row: static intent links plus a copy-link button, below the tag list.
+   A top rule (matching the site's <hr>: 1px, --color-accent) sets it apart from
+   the tags above. */
 .share {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: var(--spacing-2);
-  margin-top: var(--spacing-4);
+  margin-top: var(--spacing-8);
+  padding-top: var(--spacing-6);
+  border-top: 1px solid var(--color-accent);
 }
 
 .share-label {
@@ -654,16 +684,14 @@ a:focus {
   border-color: var(--color-primary);
 }
 
-/* "Powiązane wpisy": shared-tag suggestions below the article body. */
-.related {
-  margin-top: var(--spacing-12);
-}
-
-/* Previous/next post navigation: spread the two links across the row. */
+/* Post-footer sections (related posts, prev/next nav) are each set off from the
+   content above by the shared rule — 1px, --color-accent, matching the site's
+   <hr> — so the end of an article reads as distinct blocks. */
+.related,
 .blog-post-nav {
-  /* Separate the nav from the tag list above it (the tags carry only a top
-     margin, so without this they sit flush against the prev/next links). */
   margin-top: var(--spacing-8);
+  padding-top: var(--spacing-8);
+  border-top: 1px solid var(--color-accent);
 }
 
 .blog-post-nav ul {
@@ -992,14 +1020,8 @@ a:focus {
 
 /* Media queries */
 
-/* From the md breakpoint up, prose lists pull their markers into the gutter and
-   blockquotes hang into the left margin. */
+/* From the md breakpoint up, prose lists pull their markers into the gutter. */
 @media (width >= 48rem) {
-  blockquote {
-    margin-left: calc(-1 * var(--spacing-6));
-    padding-left: var(--spacing-6);
-  }
-
   ul,
   ol {
     list-style-position: outside;
@@ -1175,9 +1197,11 @@ a:focus {
   justify-content: space-between;
   flex-wrap: wrap;
 
-  /* Match the breathing room the bio has around its dividers so the footer is
-     not flush against the rule above it. */
-  margin-top: var(--spacing-8);
+  /* Match the bio's --spacing-6 gap so the footer sits a uniform distance below
+     the rule above it. Font size matches the rest of the page chrome
+     (breadcrumbs, bio) so the secondary text is uniform. */
+  margin-top: var(--spacing-6);
+  font-size: var(--fontSize-0);
 }
 
 .footer-metadata a {
