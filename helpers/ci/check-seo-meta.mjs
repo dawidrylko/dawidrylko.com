@@ -7,6 +7,7 @@
  *
  *   - a non-empty <title>
  *   - a non-empty <meta name="description">
+ *   - exactly one <h1> (SEO audits flag pages with zero or multiple H1s)
  *   - a <link rel="canonical"> pointing at the production origin
  *   - every <script type="application/ld+json"> block is valid JSON
  *
@@ -78,6 +79,12 @@ function checkPage(page, html) {
 
   const description = html.match(/<meta[^>]*name="description"[^>]*content="([^"]*)"/);
   if (!description || !description[1].trim()) fail(`${page}: missing or empty meta description`);
+
+  // Exactly one <h1> per page. Ahrefs flags both missing and multiple H1s; the
+  // usual regression is a React island (e.g. a demo) rendering its own <h1>
+  // inside an article that already has the post title as <h1>.
+  const h1Count = (html.match(/<h1[\s/>]/g) || []).length;
+  if (h1Count !== 1) fail(`${page}: expected exactly one <h1>, found ${h1Count}`);
 
   const canonical = html.match(/<link[^>]*rel="canonical"[^>]*href="([^"]*)"/);
   // noindex pages (e.g. the 404) must not carry a canonical at all: a self
