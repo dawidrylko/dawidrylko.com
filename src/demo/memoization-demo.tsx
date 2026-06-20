@@ -161,7 +161,7 @@ const MemoizationDemo: FC = () => {
       <div className="harry-potter-app-container">
         <div className="harry-potter-main-card">
           <header className="harry-potter-header">
-            <h1 className="harry-potter-title">🧙‍♂️ Dumbledore&apos;s Pensieve</h1>
+            <h2 className="harry-potter-title">🧙‍♂️ Dumbledore&apos;s Pensieve</h2>
             <p className="harry-potter-subtitle">React Memoization Demo with Horcrux Memories</p>
             <p className="harry-potter-description">
               Extract memories from Voldemort&apos;s Horcruxes. First extraction takes time due to magical processing,
