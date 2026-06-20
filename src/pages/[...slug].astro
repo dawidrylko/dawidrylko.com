@@ -7,6 +7,8 @@ import { SITE_METADATA } from '../data/site-metadata';
 import { STRUCTURED_DATA } from '../data/structured-data';
 import { formatPolishDate, toISODate } from '../lib/date';
 import { slugifyTag } from '../lib/tags';
+import { countWords, readingTimeMinutes } from '../lib/reading-time';
+import { plPlural } from '../lib/pl-plural';
 
 export async function getStaticPaths() {
   // Replicates Gatsby's createPages exactly: posts ordered by frontmatter date
@@ -45,14 +47,11 @@ const ogImage = featuredImg ? (await getImage({ src: featuredImg, width: 1200, f
 const ogImageWidth = featuredImg ? 1200 : undefined;
 const ogImageHeight = featuredImg ? Math.round((1200 * featuredImg.height) / featuredImg.width) : undefined;
 
-// Approximate word count from the raw Markdown body (strips fenced code first).
-const wordCount = post.body
-  ? post.body
-      .replace(/```[\s\S]*?```/g, ' ')
-      .trim()
-      .split(/\s+/)
-      .filter(Boolean).length
-  : undefined;
+// Approximate word count from the raw Markdown body (strips fenced code first)
+// and the derived reading-time estimate shown in the post header.
+const words = countWords(post.body);
+const wordCount = words || undefined;
+const readingTime = readingTimeMinutes(words);
 
 const structuredData = {
   '@context': 'https://schema.org',
@@ -99,6 +98,8 @@ const structuredData = {
         <span>{dateFormatted}</span>
         &nbsp;|&nbsp;
         <span><a href="/bio/">{SITE_METADATA.author.name}</a></span>
+        &nbsp;|&nbsp;
+        <span>{readingTime} min czytania &middot; {words} {plPlural(words, ['słowo', 'słowa', 'słów'])}</span>
       </small>
     </header>
     {
