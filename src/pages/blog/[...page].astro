@@ -122,7 +122,7 @@ const structuredData = {
   <ol id="blog-search-results" class="posts" hidden></ol>
 
   <ol id="blog-posts" class="posts">
-    {items.map(({ post }) => <PostListItem post={post} tagMode="search" />)}
+    {items.map(({ post }) => <PostListItem post={post} />)}
   </ol>
 
   {
@@ -171,6 +171,8 @@ const structuredData = {
 </PageLayout>
 
 <script>
+  import { slugifyTag } from '../../lib/slugify-tag';
+
   // Progressive-enhancement search across ALL posts (not just the current page).
   // The index is fetched once, lazily, on first interaction.
   type SearchItem = {
@@ -265,8 +267,7 @@ const structuredData = {
             const tagLi = document.createElement('li');
             const tagLink = document.createElement('a');
             tagLink.className = 'tag';
-            tagLink.href = `/blog/?q=${encodeURIComponent(tag)}`;
-            tagLink.dataset.tag = tag;
+            tagLink.href = `/tags/${slugifyTag(tag)}/`;
             tagLink.textContent = `#${tag}`;
             tagLi.appendChild(tagLink);
             tags.appendChild(tagLi);
@@ -322,20 +323,7 @@ const structuredData = {
       debounce = setTimeout(() => void search(input.value), 120);
     });
 
-    // Tag chips (in the list and in search results) drive the same search box
-    // instead of reloading the page.
-    document.addEventListener('click', event => {
-      const target = event.target as HTMLElement;
-      const tagLink = target.closest<HTMLElement>('[data-tag]');
-      if (!tagLink) return;
-      event.preventDefault();
-      const tag = tagLink.dataset.tag ?? '';
-      input.value = tag;
-      void search(tag);
-      input.scrollIntoView({ block: 'start', behavior: 'smooth' });
-    });
-
-    // Honour ?q= on load so tag links from a post (and shared URLs) run a search.
+    // Honour ?q= on load so shared search URLs reopen their results.
     const initialQuery = new URLSearchParams(location.search).get('q');
     if (initialQuery) {
       input.value = initialQuery;

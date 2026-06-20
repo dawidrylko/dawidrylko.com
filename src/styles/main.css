@@ -280,6 +280,14 @@ main section ol {
   list-style-position: outside;
 }
 
+/* Layout lists keep their flush reset even inside a `main section` (the related
+   posts below an article, and the tag chips on each card), where the prose-list
+   gutter rule above would otherwise indent them. */
+main section ol.posts,
+main section .tags {
+  padding-left: var(--spacing-0);
+}
+
 blockquote {
   color: var(--color-text-light);
   margin-left: calc(-1 * var(--spacing-6));
@@ -658,6 +666,23 @@ a:focus {
   margin-bottom: var(--spacing-8);
 }
 
+/* Shiki code blocks ship with no padding, so the code sits flush against the
+   box edge. Add breathing room plus the shared media radius, and keep the
+   vertical rhythm consistent with paragraphs. */
+.astro-code {
+  padding: var(--spacing-4);
+  margin-bottom: var(--spacing-8);
+  border-radius: var(--spacing-2);
+}
+
+/* Unified rounded corners across the blog and subpages: post featured images,
+   in-content figures and code samples all share one radius (post thumbnails and
+   the TOC box already use it). */
+.blog-post img,
+.figure img {
+  border-radius: var(--spacing-2);
+}
+
 /* In-post table of contents: a bordered box sitting above the article body. */
 .toc {
   margin-bottom: var(--spacing-8);
@@ -690,6 +715,13 @@ a:focus {
 
 .toc li {
   counter-increment: toc-counter;
+  margin-bottom: var(--spacing-2);
+}
+
+/* Drop the trailing item's margin so the box padding alone sets the bottom gap
+   (the global `ol li` margin-bottom otherwise stacks on top of it). */
+.toc li:last-child {
+  margin-bottom: var(--spacing-0);
 }
 
 .toc li::before {
@@ -839,16 +871,17 @@ a:focus {
   font-family: var(--font-heading);
   font-size: var(--fontSize-0);
   line-height: 1.2;
-  padding: var(--spacing-1) var(--spacing-2);
-  border: 1px solid var(--color-accent);
-  border-radius: var(--spacing-1);
+  padding: var(--spacing-1) var(--spacing-3);
+  border-radius: var(--spacing-2);
+  background-color: var(--color-accent);
   color: var(--color-primary);
   text-decoration: none;
 }
 
 .tag:hover,
 .tag:focus {
-  background-color: var(--color-accent);
+  background-color: var(--color-primary);
+  color: var(--color-on-primary);
 }
 
 /* Pagination */
