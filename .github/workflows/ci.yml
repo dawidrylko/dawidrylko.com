@@ -239,9 +239,10 @@ jobs:
       - name: Check internal links
         run: pnpm dlx linkinator@6.1.2 dist --recurse --skip "^https?://(?!localhost)"
 
-  # Rendered-page audit (Lighthouse) of the app-owned pages: accessibility and
-  # SEO are gated; performance and best-practices are advisory. ubuntu-latest
-  # ships Chrome, which Lighthouse auto-detects.
+  # Rendered-page audit (Lighthouse) of the app-owned pages: accessibility, SEO
+  # and performance are gated (performance on the median of three runs);
+  # best-practices stays advisory. ubuntu-latest ships Chrome, which Lighthouse
+  # auto-detects.
   lighthouse:
     name: Lighthouse
     runs-on: ubuntu-latest
