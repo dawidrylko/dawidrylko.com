@@ -36,7 +36,7 @@ Przed zatwierdzeniem zmian uruchom `pnpm type:check`, `pnpm lint:check`, `pnpm l
 - **Build:** statyczny, wyjście w `dist/` (publicDir: `static/`).
 
 ```
-src/components/    # .astro (Seo, Menu, Breadcrumbs, Bio, Table, JsonLd, ExternalLink, Figure) + wyspy React .tsx (Mermaid)
+src/components/    # .astro (Seo, Menu, Breadcrumbs, Bio, Table, JsonLd, ExternalLink, Figure, Faq, HowTo) + wyspy React .tsx (Mermaid)
 src/layouts/       # PageLayout.astro (chrome: head/Seo, header, breadcrumbs, bio, footer)
 src/pages/         # index, blog, bio, contact, setup, metadata, files, 404, [...slug].astro, rss.xml.ts
 src/data/          # site-metadata.ts, structured-data.ts, gtag.ts
