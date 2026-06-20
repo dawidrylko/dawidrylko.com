@@ -11,6 +11,7 @@ import { slugifyTag } from '../lib/tags';
 import { countWords, readingTimeMinutes } from '../lib/reading-time';
 import { plPlural } from '../lib/pl-plural';
 import { relatedPosts } from '../lib/related-posts';
+import { buildTocTree } from '../lib/toc';
 
 export async function getStaticPaths() {
   // Replicates Gatsby's createPages exactly: posts ordered by frontmatter date
@@ -44,6 +45,9 @@ const { Content, headings } = await render(post);
 // Shown only when there is enough structure to be worth navigating.
 const tocHeadings = headings.filter(heading => heading.depth === 2 || heading.depth === 3);
 const showToc = tocHeadings.length >= 3;
+// Nest h3s under their parent h2 so the list numbers hierarchically (5 → 5.1)
+// and strip the autolink "#" each heading's text carries.
+const tocTree = buildTocTree(tocHeadings);
 const { title, description, date, updatedDate, tags, featuredImg, featuredImgAlt } = post.data;
 
 const dateFormatted = formatPolishDate(date);
@@ -147,10 +151,19 @@ const structuredData = {
       showToc && (
         <nav class="toc" aria-label="Spis treści">
           <h2 class="toc-title">Spis treści</h2>
-          <ol>
-            {tocHeadings.map(heading => (
-              <li class={`toc-depth-${heading.depth}`}>
-                <a href={`#${heading.slug}`}>{heading.text}</a>
+          <ol class="toc-list">
+            {tocTree.map(entry => (
+              <li>
+                <a href={`#${entry.slug}`}>{entry.text}</a>
+                {entry.children.length > 0 && (
+                  <ol>
+                    {entry.children.map(child => (
+                      <li>
+                        <a href={`#${child.slug}`}>{child.text}</a>
+                      </li>
+                    ))}
+                  </ol>
+                )}
               </li>
             ))}
           </ol>
