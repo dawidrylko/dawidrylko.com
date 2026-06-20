@@ -61,14 +61,12 @@ async function collectHtml(dir) {
   return files.flat();
 }
 
-/** Decode the handful of HTML entities that appear in titles/descriptions. */
+/** The handful of HTML entities that appear in titles/descriptions. */
+const HTML_ENTITIES = { '&amp;': '&', '&lt;': '<', '&gt;': '>', '&quot;': '"', '&#39;': "'" };
+
+/** Decode those entities in a single pass so "&amp;lt;" is not double-unescaped. */
 function decodeEntities(text) {
-  return text
-    .replace(/&amp;/g, '&')
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'");
+  return text.replace(/&(?:amp|lt|gt|quot|#39);/g, entity => HTML_ENTITIES[entity]);
 }
 
 function isOwnedRoute(rel) {
