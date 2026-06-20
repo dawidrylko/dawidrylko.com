@@ -52,11 +52,24 @@ const { person } = STRUCTURED_DATA;
 const publishedTime = toISODate(date);
 const modifiedTime = updatedDate ? toISODate(updatedDate) : undefined;
 
-// Open Graph wants a bounded image, not the raw (often multi-thousand-px) source.
-const ogImage = featuredImg ? (await getImage({ src: featuredImg, width: 1200, format: 'webp' })).src : undefined;
-// Preserve the source aspect ratio so OG image dimensions are accurate.
-const ogImageWidth = featuredImg ? 1200 : undefined;
-const ogImageHeight = featuredImg ? Math.round((1200 * featuredImg.height) / featuredImg.width) : undefined;
+// Open Graph image. Posts with a featuredImg use a bounded copy of it; top-level
+// posts without one fall back to a generated brand card (/og/<slug>.png, emitted
+// by src/pages/og/[slug].png.ts). Secondary pages (id with a slash) get no card
+// and fall back to the brand icon in <Seo>.
+const hasGeneratedOg = !featuredImg && !post.id.includes('/');
+const ogImage = featuredImg
+  ? (await getImage({ src: featuredImg, width: 1200, format: 'webp' })).src
+  : hasGeneratedOg
+    ? `/og/${post.id}.png`
+    : undefined;
+// Preserve the source aspect ratio so OG image dimensions are accurate; the
+// generated card is a fixed 1200×630.
+const ogImageWidth = featuredImg ? 1200 : hasGeneratedOg ? 1200 : undefined;
+const ogImageHeight = featuredImg
+  ? Math.round((1200 * featuredImg.height) / featuredImg.width)
+  : hasGeneratedOg
+    ? 630
+    : undefined;
 
 // Approximate word count from the raw Markdown body (strips fenced code first)
 // and the derived reading-time estimate shown in the post header.
