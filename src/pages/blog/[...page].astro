@@ -1,16 +1,16 @@
 ---
 import type { GetStaticPaths, Page } from 'astro';
 import type { CollectionEntry } from 'astro:content';
-import { Image, Picture, getImage } from 'astro:assets';
+import { Image, getImage } from 'astro:assets';
 import PageLayout from '../../layouts/PageLayout.astro';
 import JsonLd from '../../components/JsonLd.astro';
+import PostListItem from '../../components/PostListItem.astro';
 import rssIcon from '../../assets/rss.svg';
 import { SITE_METADATA } from '../../data/site-metadata';
 import { STRUCTURED_DATA } from '../../data/structured-data';
 import { excerpt } from '../../lib/excerpt';
-import { inlineMarkdown } from '../../lib/inline-markdown';
 import { getBlogPosts, POSTS_PER_PAGE } from '../../lib/blog';
-import { formatPolishDate, toISODate } from '../../lib/date';
+import { toISODate } from '../../lib/date';
 
 const PAGE_METADATA = {
   title: 'Blog 🇵🇱',
@@ -48,9 +48,7 @@ const { person } = STRUCTURED_DATA;
 
 const items = page.data.map(post => {
   const description = post.data.description || excerpt(post.body ?? '');
-  const descriptionHtml = inlineMarkdown(description);
-  const dateFormatted = formatPolishDate(post.data.date);
-  return { post, description, descriptionHtml, dateFormatted };
+  return { post, description };
 });
 
 // Optimised WebP URL per post for the JSON-LD image, keyed by post id. Using the
@@ -103,6 +101,8 @@ const structuredData = {
   <div class="rss">
     <Image src={rssIcon} alt="Ikona RSS" width={20} height={20} layout="fixed" />
     <a href="/rss.xml" type="application/rss+xml">Subskrybuj kanał RSS</a>
+    &nbsp;|&nbsp;
+    <a href="/tags/">Przeglądaj tagi</a>
   </div>
 
   <search class="blog-search">
@@ -122,50 +122,7 @@ const structuredData = {
   <ol id="blog-search-results" class="posts" hidden></ol>
 
   <ol id="blog-posts" class="posts">
-    {
-      items.map(({ post, descriptionHtml, dateFormatted }) => (
-        <li>
-          <article class="post-list-item">
-            <header>
-              <h2>
-                <a href={`/${post.id}/`}>{post.data.title}</a>
-              </h2>
-              <small>
-                <span>{dateFormatted}</span>
-                &nbsp;|&nbsp;
-                <span>
-                  <a href="/bio/">{author.name}</a>
-                </span>
-              </small>
-            </header>
-            <section>
-              {post.data.featuredImg && (
-                <a href={`/${post.id}/`} class="post-thumb" aria-hidden="true" tabindex="-1">
-                  <Picture
-                    src={post.data.featuredImg}
-                    formats={['avif', 'webp']}
-                    fallbackFormat="webp"
-                    width={600}
-                    sizes="(min-width: 37.5rem) 200px, 100vw"
-                    alt={post.data.featuredImgAlt || ''}
-                  />
-                </a>
-              )}
-              <p set:html={descriptionHtml} />
-            </section>
-            <ul class="tags" aria-label="Tagi">
-              {post.data.tags.map(tag => (
-                <li>
-                  <a class="tag" href={`/blog/?q=${encodeURIComponent(tag)}`} data-tag={tag}>
-                    #{tag}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </article>
-        </li>
-      ))
-    }
+    {items.map(({ post }) => <PostListItem post={post} tagMode="search" />)}
   </ol>
 
   {

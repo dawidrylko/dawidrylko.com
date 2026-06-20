@@ -1,0 +1,82 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { Picture } from 'astro:assets';
+import { SITE_METADATA } from '../data/site-metadata';
+import { excerpt } from '../lib/excerpt';
+import { inlineMarkdown } from '../lib/inline-markdown';
+import { formatPolishDate } from '../lib/date';
+import { slugifyTag } from '../lib/tags';
+
+// Shared blog post card (one <li> in a .posts list). Used by the blog index and
+// the tag archives so the markup stays in one place.
+//
+// tagMode controls the tag chips:
+//   - 'link'   → real links to the tag archive (/tags/<slug>/); the default and
+//                the right choice everywhere except the blog index.
+//   - 'search' → the blog index's progressive-enhancement chips (data-tag drives
+//                the in-page search; href is the shareable /blog/?q= fallback).
+interface Props {
+  post: CollectionEntry<'posts'>;
+  tagMode?: 'link' | 'search';
+}
+
+const { post, tagMode = 'link' } = Astro.props;
+const author = SITE_METADATA.author;
+
+const description = post.data.description || excerpt(post.body ?? '');
+const descriptionHtml = inlineMarkdown(description);
+const dateFormatted = formatPolishDate(post.data.date);
+---
+
+<li>
+  <article class="post-list-item">
+    <header>
+      <h2>
+        <a href={`/${post.id}/`}>{post.data.title}</a>
+      </h2>
+      <small>
+        <span>{dateFormatted}</span>
+        &nbsp;|&nbsp;
+        <span>
+          <a href="/bio/">{author.name}</a>
+        </span>
+      </small>
+    </header>
+    <section>
+      {
+        post.data.featuredImg && (
+          <a href={`/${post.id}/`} class="post-thumb" aria-hidden="true" tabindex="-1">
+            <Picture
+              src={post.data.featuredImg}
+              formats={['avif', 'webp']}
+              fallbackFormat="webp"
+              width={600}
+              sizes="(min-width: 37.5rem) 200px, 100vw"
+              alt={post.data.featuredImgAlt || ''}
+            />
+          </a>
+        )
+      }
+      <p set:html={descriptionHtml} />
+    </section>
+    <ul class="tags" aria-label="Tagi">
+      {
+        post.data.tags.map(tag =>
+          tagMode === 'search' ? (
+            <li>
+              <a class="tag" href={`/blog/?q=${encodeURIComponent(tag)}`} data-tag={tag}>
+                #{tag}
+              </a>
+            </li>
+          ) : (
+            <li>
+              <a class="tag" href={`/tags/${slugifyTag(tag)}/`}>
+                #{tag}
+              </a>
+            </li>
+          ),
+        )
+      }
+    </ul>
+  </article>
+</li>

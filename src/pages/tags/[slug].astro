@@ -1,0 +1,69 @@
+---
+import type { GetStaticPaths } from 'astro';
+import PageLayout from '../../layouts/PageLayout.astro';
+import JsonLd from '../../components/JsonLd.astro';
+import PostListItem from '../../components/PostListItem.astro';
+import { SITE_METADATA } from '../../data/site-metadata';
+import { createPageSchema } from '../../lib/page-metadata';
+import { getTags, type TagInfo } from '../../lib/tags';
+import { toISODate } from '../../lib/date';
+
+export const getStaticPaths = (async () => {
+  const tags = await getTags();
+  return tags.map(tag => ({ params: { slug: tag.slug }, props: { tag } }));
+}) satisfies GetStaticPaths;
+
+interface Props {
+  tag: TagInfo;
+}
+
+const { tag } = Astro.props;
+
+const title = `Tag: ${tag.tag}`;
+const description = `Wpisy oznaczone tagiem „${tag.tag}” na blogu Dawida Ryłko — ${tag.count} ${
+  tag.count === 1 ? 'wpis' : 'wpisów'
+}.`;
+
+const structuredData = createPageSchema({
+  type: 'CollectionPage',
+  title,
+  description,
+  keywords: [tag.tag],
+  extra: {
+    mainEntity: {
+      '@type': 'ItemList',
+      name: title,
+      numberOfItems: tag.count,
+      itemListElement: tag.posts.map((post, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        url: `${SITE_METADATA.url}/${post.id}/`,
+        name: post.data.title,
+      })),
+    },
+    about: { '@type': 'Thing', name: tag.tag },
+    dateModified: toISODate(tag.posts[0].data.date),
+  },
+});
+---
+
+<PageLayout
+  breadcrumbTitle={title}
+  breadcrumbParents={[
+    { name: 'Blog 🇵🇱', url: '/blog/' },
+    { name: 'Tagi', url: '/tags/' },
+  ]}
+  title={title}
+  description={description}
+  lang="pl"
+>
+  <JsonLd data={structuredData} />
+  <header>
+    <h1>#{tag.tag}</h1>
+    <small>{tag.count} {tag.count === 1 ? 'wpis' : 'wpisów'}</small>
+  </header>
+  <ol class="posts">
+    {tag.posts.map(post => <PostListItem post={post} />)}
+  </ol>
+  <p><a href="/tags/">← Wszystkie tagi</a></p>
+</PageLayout>

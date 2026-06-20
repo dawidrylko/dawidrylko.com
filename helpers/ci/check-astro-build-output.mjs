@@ -175,6 +175,31 @@ async function checkMermaidOverflow(css) {
   }
 }
 
+async function checkTagArchives() {
+  // The tag index must exist and link out to at least one tag archive, and each
+  // archive must list posts via the shared .post-list-item card. Tag chips on
+  // post pages point at /tags/<slug>/, so a broken archive would 404 internally.
+  if (!(await exists('tags/index.html'))) {
+    fail('cannot check tags: tags/index.html missing (tag archive pages did not build)');
+    return;
+  }
+  const indexHtml = await read('tags/index.html');
+  const firstTag = indexHtml.match(/href="\/tags\/([^"/]+)\/"/);
+  if (!firstTag) {
+    fail('tags index lists no tag archives (/tags/<slug>/ links missing)');
+    return;
+  }
+  const archive = `tags/${firstTag[1]}/index.html`;
+  if (!(await exists(archive))) {
+    fail(`tag archive ${archive} missing (a /tags/ link points at a page that did not build)`);
+    return;
+  }
+  const archiveHtml = await read(archive);
+  if (!/class="post-list-item"/.test(archiveHtml)) {
+    fail('tag archive lists no posts (.post-list-item missing — shared card regressed)');
+  }
+}
+
 async function checkBlogThumbnail() {
   if (!(await exists('blog/index.html'))) {
     fail('cannot check blog thumbnails: blog/index.html missing');
@@ -205,6 +230,7 @@ async function main() {
   await checkMermaidOverflow(css);
   await checkDemoHydration();
   await checkBlogThumbnail();
+  await checkTagArchives();
   await checkFilesPage();
   await checkFilesHiddenToggle();
 
@@ -215,7 +241,7 @@ async function main() {
     process.exit(1);
   }
   console.log(
-    '  ✓ code dark theme, Mermaid hydration + overflow, demo hydration, thumbnails, list markers, breadcrumbs, files listing + toggle.',
+    '  ✓ code dark theme, Mermaid hydration + overflow, demo hydration, thumbnails, tag archives, list markers, breadcrumbs, files listing + toggle.',
   );
 }
 

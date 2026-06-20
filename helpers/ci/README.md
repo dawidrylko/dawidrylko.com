@@ -51,6 +51,18 @@ node helpers/ci/check-image-budget.mjs                  # check
 node helpers/ci/check-image-budget.mjs --update-baseline # regenerate baseline
 ```
 
+## `check-bundle-budget.mjs`
+
+Fails when any single page references more than 240 KB of `/_astro/*.js` up front
+(module scripts + modulepreload links). Mermaid's per-diagram chunks load at
+runtime and are not counted. Catches a heavy dependency that starts shipping
+site-wide. Runs in the `build-contract` job.
+
+```bash
+pnpm build
+node helpers/ci/check-bundle-budget.mjs
+```
+
 ## `check-no-ai-attribution.mjs`
 
 Enforces the no-AI-attribution rule from `CLAUDE.md`: fails if a commit message

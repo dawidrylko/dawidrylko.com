@@ -3,9 +3,14 @@ import { getCollection, render } from 'astro:content';
 import { Picture, getImage } from 'astro:assets';
 import PageLayout from '../layouts/PageLayout.astro';
 import JsonLd from '../components/JsonLd.astro';
+import PostListItem from '../components/PostListItem.astro';
 import { SITE_METADATA } from '../data/site-metadata';
 import { STRUCTURED_DATA } from '../data/structured-data';
 import { formatPolishDate, toISODate } from '../lib/date';
+import { slugifyTag } from '../lib/tags';
+import { countWords, readingTimeMinutes } from '../lib/reading-time';
+import { plPlural } from '../lib/pl-plural';
+import { relatedPosts } from '../lib/related-posts';
 
 export async function getStaticPaths() {
   // Replicates Gatsby's createPages exactly: posts ordered by frontmatter date
@@ -13,6 +18,9 @@ export async function getStaticPaths() {
   // "next" is the newer one (posts[i+1]). Logic lives inside getStaticPaths
   // because Astro runs it in an isolated scope.
   const posts = (await getCollection('posts')).sort((a, b) => a.data.date.getTime() - b.data.date.getTime());
+  // Related posts are drawn from top-level entries only (secondary pages such as
+  // .../ng-help never appear in listings).
+  const topLevel = posts.filter(entry => !entry.id.includes('/'));
 
   return posts.map((post, index) => {
     const older = index > 0 ? posts[index - 1] : undefined;
@@ -23,13 +31,19 @@ export async function getStaticPaths() {
         post,
         previous: older ? { slug: older.id, title: older.data.title } : null,
         next: newer ? { slug: newer.id, title: newer.data.title } : null,
+        related: relatedPosts(post, topLevel, 3),
       },
     };
   });
 }
 
-const { post, previous, next } = Astro.props;
-const { Content } = await render(post);
+const { post, previous, next, related } = Astro.props;
+const { Content, headings } = await render(post);
+
+// Table of contents from the post's h2/h3 headings (ids come from rehype-slug).
+// Shown only when there is enough structure to be worth navigating.
+const tocHeadings = headings.filter(heading => heading.depth === 2 || heading.depth === 3);
+const showToc = tocHeadings.length >= 3;
 const { title, description, date, updatedDate, tags, featuredImg, featuredImgAlt } = post.data;
 
 const dateFormatted = formatPolishDate(date);
@@ -38,20 +52,36 @@ const { person } = STRUCTURED_DATA;
 const publishedTime = toISODate(date);
 const modifiedTime = updatedDate ? toISODate(updatedDate) : undefined;
 
-// Open Graph wants a bounded image, not the raw (often multi-thousand-px) source.
-const ogImage = featuredImg ? (await getImage({ src: featuredImg, width: 1200, format: 'webp' })).src : undefined;
-// Preserve the source aspect ratio so OG image dimensions are accurate.
-const ogImageWidth = featuredImg ? 1200 : undefined;
-const ogImageHeight = featuredImg ? Math.round((1200 * featuredImg.height) / featuredImg.width) : undefined;
+// Open Graph image. Posts with a featuredImg use a bounded copy of it; top-level
+// posts without one fall back to a generated brand card (/og/<slug>.png, emitted
+// by src/pages/og/[slug].png.ts). Secondary pages (id with a slash) get no card
+// and fall back to the brand icon in <Seo>.
+const hasGeneratedOg = !featuredImg && !post.id.includes('/');
+const ogImage = featuredImg
+  ? (await getImage({ src: featuredImg, width: 1200, format: 'webp' })).src
+  : hasGeneratedOg
+    ? `/og/${post.id}.png`
+    : undefined;
+// Preserve the source aspect ratio so OG image dimensions are accurate; the
+// generated card is a fixed 1200×630.
+const ogImageWidth = featuredImg ? 1200 : hasGeneratedOg ? 1200 : undefined;
+const ogImageHeight = featuredImg
+  ? Math.round((1200 * featuredImg.height) / featuredImg.width)
+  : hasGeneratedOg
+    ? 630
+    : undefined;
 
-// Approximate word count from the raw Markdown body (strips fenced code first).
-const wordCount = post.body
-  ? post.body
-      .replace(/```[\s\S]*?```/g, ' ')
-      .trim()
-      .split(/\s+/)
-      .filter(Boolean).length
-  : undefined;
+// Approximate word count from the raw Markdown body (strips fenced code first)
+// and the derived reading-time estimate shown in the post header.
+const words = countWords(post.body);
+const wordCount = words || undefined;
+const readingTime = readingTimeMinutes(words);
+
+// Share targets: static intent URLs (no third-party widgets/scripts) plus a
+// copy-link button wired up by the inline script below.
+const shareUrl = new URL(Astro.url.pathname, SITE_METADATA.url).href;
+const shareOnX = `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(shareUrl)}`;
+const shareOnLinkedIn = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`;
 
 const structuredData = {
   '@context': 'https://schema.org',
@@ -98,6 +128,8 @@ const structuredData = {
         <span>{dateFormatted}</span>
         &nbsp;|&nbsp;
         <span><a href="/bio/">{SITE_METADATA.author.name}</a></span>
+        &nbsp;|&nbsp;
+        <span>{readingTime} min czytania &middot; {words} {plPlural(words, ['słowo', 'słowa', 'słów'])}</span>
       </small>
     </header>
     {
@@ -111,6 +143,20 @@ const structuredData = {
         />
       )
     }
+    {
+      showToc && (
+        <nav class="toc" aria-label="Spis treści">
+          <h2 class="toc-title">Spis treści</h2>
+          <ol>
+            {tocHeadings.map(heading => (
+              <li class={`toc-depth-${heading.depth}`}>
+                <a href={`#${heading.slug}`}>{heading.text}</a>
+              </li>
+            ))}
+          </ol>
+        </nav>
+      )
+    }
     <section>
       <Content />
     </section>
@@ -118,14 +164,33 @@ const structuredData = {
       {
         tags.map(tag => (
           <li>
-            <a class="tag" href={`/blog/?q=${encodeURIComponent(tag)}`}>
+            <a class="tag" href={`/tags/${slugifyTag(tag)}/`}>
               #{tag}
             </a>
           </li>
         ))
       }
     </ul>
+    <div class="share">
+      <span class="share-label">Udostępnij:</span>
+      <a class="share-link" href={shareOnX} target="_blank" rel="noopener noreferrer nofollow">X</a>
+      <a class="share-link" href={shareOnLinkedIn} target="_blank" rel="noopener noreferrer nofollow">LinkedIn</a>
+      <button class="share-link share-copy" type="button" data-share-url={shareUrl}>Kopiuj link</button>
+    </div>
   </article>
+
+  {
+    related.length > 0 && (
+      <section class="related" aria-label="Powiązane wpisy">
+        <h2>Powiązane wpisy</h2>
+        <ol class="posts">
+          {related.map(relatedPost => (
+            <PostListItem post={relatedPost} />
+          ))}
+        </ol>
+      </section>
+    )
+  }
 
   <nav class="blog-post-nav">
     <ul>
@@ -150,3 +215,21 @@ const structuredData = {
     </ul>
   </nav>
 </PageLayout>
+
+<script>
+  // Copy-link button: writes the post URL to the clipboard with brief feedback.
+  // Progressive enhancement — the share intent links work without it.
+  const button = document.querySelector<HTMLButtonElement>('.share-copy');
+  if (button) {
+    const original = button.textContent;
+    button.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(button.dataset.shareUrl ?? location.href);
+        button.textContent = 'Skopiowano!';
+        window.setTimeout(() => (button.textContent = original), 2000);
+      } catch {
+        // Clipboard API unavailable (e.g. insecure context); leave the label.
+      }
+    });
+  }
+</script>
