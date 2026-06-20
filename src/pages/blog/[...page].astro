@@ -174,6 +174,7 @@ const structuredData = {
 
 <script>
   import { slugifyTag } from '../../lib/slugify-tag';
+  import { SITE_METADATA } from '../../data/site-metadata';
 
   // Progressive-enhancement search across ALL posts (not just the current page).
   // The index is fetched once, lazily, on first interaction.
@@ -183,6 +184,9 @@ const structuredData = {
     descriptionHtml: string;
     tags: string[];
     dateFormatted: string;
+    readingTime: number;
+    words: number;
+    wordsLabel: string;
     url: string;
     img?: { src: string; alt: string };
   };
@@ -234,8 +238,30 @@ const structuredData = {
         titleLink.href = item.url;
         titleLink.textContent = item.title;
         h2.appendChild(titleLink);
+        // Mirror PostListItem's meta row: date • author • reading time • words,
+        // bullet-separated with the shared .separator span.
+        const separator = () => {
+          const span = document.createElement('span');
+          span.className = 'separator';
+          span.setAttribute('aria-hidden', 'true');
+          span.textContent = '•';
+          return span;
+        };
+
+        const dateSpan = document.createElement('span');
+        dateSpan.textContent = item.dateFormatted;
+
+        const authorSpan = document.createElement('span');
+        const authorLink = document.createElement('a');
+        authorLink.href = '/bio/';
+        authorLink.textContent = SITE_METADATA.author.name;
+        authorSpan.appendChild(authorLink);
+
+        const metaSpan = document.createElement('span');
+        metaSpan.append(`${item.readingTime} min czytania `, separator(), ` ${item.words} ${item.wordsLabel}`);
+
         const small = document.createElement('small');
-        small.textContent = item.dateFormatted;
+        small.append(dateSpan, separator(), authorSpan, separator(), metaSpan);
         header.append(h2, small);
 
         const section = document.createElement('section');
