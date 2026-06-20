@@ -1,7 +1,7 @@
 ---
 import type { GetStaticPaths, Page } from 'astro';
 import type { CollectionEntry } from 'astro:content';
-import { Image, Picture } from 'astro:assets';
+import { Image, Picture, getImage } from 'astro:assets';
 import PageLayout from '../../layouts/PageLayout.astro';
 import JsonLd from '../../components/JsonLd.astro';
 import rssIcon from '../../assets/rss.svg';
@@ -53,6 +53,19 @@ const items = page.data.map(post => {
   return { post, description, descriptionHtml, dateFormatted };
 });
 
+// Optimised WebP URL per post for the JSON-LD image, keyed by post id. Using the
+// raw featuredImg.src would emit the full-size original into the build.
+const featuredImageUrls = new Map(
+  await Promise.all(
+    items
+      .filter(({ post }) => post.data.featuredImg)
+      .map(async ({ post }): Promise<[string, string]> => {
+        const image = await getImage({ src: post.data.featuredImg!, width: 1200, format: 'webp' });
+        return [post.id, image.src];
+      }),
+  ),
+);
+
 // Build a stable href for any page number (page 1 keeps the bare /blog/ URL).
 const pageHref = (n: number) => (n === 1 ? '/blog/' : `/blog/${n}/`);
 
@@ -75,7 +88,7 @@ const structuredData = {
     datePublished: toISODate(post.data.date),
     author: { '@type': 'Person', name: author.name },
     image: post.data.featuredImg
-      ? { '@type': 'ImageObject', url: post.data.featuredImg.src, description: post.data.featuredImgAlt || '' }
+      ? { '@type': 'ImageObject', url: featuredImageUrls.get(post.id), description: post.data.featuredImgAlt || '' }
       : undefined,
     url: `${SITE_METADATA.url}/${post.id}/`,
   })),
@@ -131,6 +144,7 @@ const structuredData = {
                   <Picture
                     src={post.data.featuredImg}
                     formats={['avif', 'webp']}
+                    fallbackFormat="webp"
                     width={600}
                     sizes="(min-width: 37.5rem) 200px, 100vw"
                     alt={post.data.featuredImgAlt || ''}

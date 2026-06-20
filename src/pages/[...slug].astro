@@ -102,7 +102,13 @@ const structuredData = {
     </header>
     {
       featuredImg && (
-        <Picture src={featuredImg} formats={['avif', 'webp']} layout="full-width" alt={featuredImgAlt ?? ''} />
+        <Picture
+          src={featuredImg}
+          formats={['avif', 'webp']}
+          fallbackFormat="webp"
+          layout="full-width"
+          alt={featuredImgAlt ?? ''}
+        />
       )
     }
     <section>
