@@ -5,6 +5,8 @@ import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
+import rehypeSlug from 'rehype-slug';
+import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import webmanifest from './src/integrations/webmanifest';
 
 // Content pipeline (migrated from Gatsby):
@@ -31,8 +33,23 @@ export default defineConfig({
     layout: 'constrained',
   },
   markdown: {
+    // rehype-slug adds id="" to every heading (Astro does not by default), so
+    // the in-post table of contents and shared deep links resolve. autolink then
+    // appends a hover "#" anchor; it is aria-hidden + tabindex -1 so it neither
+    // duplicates the heading in the a11y tree nor becomes a focus trap.
     remarkPlugins: [remarkMath],
-    rehypePlugins: [rehypeKatex],
+    rehypePlugins: [
+      rehypeKatex,
+      rehypeSlug,
+      [
+        rehypeAutolinkHeadings,
+        {
+          behavior: 'append',
+          properties: { className: ['heading-anchor'], ariaHidden: 'true', tabIndex: -1 },
+          content: { type: 'text', value: '#' },
+        },
+      ],
+    ],
     shikiConfig: {
       themes: { light: 'github-light', dark: 'github-dark' },
     },

@@ -32,7 +32,12 @@ export async function getStaticPaths() {
 }
 
 const { post, previous, next } = Astro.props;
-const { Content } = await render(post);
+const { Content, headings } = await render(post);
+
+// Table of contents from the post's h2/h3 headings (ids come from rehype-slug).
+// Shown only when there is enough structure to be worth navigating.
+const tocHeadings = headings.filter(heading => heading.depth === 2 || heading.depth === 3);
+const showToc = tocHeadings.length >= 3;
 const { title, description, date, updatedDate, tags, featuredImg, featuredImgAlt } = post.data;
 
 const dateFormatted = formatPolishDate(date);
@@ -111,6 +116,20 @@ const structuredData = {
           layout="full-width"
           alt={featuredImgAlt ?? ''}
         />
+      )
+    }
+    {
+      showToc && (
+        <nav class="toc" aria-label="Spis treści">
+          <h2 class="toc-title">Spis treści</h2>
+          <ol>
+            {tocHeadings.map(heading => (
+              <li class={`toc-depth-${heading.depth}`}>
+                <a href={`#${heading.slug}`}>{heading.text}</a>
+              </li>
+            ))}
+          </ol>
+        </nav>
       )
     }
     <section>
