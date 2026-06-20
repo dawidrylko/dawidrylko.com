@@ -1,31 +1,8 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { __setEntries, type MockPost } from '../../test/mocks/astro-content';
-import { slugifyTag, getTags } from './tags';
+import { getTags } from './tags';
 
 const post = (id: string, date: string, tags: string[]): MockPost => ({ id, data: { date: new Date(date), tags } });
-
-describe('slugifyTag', () => {
-  it('lowercases and keeps simple tags', () => {
-    expect(slugifyTag('JavaScript')).toBe('javascript');
-    expect(slugifyTag('css')).toBe('css');
-  });
-
-  it('collapses dots and spaces into single hyphens', () => {
-    expect(slugifyTag('Node.js')).toBe('node-js');
-    expect(slugifyTag('frontend development')).toBe('frontend-development');
-    expect(slugifyTag('shopping   manager')).toBe('shopping-manager');
-  });
-
-  it('strips Polish diacritics (including ł)', () => {
-    expect(slugifyTag('Łódź')).toBe('lodz');
-    expect(slugifyTag('Zażółć')).toBe('zazolc');
-  });
-
-  it('trims leading and trailing separators', () => {
-    expect(slugifyTag('C++')).toBe('c');
-    expect(slugifyTag('.NET')).toBe('net');
-  });
-});
 
 describe('getTags', () => {
   beforeEach(() => __setEntries([]));

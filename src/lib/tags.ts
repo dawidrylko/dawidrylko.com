@@ -1,4 +1,9 @@
 import { getBlogPosts } from './blog';
+import { slugifyTag } from './slugify-tag';
+
+// Re-exported so existing server-side imports (`../lib/tags`) keep working; the
+// implementation lives in a dependency-free module the client search can import.
+export { slugifyTag };
 
 // A blog post entry, inferred from getBlogPosts so this stays in sync with the
 // content collection type without importing astro:content directly (the unit
@@ -14,20 +19,6 @@ export interface TagInfo {
   count: number;
   // Posts carrying the tag, newest first (getBlogPosts order is preserved).
   posts: Post[];
-}
-
-// Build a URL-safe slug for a tag. Mirrors the blog search normaliser
-// (lowercase, strip diacritics, ł→l — ł is not a decomposable combining mark)
-// then collapses every run of non-alphanumeric characters to a single hyphen so
-// "Node.js" → "node-js" and "frontend development" → "frontend-development".
-export function slugifyTag(tag: string): string {
-  return tag
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/ł/g, 'l')
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '');
 }
 
 // Aggregate every tag across the published posts. Returns one entry per distinct

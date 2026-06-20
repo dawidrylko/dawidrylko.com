@@ -13,14 +13,13 @@ test.describe('blog search', () => {
     await expect(page.locator('#blog-posts')).toBeVisible();
   });
 
-  test('clicking a tag chip runs a search for that tag', async ({ page }) => {
+  test('clicking a tag chip navigates to its archive page', async ({ page }) => {
     await page.goto('/blog/');
     const firstTag = page.locator('#blog-posts .tag').first();
-    const tag = await firstTag.getAttribute('data-tag');
-    expect(tag).toBeTruthy();
+    await expect(firstTag).toHaveAttribute('href', /^\/tags\/.+\/$/);
 
     await firstTag.click();
-    await expect(page.locator('#blog-search-input')).toHaveValue(tag as string);
-    await expect(page.locator('#blog-search-results')).toBeVisible();
+    await expect(page).toHaveURL(/\/tags\/.+\//);
+    await expect(page.locator('h1')).toContainText('#');
   });
 });
