@@ -1,11 +1,11 @@
 ---
 import { SITE_METADATA } from '../data/site-metadata';
 import JsonLd from './JsonLd.astro';
+import { buildCrumbs } from '../lib/breadcrumbs';
 import type { NavLink } from '../types';
 
-// Port of src/components/breadcrumbs.tsx. Builds the trail from the current
-// pathname, mapping known menu segments to their labels and using the page's
-// custom title for the active (last) crumb.
+// Builds the trail from the current pathname, mapping known menu segments to
+// their labels and using the page's custom title for the active (last) crumb.
 interface Props {
   customTitle: string;
   // Extra ancestor crumbs inserted between Home and the path-derived trail.
@@ -16,48 +16,13 @@ interface Props {
 
 const { customTitle, parents = [] } = Astro.props;
 const siteUrl = `${SITE_METADATA.url}/`;
-const menu = SITE_METADATA.menu;
-const pathname = Astro.url.pathname;
 
-type Crumb = { name: string; title: string; url: string; isActive: boolean };
-
-function buildCrumbs(): Crumb[] {
-  const segments = pathname.split('/').filter(Boolean);
-  const crumbs: Crumb[] = [{ name: '🏠', title: 'Home', url: '/', isActive: pathname === '/' }];
-
-  if (pathname === '/') {
-    return crumbs;
-  }
-
-  // Injected ancestors (e.g. Blog for a post) come right after Home.
-  for (const parent of parents) {
-    crumbs.push({ name: parent.name, title: parent.name, url: parent.url, isActive: false });
-  }
-
-  const pathMap = menu.reduce<Record<string, string>>((acc, item) => {
-    acc[item.url.replace(/\//g, '')] = item.name;
-    return acc;
-  }, {});
-
-  let currentPath = '';
-  segments.forEach((segment, index) => {
-    currentPath += '/' + segment;
-    // Trailing slash keeps crumb hrefs canonical under trailingSlash: 'always',
-    // so relative links inside nested pages resolve correctly.
-    const url = `${currentPath}/`;
-    const isLast = index === segments.length - 1;
-    if (isLast) {
-      crumbs.push({ name: customTitle, title: customTitle, url, isActive: true });
-    } else {
-      const name = pathMap[segment] || segment.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-      crumbs.push({ name, title: name, url, isActive: false });
-    }
-  });
-
-  return crumbs;
-}
-
-const crumbs = buildCrumbs();
+const crumbs = buildCrumbs({
+  pathname: Astro.url.pathname,
+  customTitle,
+  menu: SITE_METADATA.menu,
+  parents,
+});
 const show = crumbs.length > 1;
 
 const structuredData = {
