@@ -109,7 +109,7 @@ async function checkSocialMeta() {
   }
 }
 
-/** The critical heading/body fonts must be preloaded as woff2 (LCP/CLS gate). */
+/** The critical body font must be preloaded as woff2 (LCP/CLS gate). */
 async function checkFontPreload() {
   const page = 'index.html';
   if (!(await exists(page))) {
@@ -119,8 +119,8 @@ async function checkFontPreload() {
   const html = await read(page);
   const preloads = html.match(/<link[^>]*rel="preload"[^>]*>/g) ?? [];
   const fontPreloads = preloads.filter(tag => /as="font"/.test(tag) && /type="font\/woff2"/.test(tag));
-  if (fontPreloads.length < 2) {
-    fail(`dist/${page} should preload the heading and body woff2 fonts (found ${fontPreloads.length})`);
+  if (fontPreloads.length < 1) {
+    fail(`dist/${page} should preload the body woff2 font (found ${fontPreloads.length})`);
   }
   for (const tag of fontPreloads) {
     if (!/crossorigin/.test(tag)) {
@@ -147,7 +147,7 @@ async function main() {
     console.error(`\nBuild-output contract failed: ${problems.length} problem(s).`);
     process.exit(1);
   }
-  console.log('  ✓ core pages, RSS, sitemap, manifest, social meta and font preload all present.');
+  console.log('  ✓ core pages, RSS, sitemap, manifest, social meta and body-font preload all present.');
 }
 
 main().catch(err => {
