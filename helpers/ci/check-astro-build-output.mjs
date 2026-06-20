@@ -11,7 +11,7 @@
  *   - the memoization post's interactive demo hydrates (client:visible island)
  *   - blog-list thumbnails render at a bounded (600px) size, not full-res
  *   - content list markers stay outside (not dropped onto their own line / clipped)
- *   - breadcrumbs truncate on one line (no horizontal-scroll fallback)
+ *   - breadcrumbs wrap onto multiple lines on mobile (no truncation / scroll)
  *   - the /files/ page lists presentations (static/files is read from disk)
  *   - the /files/ cmd/ctrl+shift+. hidden-variant toggle ships and is wired up
  *   - the /setup/ Mermaid diagram cannot push page-level horizontal scroll
@@ -97,11 +97,14 @@ async function checkBreadcrumbs(css) {
     fail('breadcrumbs ol rule not found in bundled CSS');
     return;
   }
-  if (!/flex-wrap:\s*nowrap/.test(m[1])) {
-    fail('breadcrumbs no longer nowrap (wrapping regressed)');
+  // Mobile-first contract: the trail wraps onto multiple lines on narrow
+  // screens (left-aligned), never truncating crumbs or introducing horizontal
+  // scroll.
+  if (!/flex-wrap:\s*wrap/.test(m[1])) {
+    fail('breadcrumbs no longer wrap (would truncate/overflow on mobile)');
   }
   if (/overflow-x/.test(m[1])) {
-    fail('breadcrumbs reintroduced horizontal scroll (should be ellipsis only)');
+    fail('breadcrumbs reintroduced horizontal scroll (should wrap instead)');
   }
 }
 

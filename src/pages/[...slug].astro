@@ -130,10 +130,14 @@ const structuredData = {
       <h1>{title}</h1>
       <small>
         <span>{dateFormatted}</span>
-        &nbsp;|&nbsp;
+        <span class="separator" aria-hidden="true">•</span>
         <span><a href="/bio/">{SITE_METADATA.author.name}</a></span>
-        &nbsp;|&nbsp;
-        <span>{readingTime} min czytania &middot; {words} {plPlural(words, ['słowo', 'słowa', 'słów'])}</span>
+        <span class="separator" aria-hidden="true">•</span>
+        <span
+          >{readingTime} min czytania <span class="separator" aria-hidden="true">•</span>
+          {words}
+          {plPlural(words, ['słowo', 'słowa', 'słów'])}</span
+        >
       </small>
     </header>
     {
