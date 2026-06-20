@@ -6,6 +6,8 @@ import { excerpt } from '../lib/excerpt';
 import { inlineMarkdown } from '../lib/inline-markdown';
 import { formatPolishDate } from '../lib/date';
 import { slugifyTag } from '../lib/tags';
+import { countWords, readingTimeMinutes } from '../lib/reading-time';
+import { plPlural } from '../lib/pl-plural';
 
 // Shared blog post card (one <li> in a .posts list). Used by the blog index, the
 // tag archives and the related-posts section so the markup stays in one place.
@@ -20,6 +22,11 @@ const author = SITE_METADATA.author;
 const description = post.data.description || excerpt(post.body ?? '');
 const descriptionHtml = inlineMarkdown(description);
 const dateFormatted = formatPolishDate(post.data.date);
+
+// Reading-time and word-count meta, matching the post header so listings, tag
+// archives and the related section read consistently with the article itself.
+const words = countWords(post.body);
+const readingTime = readingTimeMinutes(words);
 ---
 
 <li>
@@ -33,6 +40,12 @@ const dateFormatted = formatPolishDate(post.data.date);
         <span class="separator" aria-hidden="true">•</span>
         <span>
           <a href="/bio/">{author.name}</a>
+        </span>
+        <span class="separator" aria-hidden="true">•</span>
+        <span>
+          {readingTime} min czytania <span class="separator" aria-hidden="true">•</span>
+          {words}
+          {plPlural(words, ['słowo', 'słowa', 'słów'])}
         </span>
       </small>
     </header>
