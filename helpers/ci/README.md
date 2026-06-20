@@ -25,6 +25,32 @@ runs in the `build-contract` job against the shared build artifact, so it never
 triggers its own build. Rendered-page audits (Lighthouse) and link integrity
 (linkinator) live in separate jobs to keep responsibilities from overlapping.
 
+## `check-seo-lengths.mjs`
+
+Enforces the SEO length limits (mirrored in `src/lib/seo.ts`) on the rendered
+pages: `<title>` ≤ 60 chars and `<meta name="description">` ≤ 160. App-owned
+routes (`/`, `/blog/*`, `/bio/`, `/contact/`, `/setup/`, `/metadata/`, `/files/`)
+fail the build; blog posts (author content from MDX frontmatter) are reported as
+warnings only. Runs in the `build-contract` job.
+
+```bash
+pnpm build
+node helpers/ci/check-seo-lengths.mjs
+```
+
+## `check-image-budget.mjs`
+
+Fails when an emitted image exceeds the 1 MB per-file budget. Existing oversized
+post images are grandfathered by source-name stem in `image-budget-baseline.json`,
+so only **new** oversized images break the build. Runs in the `build-contract`
+job. After intentionally optimising images, refresh the baseline:
+
+```bash
+pnpm build
+node helpers/ci/check-image-budget.mjs                  # check
+node helpers/ci/check-image-budget.mjs --update-baseline # regenerate baseline
+```
+
 ## `check-no-ai-attribution.mjs`
 
 Enforces the no-AI-attribution rule from `CLAUDE.md`: fails if a commit message

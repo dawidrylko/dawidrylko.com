@@ -202,6 +202,12 @@ jobs:
       - name: Verify SEO / structured-data contract
         run: node helpers/ci/check-seo-meta.mjs
 
+      - name: Verify SEO title/description lengths
+        run: node helpers/ci/check-seo-lengths.mjs
+
+      - name: Verify image weight budget
+        run: node helpers/ci/check-image-budget.mjs
+
   # Internal link integrity across the built site (catches broken links and
   # broken redirects). External URLs are skipped to keep the gate deterministic.
   links:

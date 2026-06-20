@@ -80,10 +80,18 @@ function checkPage(page, html) {
   if (!description || !description[1].trim()) fail(`${page}: missing or empty meta description`);
 
   const canonical = html.match(/<link[^>]*rel="canonical"[^>]*href="([^"]*)"/);
-  // Compare the parsed origin (not a substring) so a look-alike host such as
-  // https://dawidrylko.com.evil.com/ cannot pass the check.
-  const canonicalOrigin = canonical && URL.canParse(canonical[1]) ? new URL(canonical[1]).origin : null;
-  if (canonicalOrigin !== ORIGIN) fail(`${page}: missing or non-canonical canonical link`);
+  // noindex pages (e.g. the 404) must not carry a canonical at all: a self
+  // canonical would point at a non-200 URL, which SEO audits flag. Indexable
+  // pages must carry one pointing at the production origin.
+  const isNoindex = /<meta[^>]*name="robots"[^>]*content="[^"]*noindex/i.test(html);
+  if (isNoindex) {
+    if (canonical) fail(`${page}: noindex page must not emit a canonical link`);
+  } else {
+    // Compare the parsed origin (not a substring) so a look-alike host such as
+    // https://dawidrylko.com.evil.com/ cannot pass the check.
+    const canonicalOrigin = canonical && URL.canParse(canonical[1]) ? new URL(canonical[1]).origin : null;
+    if (canonicalOrigin !== ORIGIN) fail(`${page}: missing or non-canonical canonical link`);
+  }
 
   for (const [i, block] of ldJsonBlocks(html).entries()) {
     try {

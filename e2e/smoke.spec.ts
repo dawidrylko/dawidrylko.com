@@ -36,6 +36,10 @@ test('unknown route serves the 404 page', async ({ page }) => {
   const response = await page.goto('/no-such-page-please/');
   expect(response?.status()).toBe(404);
   await expect(page.locator('h1')).toContainText('Page Not Found');
+
+  // The noindex 404 must not advertise a canonical: it would point at a non-200
+  // URL, which SEO audits flag.
+  await expect(page.locator('link[rel="canonical"]')).toHaveCount(0);
 });
 
 test('dark mode applies the dark background token', async ({ page }) => {

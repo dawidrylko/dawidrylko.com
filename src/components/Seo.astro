@@ -1,5 +1,6 @@
 ---
 import { SITE_METADATA } from '../data/site-metadata';
+import { resolveMetaTitle, resolveMetaDescription } from '../lib/seo';
 
 // Port of the Gatsby <Seo> component (src/components/seo.tsx): title, description,
 // canonical/OG url, Open Graph and Twitter Card meta. The <html lang> attribute
@@ -43,11 +44,10 @@ const OG_LOCALES: Record<string, string> = { en: 'en_US', pl: 'pl_PL' };
 
 const metaLang = lang ?? SITE_METADATA.lang;
 const siteTitle = SITE_METADATA.title;
-const siteDescription = SITE_METADATA.description.en;
 const author = SITE_METADATA.author;
 
-const metaDescription = description || siteDescription;
-const metaTitle = title ? `${title} | ${siteTitle}` : `${siteTitle} | ${author.jobTitle}`;
+const metaDescription = resolveMetaDescription(description);
+const metaTitle = resolveMetaTitle(title);
 const metaImageAlt = imageAlt ?? metaTitle;
 
 const twitterUrl = SITE_METADATA.social.find(({ name }) => name === 'Twitter')?.url ?? '';
