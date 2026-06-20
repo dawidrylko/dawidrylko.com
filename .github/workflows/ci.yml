@@ -208,6 +208,9 @@ jobs:
       - name: Verify image weight budget
         run: node helpers/ci/check-image-budget.mjs
 
+      - name: Verify JS bundle budget
+        run: node helpers/ci/check-bundle-budget.mjs
+
   # Internal link integrity across the built site (catches broken links and
   # broken redirects). External URLs are skipped to keep the gate deterministic.
   links:
