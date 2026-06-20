@@ -82,7 +82,7 @@ const structuredData = {
       <hr />
       <nav class="breadcrumbs" aria-label="Breadcrumb">
         <ol>
-          {crumbs.map((item, index) => (
+          {crumbs.map(item => (
             <li class={item.isActive ? 'active' : ''}>
               {item.isActive ? (
                 <span aria-current="page" title={item.title}>
@@ -92,11 +92,6 @@ const structuredData = {
                 <a href={item.url} title={item.title}>
                   {item.name}
                 </a>
-              )}
-              {index < crumbs.length - 1 && (
-                <span class="separator" aria-hidden="true">
-                  {' / '}
-                </span>
               )}
             </li>
           ))}

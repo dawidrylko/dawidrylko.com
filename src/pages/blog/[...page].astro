@@ -99,9 +99,11 @@ const structuredData = {
     <h1>{PAGE_METADATA.title}</h1>
   </header>
   <div class="rss">
-    <Image src={rssIcon} alt="Ikona RSS" width={20} height={20} layout="fixed" />
-    <a href="/rss.xml" type="application/rss+xml">Subskrybuj kanał RSS</a>
-    &nbsp;|&nbsp;
+    <span class="rss-feed">
+      <Image src={rssIcon} alt="Ikona RSS" width={20} height={20} layout="fixed" />
+      <a href="/rss.xml" type="application/rss+xml">Subskrybuj kanał RSS</a>
+    </span>
+    <span class="separator" aria-hidden="true">•</span>
     <a href="/tags/">Przeglądaj tagi</a>
   </div>
 

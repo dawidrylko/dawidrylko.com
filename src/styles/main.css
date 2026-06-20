@@ -421,6 +421,12 @@ a:focus {
   margin-top: var(--spacing-8) !important;
 }
 
+/* The first card has no divider above it, so it does not need the full
+   inter-post gap — keep it close to the search box / page header. */
+.posts > li:first-child .post-list-item {
+  margin-top: var(--spacing-4) !important;
+}
+
 .post-list-item p {
   margin-bottom: var(--spacing-0);
 }
@@ -659,7 +665,23 @@ a:focus {
 
 .rss {
   display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.rss-feed {
+  display: inline-flex;
+  align-items: center;
   gap: var(--spacing-2);
+}
+
+/* Shared inline bullet separator, matching the main menu (.menu li::after).
+   Carries its own margin so it spaces consistently in both inline meta rows
+   (date • author • reading time) and the flex RSS/tags row. */
+.separator {
+  margin: 0 var(--spacing-2);
+  color: var(--color-text-light);
+  user-select: none;
 }
 
 .gatsby-highlight {
@@ -814,7 +836,11 @@ a:focus {
 
 .blog-search {
   display: block;
-  margin: var(--spacing-6) var(--spacing-0);
+
+  /* Bottom margin trimmed: the live-region status below the input already
+     reserves a line, and the first post card carries its own top margin, so a
+     full margin here stacked into an oversized gap under the search box. */
+  margin: var(--spacing-6) var(--spacing-0) var(--spacing-0);
 }
 
 .blog-search label {
@@ -846,7 +872,7 @@ a:focus {
 .blog-search-status {
   font-size: var(--fontSize-0);
   color: var(--color-text-light);
-  margin: var(--spacing-2) var(--spacing-0) var(--spacing-0);
+  margin: var(--spacing-1) var(--spacing-0) var(--spacing-0);
   min-height: 1.5em;
 }
 
@@ -975,14 +1001,17 @@ a:focus {
   color: var(--color-text-light);
 }
 
+/* Mobile-first: the trail wraps onto multiple lines on narrow screens (no
+   truncation, no horizontal scroll) and stays left-aligned. Crumbs keep their
+   natural width — none grow to fill the row, so the active crumb sits next to
+   its parent instead of being pushed to the centre. */
 .breadcrumbs ol {
   display: flex;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   align-items: center;
   margin: var(--spacing-0);
   padding: var(--spacing-0);
   list-style: none;
-  gap: var(--spacing-1);
 }
 
 .breadcrumbs li {
@@ -990,22 +1019,21 @@ a:focus {
   align-items: center;
   margin: var(--spacing-0);
   padding: var(--spacing-0);
-  max-width: 100%;
-}
-
-.breadcrumbs li:first-child {
-  flex-shrink: 0;
-}
-
-.breadcrumbs li:not(:first-child) {
   min-width: 0;
-  flex: 1 1 auto;
+}
+
+/* Bullet separator, matching the main menu (see .menu li::after). */
+.breadcrumbs li:not(:last-child)::after {
+  content: '•';
+  margin: 0 var(--spacing-2);
+  color: var(--color-text-light);
+  user-select: none;
 }
 
 .breadcrumbs a,
 .breadcrumbs span {
   display: inline-block;
-  padding: var(--spacing-1) var(--spacing-2);
+  padding: 0 var(--spacing-1);
   border-radius: var(--spacing-1);
   text-decoration: none;
   transition:
@@ -1013,10 +1041,7 @@ a:focus {
     color 0.2s ease;
   overflow-wrap: break-word;
   hyphens: auto;
-  max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  min-width: 0;
 }
 
 .breadcrumbs a {
@@ -1032,15 +1057,6 @@ a:focus {
 .breadcrumbs li.active span {
   color: var(--color-text);
   font-weight: var(--fontWeight-bold);
-  background-color: var(--color-accent);
-}
-
-.breadcrumbs .separator {
-  margin: 0 var(--spacing-1);
-  color: var(--color-text-light);
-  font-weight: var(--fontWeight-normal);
-  flex-shrink: 0;
-  user-select: none;
 }
 
 /* Accessibility improvements */
