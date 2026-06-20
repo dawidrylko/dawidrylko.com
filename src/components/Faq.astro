@@ -1,0 +1,36 @@
+---
+// Opt-in FAQ block for MDX posts. Renders an accessible, no-JS accordion
+// (native <details>/<summary>) and emits FAQPage JSON-LD for rich results.
+//
+// Usage in a post (content/pl/.../index.mdx):
+//   import Faq from '../../../src/components/Faq.astro';
+//   <Faq items={[
+//     { question: 'Pytanie?', answer: 'Odpowiedź z **Markdownem**.' },
+//   ]} />
+//
+// Answer text accepts the same inline-Markdown subset as post descriptions
+// (bold, italic, code, links); the JSON-LD mirror is plain text.
+import JsonLd from './JsonLd.astro';
+import { inlineMarkdown } from '../lib/inline-markdown';
+import { buildFaqJsonLd, type FaqItem } from '../lib/structured-content';
+
+interface Props {
+  items: FaqItem[];
+  title?: string;
+}
+
+const { items, title = 'Najczęściej zadawane pytania' } = Astro.props;
+---
+
+<section class="faq" aria-label={title}>
+  <h2>{title}</h2>
+  {
+    items.map(item => (
+      <details class="faq-item">
+        <summary>{item.question}</summary>
+        <div class="faq-answer" set:html={inlineMarkdown(item.answer)} />
+      </details>
+    ))
+  }
+  <JsonLd data={buildFaqJsonLd(items)} />
+</section>

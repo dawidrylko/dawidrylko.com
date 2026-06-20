@@ -101,10 +101,36 @@ function checkPage(page, html) {
   }
 
   for (const [i, block] of ldJsonBlocks(html).entries()) {
+    let data;
     try {
-      JSON.parse(block);
+      data = JSON.parse(block);
     } catch (err) {
       fail(`${page}: invalid JSON-LD block #${i + 1} (${err.message})`);
+      continue;
+    }
+    // Defensive rich-result validation: the opt-in Faq/HowTo MDX components are
+    // author-driven, so we cannot require them — but where they appear they must
+    // be well-formed, or the rich result is silently rejected by crawlers.
+    for (const node of Array.isArray(data) ? data : [data]) {
+      if (!node || typeof node !== 'object') continue;
+      if (node['@type'] === 'FAQPage') {
+        const entities = Array.isArray(node.mainEntity) ? node.mainEntity : [];
+        if (entities.length === 0) fail(`${page}: FAQPage JSON-LD has no Question entries`);
+        for (const q of entities) {
+          if (q?.['@type'] !== 'Question' || !q?.name || !q?.acceptedAnswer?.text) {
+            fail(`${page}: FAQPage Question is missing name or acceptedAnswer.text`);
+          }
+        }
+      }
+      if (node['@type'] === 'HowTo') {
+        const steps = Array.isArray(node.step) ? node.step : [];
+        if (steps.length === 0) fail(`${page}: HowTo JSON-LD has no steps`);
+        for (const s of steps) {
+          if (s?.['@type'] !== 'HowToStep' || !s?.text) {
+            fail(`${page}: HowTo step is missing @type or text`);
+          }
+        }
+      }
     }
   }
 

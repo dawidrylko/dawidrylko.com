@@ -28,7 +28,7 @@
   --spacing-24: 6rem;
   --spacing-32: 8rem;
   --fontFamily-sans:
-    'MontserratVariable', system-ui, -apple-system, blinkmacsystemfont,
+    'Montserrat Variable', system-ui, -apple-system, blinkmacsystemfont,
     'Segoe UI', roboto, 'Helvetica Neue', arial, 'Noto Sans', sans-serif,
     'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   --fontFamily-serif:
@@ -695,6 +695,52 @@ a:focus {
 .toc li::before {
   content: counters(toc-counter, '.') '. ';
   color: var(--color-text-light);
+}
+
+/* Opt-in FAQ block (Faq.astro): a native <details> accordion in a bordered box,
+   matching the .toc idiom. No JS — accessibility and INP come for free. */
+.faq {
+  margin-top: var(--spacing-12);
+}
+
+.faq-item {
+  padding: var(--spacing-3) var(--spacing-5);
+  border: 1px solid var(--color-accent);
+  border-radius: var(--spacing-2);
+  margin-bottom: var(--spacing-3);
+}
+
+.faq-item summary {
+  cursor: pointer;
+  font-family: var(--font-heading);
+  font-weight: var(--fontWeight-bold);
+}
+
+.faq-item summary:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.faq-answer {
+  margin-top: var(--spacing-2);
+}
+
+.faq-answer > :last-child {
+  margin-bottom: var(--spacing-0);
+}
+
+/* Opt-in HowTo block (HowTo.astro): an ordered step list. */
+.howto {
+  margin-top: var(--spacing-12);
+}
+
+.howto-step {
+  margin-bottom: var(--spacing-3);
+}
+
+.howto-step-name {
+  display: block;
+  font-family: var(--font-heading);
 }
 
 /* Heading anchors appended by rehype-autolink-headings: hidden until the heading
