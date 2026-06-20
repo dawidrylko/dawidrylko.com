@@ -63,6 +63,18 @@
 
   /* Text rendered on top of --color-primary (e.g. table headers). */
   --color-on-primary: #fff;
+
+  /* Corner radii (semantic aliases over the spacing scale) so the whole
+     interactive family rounds consistently:
+       --radius-control — inline links/crumbs with a subtle hover surface
+       --radius-pill    — pill controls: tags, pagination, share links */
+  --radius-control: var(--spacing-1);
+  --radius-pill: var(--spacing-2);
+
+  /* Minimum tap target for compact icon/numeric controls (pagination arrows
+     and page numbers). 2.25rem = 36px — comfortably above the WCAG AA 24px
+     floor while staying proportional to the tag chips beside it. */
+  --size-control: 2.25rem;
 }
 
 /* Dark theme: pure CSS, driven by the OS setting. Only the color tokens are
@@ -632,7 +644,7 @@ a:focus {
   font-size: var(--fontSize-0);
   color: var(--color-primary);
   border: 1px solid var(--color-accent);
-  border-radius: var(--spacing-2);
+  border-radius: var(--radius-pill);
   background: none;
   cursor: pointer;
   text-decoration: none;
@@ -898,7 +910,7 @@ a:focus {
   font-size: var(--fontSize-0);
   line-height: 1.2;
   padding: var(--spacing-1) var(--spacing-3);
-  border-radius: var(--spacing-2);
+  border-radius: var(--radius-pill);
   background-color: var(--color-accent);
   color: var(--color-primary);
   text-decoration: none;
@@ -946,10 +958,10 @@ a:focus {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 2.75rem;
-  min-height: 2.75rem;
-  padding: var(--spacing-1) var(--spacing-2);
-  border-radius: var(--spacing-1);
+  min-width: var(--size-control);
+  min-height: var(--size-control);
+  padding: var(--spacing-1) var(--spacing-3);
+  border-radius: var(--radius-pill);
   text-decoration: none;
   font-family: var(--font-heading);
   font-size: var(--fontSize-0);
@@ -1034,7 +1046,7 @@ a:focus {
 .breadcrumbs span {
   display: inline-block;
   padding: 0 var(--spacing-1);
-  border-radius: var(--spacing-1);
+  border-radius: var(--radius-control);
   text-decoration: none;
   transition:
     background-color 0.2s ease,
