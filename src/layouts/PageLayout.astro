@@ -69,7 +69,11 @@ const { website } = STRUCTURED_DATA;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="canonical" href={canonical} />
+    {
+      /* noindex pages (e.g. 404) must not advertise a canonical: theirs would
+        point at a non-200 URL, which SEO audits flag. */
+    }
+    {!noIndex && <link rel="canonical" href={canonical} />}
     <link rel="manifest" href="/manifest.webmanifest" />
     <meta name="theme-color" content="#005b99" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />

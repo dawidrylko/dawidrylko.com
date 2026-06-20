@@ -4,9 +4,15 @@ export const SITE_METADATA = {
   lang: 'en',
   url: 'https://dawidrylko.com',
   title: 'Dawid Ryłko',
+  // Short tagline used only for the homepage <title> (siteTitle | tagline), kept
+  // under the 60-char SEO limit. The full role copy lives in author.jobTitle.
+  titleTagline: 'Software Engineer | Scalable, Secure Systems',
+  // Fallback meta description for pages without their own. Kept ≤160 chars and
+  // free of the decimal-ASCII easter egg (that belongs in the header, not in
+  // search snippets).
   description: {
-    en: 'Welcome to Dawid Ryłko’s personal website and blog. Find articles, insights, and updates from the world of technology here. 68 97 119 105 100 32 82 121 108 107 111',
-    pl: 'Witaj na osobistej stronie i blogu Dawida Ryłko. Znajdziesz tutaj artykuły, spostrzeżenia i aktualizacje ze świata technologii. 68 97 119 105 100 32 82 121 108 107 111',
+    en: 'Personal website and blog of Dawid Ryłko, Software Engineer—articles and insights on software architecture, scalable systems, and modern web.',
+    pl: 'Osobista strona i blog Dawida Ryłko, Software Engineera — artykuły o architekturze systemów, skalowalności i nowoczesnym wytwarzaniu oprogramowania.',
   },
   author: {
     name: 'Dawid Ryłko',

@@ -8,7 +8,7 @@ import type { PageMetadata } from '../types';
 const PAGE_METADATA: PageMetadata = {
   title: 'Home',
   description:
-    'Dawid Ryłko - Software Engineer specializing in scalable, secure, and resilient systems. Explore articles on software engineering, system architecture, and emerging technologies. Available for collaboration on meaningful technology projects.',
+    'Dawid Ryłko—Software Engineer building scalable, secure, and resilient systems. Articles on software engineering, architecture, and emerging tech.',
   keywords: [
     'Dawid Ryłko',
     'Software Engineer',
@@ -39,7 +39,7 @@ const structuredData = createPageSchema({
 });
 ---
 
-<PageLayout breadcrumbTitle={PAGE_METADATA.title}>
+<PageLayout breadcrumbTitle={PAGE_METADATA.title} description={PAGE_METADATA.description}>
   <JsonLd data={structuredData} />
   <header>
     <h1>Hi, I'm Dawid Ryłko</h1>

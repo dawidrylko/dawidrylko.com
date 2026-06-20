@@ -73,6 +73,16 @@ Potrzebne przy modyfikacji `[...slug].astro`, `content.config.ts`, RSS (`rss.xml
 - **Prettier:** single quotes, średniki, 2 spacje, `printWidth: 120`, `arrowParens: avoid`, plugin `prettier-plugin-astro`.
 - **Komentarze:** tylko po angielsku i tylko te realnie wartościowe — wyjaśniaj „dlaczego”, a nie to, co kod już mówi sam.
 
+## SEO i metadane (limity Ahrefs)
+
+Audyt Ahrefs pilnuje długości i poprawności metadanych. Reguły poniżej dotyczą stron, które kontrolujemy (kod w repo) — pilnują ich testy jednostkowe (`src/lib/seo.test.ts`) i checki na zbudowanym `dist/`.
+
+- **Limity długości** (`src/lib/seo.ts`): `<title>` ≤ **60** znaków, `<meta name="description">` ≤ **160**. Zmieniając tytuł/opis strony statycznej (`src/pages/*`) lub fallback w `site-metadata.ts`, mieść się w limitach. Sprawdza je `helpers/ci/check-seo-lengths.mjs` (twardo dla stron własnych: `/`, `/blog/*`, `/bio/`, `/contact/`, `/setup/`, `/metadata/`, `/files/`; posty z `content/pl` tylko ostrzega — ich tytuł/opis pochodzą z frontmatteru autora).
+- **Tytuł strony głównej** budowany jest z `SITE_METADATA.title` + `titleTagline` (krótki, ≤60 z marką). `author.jobTitle` (pełny opis roli) jest dłuższy i służy tylko do Bio + JSON-LD — nie używaj go w `<title>`.
+- **Fallback opisu** (`SITE_METADATA.description`) musi być ≤160 i **bez** easter-egga „68 97 119…” (ten należy do nagłówka, nie do snippetu w SERP).
+- **Canonical:** strony `noIndex` (np. 404) **nie** emitują `<link rel="canonical">` (wskazywałby na URL non-200). Pilnują tego `helpers/ci/check-seo-meta.mjs` i smoke test.
+- **Budżet obrazów:** każdy obraz w `dist/` ≤ **1 MB** (`helpers/ci/check-image-budget.mjs`). Istniejące, cięższe obrazy postów są tymczasowo na liście wyjątków (`image-budget-baseline.json`); **nowe** ponadwymiarowe obrazy blokują CI — optymalizuj/zmniejszaj źródło przed dodaniem. Po świadomej optymalizacji odśwież baseline: `node helpers/ci/check-image-budget.mjs --update-baseline`.
+
 ## Czego nie zmieniać
 
 - **Nie zmieniaj `lang="en"`** w `PageLayout.astro` / `Seo.astro` mimo polskich treści — to celowa decyzja.
