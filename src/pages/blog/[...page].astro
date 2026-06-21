@@ -107,7 +107,7 @@ const structuredData = {
     <a href="/tags/">Przeglądaj tagi</a>
   </div>
 
-  <search class="blog-search">
+  <search class="blog-search" data-author={author.name}>
     <label for="blog-search-input">Szukaj wpisów</label>
     <input
       type="search"
@@ -174,7 +174,6 @@ const structuredData = {
 
 <script>
   import { slugifyTag } from '../../lib/slugify-tag';
-  import { SITE_METADATA } from '../../data/site-metadata';
 
   // Progressive-enhancement search across ALL posts (not just the current page).
   // The index is fetched once, lazily, on first interaction.
@@ -196,6 +195,9 @@ const structuredData = {
   const results = document.getElementById('blog-search-results');
   const posts = document.getElementById('blog-posts');
   const pagination = document.getElementById('blog-pagination');
+  // Author name is carried on the search container's data attribute so this
+  // bundle does not pull in the whole site-metadata module.
+  const authorName = document.querySelector<HTMLElement>('.blog-search')?.dataset.author ?? '';
 
   if (input && status && results && posts) {
     let index: SearchItem[] | null = null;
@@ -254,7 +256,7 @@ const structuredData = {
         const authorSpan = document.createElement('span');
         const authorLink = document.createElement('a');
         authorLink.href = '/bio/';
-        authorLink.textContent = SITE_METADATA.author.name;
+        authorLink.textContent = authorName;
         authorSpan.appendChild(authorLink);
 
         const metaSpan = document.createElement('span');
