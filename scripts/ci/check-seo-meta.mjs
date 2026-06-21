@@ -16,6 +16,9 @@
  *   - blog post pages carry a BlogPosting JSON-LD node
  *   - blog post pages declare og:type=article + article:published_time
  *   - every page emits a WebSite JSON-LD node (site-wide search action)
+ *   - every inline Person node (the canonical #person) carries a non-empty
+ *     sameAs (the social profiles that anchor the author's identity)
+ *   - the /bio/ profile page is typed ProfilePage with a Person mainEntity
  *
  * Redirect stubs (meta-refresh pages such as /resume/) are skipped. Zero
  * dependencies; runs against the built output, it does NOT rebuild. Exits
@@ -68,6 +71,28 @@ function rootTypes(block) {
   } catch {
     return [];
   }
+}
+
+/** Every object node anywhere in a parsed JSON-LD block (depth-first). */
+function allNodes(value, acc = []) {
+  if (Array.isArray(value)) {
+    for (const item of value) allNodes(item, acc);
+  } else if (value && typeof value === 'object') {
+    acc.push(value);
+    for (const key of Object.keys(value)) allNodes(value[key], acc);
+  }
+  return acc;
+}
+
+/** Parsed object nodes of every JSON-LD block on a page (nested included). */
+function allJsonLdNodes(html) {
+  return ldJsonBlocks(html).flatMap(block => {
+    try {
+      return allNodes(JSON.parse(block));
+    } catch {
+      return [];
+    }
+  });
 }
 
 function checkPage(page, html) {
@@ -131,6 +156,29 @@ function checkPage(page, html) {
           }
         }
       }
+    }
+  }
+
+  // The canonical Person node (#person) anchors the author's identity; wherever
+  // it is emitted as a full inline node (carrying a name, not just an {@id}
+  // reference) it must list the social profiles via sameAs, or knowledge-graph
+  // crawlers cannot reconcile the author across the web.
+  for (const node of allJsonLdNodes(html)) {
+    if (node['@type'] === 'Person' && node['@id'] === `${ORIGIN}/#person` && node.name) {
+      if (!Array.isArray(node.sameAs) || node.sameAs.length === 0) {
+        fail(`${page}: canonical Person node is missing a non-empty sameAs`);
+      }
+    }
+  }
+
+  // The /bio/ page is the author's profile: schema.org's ProfilePage with a
+  // Person mainEntity is the pattern Google expects, so lock it against a
+  // regression back to a bare WebPage.
+  if (page === 'bio/index.html') {
+    const profile = allJsonLdNodes(html).find(node => node['@type'] === 'ProfilePage');
+    if (!profile) fail(`${page}: bio page must emit a ProfilePage JSON-LD node`);
+    else if (profile.mainEntity?.['@type'] !== 'Person') {
+      fail(`${page}: ProfilePage mainEntity must be a Person`);
     }
   }
 

@@ -26,6 +26,11 @@ describe('createPageSchema', () => {
     expect('author' in createPageSchema({ title: 'T', description: 'd', withAuthor: false })).toBe(false);
   });
 
+  it('supports the ProfilePage type', () => {
+    const schema = createPageSchema({ type: 'ProfilePage', title: 'About', description: 'd' });
+    expect(schema['@type']).toBe('ProfilePage');
+  });
+
   it('supports the CollectionPage type and merges extra fields', () => {
     const schema = createPageSchema({
       type: 'CollectionPage',

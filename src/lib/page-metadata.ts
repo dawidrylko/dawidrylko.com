@@ -6,7 +6,7 @@ import { STRUCTURED_DATA } from '../data/structured-data';
 // mainEntity, potentialAction…) are passed in via `extra`.
 const { person } = STRUCTURED_DATA;
 
-type PageSchemaType = 'WebPage' | 'CollectionPage';
+type PageSchemaType = 'WebPage' | 'CollectionPage' | 'ProfilePage';
 
 interface PageSchemaInput {
   type?: PageSchemaType;
