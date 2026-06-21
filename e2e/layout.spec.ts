@@ -46,6 +46,35 @@ for (const route of ['/bio/', '/contact/']) {
   });
 }
 
+test('share row keeps its divider close to the controls', async ({ page }) => {
+  await page.goto('/blog/');
+  const href = await page.locator('#blog-posts .post-list-item h2 a').first().getAttribute('href');
+  expect(href).toBeTruthy();
+  await page.goto(href as string);
+
+  const share = page.locator('article.blog-post .share');
+  const firstLink = share.locator('.share-link').first();
+  await expect(share).toBeVisible();
+  await expect(firstLink).toBeVisible();
+
+  // The top rule sits at the box edge; tight padding keeps it hugging the
+  // controls (the breadcrumb-style pairing), unlike the wide gap that opens
+  // the share row away from the section above it.
+  const shareBox = await share.boundingBox();
+  const linkBox = await firstLink.boundingBox();
+  expect(shareBox).not.toBeNull();
+  expect(linkBox).not.toBeNull();
+
+  const dividerGap = (linkBox?.y ?? 0) - (shareBox?.y ?? 0);
+  // Divider hugs the buttons (padding-top is --spacing-2 = 8px); guard against a
+  // regression back to the loose --spacing-6 (24px) that pushed it far away.
+  expect(dividerGap).toBeLessThanOrEqual(12);
+
+  // It must still be clearly set apart from the tags above it.
+  const marginTop = await share.evaluate(el => Number.parseFloat(getComputedStyle(el).marginTop));
+  expect(marginTop).toBeGreaterThan(12);
+});
+
 test('setup page server-renders a sized skeleton so the diagram does not jump', async ({ request }) => {
   const response = await request.get('/setup/');
   expect(response.ok()).toBeTruthy();

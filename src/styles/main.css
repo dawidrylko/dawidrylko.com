@@ -647,14 +647,16 @@ a:focus {
 
 /* Share row: static intent links plus a copy-link button, below the tag list.
    A top rule (matching the site's <hr>: 1px, --color-accent) sets it apart from
-   the tags above. */
+   the tags above. The margin opens the gap above the rule; the rule itself hugs
+   the controls below it (tight padding) so the divider reads as belonging to the
+   share row — the same close pairing the breadcrumbs use with their separators. */
 .share {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: var(--spacing-2);
   margin-top: var(--spacing-8);
-  padding-top: var(--spacing-6);
+  padding-top: var(--spacing-2);
   border-top: 1px solid var(--color-accent);
 }
 
