@@ -1,0 +1,42 @@
+---
+import { SITE_METADATA } from '../data/site-metadata';
+import ShareLink from './ShareLink.astro';
+
+interface Props {
+  // Used as the pre-filled text for the X intent link.
+  title: string;
+}
+
+const { title } = Astro.props;
+
+// Share targets: static intent URLs (no third-party widgets/scripts) plus a
+// copy-link button wired up by the inline script below.
+const shareUrl = new URL(Astro.url.pathname, SITE_METADATA.url).href;
+const shareOnX = `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(shareUrl)}`;
+const shareOnLinkedIn = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`;
+---
+
+<div class="share">
+  <span class="share-label">Udostępnij:</span>
+  <ShareLink href={shareOnX}>X</ShareLink>
+  <ShareLink href={shareOnLinkedIn}>LinkedIn</ShareLink>
+  <ShareLink shareUrl={shareUrl}>Kopiuj link</ShareLink>
+</div>
+
+<script>
+  // Copy-link button: writes the post URL to the clipboard with brief feedback.
+  // Progressive enhancement — the share intent links work without it.
+  const button = document.querySelector<HTMLButtonElement>('.share-copy');
+  if (button) {
+    const original = button.textContent;
+    button.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(button.dataset.shareUrl ?? location.href);
+        button.textContent = 'Skopiowano!';
+        window.setTimeout(() => (button.textContent = original), 2000);
+      } catch {
+        // Clipboard API unavailable (e.g. insecure context); leave the label.
+      }
+    });
+  }
+</script>
