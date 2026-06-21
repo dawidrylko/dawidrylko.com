@@ -207,7 +207,13 @@ const sections: { id: string; heading: string; ariaLabel: string; items: SetupIt
     </section>
 
     <section id="diagram" aria-labelledby="diagram-heading">
-      <Mermaid client:load chart={setupDiagram} ariaLabel="Hardware setup workflow diagram" />
+      {
+        /* Hydrate when scrolled into view: keeps the ~1 MB mermaid + cytoscape
+        bundle off the initial load (the diagram sits well below the fold). The
+        skeleton is server-rendered so its height is reserved up front and the
+        page does not shift when hydration swaps in the SVG. */
+      }
+      <Mermaid client:visible chart={setupDiagram} ariaLabel="Hardware setup workflow diagram" />
     </section>
 
     <Figure src={hardwareSetup} alt={image.alt} caption={image.figcaption} />

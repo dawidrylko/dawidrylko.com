@@ -15,11 +15,12 @@
  *   - best-practices stays advisory (warn); it still surfaces drops in review.
  *
  * Per-page gate (assertMatrix): the primary app pages (home, blog, bio,
- * contact) are lightweight, content-light documents and are held to the
- * strictest bar the toolchain can sustain. The remaining pages legitimately
- * ship heavier runtime work — /setup/ hydrates the Mermaid island, /metadata/
- * renders the full presentation index — so their performance gate is the 0.8
- * floor while accessibility and SEO stay high everywhere.
+ * contact) are lightweight, content-led documents held to the strictest bar
+ * the toolchain can sustain (gtag.js is loaded lazily, off the critical path,
+ * so it no longer caps their score). The remaining pages keep the 0.8 floor:
+ * /metadata/ renders the full presentation index, and /setup/ hydrates the
+ * Mermaid island on scroll (client:visible) rather than at load. Accessibility
+ * and SEO stay high everywhere.
  */
 
 // The strict accessibility/SEO bar shared by every audited page: these scores

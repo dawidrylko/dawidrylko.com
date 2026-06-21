@@ -101,11 +101,6 @@ const { website } = STRUCTURED_DATA;
       fetched before CSS is parsed, cutting LCP and swap-driven CLS. */
     }
     <link rel="preload" href={merriweatherBody} as="font" type="font/woff2" crossorigin />
-    {
-      /* Warm up the Google Analytics origin so gtag.js (loaded async, prod only)
-        resolves DNS/TLS off the critical path. Harmless when GA is absent (dev). */
-    }
-    <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
     <Seo
       title={title}
       description={description}
@@ -123,16 +118,21 @@ const { website } = STRUCTURED_DATA;
     />
     <JsonLd data={website} />
 
-    {/* Google Analytics 4 — production builds only. */}
+    {
+      /* Google Analytics 4 — production builds only. The gtag stub, dataLayer
+        and config call run synchronously so window.gtag exists immediately and
+        the Core Web Vitals island can queue metrics from first paint. The
+        ~90 KB gtag.js is loaded lazily — on the first of user interaction, the
+        page being hidden, or a 5 s fallback — so it no longer competes with
+        rendering on the critical path. Queued hits (pageview + web vitals)
+        flush as soon as it arrives. */
+    }
     {
       import.meta.env.PROD && (
-        <>
-          <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${GTAG}`} />
-          <script
-            is:inline
-            set:html={`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${GTAG}');`}
-          />
-        </>
+        <script
+          is:inline
+          set:html={`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${GTAG}');(function(){var loaded=false;function load(){if(loaded)return;loaded=true;var s=document.createElement('script');s.async=true;s.src='https://www.googletagmanager.com/gtag/js?id=${GTAG}';document.head.appendChild(s);}var o={once:true,passive:true},evs=['pointerdown','keydown','touchstart','scroll'];evs.forEach(function(e){addEventListener(e,load,o);});document.addEventListener('visibilitychange',function(){if(document.visibilityState==='hidden')load();});setTimeout(load,5000);}());`}
+        />
       )
     }
 

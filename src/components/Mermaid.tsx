@@ -76,8 +76,9 @@ const MermaidInner: FC<Required<MermaidProps>> = ({ chart, ariaLabel }) => {
   }
 
   if (!svg) {
-    // Server-rendered too (client:load), so the reserved height is present on
-    // first paint and the content below does not jump when the SVG arrives.
+    // Server-rendered even under client:visible, so the reserved height is
+    // present on first paint and the content below does not jump when the
+    // island hydrates and swaps in the SVG.
     return (
       <div className="mermaid-diagram-skeleton" role="status" aria-label={`${ariaLabel} – loading`} aria-busy="true" />
     );
