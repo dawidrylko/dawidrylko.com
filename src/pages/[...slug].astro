@@ -197,7 +197,10 @@ const structuredData = {
   </article>
 
   {
-    related.length > 0 && (
+    /* Related posts (topical) take priority; the chronological prev/next nav is
+       a fallback only when there are no related posts, so the post footer never
+       shows two competing navigation blocks. */
+    related.length > 0 ? (
       <section class="related" aria-label="Powiązane wpisy">
         <h2>Powiązane wpisy</h2>
         <ol class="posts">
@@ -206,31 +209,31 @@ const structuredData = {
           ))}
         </ol>
       </section>
+    ) : (
+      (previous || next) && (
+        <nav class="blog-post-nav" aria-label="Sąsiednie wpisy">
+          <ul>
+            {previous && (
+              <li class="blog-post-nav-prev">
+                <a href={`/${previous.slug}/`} rel="prev">
+                  <span class="blog-post-nav-label">← Poprzedni wpis</span>
+                  <span class="blog-post-nav-title">{previous.title}</span>
+                </a>
+              </li>
+            )}
+            {next && (
+              <li class="blog-post-nav-next">
+                <a href={`/${next.slug}/`} rel="next">
+                  <span class="blog-post-nav-label">Następny wpis →</span>
+                  <span class="blog-post-nav-title">{next.title}</span>
+                </a>
+              </li>
+            )}
+          </ul>
+        </nav>
+      )
     )
   }
-
-  <nav class="blog-post-nav">
-    <ul>
-      <li>
-        {
-          previous && (
-            <a href={`/${previous.slug}/`} rel="prev">
-              ← {previous.title}
-            </a>
-          )
-        }
-      </li>
-      <li>
-        {
-          next && (
-            <a href={`/${next.slug}/`} rel="next">
-              {next.title} →
-            </a>
-          )
-        }
-      </li>
-    </ul>
-  </nav>
 </PageLayout>
 
 <script>
