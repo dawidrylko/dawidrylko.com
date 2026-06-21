@@ -70,11 +70,6 @@
        --radius-pill    — pill controls: tags, pagination, share links */
   --radius-control: var(--spacing-1);
   --radius-pill: var(--spacing-2);
-
-  /* Minimum tap target for compact icon/numeric controls (pagination arrows
-     and page numbers). 2.25rem = 36px — comfortably above the WCAG AA 24px
-     floor while staying proportional to the tag chips beside it. */
-  --size-control: 2.25rem;
 }
 
 /* Dark theme: pure CSS, driven by the OS setting. Only the color tokens are
@@ -690,17 +685,68 @@ a:focus {
 .related,
 .blog-post-nav {
   margin-top: var(--spacing-8);
-  padding-top: var(--spacing-8);
+  padding-top: var(--spacing-6);
   border-top: 1px solid var(--color-accent);
+}
+
+/* The section heading sits directly under the divider; drop its global
+   heading top margin (--spacing-12) so the gap above it is just the section's
+   padding, not padding + heading margin stacked. */
+.related > h2 {
+  margin-top: var(--spacing-0);
 }
 
 .blog-post-nav ul {
   display: flex;
   flex-wrap: wrap;
+  gap: var(--spacing-4);
   justify-content: space-between;
   list-style: none;
   margin: var(--spacing-0);
   padding: var(--spacing-0);
+}
+
+/* Two equal-width cards that wrap to a stack on narrow screens. */
+.blog-post-nav li {
+  margin: var(--spacing-0);
+  flex: 1 1 14rem;
+  min-width: 0;
+}
+
+/* When only the next link exists it still aligns to the right edge. */
+.blog-post-nav-next {
+  margin-left: auto;
+  text-align: right;
+}
+
+.blog-post-nav a {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+  height: 100%;
+  padding: var(--spacing-3) var(--spacing-4);
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-pill);
+  text-decoration: none;
+  transition: border-color 0.2s ease;
+}
+
+.blog-post-nav a:hover,
+.blog-post-nav a:focus {
+  border-color: var(--color-primary);
+}
+
+.blog-post-nav-label {
+  font-family: var(--font-heading);
+  font-size: var(--fontSize-0);
+  color: var(--color-text-light);
+}
+
+.blog-post-nav-title {
+  font-family: var(--font-heading);
+  font-weight: var(--fontWeight-bold);
+  color: var(--color-primary);
+  overflow-wrap: break-word;
 }
 
 .rss {
@@ -980,19 +1026,22 @@ a:focus {
 
 /* Page numbers and the prev/next arrows share one button shape so the arrows
    read as part of the pagination control rather than floating beside it. */
+
+/* Page numbers and the prev/next arrows share the tag chip's box exactly (same
+   font, line-height, padding and radius) so the pagination reads as the same
+   pill family and sits at the same height as the tag chips. */
 .pagination-pages a,
 .pagination-pages .is-current,
 .pagination-edge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: var(--size-control);
-  min-height: var(--size-control);
   padding: var(--spacing-1) var(--spacing-3);
   border-radius: var(--radius-pill);
   text-decoration: none;
   font-family: var(--font-heading);
   font-size: var(--fontSize-0);
+  line-height: 1.2;
 }
 
 .pagination-pages a,
@@ -1035,17 +1084,17 @@ a:focus {
   color: var(--color-text-light);
 }
 
-/* Mobile-first: the trail wraps onto multiple lines on narrow screens (no
-   truncation, no horizontal scroll) and stays left-aligned. Crumbs keep their
-   natural width — none grow to fill the row, so the active crumb sits next to
-   its parent instead of being pushed to the centre. */
+/* The trail stays on a single line and scrolls horizontally on narrow screens
+   rather than wrapping, so a deep path (or long active crumb) never stacks onto
+   several rows. Crumbs keep their natural width and do not shrink. */
 .breadcrumbs ol {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
   margin: var(--spacing-0);
   padding: var(--spacing-0);
   list-style: none;
+  overflow-x: auto;
 }
 
 .breadcrumbs li {
@@ -1053,12 +1102,13 @@ a:focus {
   align-items: center;
   margin: var(--spacing-0);
   padding: var(--spacing-0);
-  min-width: 0;
+  flex: 0 0 auto;
 }
 
-/* Bullet separator, matching the main menu (see .menu li::after). */
+/* Chevron separator: reads as a hierarchy step (Home › Blog › …), unlike the
+   bullet used for flat inline meta rows elsewhere. */
 .breadcrumbs li:not(:last-child)::after {
-  content: '•';
+  content: '›';
   margin: 0 var(--spacing-2);
   color: var(--color-text-light);
   user-select: none;
@@ -1073,9 +1123,7 @@ a:focus {
   transition:
     background-color 0.2s ease,
     color 0.2s ease;
-  overflow-wrap: break-word;
-  hyphens: auto;
-  min-width: 0;
+  white-space: nowrap;
 }
 
 .breadcrumbs a {
@@ -1096,7 +1144,8 @@ a:focus {
 /* Accessibility improvements */
 @media (prefers-reduced-motion: reduce) {
   .breadcrumbs a,
-  .breadcrumbs span {
+  .breadcrumbs span,
+  .blog-post-nav a {
     transition: none;
   }
 }

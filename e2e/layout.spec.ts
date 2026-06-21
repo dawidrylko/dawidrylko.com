@@ -10,23 +10,25 @@ test('footer is separated from the divider above it', async ({ page }) => {
   expect(marginTop).toBeGreaterThan(0);
 });
 
-test('blog post separates its tag list from the prev/next navigation', async ({ page }) => {
+test('blog post separates its tag list from the following section', async ({ page }) => {
   await page.goto('/blog/');
   const href = await page.locator('#blog-posts .post-list-item h2 a').first().getAttribute('href');
   expect(href).toBeTruthy();
   await page.goto(href as string);
 
   const tags = page.locator('article.blog-post .tags');
-  const nav = page.locator('.blog-post-nav');
+  // Related posts and the prev/next nav are mutually exclusive; whichever one
+  // renders must sit clearly below the tag list.
+  const following = page.locator('.related, .blog-post-nav').first();
   await expect(tags).toBeVisible();
-  await expect(nav).toBeVisible();
+  await expect(following).toBeVisible();
 
   const tagsBox = await tags.boundingBox();
-  const navBox = await nav.boundingBox();
+  const followingBox = await following.boundingBox();
   expect(tagsBox).not.toBeNull();
-  expect(navBox).not.toBeNull();
+  expect(followingBox).not.toBeNull();
 
-  const gap = (navBox?.y ?? 0) - ((tagsBox?.y ?? 0) + (tagsBox?.height ?? 0));
+  const gap = (followingBox?.y ?? 0) - ((tagsBox?.y ?? 0) + (tagsBox?.height ?? 0));
   expect(gap).toBeGreaterThan(8);
 });
 
