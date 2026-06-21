@@ -50,12 +50,16 @@ test('setup page server-renders a sized skeleton so the diagram does not jump', 
   const response = await request.get('/setup/');
   expect(response.ok()).toBeTruthy();
   const html = await response.text();
-  // The Mermaid island is client:load, so its loading placeholder is part of the
-  // server-rendered HTML and reserves height before hydration.
+  // The Mermaid island is client:visible, but Astro still server-renders the
+  // island's initial output, so its loading placeholder is part of the HTML and
+  // reserves height before hydration.
   expect(html).toContain('mermaid-diagram-skeleton');
 });
 
-test('setup page eventually renders the mermaid diagram', async ({ page }) => {
+test('setup page renders the mermaid diagram once scrolled into view', async ({ page }) => {
   await page.goto('/setup/');
-  await expect(page.locator('#diagram .mermaid-diagram svg')).toBeVisible();
+  // client:visible: hydration (and the ~1 MB mermaid bundle) is deferred until
+  // the diagram scrolls into the viewport, so bring it into view first.
+  await page.locator('#diagram').scrollIntoViewIfNeeded();
+  await expect(page.locator('#diagram .mermaid-diagram svg')).toBeVisible({ timeout: 20000 });
 });

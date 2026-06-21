@@ -1173,8 +1173,14 @@ a:focus {
 
 .mermaid-diagram {
   display: flex;
+  align-items: center;
   justify-content: center;
   margin: var(--spacing-6) 0;
+
+  /* Match the skeleton's reserved height so the swap from placeholder to SVG
+     never shrinks the box — the rendered diagram fills (or centres within) the
+     same space the skeleton held, keeping the page from jumping on hydration. */
+  min-height: 20rem;
 
   /* Safety net: keep a wide diagram from pushing horizontal scroll onto the
      whole page (notably on phones) — it scrolls within its own box instead. */

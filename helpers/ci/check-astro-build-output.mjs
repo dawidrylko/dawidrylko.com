@@ -7,7 +7,7 @@
  * the built output — it does NOT rebuild. Each check maps to a concrete fix:
  *
  *   - code blocks ship Shiki's dark palette and it is activated in dark mode
- *   - the /setup/ Mermaid diagram hydrates (client:load island)
+ *   - the /setup/ Mermaid diagram hydrates lazily on scroll (client:visible island)
  *   - the memoization post's interactive demo hydrates (client:visible island)
  *   - blog-list thumbnails render at a bounded (600px) size, not full-res
  *   - content list markers stay outside (not dropped onto their own line / clipped)
@@ -113,8 +113,11 @@ async function checkSetupMermaid() {
     return;
   }
   const html = await read('setup/index.html');
-  if (!/client="load"/.test(html) || !/component-url="[^"]*Mermaid[^"]*"/.test(html)) {
-    fail('/setup/ Mermaid diagram is not a client:load island (would not hydrate)');
+  // client:visible (not client:load): the diagram hydrates when scrolled into
+  // view, keeping the ~1 MB mermaid bundle off the initial load. The skeleton is
+  // still server-rendered, so the island markup must be present in the HTML.
+  if (!/client="visible"/.test(html) || !/component-url="[^"]*Mermaid[^"]*"/.test(html)) {
+    fail('/setup/ Mermaid diagram is not a client:visible island (would not hydrate on scroll)');
   }
 }
 
