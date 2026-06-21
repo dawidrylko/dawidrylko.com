@@ -18,7 +18,6 @@ import '@fontsource/merriweather/latin-ext-700.css';
 // (e.g. the Mermaid island on /setup/). Montserrat still loads via its
 // unicode-range @font-face from the import above.
 import merriweatherBody from '@fontsource/merriweather/files/merriweather-latin-400-normal.woff2';
-import 'katex/dist/katex.min.css';
 import '../styles/normalize.css';
 import '../styles/main.css';
 import Seo from '../components/Seo.astro';
@@ -102,6 +101,11 @@ const { website } = STRUCTURED_DATA;
       fetched before CSS is parsed, cutting LCP and swap-driven CLS. */
     }
     <link rel="preload" href={merriweatherBody} as="font" type="font/woff2" crossorigin />
+    {
+      /* Warm up the Google Analytics origin so gtag.js (loaded async, prod only)
+        resolves DNS/TLS off the critical path. Harmless when GA is absent (dev). */
+    }
+    <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
     <Seo
       title={title}
       description={description}

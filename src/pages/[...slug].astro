@@ -1,4 +1,8 @@
 ---
+// KaTeX styles are scoped to the post route (the only place MDX math renders)
+// instead of the global layout, so the ~23 KB of math CSS no longer blocks
+// rendering on the app pages (home, blog, bio, contact, …) that never use it.
+import 'katex/dist/katex.min.css';
 import { getCollection, render } from 'astro:content';
 import { Picture, getImage } from 'astro:assets';
 import PageLayout from '../layouts/PageLayout.astro';
