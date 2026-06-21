@@ -9,8 +9,18 @@
 const REQUIRED_HEADINGS = ['## Description', '## Type of change', '## Related issue', '## Checklist'];
 
 // Strip HTML comments (the template's guidance lives in them) so "did the
-// author write anything real?" checks see only authored prose.
-const stripComments = text => text.replace(/<!--[\s\S]*?-->/g, '');
+// author write anything real?" checks see only authored prose. Replace until
+// the string is stable: a single pass can re-expose a `<!--` from overlapping
+// or nested markers, so loop to a fixpoint.
+const stripComments = text => {
+  let current = text;
+  let previous;
+  do {
+    previous = current;
+    current = current.replace(/<!--[\s\S]*?-->/g, '');
+  } while (current !== previous);
+  return current;
+};
 
 // Return the text under `heading` up to the next `## ` heading (or end).
 const sectionBody = (body, heading) => {

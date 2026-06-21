@@ -63,4 +63,11 @@ describe('validatePrBody', () => {
     const body = VALID_BODY.replace('- [x] feat — a new feature', '- [ ] feat — a new feature');
     expect(validatePrBody(body)).toContainEqual(expect.stringContaining('Type of change'));
   });
+
+  it('treats a Description with only overlapping comments as empty', () => {
+    // A single regex pass strips this to "<!-- -->" (re-exposing a comment);
+    // the fixpoint loop removes it fully, so the section counts as empty.
+    const body = VALID_BODY.replace('Adds a reading-time estimate to blog posts.', '<<!-- -->!-- -->');
+    expect(validatePrBody(body)).toContainEqual(expect.stringContaining('## Description'));
+  });
 });
