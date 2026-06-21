@@ -908,7 +908,10 @@ a:focus {
   list-style: none;
 }
 
-.posts li + li {
+/* Direct child only: a divider between post cards. Without the `>` the rule
+   also leaks onto the tag chips (.tags li), drawing a stray line above every
+   tag after the first. */
+.posts > li + li {
   border-top: 1px solid var(--color-accent);
 }
 
