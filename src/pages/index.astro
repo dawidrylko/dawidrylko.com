@@ -21,6 +21,39 @@ const PAGE_METADATA: PageMetadata = {
   ],
 };
 
+// Concrete areas of work shown in the "What I do" block. Kept as a single source
+// of truth so the visible list and the JSON-LD ItemList below never drift apart.
+const CAPABILITIES: { term: string; description: string }[] = [
+  {
+    term: 'Web platforms',
+    description:
+      'Production frontends in React, Angular, and TypeScript, backed by Node.js APIs—shipped end to end, from first commit to deployment.',
+  },
+  {
+    term: 'Mobile apps',
+    description: 'Cross-platform mobile applications taken from prototype to the App Store and Google Play.',
+  },
+  {
+    term: 'Architecture & infrastructure',
+    description:
+      'System design, CI/CD pipelines, and infrastructure automation that keep releases fast, repeatable, and predictable.',
+  },
+  {
+    term: 'AI integration',
+    description:
+      'Bringing LLMs and AI-driven features into real products that ship—not demos that stall in a notebook.',
+  },
+  {
+    term: 'Cybersecurity',
+    description: 'Security reviews and hardening so the systems I build stay resilient when it matters.',
+  },
+  {
+    term: 'Technical leadership',
+    description:
+      'Leading engineering teams, mentoring developers, and setting technical direction that scales with the product.',
+  },
+];
+
 const { person } = STRUCTURED_DATA;
 const structuredData = createPageSchema({
   title: PAGE_METADATA.title,
@@ -29,10 +62,18 @@ const structuredData = createPageSchema({
   keywords: PAGE_METADATA.keywords,
   extra: {
     about: {
-      '@type': 'Thing',
-      name: 'Software Engineering',
-      description:
-        'Designing and building scalable, secure, and future-proof systems that address real-world challenges',
+      '@type': 'ItemList',
+      name: 'What I do',
+      description: 'Concrete areas where Dawid Ryłko designs, builds, and ships software.',
+      itemListElement: CAPABILITIES.map((capability, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        item: {
+          '@type': 'Thing',
+          name: capability.term,
+          description: capability.description,
+        },
+      })),
     },
     mainEntity: person,
   },
@@ -54,6 +95,21 @@ const structuredData = createPageSchema({
       Discover my <a href="/blog/">latest articles</a> on software engineering, system architecture, and emerging technologies,
       or learn more <a href="/bio/">about my journey</a> and professional background.
     </p>
+  </section>
+  <section id="what-i-do">
+    <h2>What I do</h2>
+    <ul class="capabilities">
+      {
+        CAPABILITIES.map(({ term, description }) => (
+          <li>
+            <strong>{term}</strong>
+            {description}
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+  <section id="cta">
     <p>
       Interested in working together? <a href="/contact/">Get in touch</a> and let's create technology that lasts.
     </p>

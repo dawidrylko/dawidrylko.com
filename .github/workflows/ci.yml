@@ -52,6 +52,10 @@ jobs:
         if: ${{ !cancelled() }}
         run: pnpm run lint:css
 
+      - name: No scoped styles in .astro
+        if: ${{ !cancelled() }}
+        run: node scripts/ci/check-no-scoped-styles.mjs
+
       - name: Format check
         if: ${{ !cancelled() }}
         run: pnpm run format:check

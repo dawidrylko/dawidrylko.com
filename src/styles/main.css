@@ -547,6 +547,40 @@ a:focus {
   }
 }
 
+/* Homepage "What I do" grid: capability cards sharing the site's card idiom
+   (1px accent border, --spacing-2 radius). One column on phones, two from the
+   sm breakpoint up. Overrides the prose-list gutter/markers from `main section
+   ul` since these are layout cards, not a prose list. */
+.capabilities {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-4);
+  margin: var(--spacing-0);
+  padding: var(--spacing-0);
+  list-style: none;
+}
+
+.capabilities li {
+  margin: var(--spacing-0);
+  padding: var(--spacing-4) var(--spacing-5);
+  border: 1px solid var(--color-accent);
+  border-radius: var(--spacing-2);
+  line-height: var(--lineHeight-relaxed);
+}
+
+.capabilities strong {
+  display: block;
+  margin-bottom: var(--spacing-1);
+  font-family: var(--font-heading);
+  color: var(--color-heading);
+}
+
+@media (width >= 30rem) {
+  .capabilities {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 /* Mobile-first author card: stacked and centred on phones; horizontal from the
    sm breakpoint up. */
 .bio {
