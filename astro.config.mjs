@@ -30,6 +30,17 @@ export default defineConfig({
   redirects: {
     '/resume': '/bio/',
   },
+  build: {
+    // Inline all CSS into <style> tags instead of emitting a render-blocking
+    // <link rel="stylesheet">. The shared chrome stylesheet (~24 KB) otherwise
+    // sits on the critical path of every page, gating FCP/LCP behind an extra
+    // round-trip on Lighthouse's throttled mobile profile — the documented
+    // performance ceiling for these text-led pages. Inlining ships the critical
+    // CSS in the initial HTML response, removing that round-trip. The trade-off
+    // (CSS is no longer cached across navigations) is acceptable for a static
+    // site whose visits are predominantly single-page entries from search.
+    inlineStylesheets: 'always',
+  },
   integrations: [
     mdx(),
     react(),
