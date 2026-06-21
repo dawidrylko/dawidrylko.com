@@ -20,6 +20,10 @@ updates:
         applies-to: version-updates
         patterns:
           - '*'
+    ignore:
+      # katex is intentionally held back for now — a newer major is a breaking
+      # change we are not ready to adopt yet. Bump it manually when ready.
+      - dependency-name: 'katex'
 
   - package-ecosystem: 'github-actions'
     directory: '/'
