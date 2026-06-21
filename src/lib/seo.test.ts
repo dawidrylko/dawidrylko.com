@@ -36,7 +36,7 @@ describe('resolveMetaDescription', () => {
   it('keeps the fallback site descriptions within the SEO limit and free of the ASCII easter egg', () => {
     for (const description of Object.values(SITE_METADATA.description)) {
       expect(isWithinDescriptionLimit(description)).toBe(true);
-      // The decimal-ASCII header easter egg must not leak into search snippets.
+      // The decimal-ASCII signature easter egg must not leak into search snippets.
       expect(description).not.toMatch(/\b68 97 119\b/);
     }
   });

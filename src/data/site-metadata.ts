@@ -8,8 +8,8 @@ export const SITE_METADATA = {
   // under the 60-char SEO limit. The full role copy lives in author.jobTitle.
   titleTagline: 'Software Engineer | Scalable, Secure Systems',
   // Fallback meta description for pages without their own. Kept ≤160 chars and
-  // free of the decimal-ASCII easter egg (that belongs in the header, not in
-  // search snippets).
+  // free of the decimal-ASCII easter egg (that lives on the /metadata/ page, not
+  // in search snippets).
   description: {
     en: 'Personal website and blog of Dawid Ryłko, Software Engineer—articles and insights on software architecture, scalable systems, and modern web.',
     pl: 'Osobista strona i blog Dawida Ryłko, Software Engineera — artykuły o architekturze systemów, skalowalności i nowoczesnym wytwarzaniu oprogramowania.',
