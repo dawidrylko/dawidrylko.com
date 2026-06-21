@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { __setEntries, type MockPost } from '../../test/mocks/astro-content';
-import { getTags } from './tags';
+import { getTags, postCountLabel, describeTagPage, type TagInfo } from './tags';
+import { DESCRIPTION_MAX_LENGTH } from './seo';
 
 const post = (id: string, date: string, tags: string[]): MockPost => ({ id, data: { date: new Date(date), tags } });
 
@@ -36,5 +37,35 @@ describe('getTags', () => {
   it('throws on a slug collision between two distinct tags', async () => {
     __setEntries([post('a', '2025-01-01', ['C++', 'C#'])]);
     await expect(getTags()).rejects.toThrow(/slug collision/);
+  });
+});
+
+describe('postCountLabel', () => {
+  it('uses the correct Polish plural form', () => {
+    expect(postCountLabel(1)).toBe('1 wpis');
+    expect(postCountLabel(2)).toBe('2 wpisy');
+    expect(postCountLabel(4)).toBe('4 wpisy');
+    expect(postCountLabel(5)).toBe('5 wpisów');
+    expect(postCountLabel(12)).toBe('12 wpisów');
+    expect(postCountLabel(22)).toBe('22 wpisy');
+  });
+});
+
+describe('describeTagPage', () => {
+  const tag = (name: string, count: number): TagInfo => ({ tag: name, slug: name, count, posts: [] });
+
+  it('includes the tag name and post count', () => {
+    const description = describeTagPage(tag('angular', 7));
+    expect(description).toContain('„angular”');
+    expect(description).toContain('7 wpisów');
+  });
+
+  it('is long enough to clear the "too short" audit yet within the SEO limit', () => {
+    const cases: TagInfo[] = [tag('ai', 1), tag('iot', 1), tag('shopping manager', 18), tag('home assistant', 1)];
+    for (const t of cases) {
+      const length = describeTagPage(t).length;
+      expect(length).toBeGreaterThanOrEqual(110);
+      expect(length).toBeLessThanOrEqual(DESCRIPTION_MAX_LENGTH);
+    }
   });
 });

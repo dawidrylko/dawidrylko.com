@@ -5,7 +5,7 @@ import JsonLd from '../../components/JsonLd.astro';
 import PostListItem from '../../components/PostListItem.astro';
 import { SITE_METADATA } from '../../data/site-metadata';
 import { createPageSchema } from '../../lib/page-metadata';
-import { getTags, type TagInfo } from '../../lib/tags';
+import { getTags, postCountLabel, describeTagPage, type TagInfo } from '../../lib/tags';
 import { toISODate } from '../../lib/date';
 
 export const getStaticPaths = (async () => {
@@ -20,9 +20,7 @@ interface Props {
 const { tag } = Astro.props;
 
 const title = `Tag: ${tag.tag}`;
-const description = `Wpisy oznaczone tagiem „${tag.tag}” na blogu Dawida Ryłko — ${tag.count} ${
-  tag.count === 1 ? 'wpis' : 'wpisów'
-}.`;
+const description = describeTagPage(tag);
 
 const structuredData = createPageSchema({
   type: 'CollectionPage',
@@ -60,7 +58,7 @@ const structuredData = createPageSchema({
   <JsonLd data={structuredData} />
   <header>
     <h1>#{tag.tag}</h1>
-    <small>{tag.count} {tag.count === 1 ? 'wpis' : 'wpisów'}</small>
+    <small>{postCountLabel(tag.count)}</small>
   </header>
   <ol class="posts">
     {tag.posts.map(post => <PostListItem post={post} />)}

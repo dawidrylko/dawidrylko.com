@@ -1,5 +1,6 @@
 import { getBlogPosts } from './blog';
 import { slugifyTag } from './slugify-tag';
+import { plPlural } from './pl-plural';
 
 // Re-exported so existing server-side imports (`../lib/tags`) keep working; the
 // implementation lives in a dependency-free module the client search can import.
@@ -50,4 +51,18 @@ export async function getTags(): Promise<TagInfo[]> {
   }
 
   return [...byTag.values()].sort((a, b) => b.count - a.count || a.tag.localeCompare(b.tag, 'pl'));
+}
+
+// "<n> wpis/wpisy/wpisów" with the correct Polish plural form for the count.
+export function postCountLabel(count: number): string {
+  return `${count} ${plPlural(count, ['wpis', 'wpisy', 'wpisów'])}`;
+}
+
+// Meta description for a tag archive page. Kept long enough to clear the
+// "meta description too short" SEO audit while staying within the 160-character
+// limit for every tag (longest current case ~146 chars).
+export function describeTagPage(tag: TagInfo): string {
+  return `Wpisy oznaczone tagiem „${tag.tag}” na blogu Dawida Ryłko — ${postCountLabel(
+    tag.count,
+  )}. Artykuły o programowaniu, technologiach i wytwarzaniu oprogramowania.`;
 }
