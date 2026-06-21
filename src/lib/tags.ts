@@ -58,6 +58,11 @@ export function postCountLabel(count: number): string {
   return `${count} ${plPlural(count, ['wpis', 'wpisy', 'wpisów'])}`;
 }
 
+// "<n> tag/tagi/tagów" with the correct Polish plural form for the count.
+export function tagCountLabel(count: number): string {
+  return `${count} ${plPlural(count, ['tag', 'tagi', 'tagów'])}`;
+}
+
 // Meta description for a tag archive page. Kept long enough to clear the
 // "meta description too short" SEO audit while staying within the 160-character
 // limit for every tag (longest current case ~146 chars).
