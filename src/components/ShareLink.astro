@@ -1,0 +1,23 @@
+---
+// A single share control. Renders an outbound intent link when given `href`,
+// or the copy-link button (wired up by Share.astro's script) when given
+// `shareUrl` instead. Both variants share the .share-link pill styling.
+interface Props {
+  href?: string;
+  shareUrl?: string;
+}
+
+const { href, shareUrl } = Astro.props;
+---
+
+{
+  href ? (
+    <a class="share-link" href={href} target="_blank" rel="noopener noreferrer nofollow">
+      <slot />
+    </a>
+  ) : (
+    <button class="share-link share-copy" type="button" data-share-url={shareUrl}>
+      <slot />
+    </button>
+  )
+}

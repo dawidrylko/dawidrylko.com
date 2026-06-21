@@ -664,9 +664,14 @@ a:focus {
 }
 
 .share-link {
+  display: inline-block;
   padding: var(--spacing-1) var(--spacing-3);
   font-family: var(--font-heading);
   font-size: var(--fontSize-0);
+
+  /* Match the tag chips' compact height: without this the inherited body
+     line-height pushed the pill outline too far apart vertically. */
+  line-height: 1.2;
   color: var(--color-primary);
   border: 1px solid var(--color-accent);
   border-radius: var(--radius-pill);
