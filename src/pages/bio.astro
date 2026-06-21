@@ -71,6 +71,10 @@ const image = {
 const { person } = STRUCTURED_DATA;
 
 const structuredData = createPageSchema({
+  // ProfilePage is schema.org's type for an about/profile page; pairing it with
+  // mainEntity = the Person it describes is Google's recommended pattern and
+  // keeps the page node consistent with the site-wide #person node.
+  type: 'ProfilePage',
   title: PAGE_METADATA.title,
   description: PAGE_METADATA.description,
   keywords: PAGE_METADATA.keywords,
