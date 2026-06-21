@@ -688,10 +688,12 @@ a:focus {
 
 /* Post-footer sections (related posts, prev/next nav) are each set off from the
    content above by the shared rule — 1px, --color-accent, matching the site's
-   <hr> — so the end of an article reads as distinct blocks. */
+   <hr> — so the end of an article reads as distinct blocks. Even --spacing-6 on
+   both sides of the rule keeps the same balanced pairing the breadcrumbs/bio
+   chrome use, instead of a loose gap opening above the divider. */
 .related,
 .blog-post-nav {
-  margin-top: var(--spacing-8);
+  margin-top: var(--spacing-6);
   padding-top: var(--spacing-6);
   border-top: 1px solid var(--color-accent);
 }

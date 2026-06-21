@@ -75,6 +75,31 @@ test('share row keeps its divider close to the controls', async ({ page }) => {
   expect(marginTop).toBeGreaterThan(12);
 });
 
+test('post-footer divider keeps the balanced breadcrumb-style spacing', async ({ page }) => {
+  await page.goto('/blog/');
+  const href = await page.locator('#blog-posts .post-list-item h2 a').first().getAttribute('href');
+  expect(href).toBeTruthy();
+  await page.goto(href as string);
+
+  const following = page.locator('.related, .blog-post-nav').first();
+  await expect(following).toBeVisible();
+
+  // The rule sits at the box edge, so margin-top is the gap above it and
+  // padding-top the gap below. Both should be the tight --spacing-6 (24px) the
+  // chrome dividers use — guard against a regression to the loose --spacing-8
+  // (32px) that opened a wide gap below the share row.
+  const { marginTop, paddingTop } = await following.evaluate(el => {
+    const style = getComputedStyle(el);
+    return {
+      marginTop: Number.parseFloat(style.marginTop),
+      paddingTop: Number.parseFloat(style.paddingTop),
+    };
+  });
+  expect(marginTop).toBeLessThanOrEqual(26);
+  expect(marginTop).toBeGreaterThan(12);
+  expect(Math.abs(marginTop - paddingTop)).toBeLessThanOrEqual(2);
+});
+
 test('setup page server-renders a sized skeleton so the diagram does not jump', async ({ request }) => {
   const response = await request.get('/setup/');
   expect(response.ok()).toBeTruthy();
