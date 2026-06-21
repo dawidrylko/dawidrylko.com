@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 General question or contact
+    url: https://dawidrylko.com/contact/
+    about: For general questions, please reach out via the contact page instead of opening an issue.

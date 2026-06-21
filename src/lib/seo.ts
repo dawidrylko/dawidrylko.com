@@ -3,7 +3,7 @@ import { SITE_METADATA } from '../data/site-metadata';
 // Search engines truncate titles and descriptions in results; values past these
 // limits get cut in SERPs and are flagged by SEO audits (Ahrefs "title too
 // long" / "meta description too long"). Enforced on the pages we control by the
-// unit tests next to this file and by helpers/ci/check-seo-lengths.mjs on the
+// unit tests next to this file and by scripts/ci/check-seo-lengths.mjs on the
 // rendered output.
 export const TITLE_MAX_LENGTH = 60;
 export const DESCRIPTION_MAX_LENGTH = 160;

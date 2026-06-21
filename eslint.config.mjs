@@ -5,8 +5,8 @@ import jsxA11y from 'eslint-plugin-jsx-a11y';
 import globals from 'globals';
 
 export default [
-  // content/ holds authored posts (and their code samples); helpers venv is Python.
-  { ignores: ['dist/**', '.astro/**', 'node_modules/**', 'content/**', 'helpers/**/venv/**'] },
+  // content/ holds authored posts, their code samples, and per-post chart-source/ tooling.
+  { ignores: ['dist/**', '.astro/**', 'node_modules/**', 'content/**'] },
   js.configs.recommended,
   ...tseslint.configs.recommended,
   ...astro.configs.recommended,

@@ -1,10 +1,10 @@
-# helpers/ci
+# scripts/ci
 
 Zero-dependency CI helpers that run against the build output, not the source.
 
 ## `check-build-output.mjs`
 
-Asserts the build-output contract on `public/` after `pnpm build`:
+Asserts the build-output contract on `dist/` after `pnpm build`:
 
 - core pages (`index.html`, `404.html`),
 - RSS feed (`rss.xml`) with an `<atom:link rel="self">`, at least one `<item>`
@@ -17,7 +17,7 @@ Run locally after a build:
 
 ```bash
 pnpm build
-node helpers/ci/check-build-output.mjs
+node scripts/ci/check-build-output.mjs
 ```
 
 Exits non-zero and lists every problem when the contract is violated. In CI it
@@ -35,7 +35,7 @@ warnings only. Runs in the `build-contract` job.
 
 ```bash
 pnpm build
-node helpers/ci/check-seo-lengths.mjs
+node scripts/ci/check-seo-lengths.mjs
 ```
 
 ## `check-image-budget.mjs`
@@ -47,8 +47,8 @@ job. After intentionally optimising images, refresh the baseline:
 
 ```bash
 pnpm build
-node helpers/ci/check-image-budget.mjs                  # check
-node helpers/ci/check-image-budget.mjs --update-baseline # regenerate baseline
+node scripts/ci/check-image-budget.mjs                  # check
+node scripts/ci/check-image-budget.mjs --update-baseline # regenerate baseline
 ```
 
 ## `check-bundle-budget.mjs`
@@ -60,7 +60,7 @@ site-wide. Runs in the `build-contract` job.
 
 ```bash
 pnpm build
-node helpers/ci/check-bundle-budget.mjs
+node scripts/ci/check-bundle-budget.mjs
 ```
 
 ## `check-no-ai-attribution.mjs`
@@ -75,5 +75,5 @@ passed via env (never interpolated into a shell command); commit messages are
 read from `git log BASE_SHA..HEAD_SHA`. Run it locally against a range:
 
 ```bash
-BASE_SHA=origin/master HEAD_SHA=HEAD node helpers/ci/check-no-ai-attribution.mjs
+BASE_SHA=origin/master HEAD_SHA=HEAD node scripts/ci/check-no-ai-attribution.mjs
 ```

@@ -107,7 +107,7 @@ jobs:
           PR_BODY: ${{ github.event.pull_request.body }}
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
-        run: node helpers/ci/check-no-ai-attribution.mjs
+        run: node scripts/ci/check-no-ai-attribution.mjs
 
   # Newly introduced vulnerable or incompatibly-licensed dependencies are
   # blocked at the PR that adds them.
@@ -191,25 +191,25 @@ jobs:
           path: dist
 
       - name: Verify distribution contract
-        run: node helpers/ci/check-build-output.mjs
+        run: node scripts/ci/check-build-output.mjs
 
       - name: Verify URL parity with content/pl
-        run: node helpers/ci/check-astro-url-parity.mjs
+        run: node scripts/ci/check-astro-url-parity.mjs
 
       - name: Verify rendering-regression contract
-        run: node helpers/ci/check-astro-build-output.mjs
+        run: node scripts/ci/check-astro-build-output.mjs
 
       - name: Verify SEO / structured-data contract
-        run: node helpers/ci/check-seo-meta.mjs
+        run: node scripts/ci/check-seo-meta.mjs
 
       - name: Verify SEO title/description lengths
-        run: node helpers/ci/check-seo-lengths.mjs
+        run: node scripts/ci/check-seo-lengths.mjs
 
       - name: Verify image weight budget
-        run: node helpers/ci/check-image-budget.mjs
+        run: node scripts/ci/check-image-budget.mjs
 
       - name: Verify JS bundle budget
-        run: node helpers/ci/check-bundle-budget.mjs
+        run: node scripts/ci/check-bundle-budget.mjs
 
   # Internal link integrity across the built site (catches broken links and
   # broken redirects). External URLs are skipped to keep the gate deterministic.

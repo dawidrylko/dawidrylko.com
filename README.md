@@ -4,42 +4,72 @@
 [![Continuous Deployment](https://github.com/dawidrylko/dawidrylko.com/actions/workflows/cd.yml/badge.svg)](https://github.com/dawidrylko/dawidrylko.com/actions/workflows/cd.yml)
 [![CodeQL](https://github.com/dawidrylko/dawidrylko.com/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/dawidrylko/dawidrylko.com/actions/workflows/github-code-scanning/codeql)
 
-My personal website based on [React](https://react.dev) and [Gatsby](https://www.gatsbyjs.com).
+Personal website and blog of [Dawid Ryłko](https://dawidrylko.com) — a static site built with
+**[Astro](https://astro.build)** and **[React](https://react.dev)** islands, written in **TypeScript**
+and **MDX**, and deployed to **GitHub Pages**.
 
-## 🚀 Development
+## 🧱 Tech stack
 
-### 📋 Prerequisites
+- **[Astro 6](https://astro.build)** — static site generator (MDX, RSS, sitemap integrations)
+- **[React 19](https://react.dev)** — interactive islands, hydrated on demand
+- **TypeScript** + **MDX** content collections (Zod-validated frontmatter)
+- **[KaTeX](https://katex.org)** (math), **[Shiki](https://shiki.style)** (code), **[Mermaid](https://mermaid.js.org)** (diagrams)
+- **pnpm** workspaces, **Node** pinned via [`.nvmrc`](./.nvmrc)
 
-- Node.js (LTS version recommended)
-- pnpm
-
-### 🔧 Installation
+## 🚀 Getting started
 
 ```bash
-pnpm install
+pnpm install        # install dependencies
+pnpm dev            # start the dev server on http://localhost:4321
+pnpm build          # build the production site to dist/
+pnpm preview        # preview the production build locally
 ```
 
-### 📝 Available Scripts
+## 📜 Scripts
 
-- `pnpm develop` or `pnpm start` - Start the development server
-- `pnpm build` - Build the production-ready site
-- `pnpm serve` - Serve the production build locally
-- `pnpm clean` - Clean the cache and public directories
+| Command              | Description                                            |
+| -------------------- | ------------------------------------------------------ |
+| `pnpm dev`           | Start the development server                           |
+| `pnpm build`         | Build the production site to `dist/`                   |
+| `pnpm preview`       | Preview the built site locally                         |
+| `pnpm clean`         | Remove `dist/` and `.astro/`                           |
+| `pnpm type:check`    | TypeScript + Astro diagnostics (`astro check`)         |
+| `pnpm lint:check`    | Lint with ESLint (`lint:fix` to autofix)               |
+| `pnpm lint:css`      | Lint CSS with Stylelint (`lint:css:fix` to autofix)    |
+| `pnpm format:check`  | Check formatting with Prettier (`format:write` to fix) |
+| `pnpm a11y:contrast` | Audit design-token colour contrast (WCAG AA)           |
+| `pnpm test`          | Run unit tests (Vitest)                                |
+| `pnpm test:e2e`      | Run end-to-end + accessibility tests (Playwright)      |
 
-### ⚡ Quality Assurance
+## 🗂️ Project structure
 
-- `pnpm type:check` - Run TypeScript type checking
-- `pnpm format:write` - Format code using Prettier
-- `pnpm format:check` - Check code formatting
-- `pnpm lint:fix` - Fix ESLint issues
-- `pnpm lint:check` - Check for ESLint issues
+```
+src/            # components, layouts, pages, lib (logic + unit tests), styles
+content/pl/     # authored MDX blog posts (Content Collection)
+static/         # files copied verbatim (CNAME, robots.txt, /files)
+e2e/            # Playwright end-to-end + axe-core a11y tests
+scripts/        # zero-dep tooling: ci/ (build-output gates), a11y/, notify/, presentations/
+.github/        # workflows, issue forms, PR template, Dependabot
+```
 
-The project uses Husky for git hooks and lint-staged for running checks on staged files before commits.
+## ✅ Quality gates
 
-## 📜 License
+Every pull request runs type-checking, ESLint, Stylelint, Prettier, a WCAG-AA contrast
+audit, unit tests, a production build with build-output contracts (RSS, sitemap, SEO,
+image and bundle budgets), Lighthouse, link integrity, and Playwright e2e/a11y tests.
+PR titles are validated against [Conventional Commits](https://www.conventionalcommits.org)
+and PR descriptions against the template.
 
-This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for details.
+A Husky pre-commit hook runs `lint-staged`, `astro check`, and validates presentation
+PDF metadata.
 
-## 👨‍💻 Author
+## 🤝 Contributing
 
-This project was created by [Dawid Ryłko](https://dawidrylko.com).
+Commits and PR titles follow [Conventional Commits](https://www.conventionalcommits.org)
+(`feat:`, `fix:`, `docs:`, …). Open issues with the provided
+[issue forms](./.github/ISSUE_TEMPLATE) and fill in the
+[pull request template](./.github/pull_request_template.md).
+
+## 📄 License
+
+Licensed under the MIT License — see [LICENSE](./LICENSE).

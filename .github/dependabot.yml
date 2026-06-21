@@ -21,7 +21,8 @@ updates:
         patterns:
           - '*'
     ignore:
-      # Pinned to 0.13.3 for gatsby-remark-katex compatibility — do not bump.
+      # katex is intentionally held back for now — a newer major is a breaking
+      # change we are not ready to adopt yet. Bump it manually when ready.
       - dependency-name: 'katex'
 
   - package-ecosystem: 'github-actions'

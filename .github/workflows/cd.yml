@@ -89,7 +89,7 @@ jobs:
         continue-on-error: true
         env:
           GOOGLE_JSON_KEY_FILE: ${{ secrets.GOOGLE_JSON_KEY_FILE }}
-        working-directory: '.github/scripts'
+        working-directory: 'scripts/notify'
         shell: bash
         run: ./google.sh
 
@@ -97,6 +97,6 @@ jobs:
         continue-on-error: true
         env:
           BING_API_KEY: ${{ secrets.BING_API_KEY }}
-        working-directory: '.github/scripts'
+        working-directory: 'scripts/notify'
         shell: bash
         run: ./bing.sh

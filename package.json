@@ -20,7 +20,7 @@
     "lint:fix": "eslint . --fix",
     "lint:css": "stylelint \"src/**/*.css\"",
     "lint:css:fix": "stylelint \"src/**/*.css\" --fix",
-    "a11y:contrast": "node helpers/a11y-contrast/check-contrast.mjs",
+    "a11y:contrast": "node scripts/a11y/check-contrast.mjs",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
@@ -72,5 +72,36 @@
     "**/*.{astro,ts,tsx,js,mjs,json,md}": "prettier --write",
     "**/*.{astro,ts,tsx,js,mjs}": "eslint --fix",
     "src/**/*.css": "stylelint --fix"
+  },
+  "prettier": {
+    "arrowParens": "avoid",
+    "semi": true,
+    "singleQuote": true,
+    "tabWidth": 2,
+    "printWidth": 120,
+    "plugins": [
+      "prettier-plugin-astro"
+    ],
+    "overrides": [
+      {
+        "files": "*.astro",
+        "options": {
+          "parser": "astro"
+        }
+      }
+    ]
+  },
+  "stylelint": {
+    "extends": [
+      "stylelint-config-standard"
+    ],
+    "ignoreFiles": [
+      "src/styles/normalize.css"
+    ],
+    "rules": {
+      "custom-property-pattern": null,
+      "keyframes-name-pattern": null,
+      "no-descending-specificity": null
+    }
   }
 }

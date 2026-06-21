@@ -2,7 +2,7 @@
 
 Instrukcje dla Claude Code. Blog i portfolio Dawida Ryłko: Astro 6 + React 19 (wyspy) + TypeScript + MDX, hostowane na GitHub Pages.
 
-**Zakres pracy:** narzędzia i kod wspierający bloga — komponenty, layouty, strony, konfiguracja Astro, skrypty pomocnicze (`helpers/`) i CI/CD. Treść postów w `content/pl/` pisze autor ręcznie; nie twórz ani nie edytuj postów blogowych.
+**Zakres pracy:** narzędzia i kod wspierający bloga — komponenty, layouty, strony, konfiguracja Astro, skrypty pomocnicze (`scripts/`) i CI/CD. Treść postów w `content/pl/` pisze autor ręcznie; nie twórz ani nie edytuj postów blogowych.
 
 ## Polecenia
 
@@ -27,7 +27,7 @@ pnpm test:e2e       # testy e2e + a11y (Playwright) na zbudowanym dist/
 
 Przed zatwierdzeniem zmian uruchom `pnpm type:check`, `pnpm lint:check`, `pnpm lint:css`, `pnpm format:check` i `pnpm test`.
 
-**Testy:** projekt ma framework testowy. **Vitest** pokrywa logikę bezframeworkową w `src/lib` (pliki `*.test.ts` obok kodu; wirtualny moduł `astro:content` jest aliasowany do `test/mocks/`). **Playwright** (`e2e/*.spec.ts`) uruchamia testy e2e i skan dostępności `@axe-core/playwright` na podglądzie `dist/` (`astro preview`); wymaga przeglądarki `pnpm exec playwright install chromium`. Dodając lub zmieniając czystą logikę w `src/lib`, dopisz testy jednostkowe.
+**Testy:** projekt ma framework testowy. **Vitest** pokrywa logikę bezframeworkową w `src/lib` oraz skrypty CI w `scripts/` (pliki testów obok kodu: `*.test.ts` w `src`, `*.test.mjs` w `scripts`; wirtualny moduł `astro:content` jest aliasowany do `test/mocks/`). **Playwright** (`e2e/*.spec.ts`) uruchamia testy e2e i skan dostępności `@axe-core/playwright` na podglądzie `dist/` (`astro preview`); wymaga przeglądarki `pnpm exec playwright install chromium`. Dodając lub zmieniając czystą logikę w `src/lib`, dopisz testy jednostkowe.
 
 ## Stos i struktura
 
@@ -44,15 +44,15 @@ src/lib/           # excerpt.ts, inline-markdown.ts, blog.ts, date.ts, page-meta
 src/types.ts       # współdzielone typy (PageMetadata, NavLink)
 e2e/               # testy Playwright (smoke, search, a11y); test/mocks/ — stuby dla Vitest
 src/integrations/  # webmanifest.ts (generuje manifest + ikony przez sharp w astro:build:done)
-src/scripts/       # web-vitals.ts (klienckie raportowanie do GA4)
+src/scripts/       # web-vitals.ts (klienckie raportowanie do GA4) — NIE mylić z tooling /scripts
 src/assets/        # obrazy przetwarzane przez astro:assets
 src/styles/        # main.css (design tokens), normalize.css
 src/demo/          # memoization-demo.tsx — interaktywna wyspa importowana w jednym poście
 src/content.config.ts  # kolekcja `posts` + schemat zod frontmatter
-content/pl/        # posty blogowe MDX
+content/pl/        # posty blogowe MDX (część postów ma własny chart-source/ — jednorazowe narzędzia)
 static/            # zasoby kopiowane 1:1 (CNAME, robots.txt, /files: prezentacje PDF, CV)
-helpers/           # skrypty CI (check-build-output, check-astro-*, a11y-contrast)
-.github/workflows/ # ci.yml (PR), cd.yml (deploy na GH Pages z dist/)
+scripts/           # tooling (zero zależności): ci/ (kontrakty na dist/), a11y/, notify/, presentations/
+.github/           # workflows (ci, cd, pr-meta), ISSUE_TEMPLATE/, pull_request_template.md, dependabot
 ```
 
 ## Model treści (kontekst przy pracy nad kodem)
@@ -60,7 +60,7 @@ helpers/           # skrypty CI (check-build-output, check-astro-*, a11y-contras
 Potrzebne przy modyfikacji `[...slug].astro`, `content.config.ts`, RSS (`rss.xml.ts`) lub sitemap — nie po to, by pisać posty:
 
 - Post to katalog `content/pl/YYYY-MM-DD--slug-po-polsku/index.mdx` (część katalogów ma też strony wtórne, np. `.../ng-help.md`).
-- Slug URL powstaje w `content.config.ts` (`generateId`: usunięcie rozszerzenia, `/index`, oraz prefiksu daty `replace(/.*--/, '')`): `2025-12-26--od-tablicy-do-mapy` → `/od-tablicy-do-mapy/`. **URL-e muszą zostać zachowane** (SEO) — pilnuje tego `helpers/ci/check-astro-url-parity.mjs`.
+- Slug URL powstaje w `content.config.ts` (`generateId`: usunięcie rozszerzenia, `/index`, oraz prefiksu daty `replace(/.*--/, '')`): `2025-12-26--od-tablicy-do-mapy` → `/od-tablicy-do-mapy/`. **URL-e muszą zostać zachowane** (SEO) — pilnuje tego `scripts/ci/check-astro-url-parity.mjs`.
 - Frontmatter: `title`, `description`, `date`, `tags`, opcjonalnie `updatedDate` (mapuje się na `dateModified` / `article:modified_time`), `featuredImg` + `featuredImgAlt` (gdy jest `featuredImg`, `featuredImgAlt` jest wymagany — reguła w schemacie zod).
 - Renderowanie MDX: **Shiki** (kod, motyw jasny/ciemny), **KaTeX** (matematyka, `remark-math` + `rehype-katex`), **Mermaid** (diagram jako wyspa React `client:*`).
 
@@ -78,11 +78,11 @@ Potrzebne przy modyfikacji `[...slug].astro`, `content.config.ts`, RSS (`rss.xml
 
 Audyt Ahrefs pilnuje długości i poprawności metadanych. Reguły poniżej dotyczą stron, które kontrolujemy (kod w repo) — pilnują ich testy jednostkowe (`src/lib/seo.test.ts`) i checki na zbudowanym `dist/`.
 
-- **Limity długości** (`src/lib/seo.ts`): `<title>` ≤ **60** znaków, `<meta name="description">` ≤ **160**. Zmieniając tytuł/opis strony statycznej (`src/pages/*`) lub fallback w `site-metadata.ts`, mieść się w limitach. Sprawdza je `helpers/ci/check-seo-lengths.mjs` (twardo dla stron własnych: `/`, `/blog/*`, `/bio/`, `/contact/`, `/setup/`, `/metadata/`, `/files/`; posty z `content/pl` tylko ostrzega — ich tytuł/opis pochodzą z frontmatteru autora).
+- **Limity długości** (`src/lib/seo.ts`): `<title>` ≤ **60** znaków, `<meta name="description">` ≤ **160**. Zmieniając tytuł/opis strony statycznej (`src/pages/*`) lub fallback w `site-metadata.ts`, mieść się w limitach. Sprawdza je `scripts/ci/check-seo-lengths.mjs` (twardo dla stron własnych: `/`, `/blog/*`, `/bio/`, `/contact/`, `/setup/`, `/metadata/`, `/files/`; posty z `content/pl` tylko ostrzega — ich tytuł/opis pochodzą z frontmatteru autora).
 - **Tytuł strony głównej** budowany jest z `SITE_METADATA.title` + `titleTagline` (krótki, ≤60 z marką). `author.jobTitle` (pełny opis roli) jest dłuższy i służy tylko do Bio + JSON-LD — nie używaj go w `<title>`.
 - **Fallback opisu** (`SITE_METADATA.description`) musi być ≤160 i **bez** easter-egga „68 97 119…” (ten należy do nagłówka, nie do snippetu w SERP).
-- **Canonical:** strony `noIndex` (np. 404) **nie** emitują `<link rel="canonical">` (wskazywałby na URL non-200). Pilnują tego `helpers/ci/check-seo-meta.mjs` i smoke test.
-- **Budżet obrazów:** każdy obraz w `dist/` ≤ **1 MB** (`helpers/ci/check-image-budget.mjs`). Istniejące, cięższe obrazy postów są tymczasowo na liście wyjątków (`image-budget-baseline.json`); **nowe** ponadwymiarowe obrazy blokują CI — optymalizuj/zmniejszaj źródło przed dodaniem. Po świadomej optymalizacji odśwież baseline: `node helpers/ci/check-image-budget.mjs --update-baseline`.
+- **Canonical:** strony `noIndex` (np. 404) **nie** emitują `<link rel="canonical">` (wskazywałby na URL non-200). Pilnują tego `scripts/ci/check-seo-meta.mjs` i smoke test.
+- **Budżet obrazów:** każdy obraz w `dist/` ≤ **1 MB** (`scripts/ci/check-image-budget.mjs`). Istniejące, cięższe obrazy postów są tymczasowo na liście wyjątków (`image-budget-baseline.json`); **nowe** ponadwymiarowe obrazy blokują CI — optymalizuj/zmniejszaj źródło przed dodaniem. Po świadomej optymalizacji odśwież baseline: `node scripts/ci/check-image-budget.mjs --update-baseline`.
 
 ## Czego nie zmieniać
 
@@ -92,10 +92,10 @@ Audyt Ahrefs pilnuje długości i poprawności metadanych. Reguły poniżej doty
 
 ## Pre-commit (Husky)
 
-Hook uruchamia kolejno: `lint-staged` (Prettier + ESLint na staged) → `pnpm type:check` (astro check) → `validate-and-fix-presentations-metadata.sh`. Dodając PDF do `static/files/presentations/`, dopisz wpis w `metadata.csv` — w przeciwnym razie hook zablokuje commit (wymaga `exiftool`).
+Hook uruchamia kolejno: `lint-staged` (Prettier + ESLint na staged) → `pnpm type:check` (astro check) → `scripts/presentations/validate-and-fix-metadata.sh`. Dodając PDF do `static/files/presentations/`, dopisz wpis w `metadata.csv` — w przeciwnym razie hook zablokuje commit (wymaga `exiftool`).
 
 ## Git i pull requesty
 
-- Pisz commity oraz tytuły i opisy PR **po angielsku**, w formacie **Conventional Commits** (`docs:`, `feat:`, `fix:`, …).
-- **Nie dodawaj atrybucji AI** — żadnych `Co-Authored-By`, `Claude-Session` ani stopek typu „Generated with Claude Code” w commitach i opisach PR. Pilnuje tego CI (`helpers/ci/check-no-ai-attribution.mjs`).
+- Pisz commity oraz tytuły i opisy PR **po angielsku**, w formacie **Conventional Commits** (`docs:`, `feat:`, `fix:`, …). Tytuł PR (egzekwowany przez `pr-meta.yml`) musi trzymać się tej specyfikacji, a opis PR — wypełnić szablon `.github/pull_request_template.md` (sprawdza `scripts/ci/check-pr-template.mjs`). Zgłoszenia otwieraj formularzami z `.github/ISSUE_TEMPLATE/`.
+- **Nie dodawaj atrybucji AI** — żadnych `Co-Authored-By`, `Claude-Session` ani stopek typu „Generated with Claude Code” w commitach i opisach PR. Pilnuje tego CI (`scripts/ci/check-no-ai-attribution.mjs`).
 - **Po zmianie zakresu pilnuj zgodności opisu z treścią** — gdy po rebase, squashu lub odrzuceniu commitów zmieni się faktyczna zawartość gałęzi, zaktualizuj tytuł i opis commita oraz PR-a, tak aby opisywały tylko to, co realnie zostaje w diffie. Nie zostawiaj opisu sprzed zmiany zakresu.
