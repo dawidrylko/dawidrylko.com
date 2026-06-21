@@ -14,7 +14,7 @@
  * future images must be optimised before they are added.
  *
  * Regenerate the baseline after intentionally optimising images:
- *   node helpers/ci/check-image-budget.mjs --update-baseline
+ *   node scripts/ci/check-image-budget.mjs --update-baseline
  *
  * Zero dependencies; runs against the built output, it does NOT rebuild.
  */

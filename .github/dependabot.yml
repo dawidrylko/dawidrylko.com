@@ -20,9 +20,6 @@ updates:
         applies-to: version-updates
         patterns:
           - '*'
-    ignore:
-      # Pinned to 0.13.3 for gatsby-remark-katex compatibility — do not bump.
-      - dependency-name: 'katex'
 
   - package-ecosystem: 'github-actions'
     directory: '/'

@@ -1,0 +1,65 @@
+name: PR metadata
+
+# Gates the PR's own metadata: a Conventional-Commits title and a filled-in
+# description template. Separate from ci.yml so it can re-run on `edited` (when
+# the author fixes the title/body) without re-running the whole build matrix.
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: 'pr-meta-${{ github.event.pull_request.number }}'
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  # The PR title must follow the Conventional Commits spec; squash-merge uses it
+  # as the commit subject, so this keeps `git log` on master conventional too.
+  title:
+    name: Conventional Commits title
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate PR title
+        uses: amannn/action-semantic-pull-request@v6
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          types: |
+            feat
+            fix
+            docs
+            style
+            refactor
+            perf
+            test
+            build
+            ci
+            chore
+            revert
+
+  # The PR description must follow .github/pull_request_template.md rather than
+  # being left as the empty scaffold. Dependabot opens template-less PRs, so it
+  # is exempt. The body is passed via env (never interpolated into a shell).
+  description:
+    name: PR description template
+    runs-on: ubuntu-latest
+    if: github.actor != 'dependabot[bot]'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Validate PR description
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: node scripts/ci/check-pr-template.mjs

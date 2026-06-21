@@ -1,3 +1,17 @@
+"""Wykres amortyzacji: Array vs Map.
+
+Jednorazowe narzędzie, które wygenerowało ilustrację do tego wpisu
+(opublikowaną w katalogu nadrzędnym jako `1.amortyzacja_array_vs_map.png`).
+Trzymane przy poście, którego dotyczy.
+
+Uruchomienie:
+    python3 -m venv venv && source venv/bin/activate
+    pip install -r requirements.txt
+    python code.py        # zapisuje amortyzacja_array_vs_map.png
+
+Parametry `n` (liczba elementów) i `k_max` (zakres osi X) zmienisz poniżej.
+"""
+
 import matplotlib.pyplot as plt
 import numpy as np
 

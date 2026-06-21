@@ -1,0 +1,49 @@
+name: 🐞 Bug report
+description: Report something on the site or in its tooling that is broken or behaves unexpectedly.
+title: '[Bug]: '
+labels: ['bug']
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for taking the time to file a bug. The more precise the report, the faster it can be fixed.
+  - type: textarea
+    id: summary
+    attributes:
+      label: What happened?
+      description: A clear description of the bug and what you expected to happen instead.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Go to '...'
+        2. Click on '...'
+        3. See the error
+    validations:
+      required: true
+  - type: input
+    id: url
+    attributes:
+      label: Affected URL
+      placeholder: https://dawidrylko.com/...
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Content / blog post
+        - Layout / styling
+        - Build / CI
+        - SEO / metadata
+        - Accessibility
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Browser, OS and device, when relevant.
+      render: text
