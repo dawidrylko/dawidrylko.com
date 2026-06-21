@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { __setEntries, type MockPost } from '../../test/mocks/astro-content';
-import { getTags, postCountLabel, describeTagPage, type TagInfo } from './tags';
+import { getTags, postCountLabel, tagCountLabel, describeTagPage, type TagInfo } from './tags';
 import { DESCRIPTION_MAX_LENGTH } from './seo';
 
 const post = (id: string, date: string, tags: string[]): MockPost => ({ id, data: { date: new Date(date), tags } });
@@ -48,6 +48,17 @@ describe('postCountLabel', () => {
     expect(postCountLabel(5)).toBe('5 wpisów');
     expect(postCountLabel(12)).toBe('12 wpisów');
     expect(postCountLabel(22)).toBe('22 wpisy');
+  });
+});
+
+describe('tagCountLabel', () => {
+  it('uses the correct Polish plural form', () => {
+    expect(tagCountLabel(1)).toBe('1 tag');
+    expect(tagCountLabel(2)).toBe('2 tagi');
+    expect(tagCountLabel(4)).toBe('4 tagi');
+    expect(tagCountLabel(5)).toBe('5 tagów');
+    expect(tagCountLabel(12)).toBe('12 tagów');
+    expect(tagCountLabel(22)).toBe('22 tagi');
   });
 });
 
