@@ -32,12 +32,17 @@ const aiResources: [string, string][] = [
   ['/sitemap-index.xml', 'Canonical list of all URLs.'],
 ];
 
+// Decimal-ASCII signature — easter egg relocated here from the site header so it
+// is no longer the first text content of every page. Decode for the nod.
+const signature = '68 97 119 105 100 32 82 121 108 107 111';
+
 const siteInfo: [string, string][] = [
   ['Title', siteTitle],
   ['Description', siteDescription],
   ['Build time', buildTime],
   ['Pages', staticPages.length.toString()],
   ['Blog posts', blogPaths.length.toString()],
+  ['Signature', signature],
 ];
 
 const PAGE_METADATA: PageMetadata = {
