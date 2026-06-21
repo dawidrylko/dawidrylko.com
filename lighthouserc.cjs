@@ -19,9 +19,10 @@
  * Per-page gate (assertMatrix): the primary app pages (home, blog, bio,
  * contact) are static, text-led documents and are held to the highest
  * performance bar they sustain reliably. On Lighthouse's mobile throttling the
- * render path (LCP/FCP behind a render-blocking stylesheet and a web font), not
- * JavaScript, is the ceiling — gtag.js is already deferred off the critical
- * path — so the realistic, non-flaky bar is 0.85, set to 0.83 to keep ~0.02 of
+ * render path (LCP/FCP behind the web font), not JavaScript, is the ceiling —
+ * gtag.js is already deferred off the critical path and the chrome CSS is
+ * inlined (build.inlineStylesheets) so no stylesheet round-trip blocks first
+ * paint — so the realistic, non-flaky bar is 0.85, set to 0.83 to keep ~0.02 of
  * headroom over the best observed run. The remaining pages keep the 0.8 floor:
  * /metadata/ renders the full presentation index, and /setup/ hydrates the
  * Mermaid island on scroll (client:visible). Accessibility and SEO stay high
