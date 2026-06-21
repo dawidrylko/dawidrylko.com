@@ -351,6 +351,29 @@ table tr:last-child td {
   border-bottom: 0;
 }
 
+/* App-page tables (metadata, files, setup, bio) wrap in .table-scroll. A bare
+   display: block table only grows to its content width, so short tables (e.g.
+   the metadata #/Path lists) leave an ugly gap to the rounded border instead of
+   filling it. Here the wrapper owns the horizontal scroll and the rounded frame,
+   while the table inside becomes a real table again (width: 100%) so columns
+   stretch edge to edge — yet still overflow into a scroll when the content
+   (white-space: nowrap) is wider than the available room. */
+.table-scroll {
+  max-width: 100%;
+  margin-bottom: var(--spacing-8);
+  overflow-x: auto;
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-pill);
+}
+
+.table-scroll table {
+  display: table;
+  width: 100%;
+  margin-bottom: 0;
+  border: 0;
+  border-radius: 0;
+}
+
 /* Column width hints applied to <col> elements so width values stay out of
    inline styles. Tables scroll horizontally on small screens (table is
    display: block; overflow-x: auto above), so these only shape proportions

@@ -12,36 +12,38 @@ interface Props {
 const { data, header, widthConfig, ariaLabel } = Astro.props;
 ---
 
-<table aria-label={ariaLabel} tabindex="0">
-  {
-    widthConfig && (
-      <colgroup>
-        {widthConfig.map(width => (
-          <col class={`col-w-${width.replace('%', '').trim()}`} />
-        ))}
-      </colgroup>
-    )
-  }
-  {
-    header && (
-      <thead>
-        <tr>
-          {header.map(item => (
-            <th scope="col">{item}</th>
-          ))}
-        </tr>
-      </thead>
-    )
-  }
-  <tbody>
+<div class="table-scroll" tabindex="0">
+  <table aria-label={ariaLabel}>
     {
-      data.map(row => (
-        <tr>
-          {row.map(cell => (
-            <td>{cell}</td>
+      widthConfig && (
+        <colgroup>
+          {widthConfig.map(width => (
+            <col class={`col-w-${width.replace('%', '').trim()}`} />
           ))}
-        </tr>
-      ))
+        </colgroup>
+      )
     }
-  </tbody>
-</table>
+    {
+      header && (
+        <thead>
+          <tr>
+            {header.map(item => (
+              <th scope="col">{item}</th>
+            ))}
+          </tr>
+        </thead>
+      )
+    }
+    <tbody>
+      {
+        data.map(row => (
+          <tr>
+            {row.map(cell => (
+              <td>{cell}</td>
+            ))}
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+</div>

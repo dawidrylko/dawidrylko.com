@@ -181,29 +181,31 @@ const sections: { id: string; heading: string; ariaLabel: string; items: SetupIt
   <main>
     <section id="desktop" aria-labelledby="desktop-heading">
       <h2 id="desktop-heading">Desktop Setup</h2>
-      <table aria-label="Desktop hardware and equipment specifications" tabindex="0">
-        <colgroup><col class="col-w-30" /><col class="col-w-70" /></colgroup>
-        <thead><tr><th scope="col">Type</th><th scope="col">Full Name</th></tr></thead>
-        <tbody>
-          {
-            desktopSetup.map(([type, name, link, details]) => (
-              <tr>
-                <td>{type}</td>
-                <td>
-                  {link ? (
-                    <ExternalLink href={link} follow aria-label={`View ${name} on external site`}>
-                      {name}
-                    </ExternalLink>
-                  ) : (
-                    name
-                  )}
-                  {details && ` (${details})`}
-                </td>
-              </tr>
-            ))
-          }
-        </tbody>
-      </table>
+      <div class="table-scroll" tabindex="0">
+        <table aria-label="Desktop hardware and equipment specifications">
+          <colgroup><col class="col-w-30" /><col class="col-w-70" /></colgroup>
+          <thead><tr><th scope="col">Type</th><th scope="col">Full Name</th></tr></thead>
+          <tbody>
+            {
+              desktopSetup.map(([type, name, link, details]) => (
+                <tr>
+                  <td>{type}</td>
+                  <td>
+                    {link ? (
+                      <ExternalLink href={link} follow aria-label={`View ${name} on external site`}>
+                        {name}
+                      </ExternalLink>
+                    ) : (
+                      name
+                    )}
+                    {details && ` (${details})`}
+                  </td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
     </section>
 
     <section id="diagram" aria-labelledby="diagram-heading">
@@ -224,39 +226,41 @@ const sections: { id: string; heading: string; ariaLabel: string; items: SetupIt
         .map(({ id, heading, ariaLabel, items }) => (
           <section id={id} aria-labelledby={`${id}-heading`}>
             <h2 id={`${id}-heading`}>{heading}</h2>
-            <table aria-label={ariaLabel} tabindex="0">
-              <colgroup>
-                <>
-                  <col class="col-w-30" />
-                  <col class="col-w-70" />
-                </>
-              </colgroup>
-              <thead>
-                <tr>
+            <div class="table-scroll" tabindex="0">
+              <table aria-label={ariaLabel}>
+                <colgroup>
                   <>
-                    <th scope="col">Type</th>
-                    <th scope="col">Full Name</th>
+                    <col class="col-w-30" />
+                    <col class="col-w-70" />
                   </>
-                </tr>
-              </thead>
-              <tbody>
-                {items.map(([type, name, link, details]) => (
+                </colgroup>
+                <thead>
                   <tr>
-                    <td>{type}</td>
-                    <td>
-                      {link ? (
-                        <ExternalLink href={link} follow aria-label={`View ${name} on external site`}>
-                          {name}
-                        </ExternalLink>
-                      ) : (
-                        name
-                      )}
-                      {details && ` (${details})`}
-                    </td>
+                    <>
+                      <th scope="col">Type</th>
+                      <th scope="col">Full Name</th>
+                    </>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {items.map(([type, name, link, details]) => (
+                    <tr>
+                      <td>{type}</td>
+                      <td>
+                        {link ? (
+                          <ExternalLink href={link} follow aria-label={`View ${name} on external site`}>
+                            {name}
+                          </ExternalLink>
+                        ) : (
+                          name
+                        )}
+                        {details && ` (${details})`}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </section>
         ))
     }

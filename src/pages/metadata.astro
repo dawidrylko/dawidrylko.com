@@ -81,58 +81,64 @@ const structuredData = createPageSchema({
   <main>
     <section id="site-info" aria-label="Site Information">
       <h2>Site Information</h2>
-      <table aria-label="Site information" tabindex="0">
-        <colgroup><col class="col-w-30" /><col class="col-w-70" /></colgroup>
-        <thead><tr><th scope="col">Property</th><th scope="col">Value</th></tr></thead>
-        <tbody>
-          {
-            siteInfo.map(([prop, value]) => (
-              <tr>
-                <td>{prop}</td>
-                <td>{value}</td>
-              </tr>
-            ))
-          }
-        </tbody>
-      </table>
+      <div class="table-scroll" tabindex="0">
+        <table aria-label="Site information">
+          <colgroup><col class="col-w-30" /><col class="col-w-70" /></colgroup>
+          <thead><tr><th scope="col">Property</th><th scope="col">Value</th></tr></thead>
+          <tbody>
+            {
+              siteInfo.map(([prop, value]) => (
+                <tr>
+                  <td>{prop}</td>
+                  <td>{value}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
     </section>
     <section id="pages" aria-label="Pages">
       <h2>Pages</h2>
-      <table aria-label="Pages" tabindex="0">
-        <colgroup><col class="col-w-10" /><col class="col-w-90" /></colgroup>
-        <thead><tr><th scope="col">#</th><th scope="col">Path</th></tr></thead>
-        <tbody>
-          {
-            staticPages.map((p, i) => (
-              <tr>
-                <td>{i + 1}</td>
-                <td>
-                  <a href={p}>{p}</a>
-                </td>
-              </tr>
-            ))
-          }
-        </tbody>
-      </table>
+      <div class="table-scroll" tabindex="0">
+        <table aria-label="Pages">
+          <colgroup><col class="col-w-10" /><col class="col-w-90" /></colgroup>
+          <thead><tr><th scope="col">#</th><th scope="col">Path</th></tr></thead>
+          <tbody>
+            {
+              staticPages.map((p, i) => (
+                <tr>
+                  <td>{i + 1}</td>
+                  <td>
+                    <a href={p}>{p}</a>
+                  </td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
     </section>
     <section id="blog-posts" aria-label="Blog Posts">
       <h2>Blog Posts</h2>
-      <table aria-label="Blog posts" tabindex="0">
-        <colgroup><col class="col-w-10" /><col class="col-w-90" /></colgroup>
-        <thead><tr><th scope="col">#</th><th scope="col">Path</th></tr></thead>
-        <tbody>
-          {
-            blogPaths.map((p, i) => (
-              <tr>
-                <td>{i + 1}</td>
-                <td>
-                  <a href={p}>{p}</a>
-                </td>
-              </tr>
-            ))
-          }
-        </tbody>
-      </table>
+      <div class="table-scroll" tabindex="0">
+        <table aria-label="Blog posts">
+          <colgroup><col class="col-w-10" /><col class="col-w-90" /></colgroup>
+          <thead><tr><th scope="col">#</th><th scope="col">Path</th></tr></thead>
+          <tbody>
+            {
+              blogPaths.map((p, i) => (
+                <tr>
+                  <td>{i + 1}</td>
+                  <td>
+                    <a href={p}>{p}</a>
+                  </td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
     </section>
   </main>
 </PageLayout>
