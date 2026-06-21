@@ -23,20 +23,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Install pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version-file: '.nvmrc'
           cache: 'pnpm'
 
       - name: Setup Pages
         id: pages
-        uses: actions/configure-pages@v4
+        uses: actions/configure-pages@v6
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -45,7 +45,7 @@ jobs:
       # webmanifest icon generation). Keyed on the inputs that change the output;
       # Astro re-validates entries by content hash, so a stale restore is safe.
       - name: Cache Astro build cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: |
             .astro
@@ -58,7 +58,7 @@ jobs:
         run: pnpm run build
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: ./dist
 
@@ -72,7 +72,7 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
 
   notify:
     name: Notify
@@ -81,7 +81,7 @@ jobs:
     if: "!contains(github.event.head_commit.message, '[skip notify]')"
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       # Notifications run after a successful deploy; a failure here must never
       # roll back or block the already-published build, so they are non-blocking.
