@@ -254,9 +254,8 @@ const MemoizationDemo: FC = () => {
         }
 
         .harry-potter-app-container {
-          min-height: 100vh;
           background-color: var(--harry-potter-bg-primary);
-          padding: 2rem;
+          padding: 1rem;
           font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
 
@@ -273,19 +272,20 @@ const MemoizationDemo: FC = () => {
         .harry-potter-header {
           background: linear-gradient(135deg, var(--harry-potter-accent-gradient-start) 0%, var(--harry-potter-accent-gradient-end) 100%);
           color: var(--harry-potter-text-primary);
-          padding: 2.5rem;
+          padding: 1.5rem;
           text-align: center;
         }
 
         .harry-potter-title {
-          font-size: 2.5rem;
+          font-size: 1.6rem;
           font-weight: 700;
           margin-bottom: 0.5rem;
           text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+          overflow-wrap: break-word;
         }
 
         .harry-potter-subtitle {
-          font-size: 1.25rem;
+          font-size: 1.05rem;
           margin-bottom: 1rem;
           opacity: 0.95;
         }
@@ -299,14 +299,14 @@ const MemoizationDemo: FC = () => {
         }
 
         .harry-potter-horcrux-section {
-          padding: 2.5rem;
+          padding: 1.5rem;
           background-color: var(--harry-potter-bg-secondary);
           border-bottom: 1px solid var(--harry-potter-border-color);
         }
 
         .harry-potter-horcrux-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+          grid-template-columns: 1fr;
           gap: 1rem;
         }
 
@@ -322,6 +322,7 @@ const MemoizationDemo: FC = () => {
           transition: all 0.3s ease;
           transform: translateY(0);
           box-shadow: 0 2px 8px rgba(91, 33, 182, 0.3);
+          overflow-wrap: break-word;
         }
 
         .harry-potter-horcrux-btn:hover:not(.harry-potter-loading) {
@@ -338,7 +339,7 @@ const MemoizationDemo: FC = () => {
         }
 
         .harry-potter-log-section {
-          padding: 2rem;
+          padding: 1.25rem;
           background-color: var(--harry-potter-bg-secondary);
         }
 
@@ -377,7 +378,7 @@ const MemoizationDemo: FC = () => {
         .harry-potter-log-container {
           background-color: var(--harry-potter-bg-log);
           border-radius: 8px;
-          padding: 1.5rem;
+          padding: 1rem;
           max-height: 400px;
           overflow-y: auto;
           font-family: 'SF Mono', Monaco, Consolas, monospace;
@@ -466,6 +467,41 @@ const MemoizationDemo: FC = () => {
 
         .harry-potter-footer p {
           margin: 0.25rem 0;
+        }
+
+        /* Larger screens: roomier spacing and a multi-column Horcrux grid */
+        @media (min-width: 48rem) {
+          .harry-potter-app-container {
+            padding: 2rem;
+          }
+
+          .harry-potter-header {
+            padding: 2.5rem;
+          }
+
+          .harry-potter-title {
+            font-size: 2.5rem;
+          }
+
+          .harry-potter-subtitle {
+            font-size: 1.25rem;
+          }
+
+          .harry-potter-horcrux-section {
+            padding: 2.5rem;
+          }
+
+          .harry-potter-horcrux-grid {
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+          }
+
+          .harry-potter-log-section {
+            padding: 2rem;
+          }
+
+          .harry-potter-log-container {
+            padding: 1.5rem;
+          }
         }
       `}</style>
     </>
