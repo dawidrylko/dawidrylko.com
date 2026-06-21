@@ -21,6 +21,17 @@ const buildTime = `${now.getUTCFullYear()}-${pad(now.getUTCMonth() + 1)}-${pad(n
 const siteTitle = SITE_METADATA.title;
 const siteDescription = SITE_METADATA.description.en;
 
+// Resources curated for AI/LLM crawlers and agents. Exposed here in addition to
+// /llms.txt and robots.txt so the intent is discoverable from the site itself.
+const aiResources: [string, string][] = [
+  ['/llms.txt', 'Structured, machine-readable summary of the site for AI/LLM crawlers.'],
+  ['/metadata/', 'This page — full inventory of pages and blog posts with build info.'],
+  ['/bio/', 'Author background: experience, education, and philosophy.'],
+  ['/blog/', 'All articles, with search and tag filtering.'],
+  ['/rss.xml', 'Full-text RSS feed of every blog post.'],
+  ['/sitemap-index.xml', 'Canonical list of all URLs.'],
+];
+
 const siteInfo: [string, string][] = [
   ['Title', siteTitle],
   ['Description', siteDescription],
@@ -62,6 +73,11 @@ const structuredData = createPageSchema({
         name: 'Content Structure',
         description: 'Complete inventory of static pages and blog posts with navigation paths.',
       },
+      {
+        '@type': 'Thing',
+        name: 'AI Resources',
+        description: 'Curated machine-readable resources for AI/LLM crawlers, including the llms.txt summary.',
+      },
     ],
     mainEntity: {
       '@type': 'ItemList',
@@ -91,6 +107,28 @@ const structuredData = createPageSchema({
                 <tr>
                   <td>{prop}</td>
                   <td>{value}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
+    <section id="ai-resources" aria-label="AI Resources">
+      <h2>AI Resources</h2>
+      <p>Machine-readable resources for AI/LLM crawlers and agents.</p>
+      <div class="table-scroll" tabindex="0">
+        <table aria-label="AI resources">
+          <colgroup><col class="col-w-30" /><col class="col-w-70" /></colgroup>
+          <thead><tr><th scope="col">Resource</th><th scope="col">Description</th></tr></thead>
+          <tbody>
+            {
+              aiResources.map(([path, description]) => (
+                <tr>
+                  <td>
+                    <a href={path}>{path}</a>
+                  </td>
+                  <td>{description}</td>
                 </tr>
               ))
             }

@@ -33,4 +33,7 @@ Allow: /
 User-agent: CCBot
 Allow: /
 
+# Structured site summary for AI/LLM crawlers (see also /metadata/).
+# llms.txt: https://dawidrylko.com/llms.txt
+
 Sitemap: https://dawidrylko.com/sitemap-index.xml
