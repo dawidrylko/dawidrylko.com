@@ -2,6 +2,7 @@
 import PageLayout from '../layouts/PageLayout.astro';
 import JsonLd from '../components/JsonLd.astro';
 import { STRUCTURED_DATA } from '../data/structured-data';
+import { buildCapabilities } from '../data/capabilities';
 import { createPageSchema } from '../lib/page-metadata';
 import type { PageMetadata } from '../types';
 
@@ -21,38 +22,21 @@ const PAGE_METADATA: PageMetadata = {
   ],
 };
 
-// Concrete areas of work shown in the "What I do" block. Kept as a single source
-// of truth so the visible list and the JSON-LD ItemList below never drift apart.
-const CAPABILITIES: { term: string; description: string }[] = [
-  {
-    term: 'Web platforms',
-    description:
-      'Production frontends in React, Angular, and TypeScript, backed by Node.js APIs—shipped end to end, from first commit to deployment.',
-  },
-  {
-    term: 'Mobile apps',
-    description: 'Cross-platform mobile applications taken from prototype to the App Store and Google Play.',
-  },
-  {
-    term: 'Architecture & infrastructure',
-    description:
-      'System design, CI/CD pipelines, and infrastructure automation that keep releases fast, repeatable, and predictable.',
-  },
-  {
-    term: 'AI integration',
-    description:
-      'Bringing LLMs and AI-driven features into real products that ship—not demos that stall in a notebook.',
-  },
-  {
-    term: 'Cybersecurity',
-    description: 'Security reviews and hardening so the systems I build stay resilient when it matters.',
-  },
-  {
-    term: 'Technical leadership',
-    description:
-      'Leading engineering teams, mentoring developers, and setting technical direction that scales with the product.',
-  },
-];
+// Home framing of the shared capability areas: concrete, punchy taglines for the
+// "What I do" block. The visible list and the JSON-LD ItemList below both read
+// from this array, so they never drift apart.
+const CAPABILITIES = buildCapabilities({
+  'Web platforms':
+    'Production frontends in React, Angular, and TypeScript, backed by Node.js APIs—shipped end to end, from first commit to deployment.',
+  'Mobile apps': 'Cross-platform mobile applications taken from prototype to the App Store and Google Play.',
+  'Architecture & infrastructure':
+    'System design, CI/CD pipelines, and infrastructure automation that keep releases fast, repeatable, and predictable.',
+  'AI integration':
+    'Bringing LLMs and AI-driven features into real products that ship—not demos that stall in a notebook.',
+  Cybersecurity: 'Security reviews and hardening so the systems I build stay resilient when it matters.',
+  'Technical leadership':
+    'Leading engineering teams, mentoring developers, and setting technical direction that scales with the product.',
+});
 
 const { person } = STRUCTURED_DATA;
 const structuredData = createPageSchema({
