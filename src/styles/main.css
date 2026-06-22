@@ -581,6 +581,13 @@ a:focus {
   }
 }
 
+/* The CTA section has no heading, so it misses the section-to-section gap that a
+   heading's top margin normally provides. Re-add it so the call to action does
+   not sit flush against the capabilities grid above. */
+#cta {
+  margin-top: var(--spacing-12);
+}
+
 /* Mobile-first author card: stacked and centred on phones; horizontal from the
    sm breakpoint up. */
 .bio {
