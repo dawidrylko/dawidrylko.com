@@ -7,6 +7,7 @@ import ExternalLink from '../components/ExternalLink.astro';
 import motto from '../assets/motto.jpg';
 import { SITE_METADATA } from '../data/site-metadata';
 import { STRUCTURED_DATA } from '../data/structured-data';
+import { buildCapabilities } from '../data/capabilities';
 import { createPageSchema } from '../lib/page-metadata';
 import type { PageMetadata } from '../types';
 
@@ -62,6 +63,23 @@ const citations = [
     extraDetails: [{ type: 'translation', note: 'Translated by ChatGPT.' }],
   },
 ];
+
+// About framing of the shared capability areas: where the experience comes from,
+// written from a track-record angle rather than the home page's tagline style.
+const capabilities = buildCapabilities({
+  'Web platforms':
+    'A decade building React, Angular, and TypeScript frontends on top of Node.js APIs—the backbone of my day-to-day engineering work.',
+  'Mobile apps':
+    'Led cross-platform mobile development end to end, carrying products from prototype through release on the App Store and Google Play.',
+  'Architecture & infrastructure':
+    'Designing systems together with the CI/CD pipelines and automation around them, so teams can ship with confidence.',
+  'AI integration':
+    'Folding LLMs and AI-driven features into production software instead of leaving them as throwaway proofs of concept.',
+  Cybersecurity:
+    'A long-standing focus on security that shapes how I review, harden, and reason about everything I build.',
+  'Technical leadership':
+    'Years of leading and mentoring engineers and setting technical direction as teams and products grow.',
+});
 
 const image = {
   alt: `Graffiti on a utility box featuring a black-and-white image of Charlie Chaplin with the quote: 'A day without laughter is a day wasted'.`,
@@ -148,6 +166,19 @@ const structuredData = createPageSchema({
       <ExternalLink href="https://dawid.dev" follow>dawid.dev</ExternalLink> to see experiments, articles, and insights on
       technology and software craftsmanship.
     </p>
+  </section>
+  <section id="what-i-do">
+    <h2>What I do</h2>
+    <ul class="capabilities">
+      {
+        capabilities.map(({ term, description }) => (
+          <li>
+            <strong>{term}</strong>
+            {description}
+          </li>
+        ))
+      }
+    </ul>
   </section>
   <section id="philosophy">
     <h2>Philosophy</h2>
