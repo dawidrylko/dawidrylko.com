@@ -1,5 +1,27 @@
 /* CSS Custom Properties Definitions */
 
+/*
+ * Metric-matched fallback for the heading face (Montserrat), which is not
+ * preloaded and so swaps in after first paint. The override descriptors force
+ * the fallback's line box (ascent/descent/line-gap) and advance width to match
+ * Montserrat, so when the web font swaps in there is no reflow — eliminating the
+ * font-swap layout shift (CLS) that otherwise caps the score on text-led pages.
+ *
+ * Values are derived from the shipped Montserrat woff2 (em 1000, ascent 968,
+ * descent -251, xWidthAvg 488) against Arial's metrics. The local() list
+ * resolves an Arial-class face on macOS/Windows and a metric-compatible one
+ * (Liberation/DejaVu Sans) on Linux — including the CI runner where Lighthouse
+ * measures — so the override actually applies there rather than being skipped.
+ */
+@font-face {
+  font-family: 'Montserrat Fallback';
+  src: local('Arial'), local('Liberation Sans'), local('DejaVu Sans'), local('Roboto');
+  size-adjust: 110.56%;
+  ascent-override: 87.56%;
+  descent-override: 22.7%;
+  line-gap-override: 0%;
+}
+
 :root {
   --maxWidth-none: 'none';
   --maxWidth-xs: 20rem;
@@ -28,11 +50,10 @@
   --spacing-24: 6rem;
   --spacing-32: 8rem;
   --fontFamily-sans:
-    'Montserrat Variable', system-ui, -apple-system, blinkmacsystemfont,
-    'Segoe UI', roboto, 'Helvetica Neue', arial, 'Noto Sans', sans-serif,
-    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-  --fontFamily-serif:
-    'Merriweather', 'Georgia', cambria, 'Times New Roman', times, serif;
+    'Montserrat Variable', 'Montserrat Fallback', system-ui, -apple-system, blinkmacsystemfont, 'Segoe UI', roboto,
+    'Helvetica Neue', arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+    'Noto Color Emoji';
+  --fontFamily-serif: 'Merriweather', 'Georgia', cambria, 'Times New Roman', times, serif;
   --font-body: var(--fontFamily-serif);
   --font-heading: var(--fontFamily-sans);
   --fontWeight-normal: 400;
