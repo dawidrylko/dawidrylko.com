@@ -42,17 +42,45 @@ async function read(relPath) {
   return readFile(join(DIST_DIR, relPath), 'utf8');
 }
 
-/** Concatenate every emitted stylesheet so we can assert on the bundled CSS. */
+/**
+ * Concatenate every stylesheet the build emits so we can assert on the bundled
+ * CSS. Styles can land in two places: external /_astro/*.css files, or inline
+ * <style> tags in the HTML when inlineStylesheets is enabled. Read both so the
+ * contract holds regardless of how Astro ships the CSS.
+ */
 async function readAllCss() {
+  const chunks = [];
+
   const assetsDir = join(DIST_DIR, '_astro');
-  let files;
   try {
-    files = await readdir(assetsDir);
+    const files = await readdir(assetsDir);
+    const css = await Promise.all(files.filter(f => f.endsWith('.css')).map(f => readFile(join(assetsDir, f), 'utf8')));
+    chunks.push(...css);
   } catch {
-    return '';
+    // No external CSS bundle (e.g. everything inlined) — fall through to HTML.
   }
-  const css = await Promise.all(files.filter(f => f.endsWith('.css')).map(f => readFile(join(assetsDir, f), 'utf8')));
-  return css.join('\n');
+
+  for (const page of await collectHtml(DIST_DIR)) {
+    const html = await readFile(page, 'utf8');
+    for (const match of html.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)) {
+      chunks.push(match[1]);
+    }
+  }
+
+  return chunks.join('\n');
+}
+
+/** Recursively collect every .html file under dir. */
+async function collectHtml(dir) {
+  const entries = await readdir(dir, { withFileTypes: true });
+  const files = await Promise.all(
+    entries.map(async entry => {
+      const full = join(dir, entry.name);
+      if (entry.isDirectory()) return collectHtml(full);
+      return entry.name.endsWith('.html') ? [full] : [];
+    }),
+  );
+  return files.flat();
 }
 
 /** Resolve a post directory by slug prefix (slugs are stable, not hashed). */
