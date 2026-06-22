@@ -4,6 +4,8 @@ import path from 'node:path';
 import PageLayout from '../layouts/PageLayout.astro';
 import JsonLd from '../components/JsonLd.astro';
 import { createPageSchema } from '../lib/page-metadata';
+import { parseFileName, formatFileSize, parsePresentationMetadata } from '../lib/presentations';
+import { SITE_METADATA } from '../data/site-metadata';
 import type { PageMetadata } from '../types';
 
 // Replaces Gatsby's custom `StaticFile` sourceNodes: read the same static/files
@@ -38,6 +40,15 @@ const readFilesRecursively = (dir: string, baseDir: string): FileNode[] => {
 
 const nodes = readFilesRecursively(filesDir, filesDir).filter(node => node.extension !== 'csv');
 
+// metadata.csv is the source of truth for each presentation's document metadata
+// (title/subject/keywords) and is kept in sync with the PDFs by the pre-commit
+// validator. Reusing it here gives the public table — and search engines —
+// descriptive titles and context instead of terse filename fragments.
+const metadataCsvPath = path.join(filesDir, 'presentations', 'metadata.csv');
+const presentationMeta = fs.existsSync(metadataCsvPath)
+  ? parsePresentationMetadata(fs.readFileSync(metadataCsvPath, 'utf8'))
+  : new Map();
+
 type FileAction = 'download' | 'open';
 type FileConfig = { icon: string; type: string; action: FileAction; hidden: boolean };
 
@@ -49,34 +60,6 @@ const FILE_CONFIG: Record<string, FileConfig[]> = {
   key: [{ icon: '🎨', type: 'Keynote', action: 'download', hidden: true }],
   ppt: [{ icon: '📊', type: 'PowerPoint', action: 'download', hidden: true }],
   pptx: [{ icon: '📊', type: 'PowerPoint', action: 'download', hidden: true }],
-};
-
-type ParsedFileName = { topic: string; order: number; title: string; language: string };
-
-const parseFileName = (fileName: string): ParsedFileName | null => {
-  const parts = fileName.split('_');
-  if (parts.length < 4) {
-    return null;
-  }
-  const [topic, orderRaw] = parts;
-  const languageRaw = parts[parts.length - 1];
-  if (topic === undefined || orderRaw === undefined || languageRaw === undefined) {
-    return null;
-  }
-  return {
-    topic,
-    order: parseInt(orderRaw, 10),
-    title: parts.slice(2, -1).join('_'),
-    language: languageRaw.toUpperCase(),
-  };
-};
-
-const formatFileSize = (bytes: number): string => {
-  if (bytes === 0) return '0 B';
-  const k = 1024;
-  const sizes = ['B', 'KB', 'MB', 'GB'];
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
-  return `${parseFloat((bytes / Math.pow(k, i)).toFixed(2))} ${sizes[i]}`;
 };
 
 const groupFilesByIdentity = (files: FileNode[]): Map<string, FileNode[]> =>
@@ -110,6 +93,14 @@ const rows = sortedEntries
     if (!parsed || !files[0]) return null;
     const pdfFile = files.find(f => f.extension.toLowerCase() === 'pdf');
     const sizeSource = pdfFile ?? files[0];
+    // Prefer the descriptive metadata.csv title/subject; fall back to a
+    // humanised filename fragment when an entry is missing from the CSV.
+    const meta = presentationMeta.get(files[0].name);
+    const fallbackTitle = parsed.title.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+    const displayTitle = meta?.title || fallbackTitle;
+    const topic = meta?.subject || parsed.topic.toUpperCase();
+    const keywords = meta?.keywords ?? '';
+    const downloadLabel = meta?.subject || fallbackTitle;
     const links = [...files]
       .sort((a, b) => {
         const ia = orderKeys.indexOf(a.extension.toLowerCase());
@@ -126,16 +117,18 @@ const rows = sortedEntries
           // the cmd/ctrl+shift+. shortcut reveals them (see the inline script).
           hidden: config.hidden,
           size: formatFileSize(file.size),
-          title: parsed.title,
-          download: `${parsed.title} - Dawid Ryłko - dawidrylko.com.${file.extension}`,
+          title: displayTitle,
+          download: `${downloadLabel} - Dawid Ryłko - dawidrylko.com.${file.extension}`,
         })),
       );
     return {
       index: index + 1,
-      topic: parsed.topic.toUpperCase(),
-      title: parsed.title,
+      topic,
+      title: displayTitle,
+      keywords,
       language: parsed.language,
       size: formatFileSize(sizeSource.size),
+      openHref: pdfFile?.publicURL ?? files[0].publicURL,
       links,
     };
   })
@@ -180,7 +173,24 @@ const structuredData = createPageSchema({
       '@type': 'ItemList',
       name: 'Presentation Files',
       description: 'Collection of downloadable technical presentations and educational materials',
-      numberOfItems: grouped.size,
+      numberOfItems: rows.length,
+      // Each row is exposed as a concrete DigitalDocument so search engines see
+      // titled, described items rather than an opaque file table.
+      itemListElement: rows.map(row => ({
+        '@type': 'ListItem',
+        position: row.index,
+        item: {
+          '@type': 'DigitalDocument',
+          name: row.title,
+          ...(row.topic ? { about: row.topic } : {}),
+          ...(row.keywords ? { keywords: row.keywords } : {}),
+          inLanguage: row.language.toLowerCase(),
+          encodingFormat: 'application/pdf',
+          url: `${SITE_METADATA.url}${row.openHref}`,
+          author: { '@id': `${SITE_METADATA.url}/#person` },
+          isAccessibleForFree: true,
+        },
+      })),
     },
   },
 });
@@ -194,21 +204,28 @@ const structuredData = createPageSchema({
   <main>
     <section aria-labelledby="presentations-heading">
       <h2 id="presentations-heading">Presentations</h2>
+      <p class="presentations-intro">
+        Slides from my technical talks and workshops on Node.js, JavaScript, and modern web development. Each
+        presentation opens or downloads as a PDF — titles link straight to the document.
+      </p>
       <div class="table-scroll" tabindex="0">
-        <table class="presentations-table" data-presentations aria-label="Presentations">
+        <table class="presentations-table" data-presentations>
+          <caption class="visually-hidden">
+            Technical presentations by Dawid Ryłko, each available to view or download as a PDF.
+          </caption>
           <colgroup>
             <col class="col-w-5" />
-            <col class="col-w-20" />
+            <col class="col-w-35" />
             <col class="col-w-20" />
             <col class="col-w-10" />
-            <col class="col-w-15" />
-            <col class="col-w-30" />
+            <col class="col-w-10" />
+            <col class="col-w-20" />
           </colgroup>
           <thead>
             <tr>
               <th scope="col">#</th>
+              <th scope="col">Presentation</th>
               <th scope="col">Topic</th>
-              <th scope="col">Title</th>
               <th scope="col">Lang</th>
               <th scope="col">Size</th>
               <th scope="col">Download</th>
@@ -219,8 +236,19 @@ const structuredData = createPageSchema({
               rows.map(row => (
                 <tr>
                   <td>{row.index}</td>
+                  <td class="presentation-cell">
+                    <a
+                      class="presentation-title"
+                      href={row.openHref}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`Open ${row.title} (PDF) in a new tab`}
+                    >
+                      {row.title}
+                    </a>
+                    {row.keywords && <span class="presentation-keywords">{row.keywords}</span>}
+                  </td>
                   <td>{row.topic}</td>
-                  <td>{row.title}</td>
                   <td>{row.language}</td>
                   <td>{row.size}</td>
                   <td>
