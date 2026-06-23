@@ -59,8 +59,8 @@ verify_metadata_csv() {
 
     local first_line
     first_line=$(head -n 1 "$METADATA_CSV")
-    if [[ "$first_line" != "filename,title,subject,keywords" ]]; then
-        log_error "Invalid CSV format. Expected header: filename,title,subject,keywords"
+    if [[ "$first_line" != "filename,title,subject,keywords,description,relatedArticle" ]]; then
+        log_error "Invalid CSV format. Expected header: filename,title,subject,keywords,description,relatedArticle"
         exit 2
     fi
 }

@@ -1,4 +1,4 @@
-filename,title,subject,keywords
-js_01_node_pl,"JavaScript | Wstęp do Node.js - NODE, NVM, NPM…","Node.js","JavaScript, Node.js, NVM, NPM"
-js_02_npm_pl,"JavaScript | NPM - package.json, zależności, SemVer, package-lock.json…","NPM","JavaScript, NPM, package.json, SemVer, dependencies"
-js_03_npm_pl,"JavaScript | NPM - automatyzacja, npx, narzędzia…","NPM","JavaScript, NPM, npx, automation, tools"
+filename,title,subject,keywords,description,relatedArticle
+js_01_node_pl,"JavaScript | Wstęp do Node.js - NODE, NVM, NPM…","Node.js","JavaScript, Node.js, NVM, NPM","Introduction to Node.js runtime: installation via NVM, first steps with the REPL, and an overview of the NPM ecosystem.",""
+js_02_npm_pl,"JavaScript | NPM - package.json, zależności, SemVer, package-lock.json…","NPM","JavaScript, NPM, package.json, SemVer, dependencies","Deep dive into NPM fundamentals: package.json structure, dependency management, Semantic Versioning, and the role of package-lock.json.",""
+js_03_npm_pl,"JavaScript | NPM - automatyzacja, npx, narzędzia…","NPM","JavaScript, NPM, npx, automation, tools","Automating workflows with NPM scripts, running packages on-the-fly with npx, and essential tooling for modern JavaScript projects.",""

@@ -446,43 +446,90 @@ table tr:last-child td {
   border: 0;
 }
 
-/* Files page: short lead-in above the presentations table. */
+/* Files page: short lead-in above the presentations grid. */
 .presentations-intro {
   max-width: 60ch;
 }
 
-/* The presentation title cell carries long descriptive text (the document title
-   plus a keyword line); let it wrap instead of inheriting the table-wide
-   white-space: nowrap, which would force a wide horizontal scroll. */
-.presentations-table .presentation-cell {
-  white-space: normal;
+.presentations-grid {
+  display: grid;
+  gap: var(--spacing-6);
 }
 
-.presentation-title {
-  font-weight: 600;
+.presentation-card {
+  padding: var(--spacing-6);
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-pill);
 }
 
-.presentation-keywords {
-  display: block;
-  margin-top: var(--spacing-1);
+.presentation-card-title {
+  margin-top: 0;
+  margin-bottom: var(--spacing-4);
+  font-size: var(--fontSize-3);
+}
+
+.presentation-details {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: var(--spacing-1) var(--spacing-4);
+  margin: 0 0 var(--spacing-4);
+  font-size: var(--fontSize-1);
+}
+
+.presentation-details dt {
   color: var(--color-text-light);
+  font-family: var(--font-heading);
+  font-weight: var(--fontWeight-bold);
   font-size: var(--fontSize-0);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
-/* Download actions cell on the files page: keep icons in a row. */
+.presentation-details dd {
+  margin: 0;
+}
+
+.presentation-description {
+  grid-column: 1 / -1;
+  color: var(--color-text-light);
+}
+
+.presentation-card-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-3);
+  padding-top: var(--spacing-4);
+  border-top: 1px solid var(--color-accent);
+}
+
+/* Download actions on the files page: keep icons in a row. */
 .file-actions {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: var(--spacing-2);
+  gap: var(--spacing-3);
+}
+
+.file-link {
+  font-size: var(--fontSize-0);
+  white-space: nowrap;
+}
+
+.presentation-related {
+  font-family: var(--font-heading);
+  font-size: var(--fontSize-0);
+  font-weight: var(--fontWeight-bold);
 }
 
 /* Files page: Keynote/PowerPoint download variants are hidden until the
-   cmd/ctrl+shift+. shortcut adds .show-hidden-variants to the table. */
-.presentations-table .file-link.is-hidden-variant {
+   cmd/ctrl+shift+. shortcut adds .show-hidden-variants to the grid. */
+.presentations-grid .file-link.is-hidden-variant {
   display: none;
 }
 
-.presentations-table.show-hidden-variants .file-link.is-hidden-variant {
+.presentations-grid.show-hidden-variants .file-link.is-hidden-variant {
   display: inline;
 }
 
