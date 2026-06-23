@@ -451,9 +451,8 @@ table tr:last-child td {
   max-width: 60ch;
 }
 
-/* The presentation title cell carries long descriptive text (the document title
-   plus description and keyword lines); let it wrap instead of inheriting the
-   table-wide white-space: nowrap, which would force a wide horizontal scroll. */
+/* Text-heavy cells (title, description, keywords) wrap instead of inheriting the
+   table-wide white-space: nowrap, avoiding a wide horizontal scroll. */
 .presentations-table .presentation-cell {
   white-space: normal;
 }
@@ -462,16 +461,7 @@ table tr:last-child td {
   font-weight: 600;
 }
 
-.presentation-description {
-  display: block;
-  margin-top: var(--spacing-1);
-  color: var(--color-text-light);
-  font-size: var(--fontSize-0);
-}
-
 .presentation-keywords {
-  display: block;
-  margin-top: var(--spacing-1);
   color: var(--color-text-light);
   font-size: var(--fontSize-0);
   font-style: italic;
