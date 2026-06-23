@@ -32,18 +32,17 @@ const aiResources: [string, string][] = [
   ['/sitemap-index.xml', 'Canonical list of all URLs.'],
 ];
 
-// Decimal-ASCII signature — easter egg relocated here from the site header so it
-// is no longer the first text content of every page. Decode for the nod.
-const signature = '68 97 119 105 100 32 82 121 108 107 111';
-
 const siteInfo: [string, string][] = [
   ['Title', siteTitle],
   ['Description', siteDescription],
   ['Build time', buildTime],
   ['Pages', staticPages.length.toString()],
   ['Blog posts', blogPaths.length.toString()],
-  ['Signature', signature],
 ];
+// The decimal-ASCII signature easter egg is appended to the table below from a
+// client-side script (see end of file), so the literal sequence never ships in
+// the crawlable HTML — keeping it out of SEO/Ahrefs text extraction while still
+// rewarding a human who opens this page.
 
 const PAGE_METADATA: PageMetadata = {
   title: 'Metadata',
@@ -92,10 +91,30 @@ const structuredData = createPageSchema({
     },
   },
 });
+
+// Open-source code of this very site. Emitting it as SoftwareSourceCode lets
+// search/AI crawlers tie the site to its public MIT-licensed repository and back
+// to the author Person node. Backed on-site by the repo link in llms.txt.
+const sourceCode = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareSourceCode',
+  name: 'dawidrylko.com',
+  description:
+    'Source code of this website — a personal blog and portfolio built with Astro, React islands, TypeScript and MDX, deployed to GitHub Pages.',
+  codeRepository: 'https://github.com/dawidrylko/dawidrylko.com',
+  url: 'https://github.com/dawidrylko/dawidrylko.com',
+  programmingLanguage: ['TypeScript', 'Astro', 'JavaScript', 'CSS'],
+  runtimePlatform: 'Node.js',
+  license: 'https://opensource.org/licenses/MIT',
+  isAccessibleForFree: true,
+  author: { '@id': `${SITE_METADATA.url}/#person` },
+  maintainer: { '@id': `${SITE_METADATA.url}/#person` },
+};
 ---
 
 <PageLayout breadcrumbTitle={PAGE_METADATA.title} title={PAGE_METADATA.title} description={PAGE_METADATA.description}>
   <JsonLd data={structuredData} />
+  <JsonLd data={sourceCode} />
   <header>
     <h1>{PAGE_METADATA.title}</h1>
   </header>
@@ -103,7 +122,7 @@ const structuredData = createPageSchema({
     <section id="site-info" aria-label="Site Information">
       <h2>Site Information</h2>
       <div class="table-scroll" tabindex="0">
-        <table aria-label="Site information">
+        <table id="site-info-table" aria-label="Site information">
           <colgroup><col class="col-w-30" /><col class="col-w-70" /></colgroup>
           <thead><tr><th scope="col">Property</th><th scope="col">Value</th></tr></thead>
           <tbody>
@@ -184,4 +203,21 @@ const structuredData = createPageSchema({
       </div>
     </section>
   </main>
+  <script is:inline>
+    // Decimal-ASCII signature easter egg, injected client-side so the literal
+    // sequence never ships in the crawlable HTML (kept out of SEO/Ahrefs text
+    // extraction) while still rewarding a human who opens this page. Decode it.
+    (() => {
+      const table = document.getElementById('site-info-table');
+      const body = table && table.tBodies[0];
+      if (!body) return;
+      const signature = 'Dawid Rylko'
+        .split('')
+        .map(ch => ch.charCodeAt(0))
+        .join(' ');
+      const row = body.insertRow();
+      row.insertCell().textContent = 'Signature';
+      row.insertCell().textContent = signature;
+    })();
+  </script>
 </PageLayout>

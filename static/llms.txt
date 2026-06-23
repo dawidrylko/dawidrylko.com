@@ -24,10 +24,12 @@ automation, cybersecurity, DevOps, IoT, smart home.
 - [Blog](https://dawidrylko.com/blog/): all articles (in Polish), with search and tag filtering.
 - [Contact](https://dawidrylko.com/contact/): how to get in touch.
 - [Setup](https://dawidrylko.com/setup/): hardware and workstation overview.
+- [Files](https://dawidrylko.com/files/): slides from talks and a downloadable CV (PDF).
 
 ## Important projects
 
 - [CyberKatalog.pl](https://cyberkatalog.pl/): cybersecurity-focused project.
+- [Website source](https://github.com/dawidrylko/dawidrylko.com): open-source (MIT) code of this site, built with Astro.
 
 ## Feeds & metadata
 

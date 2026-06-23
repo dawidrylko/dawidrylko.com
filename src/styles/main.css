@@ -1426,9 +1426,9 @@ a:focus {
 }
 
 .footer-metadata a {
-  /* The "Metadata" easter-egg stays understated, but uses the muted text token
-     (WCAG AA in both themes) rather than --color-accent (~1.4:1) so it is not an
-     accessibility failure. */
+  /* Secondary footer nav (Setup • Files • Metadata) stays understated, but uses
+     the muted text token (WCAG AA in both themes) rather than --color-accent
+     (~1.4:1) so it is not an accessibility failure. */
   color: var(--color-text-light);
 }
 

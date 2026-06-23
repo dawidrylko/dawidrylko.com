@@ -165,9 +165,13 @@ const { website } = STRUCTURED_DATA;
           Copyright © {year}
           <a href={SITE_METADATA.url}>{SITE_METADATA.author.name}</a>
         </div>
-        <div class="footer-metadata">
+        <nav class="footer-metadata" aria-label="More pages">
+          <a href="/setup/">Setup</a>
+          <span class="separator" aria-hidden="true">•</span>
+          <a href="/files/">Files</a>
+          <span class="separator" aria-hidden="true">•</span>
           <a href="/metadata/">Metadata</a>
-        </div>
+        </nav>
       </footer>
     </div>
   </body>
