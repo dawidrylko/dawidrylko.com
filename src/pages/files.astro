@@ -221,8 +221,10 @@ const structuredData = createPageSchema({
           <thead>
             <tr>
               <th scope="col">#</th>
-              <th scope="col">Presentation</th>
+              <th scope="col">Title</th>
+              <th scope="col">Description</th>
               <th scope="col">Topic</th>
+              <th scope="col">Keywords</th>
               <th scope="col">Lang</th>
               <th scope="col">Size</th>
               <th scope="col">Download</th>
@@ -244,10 +246,10 @@ const structuredData = createPageSchema({
                     >
                       {row.title}
                     </a>
-                    {row.description && <span class="presentation-description">{row.description}</span>}
-                    {row.keywords && <span class="presentation-keywords">{row.keywords}</span>}
                   </td>
+                  <td class="presentation-cell">{row.description || '—'}</td>
                   <td>{row.topic}</td>
+                  <td class="presentation-cell presentation-keywords">{row.keywords || '—'}</td>
                   <td>{row.language}</td>
                   <td>{row.size}</td>
                   <td>
