@@ -40,9 +40,9 @@ describe('formatFileSize', () => {
 
 describe('parsePresentationMetadata', () => {
   const csv = [
-    'filename,title,subject,keywords',
-    'js_01_node_pl,"JavaScript | Wstęp do Node.js - NODE, NVM, NPM…","Node.js","JavaScript, Node.js, NVM, NPM"',
-    'js_02_npm_pl,"JavaScript | NPM - package.json, zależności…","NPM","JavaScript, NPM, package.json"',
+    'filename,title,subject,keywords,description,relatedArticle',
+    'js_01_node_pl,"JavaScript | Wstęp do Node.js - NODE, NVM, NPM…","Node.js","JavaScript, Node.js, NVM, NPM","Intro to Node.js",""',
+    'js_02_npm_pl,"JavaScript | NPM - package.json, zależności…","NPM","JavaScript, NPM, package.json","NPM deep dive","/npm-post/"',
   ].join('\n');
 
   it('maps each filename to its descriptive metadata', () => {
@@ -51,6 +51,8 @@ describe('parsePresentationMetadata', () => {
       title: 'JavaScript | Wstęp do Node.js - NODE, NVM, NPM…',
       subject: 'Node.js',
       keywords: 'JavaScript, Node.js, NVM, NPM',
+      description: 'Intro to Node.js',
+      relatedArticle: '',
     });
   });
 
@@ -58,6 +60,12 @@ describe('parsePresentationMetadata', () => {
     const map = parsePresentationMetadata(csv);
     expect(map.get('js_02_npm_pl')?.title).toBe('JavaScript | NPM - package.json, zależności…');
     expect(map.get('js_02_npm_pl')?.keywords).toBe('JavaScript, NPM, package.json');
+  });
+
+  it('parses description and relatedArticle fields', () => {
+    const map = parsePresentationMetadata(csv);
+    expect(map.get('js_02_npm_pl')?.description).toBe('NPM deep dive');
+    expect(map.get('js_02_npm_pl')?.relatedArticle).toBe('/npm-post/');
   });
 
   it('ignores the header row and blank lines', () => {
@@ -71,7 +79,9 @@ describe('parsePresentationMetadata', () => {
   });
 
   it('unescapes doubled quotes inside a field', () => {
-    const map = parsePresentationMetadata('filename,title,subject,keywords\nx_01_y_pl,"A ""quoted"" title","S","k"');
+    const map = parsePresentationMetadata(
+      'filename,title,subject,keywords,description,relatedArticle\nx_01_y_pl,"A ""quoted"" title","S","k","desc",""',
+    );
     expect(map.get('x_01_y_pl')?.title).toBe('A "quoted" title');
   });
 });

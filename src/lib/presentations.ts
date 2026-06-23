@@ -31,7 +31,13 @@ export const formatFileSize = (bytes: number): string => {
   return `${parseFloat((bytes / Math.pow(k, i)).toFixed(2))} ${sizes[i]}`;
 };
 
-export type PresentationMeta = { title: string; subject: string; keywords: string };
+export type PresentationMeta = {
+  title: string;
+  subject: string;
+  keywords: string;
+  description: string;
+  relatedArticle: string;
+};
 
 // Split a single CSV row into fields, honouring double-quoted fields that may
 // contain commas. A doubled quote ("") inside a quoted field is a literal quote.
@@ -72,7 +78,7 @@ export const parsePresentationMetadata = (csv: string): Map<string, Presentation
   const map = new Map<string, PresentationMeta>();
   const lines = csv.split(/\r?\n/).filter(line => line.trim() !== '');
   for (const line of lines.slice(1)) {
-    const [filename, title, subject, keywords] = parseCsvRow(line);
+    const [filename, title, subject, keywords, description, relatedArticle] = parseCsvRow(line);
     if (!filename) {
       continue;
     }
@@ -80,6 +86,8 @@ export const parsePresentationMetadata = (csv: string): Map<string, Presentation
       title: title ?? '',
       subject: subject ?? '',
       keywords: keywords ?? '',
+      description: description ?? '',
+      relatedArticle: relatedArticle ?? '',
     });
   }
   return map;
