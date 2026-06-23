@@ -17,6 +17,7 @@ import { countWords, readingTimeMinutes } from '../lib/reading-time';
 import { plPlural } from '../lib/pl-plural';
 import { relatedPosts } from '../lib/related-posts';
 import { buildTocTree } from '../lib/toc';
+import { CONTENT_LANG } from '../lib/i18n';
 
 export async function getStaticPaths() {
   // Replicates Gatsby's createPages exactly: posts ordered by frontmatter date
@@ -121,7 +122,7 @@ const structuredData = {
   publishedTime={publishedTime}
   modifiedTime={modifiedTime}
   tags={tags}
-  lang="pl"
+  lang={CONTENT_LANG}
 >
   <JsonLd data={structuredData} />
   <article class="blog-post">

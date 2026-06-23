@@ -11,6 +11,7 @@ import { STRUCTURED_DATA } from '../../data/structured-data';
 import { excerpt } from '../../lib/excerpt';
 import { getBlogPosts, POSTS_PER_PAGE } from '../../lib/blog';
 import { toISODate } from '../../lib/date';
+import { CONTENT_LANG } from '../../lib/i18n';
 
 const PAGE_METADATA = {
   title: 'Blog 🇵🇱',
@@ -93,7 +94,12 @@ const structuredData = {
 };
 ---
 
-<PageLayout breadcrumbTitle={breadcrumbTitle} title={pageTitle} description={PAGE_METADATA.description} lang="pl">
+<PageLayout
+  breadcrumbTitle={breadcrumbTitle}
+  title={pageTitle}
+  description={PAGE_METADATA.description}
+  lang={CONTENT_LANG}
+>
   <JsonLd data={structuredData} />
   <header>
     <h1>{PAGE_METADATA.title}</h1>
