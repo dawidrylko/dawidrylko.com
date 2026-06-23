@@ -7,6 +7,7 @@ import { SITE_METADATA } from '../../data/site-metadata';
 import { createPageSchema } from '../../lib/page-metadata';
 import { getTags, postCountLabel, describeTagPage, type TagInfo } from '../../lib/tags';
 import { toISODate } from '../../lib/date';
+import { CONTENT_LANG } from '../../lib/i18n';
 
 export const getStaticPaths = (async () => {
   const tags = await getTags();
@@ -53,7 +54,7 @@ const structuredData = createPageSchema({
   ]}
   title={title}
   description={description}
-  lang="pl"
+  lang={CONTENT_LANG}
 >
   <JsonLd data={structuredData} />
   <header>

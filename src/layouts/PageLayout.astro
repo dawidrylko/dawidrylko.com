@@ -28,6 +28,7 @@ import JsonLd from '../components/JsonLd.astro';
 import { SITE_METADATA } from '../data/site-metadata';
 import { STRUCTURED_DATA } from '../data/structured-data';
 import { GTAG } from '../data/gtag';
+import { DEFAULT_LANG } from '../lib/i18n';
 import type { NavLink } from '../types';
 
 // Port of src/components/layout.tsx — the chrome shared by every page (header
@@ -66,7 +67,7 @@ const {
   lang,
 } = Astro.props;
 
-const metaLang = lang ?? SITE_METADATA.lang;
+const metaLang = lang ?? DEFAULT_LANG;
 const pathname = Astro.url.pathname;
 const isRootPath = pathname === '/';
 const canonical = new URL(pathname, Astro.site).href;
@@ -88,6 +89,15 @@ const { website } = STRUCTURED_DATA;
         point at a non-200 URL, which SEO audits flag. */
     }
     {!noIndex && <link rel="canonical" href={canonical} />}
+    {
+      /* hreflang declares each URL's language to search engines. Every page is
+        monolingual (English shell or Polish content) with no translated twin, so
+        the page self-references its own language and doubles as x-default. Like
+        the canonical, it is skipped on noindex pages so it never points at a
+        non-200 URL. */
+    }
+    {!noIndex && <link rel="alternate" hreflang={metaLang} href={canonical} />}
+    {!noIndex && <link rel="alternate" hreflang="x-default" href={canonical} />}
     <link rel="manifest" href="/manifest.webmanifest" />
     <meta name="theme-color" content="#005b99" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />

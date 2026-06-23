@@ -4,6 +4,7 @@ import JsonLd from '../../components/JsonLd.astro';
 import { SITE_METADATA } from '../../data/site-metadata';
 import { createPageSchema } from '../../lib/page-metadata';
 import { getTags, tagCountLabel } from '../../lib/tags';
+import { CONTENT_LANG } from '../../lib/i18n';
 import type { PageMetadata } from '../../types';
 
 const tags = await getTags();
@@ -41,7 +42,7 @@ const structuredData = createPageSchema({
   breadcrumbParents={[{ name: 'Blog 🇵🇱', url: '/blog/' }]}
   title={PAGE_METADATA.title}
   description={PAGE_METADATA.description}
-  lang="pl"
+  lang={CONTENT_LANG}
 >
   <JsonLd data={structuredData} />
   <header>

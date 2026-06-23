@@ -63,6 +63,21 @@ pnpm build
 node scripts/ci/check-bundle-budget.mjs
 ```
 
+## `check-lang-attributes.mjs`
+
+Locks the PL/EN language strategy (mirrored in `src/lib/i18n.ts`) on the rendered
+pages: every indexable page declares a supported `<html lang>` (en, pl) with an
+agreeing `og:locale`, the English shell routes (`/`, `/bio/`, `/contact/`,
+`/setup/`, `/metadata/`, `/files/`) stay `lang=en` while the blog, post and tag
+routes stay `lang=pl`, and indexable pages self-reference their language via
+`hreflang` + `x-default` (noindex pages emit none). Runs in the `build-contract`
+job.
+
+```bash
+pnpm build
+node scripts/ci/check-lang-attributes.mjs
+```
+
 ## `check-no-ai-attribution.mjs`
 
 Enforces the no-AI-attribution rule from `CLAUDE.md`: fails if a commit message
