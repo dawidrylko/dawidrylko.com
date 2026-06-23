@@ -451,8 +451,8 @@ table tr:last-child td {
   max-width: 60ch;
 }
 
-/* Text-heavy cells (title, description, keywords) wrap instead of inheriting
-   the table-wide white-space: nowrap, avoiding a wide horizontal scroll. */
+/* Text-heavy cells (title, description, keywords) wrap instead of inheriting the
+   table-wide white-space: nowrap, avoiding a wide horizontal scroll. */
 .presentations-table .presentation-cell {
   white-space: normal;
 }
