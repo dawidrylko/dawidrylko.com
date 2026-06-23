@@ -41,9 +41,9 @@ const readFilesRecursively = (dir: string, baseDir: string): FileNode[] => {
 const nodes = readFilesRecursively(filesDir, filesDir).filter(node => node.extension !== 'csv');
 
 // metadata.csv is the source of truth for each presentation's document metadata
-// (title/subject/keywords) and is kept in sync with the PDFs by the pre-commit
-// validator. Reusing it here gives the public table — and search engines —
-// descriptive titles and context instead of terse filename fragments.
+// and is kept in sync with the PDFs by the pre-commit validator. Reusing it here
+// gives the cards — and search engines — descriptive titles and context instead
+// of terse filename fragments.
 const metadataCsvPath = path.join(filesDir, 'presentations', 'metadata.csv');
 const presentationMeta = fs.existsSync(metadataCsvPath)
   ? parsePresentationMetadata(fs.readFileSync(metadataCsvPath, 'utf8'))
