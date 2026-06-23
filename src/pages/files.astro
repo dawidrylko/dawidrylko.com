@@ -92,7 +92,6 @@ const rows = sortedEntries
     const parsed = parseFileName(files[0]?.name ?? '');
     if (!parsed || !files[0]) return null;
     const pdfFile = files.find(f => f.extension.toLowerCase() === 'pdf');
-    const sizeSource = pdfFile ?? files[0];
     // Prefer the descriptive metadata.csv title/subject; fall back to a
     // humanised filename fragment when an entry is missing from the CSV.
     const meta = presentationMeta.get(files[0].name);
@@ -131,7 +130,6 @@ const rows = sortedEntries
       description,
       relatedArticle,
       language: parsed.language,
-      size: formatFileSize(sizeSource.size),
       openHref: pdfFile?.publicURL ?? files[0].publicURL,
       links,
     };
