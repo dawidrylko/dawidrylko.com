@@ -41,9 +41,9 @@ const readFilesRecursively = (dir: string, baseDir: string): FileNode[] => {
 const nodes = readFilesRecursively(filesDir, filesDir).filter(node => node.extension !== 'csv');
 
 // metadata.csv is the source of truth for each presentation's document metadata
-// and is kept in sync with the PDFs by the pre-commit validator. Reusing it here
-// gives the cards — and search engines — descriptive titles and context instead
-// of terse filename fragments.
+// and is kept in sync with the PDFs by the pre-commit validator. Reusing it
+// here gives the table — and search engines — descriptive titles and context
+// instead of terse filename fragments.
 const metadataCsvPath = path.join(filesDir, 'presentations', 'metadata.csv');
 const presentationMeta = fs.existsSync(metadataCsvPath)
   ? parsePresentationMetadata(fs.readFileSync(metadataCsvPath, 'utf8'))
@@ -92,6 +92,7 @@ const rows = sortedEntries
     const parsed = parseFileName(files[0]?.name ?? '');
     if (!parsed || !files[0]) return null;
     const pdfFile = files.find(f => f.extension.toLowerCase() === 'pdf');
+    const sizeSource = pdfFile ?? files[0];
     // Prefer the descriptive metadata.csv title/subject; fall back to a
     // humanised filename fragment when an entry is missing from the CSV.
     const meta = presentationMeta.get(files[0].name);
@@ -130,6 +131,7 @@ const rows = sortedEntries
       description,
       relatedArticle,
       language: parsed.language,
+      size: formatFileSize(sizeSource.size),
       openHref: pdfFile?.publicURL ?? files[0].publicURL,
       links,
     };
@@ -208,65 +210,88 @@ const structuredData = createPageSchema({
     <section aria-labelledby="presentations-heading">
       <h2 id="presentations-heading">Presentations</h2>
       <p class="presentations-intro">
-        Slides from my technical talks and workshops on Node.js, JavaScript, and modern web development.
+        Slides from my technical talks and workshops on Node.js, JavaScript, and modern web development. Each
+        presentation opens or downloads as a PDF — titles link straight to the document.
       </p>
-      <div class="presentations-grid" data-presentations>
-        {
-          rows.map(row => (
-            <article class="presentation-card">
-              <h3 class="presentation-card-title">
-                <a href={row.openHref} target="_blank" rel="noopener noreferrer">
-                  {row.title}
-                </a>
-              </h3>
-              <dl class="presentation-details">
-                <dt>Topic</dt>
-                <dd>{row.topic}</dd>
-                <dt>Language</dt>
-                <dd>{row.language}</dd>
-                {row.description && (
-                  <>
-                    <dt>Description</dt>
-                    <dd class="presentation-description">{row.description}</dd>
-                  </>
-                )}
-              </dl>
-              <div class="presentation-card-footer">
-                <div class="file-actions">
-                  {row.links.map(link =>
-                    link.action === 'open' ? (
-                      <a
-                        class:list={['file-link', { 'is-hidden-variant': link.hidden }]}
-                        href={link.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label={`Open ${link.title} ${link.type} in new tab`}
-                        title={`Open ${link.type} in new tab (${link.size})`}
-                      >
-                        {link.icon} {link.type}
+      <div class="table-scroll" tabindex="0">
+        <table class="presentations-table" data-presentations>
+          <caption class="visually-hidden">
+            Technical presentations by Dawid Ryłko, each available to view or download as a PDF.
+          </caption>
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Presentation</th>
+              <th scope="col">Topic</th>
+              <th scope="col">Lang</th>
+              <th scope="col">Size</th>
+              <th scope="col">Download</th>
+              <th scope="col">Article</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              rows.map(row => (
+                <tr>
+                  <td>{row.index}</td>
+                  <td class="presentation-cell">
+                    <a
+                      class="presentation-title"
+                      href={row.openHref}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`Open ${row.title} (PDF) in a new tab`}
+                    >
+                      {row.title}
+                    </a>
+                    {row.description && <span class="presentation-description">{row.description}</span>}
+                    {row.keywords && <span class="presentation-keywords">{row.keywords}</span>}
+                  </td>
+                  <td>{row.topic}</td>
+                  <td>{row.language}</td>
+                  <td>{row.size}</td>
+                  <td>
+                    <div class="file-actions">
+                      {row.links.map(link =>
+                        link.action === 'open' ? (
+                          <a
+                            class:list={['file-link', { 'is-hidden-variant': link.hidden }]}
+                            href={link.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label={`Open ${link.title} ${link.type} in new tab`}
+                            title={`Open ${link.type} in new tab (${link.size})`}
+                          >
+                            {link.icon}
+                          </a>
+                        ) : (
+                          <a
+                            class:list={['file-link', { 'is-hidden-variant': link.hidden }]}
+                            href={link.href}
+                            download={link.download}
+                            aria-label={`Download ${link.title} as ${link.type}`}
+                            title={`Download ${link.type} (${link.size})`}
+                          >
+                            {link.icon}
+                          </a>
+                        ),
+                      )}
+                    </div>
+                  </td>
+                  <td>
+                    {row.relatedArticle ? (
+                      <a href={row.relatedArticle} class="presentation-article-link">
+                        →
                       </a>
                     ) : (
-                      <a
-                        class:list={['file-link', { 'is-hidden-variant': link.hidden }]}
-                        href={link.href}
-                        download={link.download}
-                        aria-label={`Download ${link.title} as ${link.type}`}
-                        title={`Download ${link.type} (${link.size})`}
-                      >
-                        {link.icon} {link.type} ({link.size})
-                      </a>
-                    ),
-                  )}
-                </div>
-                {row.relatedArticle && (
-                  <a class="presentation-related" href={row.relatedArticle}>
-                    Related article →
-                  </a>
-                )}
-              </div>
-            </article>
-          ))
-        }
+                      <span class="presentation-no-article">—</span>
+                    )}
+                  </td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
       </div>
     </section>
   </main>
