@@ -206,6 +206,9 @@ jobs:
       - name: Verify SEO / structured-data contract
         run: node scripts/ci/check-seo-meta.mjs
 
+      - name: Verify crawl-hygiene contract
+        run: node scripts/ci/check-crawl-hygiene.mjs
+
       - name: Verify PL/EN language strategy contract
         run: node scripts/ci/check-lang-attributes.mjs
 
