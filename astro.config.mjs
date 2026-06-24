@@ -7,6 +7,7 @@ import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import rehypeSlug from 'rehype-slug';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
+import rehypeWrapTables from './src/lib/rehype-wrap-tables.ts';
 import webmanifest from './src/integrations/webmanifest';
 import { buildPostLastmodMap } from './src/lib/sitemap.ts';
 
@@ -84,6 +85,9 @@ export default defineConfig({
     // duplicates the heading in the a11y tree nor becomes a focus trap.
     remarkPlugins: [remarkMath],
     rehypePlugins: [
+      // Wrap content tables in <div class="table-scroll"> so short tables stretch
+      // to full column width (and wide ones scroll) — see rehype-wrap-tables.ts.
+      rehypeWrapTables,
       rehypeKatex,
       rehypeSlug,
       [
