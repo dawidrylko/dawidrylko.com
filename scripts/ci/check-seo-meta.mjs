@@ -241,8 +241,9 @@ async function main() {
     }
 
     for (const node of roots) {
-      if (typeof node?.['@id'] === 'string' && node['@id'].startsWith(ORIGIN)) {
-        if (new URL(node['@id']).pathname.includes('//')) fail(`${rel}: malformed @id ${node['@id']}`);
+      if (typeof node?.['@id'] === 'string' && URL.canParse(node['@id'])) {
+        const idUrl = new URL(node['@id']);
+        if (idUrl.origin === ORIGIN && idUrl.pathname.includes('//')) fail(`${rel}: malformed @id ${node['@id']}`);
       }
     }
 
