@@ -60,6 +60,9 @@ jobs:
       - name: Validate structured-data graph
         run: pnpm run check:structured-data
 
+      - name: Verify Google Search quality
+        run: pnpm run check:search-quality
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v5
         with:
