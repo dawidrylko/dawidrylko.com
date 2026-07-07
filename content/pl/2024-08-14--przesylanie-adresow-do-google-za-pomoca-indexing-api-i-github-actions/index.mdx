@@ -1,6 +1,6 @@
 ---
 title: Przesyłanie adresów do Google za pomocą Indexing API i GitHub Actions
-description: W artykule przedstawiono proces automatyzacji przesyłania adresów URL do Google przy użyciu Indexing API i GitHub Actions. Opisuje on krok po kroku, jak skonfigurować konto usługi w Google Cloud Console, dodać je do Google Search Console oraz zintegrować z GitHub Actions. Dzięki tej automatyzacji nowe strony internetowe będą szybciej indeksowane przez Google, co oszczędza czas i poprawia wydajność.
+description: Archiwalny przykład integracji Google Indexing API z GitHub Actions wraz z aktualnym wyjaśnieniem, że API obsługuje wyłącznie strony ofert pracy i transmisji na żywo spełniające wymagania Google.
 date: 2024-08-14T11:00:00.000Z
 featuredImg: ./rock-n-roll-monkey-R4WCbazrD1g-unsplash.jpg
 featuredImgAlt: Zdjęcie małego metalowego robota. Photo by Rock'n Roll Monkey on Unsplash.
@@ -8,6 +8,8 @@ tags: ['devops']
 ---
 
 Jeżeli proces może zostać zautomatyzowany, warto to zrobić. Takie podejście pozwala zaoszczędzić czas, uniknąć błędów i zwiększyć wydajność. W tym artykule przedstawię prostą automatyzację przesyłania adresów URL do Google przy użyciu Indexing API i GitHub Actions.
+
+> **Aktualizacja z 7 lipca 2026 r.:** Google udostępniło Indexing API [26 czerwca 2018 r.](https://developers.google.com/search/blog/2018/06/introducing-indexing-api-for-job?hl=pl) dla stron z ofertami pracy. Obecnie API służy wyłącznie do zgłaszania aktualizacji lub usunięcia stron zawierających `JobPosting` albo `BroadcastEvent` osadzony w `VideoObject`, czyli transmisję na żywo. [Oficjalna dokumentacja](https://developers.google.com/search/apis/indexing-api/v3/using-api?hl=pl) nie przewiduje jego używania dla zwykłych podstron i wpisów blogowych. Ten artykuł pozostaje archiwalnym opisem dawnej implementacji; integracja została usunięta z aktualnego workflow. Dla pozostałych stron należy korzystać z mapy witryny i Google Search Console.
 
 ## Wstęp
 
@@ -167,7 +169,7 @@ W celu automatyzacji procesu przesyłania adresów URL do Google za pomocą Inde
 
 W pliku `google.sh` znajduje się skrypt, który pobiera adresy URL z mojej strony internetowej i przesyła je do Google za pomocą Indexing API. Skrypt korzysta z narzędzia [easyindex-cli](https://github.com/usk81/easyindex-cli). Został zaczerpnięty z artykułu [Live Update Google through the Indexing API in GitHub Actions](https://www.jpatrickfulton.dev/blog/2023-07-13-google-and-indexingapi/) i dostosowany do moich potrzeb.
 
-Obecną konfigurację znajdziesz [tutaj](https://github.com/dawidrylko/dawidrylko.com/blob/master/.github/scripts/google.sh).
+Ostatnią wersję konfiguracji sprzed usunięcia integracji znajdziesz [tutaj](https://github.com/dawidrylko/dawidrylko.com/blob/fead8a7a0d403faebb75ecbb3fd34f0a1687a60d/scripts/notify/google.sh).
 
 ```sh
 #!/usr/bin/env bash
@@ -265,7 +267,7 @@ echo "Script completed in $duration milliseconds."
 Po utworzeniu pliku `google.sh`, należy nadać mu uprawnienia do wykonywania. W przeciwnym razie skrypt nie będzie mógł być uruchomiony:
 
 ```bash
-chmod +x .github/scripts/google.sh
+chmod +x scripts/notify/google.sh
 ```
 
 Ten krok jest kluczowy, ponieważ bez nadania uprawnień wykonywania, GitHub Actions nie będzie mógł uruchomić skryptu, co spowoduje błąd podczas działania workflow.
@@ -274,7 +276,7 @@ Ten krok jest kluczowy, ponieważ bez nadania uprawnień wykonywania, GitHub Act
 
 Wykorzystując skrypt `google.sh`, można go uruchomić w GitHub Actions. W pliku `cd.yml` dodałem nowy krok, który uruchamia skrypt, jeżeli w komunikacie commita znajduje się `[notify]`.
 
-Obecną konfigurację znajdziesz [tutaj](https://github.com/dawidrylko/dawidrylko.com/blob/master/.github/workflows/cd.yml#L74).
+Ostatnią wersję workflow sprzed usunięcia integracji znajdziesz [tutaj](https://github.com/dawidrylko/dawidrylko.com/blob/fead8a7a0d403faebb75ecbb3fd34f0a1687a60d/.github/workflows/cd.yml#L80-L102).
 
 ```yaml
 notify:
@@ -289,7 +291,7 @@ notify:
     - name: Notify Google via Indexing API
       env:
         GOOGLE_JSON_KEY_FILE: ${{ secrets.GOOGLE_JSON_KEY_FILE }}
-      working-directory: '.github/scripts'
+      working-directory: 'scripts/notify'
       shell: bash
       run: ./google.sh
 ```

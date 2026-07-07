@@ -9,6 +9,8 @@ tags: ['devops']
 
 Jeżeli proces można zautomatyzować, warto to zrobić. Podobnie jak w przypadku **Google Indexing API**, Bing udostępnia własne **URL Submission API**. Dzięki temu możemy natychmiast informować wyszukiwarkę o nowych i zmienionych podstronach, co przyspiesza ich indeksację i pojawianie się w wynikach wyszukiwania.
 
+> **Aktualizacja z 7 lipca 2026 r.:** Bing URL Submission API nadal jest obsługiwane i opisany mechanizm pozostaje prawidłowy. Microsoft [zdecydowanie rekomenduje jednak IndexNow](https://www.bing.com/webmasters/help/URL-Submission-62f2860b) dla nowych automatyzacji, ponieważ powiadamia ono Bing i inne uczestniczące wyszukiwarki. Microsoft zaznacza też, że URL Submission API może zostać wycofane w przyszłości. Samo przesłanie adresu nie gwarantuje jego indeksacji.
+
 ## Wstęp
 
 Wcześniej opisałem proces integracji z [Google Indexing API](/przesylanie-adresow-do-google-za-pomoca-indexing-api-i-github-actions/). Teraz skoncentruję się na Bing. Moja strona jest hostowana na **GitHub Pages**, a do wdrożeń wykorzystuję **GitHub Actions**. Aby skrócić czas oczekiwania na zaindeksowanie nowych lub zmienionych treści, wdrożę rozwiązanie, które po każdym wdrożeniu automatycznie wyśle zaktualizowane adresy URL do Bing za pośrednictwem Microsoft Bing URL Submission API.
@@ -132,7 +134,7 @@ Do automatyzacji przesyłania adresów URL do Bing użyjemy skryptu bash oraz Gi
 Poniższy skrypt `bing.sh` pobiera adresy URL ze strony i przesyła je do Bing za pomocą URL Submission API. Bazuje on na podejściu przedstawionym w [Live Update Microsoft Bing through the Submission API in GitHub Actions](https://www.jpatrickfulton.dev/blog/2023-07-14-bing-and-submissionapi/) i został dostosowany do moich potrzeb.
 
 Pełna konfiguracja dostępna jest w moim repozytorium:  
-[.github/scripts/bing.sh](https://github.com/dawidrylko/dawidrylko.com/blob/master/.github/scripts/bing.sh)
+[scripts/notify/bing.sh](https://github.com/dawidrylko/dawidrylko.com/blob/master/scripts/notify/bing.sh)
 
 ```sh
 #!/usr/bin/env bash
@@ -233,7 +235,7 @@ echo "Script completed in $duration milliseconds."
 Po utworzeniu pliku `bing.sh` należy nadać mu uprawnienia wykonywania, używając polecenia:
 
 ```bash
-chmod +x .github/scripts/bing.sh
+chmod +x scripts/notify/bing.sh
 ```
 
 Ten krok jest kluczowy - bez nadania uprawnień wykonywania skrypt nie będzie mógł zostać uruchomiony przez GitHub Actions.
@@ -243,7 +245,7 @@ Ten krok jest kluczowy - bez nadania uprawnień wykonywania skrypt nie będzie m
 W pliku `cd.yml` GitHub Actions można dodać krok uruchamiający `bing.sh` po wdrożeniu, pod warunkiem, że w komunikacie commita nie ma `[skip notify]`.
 
 Przykładowa konfiguracja kroku dostępna jest w repozytorium:  
-[.github/workflows/cd.yml](https://github.com/dawidrylko/dawidrylko.com/blob/master/.github/workflows/cd.yml#L74)
+[.github/workflows/cd.yml](https://github.com/dawidrylko/dawidrylko.com/blob/master/.github/workflows/cd.yml#L80-L97)
 
 ```yaml
 notify:
@@ -258,7 +260,7 @@ notify:
     - name: Notify Microsoft Bing via URL Submission API
       env:
         BING_API_KEY: ${{ secrets.BING_API_KEY }}
-      working-directory: '.github/scripts'
+      working-directory: 'scripts/notify'
       shell: bash
       run: ./bing.sh
 ```
