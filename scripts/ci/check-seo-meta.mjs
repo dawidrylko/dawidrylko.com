@@ -62,15 +62,25 @@ function ldJsonBlocks(html) {
   return [...html.matchAll(/<script[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)].map(m => m[1]);
 }
 
-/** Root @type(s) of a JSON-LD block, ignoring nodes nested inside it. */
-function rootTypes(block) {
+/** Root nodes of a JSON-LD block, including nodes in a top-level @graph. */
+function rootNodes(block) {
   try {
     const data = JSON.parse(block);
-    const nodes = Array.isArray(data) ? data : [data];
-    return nodes.flatMap(node => (node && node['@type'] ? [node['@type']] : []));
+    if (Array.isArray(data)) return data;
+    if (Array.isArray(data?.['@graph'])) return data['@graph'];
+    return [data];
   } catch {
     return [];
   }
+}
+
+function nodeTypes(node) {
+  if (!node?.['@type']) return [];
+  return Array.isArray(node['@type']) ? node['@type'] : [node['@type']];
+}
+
+function rootTypes(block) {
+  return rootNodes(block).flatMap(nodeTypes);
 }
 
 /** Every object node anywhere in a parsed JSON-LD block (depth-first). */
@@ -177,8 +187,8 @@ function checkPage(page, html) {
   if (page === 'bio/index.html') {
     const profile = allJsonLdNodes(html).find(node => node['@type'] === 'ProfilePage');
     if (!profile) fail(`${page}: bio page must emit a ProfilePage JSON-LD node`);
-    else if (profile.mainEntity?.['@type'] !== 'Person') {
-      fail(`${page}: ProfilePage mainEntity must be a Person`);
+    else if (profile.mainEntity?.['@id'] !== `${ORIGIN}/#person`) {
+      fail(`${page}: ProfilePage mainEntity must reference the canonical Person`);
     }
   }
 
@@ -204,8 +214,37 @@ async function main() {
     if (!checked) continue;
 
     indexablePages += 1;
-    const types = ldJsonBlocks(checked).flatMap(rootTypes);
+    const blocks = ldJsonBlocks(checked);
+    const roots = blocks.flatMap(rootNodes);
+    const types = blocks.flatMap(rootTypes);
     if (types.includes('WebSite')) pagesWithWebSite += 1;
+
+    if (types.includes('SiteNavigationElement')) {
+      fail(`${rel}: obsolete SiteNavigationElement JSON-LD must not be emitted`);
+    }
+
+    const fullPeople = roots.filter(
+      node => node?.['@type'] === 'Person' && node?.['@id'] === `${ORIGIN}/#person` && node?.name,
+    );
+    if (fullPeople.length !== 1) {
+      fail(`${rel}: expected one canonical full Person node, found ${fullPeople.length}`);
+    } else {
+      if (!fullPeople[0].image?.url) fail(`${rel}: canonical Person is missing an image`);
+      if (!Array.isArray(fullPeople[0].worksFor) || fullPeople[0].worksFor.length === 0) {
+        fail(`${rel}: canonical Person is missing current organizations`);
+      }
+    }
+
+    const website = roots.find(node => node?.['@type'] === 'WebSite');
+    if (website?.publisher?.['@id'] !== `${ORIGIN}/#person`) {
+      fail(`${rel}: WebSite publisher must reference the canonical Person`);
+    }
+
+    for (const node of roots) {
+      if (typeof node?.['@id'] === 'string' && node['@id'].startsWith(ORIGIN)) {
+        if (new URL(node['@id']).pathname.includes('//')) fail(`${rel}: malformed @id ${node['@id']}`);
+      }
+    }
 
     // Only individual post pages have a root BlogPosting node; blog listing pages
     // nest BlogPosting items inside a Blog node and must not be treated as posts.
@@ -219,6 +258,13 @@ async function main() {
       if (!/<meta[^>]*property="article:published_time"[^>]*content="[^"]+"/.test(checked)) {
         fail(`${rel}: BlogPosting page is missing article:published_time`);
       }
+
+      const canonical = checked.match(/<link[^>]*rel="canonical"[^>]*href="([^"]+)"/)?.[1];
+      const post = roots.find(node => node?.['@type'] === 'BlogPosting');
+      if (post?.author?.['@id'] !== `${ORIGIN}/#person`) fail(`${rel}: BlogPosting author is inconsistent`);
+      if (post?.publisher?.['@id'] !== `${ORIGIN}/#person`) fail(`${rel}: BlogPosting publisher is inconsistent`);
+      if (canonical && post?.url !== canonical) fail(`${rel}: BlogPosting URL differs from canonical URL`);
+      if (post?.image?.url && !URL.canParse(post.image.url)) fail(`${rel}: BlogPosting image URL is not absolute`);
     }
   }
 

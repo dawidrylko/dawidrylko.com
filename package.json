@@ -21,6 +21,7 @@
     "lint:css": "stylelint \"src/**/*.css\"",
     "lint:css:fix": "stylelint \"src/**/*.css\" --fix",
     "a11y:contrast": "node scripts/a11y/check-contrast.mjs",
+    "check:structured-data": "node scripts/ci/check-seo-meta.mjs",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",

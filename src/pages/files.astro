@@ -155,6 +155,7 @@ const PAGE_METADATA: PageMetadata = {
 };
 
 const structuredData = createPageSchema({
+  pathname: Astro.url.pathname,
   type: 'CollectionPage',
   title: PAGE_METADATA.title,
   description: PAGE_METADATA.description,

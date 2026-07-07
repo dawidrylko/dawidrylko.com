@@ -86,9 +86,10 @@ const image = {
   figcaption: `Photo by Dawid Ryłko, taken on September 7, 2017, in Malia, Greece.`,
 };
 
-const { person } = STRUCTURED_DATA;
+const { personReference } = STRUCTURED_DATA;
 
 const structuredData = createPageSchema({
+  pathname: Astro.url.pathname,
   // ProfilePage is schema.org's type for an about/profile page; pairing it with
   // mainEntity = the Person it describes is Google's recommended pattern and
   // keeps the page node consistent with the site-wide #person node.
@@ -108,18 +109,23 @@ const structuredData = createPageSchema({
         citation,
       })),
     },
-    mainEntity: {
-      ...person,
-      worksFor: experience.map(([company, , , url]) => ({ '@type': 'Organization', name: company, url: url || '' })),
-      alumniOf: education.map(([institution]) => ({ '@type': 'EducationalOrganization', name: institution })),
-    },
+    mainEntity: personReference,
     potentialAction: {
-      '@type': 'Action',
+      '@type': 'DownloadAction',
       name: 'Download My Full CV',
       description: 'Download a detailed overview of Dawid Ryłko’s experience and skills in PDF format.',
+      object: { '@type': 'DigitalDocument', name: 'Dawid Ryłko CV' },
       target: [
-        { '@type': 'EntryPoint', urlTemplate: '/resume-en.pdf', actionPlatform: 'https://schema.org/DownloadAction' },
-        { '@type': 'EntryPoint', urlTemplate: '/resume-pl.pdf', actionPlatform: 'https://schema.org/DownloadAction' },
+        {
+          '@type': 'EntryPoint',
+          urlTemplate: `${SITE_METADATA.url}/resume-en.pdf`,
+          actionPlatform: 'https://schema.org/DesktopWebPlatform',
+        },
+        {
+          '@type': 'EntryPoint',
+          urlTemplate: `${SITE_METADATA.url}/resume-pl.pdf`,
+          actionPlatform: 'https://schema.org/DesktopWebPlatform',
+        },
       ],
     },
   },

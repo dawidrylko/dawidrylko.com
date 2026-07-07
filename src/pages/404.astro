@@ -17,6 +17,7 @@ const hotDogImage = {
 };
 
 const structuredData = createPageSchema({
+  pathname: Astro.url.pathname,
   title: PAGE_METADATA.title,
   description: PAGE_METADATA.description,
   withAuthor: false,

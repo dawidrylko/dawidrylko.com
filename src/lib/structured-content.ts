@@ -1,4 +1,4 @@
-// Builders for opt-in rich-result structured data (schema.org FAQPage / HowTo)
+// Builders for opt-in semantic structured data (schema.org FAQPage / HowTo)
 // used by the Faq.astro and HowTo.astro MDX components. Construction lives here
 // as pure functions so it is unit-testable; the .astro files are thin wrappers
 // that render the visible markup and emit the JSON-LD these return.

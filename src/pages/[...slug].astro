@@ -57,7 +57,7 @@ const tocTree = buildTocTree(tocHeadings);
 const { title, description, date, updatedDate, tags, featuredImg, featuredImgAlt } = post.data;
 
 const dateFormatted = formatPolishDate(date);
-const { person } = STRUCTURED_DATA;
+const { personReference } = STRUCTURED_DATA;
 
 const publishedTime = toISODate(date);
 const modifiedTime = updatedDate ? toISODate(updatedDate) : undefined;
@@ -90,18 +90,26 @@ const readingTime = readingTimeMinutes(words);
 const structuredData = {
   '@context': 'https://schema.org',
   '@type': 'BlogPosting',
+  '@id': `${new URL(Astro.url.pathname, SITE_METADATA.url).href}#article`,
+  url: new URL(Astro.url.pathname, SITE_METADATA.url).href,
   headline: title,
   description: description || '',
   datePublished: publishedTime,
   dateModified: modifiedTime ?? publishedTime,
-  author: person,
+  author: personReference,
   publisher: { '@id': `${SITE_METADATA.url}/#person` },
   inLanguage: 'pl',
   keywords: tags.join(', '),
   articleSection: tags[0],
   ...(wordCount ? { wordCount } : {}),
   isPartOf: { '@type': 'Blog', '@id': `${SITE_METADATA.url}/blog/#blog`, name: 'Blog' },
-  image: featuredImg ? { '@type': 'ImageObject', url: ogImage, description: featuredImgAlt || '' } : undefined,
+  image: featuredImg
+    ? {
+        '@type': 'ImageObject',
+        url: new URL(ogImage!, SITE_METADATA.url).href,
+        description: featuredImgAlt || '',
+      }
+    : undefined,
   mainEntityOfPage: {
     '@type': 'WebPage',
     '@id': new URL(Astro.url.pathname, SITE_METADATA.url).href,

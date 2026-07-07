@@ -16,6 +16,7 @@ interface Props {
 
 const { customTitle, parents = [] } = Astro.props;
 const siteUrl = `${SITE_METADATA.url}/`;
+const canonical = new URL(Astro.url.pathname, siteUrl).href;
 
 const crumbs = buildCrumbs({
   pathname: Astro.url.pathname,
@@ -28,6 +29,7 @@ const show = crumbs.length > 1;
 const structuredData = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
+  '@id': `${canonical}#breadcrumb`,
   name: 'Breadcrumb Navigation',
   description: 'Navigation path showing current location within the website hierarchy',
   numberOfItems: crumbs.length,
@@ -35,7 +37,10 @@ const structuredData = {
     '@type': 'ListItem',
     position: index + 1,
     name: item.name,
-    item: { '@type': 'WebPage', '@id': `${siteUrl}${item.url}`, name: item.title },
+    item:
+      index === crumbs.length - 1
+        ? undefined
+        : { '@type': 'WebPage', '@id': new URL(item.url, siteUrl).href, name: item.title },
   })),
 };
 ---
