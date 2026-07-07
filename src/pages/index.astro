@@ -38,8 +38,9 @@ const CAPABILITIES = buildCapabilities({
     'Leading engineering teams, mentoring developers, and setting technical direction that scales with the product.',
 });
 
-const { person } = STRUCTURED_DATA;
+const { personReference } = STRUCTURED_DATA;
 const structuredData = createPageSchema({
+  pathname: Astro.url.pathname,
   title: PAGE_METADATA.title,
   headline: 'Dawid Ryłko - Software Engineer',
   description: PAGE_METADATA.description,
@@ -59,7 +60,7 @@ const structuredData = createPageSchema({
         },
       })),
     },
-    mainEntity: person,
+    mainEntity: personReference,
   },
 });
 ---

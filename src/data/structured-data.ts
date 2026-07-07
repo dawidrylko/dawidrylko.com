@@ -1,11 +1,11 @@
 import { SITE_METADATA } from './site-metadata';
+import avatar from '../assets/avatar.jpeg';
 
 // Ported from the Gatsby site (src/constants/structured-data.ts). The schema-dts
 // typing is dropped here (not a dependency of the Astro project); the shape is
 // emitted verbatim as JSON-LD.
 export const STRUCTURED_DATA = {
   person: {
-    '@context': 'https://schema.org',
     '@type': 'Person',
     '@id': `${SITE_METADATA.url}/#person`,
     name: SITE_METADATA.author.name,
@@ -15,9 +15,16 @@ export const STRUCTURED_DATA = {
       'Dawid Ryłko is a Software Engineer with over 10 years of experience, specialising in end-to-end digital solutions. He designs scalable, secure, and resilient systems by combining frontend and backend development with infrastructure automation, AI integration, DevOps, and cybersecurity. Known for his strategic thinking and problem-solving skills, Dawid helps organisations build robust technologies that align with business goals and deliver long-term value.',
     url: `${SITE_METADATA.url}/`,
     jobTitle: SITE_METADATA.author.jobTitle,
+    image: {
+      '@type': 'ImageObject',
+      url: new URL(avatar.src, SITE_METADATA.url).href,
+      width: avatar.width,
+      height: avatar.height,
+    },
     worksFor: [
       {
         '@type': 'Organization',
+        '@id': 'https://silesiansolutions.com/#organization',
         name: 'Silesian Solutions',
         url: 'https://silesiansolutions.com/',
         description:
@@ -25,11 +32,13 @@ export const STRUCTURED_DATA = {
       },
       {
         '@type': 'Organization',
-        name: 'Cyber Katalog',
-        url: 'https://cyberkatalog.pl/',
-        description:
-          'CyberKatalog.pl is a curated Polish directory of cybersecurity companies, promoting digital safety, privacy, and open knowledge. Dawid plays a professional role in enhancing the platform-leading feature development, performance optimization, and content quality-to elevate standards and visibility within Poland’s cybersecurity sector.',
+        name: 'Proget',
+        url: 'https://proget.pl/',
       },
+    ],
+    alumniOf: [
+      { '@type': 'CollegeOrUniversity', name: 'University of Bielsko-Biala' },
+      { '@type': 'CollegeOrUniversity', name: 'The Silesian University of Technology' },
     ],
     knowsAbout: [
       'end-to-end digital solutions',
@@ -54,18 +63,12 @@ export const STRUCTURED_DATA = {
       'Node.js',
     ],
     email: SITE_METADATA.author.email,
-    contactPoint: {
-      '@type': 'ContactPoint',
-      contactType: 'Email',
-      email: SITE_METADATA.author.email,
-    },
     sameAs: SITE_METADATA.social.map(social => social.url),
   },
-  // Site-wide WebSite node emitted on every page by the layout. The SearchAction
-  // advertises the blog search to engines (sitelinks searchbox); the publisher
-  // links back to the Person node by @id to avoid duplicating the full object.
+  // Site-wide WebSite node emitted on every page by the layout. SearchAction
+  // describes the real, shareable `?q=` blog search URL; publisher links to the
+  // canonical Person by @id instead of duplicating the full entity.
   website: {
-    '@context': 'https://schema.org',
     '@type': 'WebSite',
     '@id': `${SITE_METADATA.url}/#website`,
     url: `${SITE_METADATA.url}/`,
@@ -82,4 +85,5 @@ export const STRUCTURED_DATA = {
       'query-input': 'required name=search_term_string',
     },
   },
+  personReference: { '@id': `${SITE_METADATA.url}/#person` },
 };

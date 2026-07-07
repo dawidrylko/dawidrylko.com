@@ -45,7 +45,7 @@ const { page } = Astro.props;
 const isFirstPage = page.currentPage === 1;
 
 const author = SITE_METADATA.author;
-const { person } = STRUCTURED_DATA;
+const { personReference } = STRUCTURED_DATA;
 
 const items = page.data.map(post => {
   const description = post.data.description || excerpt(post.body ?? '');
@@ -74,23 +74,36 @@ const breadcrumbTitle = isFirstPage ? PAGE_METADATA.title : `Strona ${page.curre
 const structuredData = {
   '@context': 'https://schema.org',
   '@type': 'Blog',
+  '@id': `${new URL(Astro.url.pathname, SITE_METADATA.url).href}#blog`,
+  url: new URL(Astro.url.pathname, SITE_METADATA.url).href,
   name: PAGE_METADATA.title,
   headline: PAGE_METADATA.title,
   description: PAGE_METADATA.description,
   keywords: PAGE_METADATA.keywords.join(', '),
-  author: person,
+  author: personReference,
   inLanguage: 'pl',
-  blogPost: items.map(({ post, description }) => ({
-    '@type': 'BlogPosting',
-    headline: post.data.title,
-    description,
-    datePublished: toISODate(post.data.date),
-    author: { '@type': 'Person', name: author.name },
-    image: post.data.featuredImg
-      ? { '@type': 'ImageObject', url: featuredImageUrls.get(post.id), description: post.data.featuredImgAlt || '' }
-      : undefined,
-    url: `${SITE_METADATA.url}/${post.id}/`,
-  })),
+  blogPost: items.map(({ post, description }) => {
+    const postUrl = `${SITE_METADATA.url}/${post.id}/`;
+    return {
+      '@type': 'BlogPosting',
+      '@id': `${postUrl}#article`,
+      url: postUrl,
+      headline: post.data.title,
+      description,
+      datePublished: toISODate(post.data.date),
+      dateModified: toISODate(post.data.updatedDate ?? post.data.date),
+      author: personReference,
+      publisher: personReference,
+      mainEntityOfPage: { '@id': postUrl },
+      image: post.data.featuredImg
+        ? {
+            '@type': 'ImageObject',
+            url: new URL(featuredImageUrls.get(post.id)!, SITE_METADATA.url).href,
+            description: post.data.featuredImgAlt || '',
+          }
+        : undefined,
+    };
+  }),
 };
 ---
 

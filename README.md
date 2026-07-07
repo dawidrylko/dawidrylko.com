@@ -60,6 +60,12 @@ image and bundle budgets), Lighthouse, link integrity, and Playwright e2e/a11y t
 PR titles are validated against [Conventional Commits](https://www.conventionalcommits.org)
 and PR descriptions against the template.
 
+`pnpm check:structured-data` validates every generated JSON-LD block and the canonical
+`Person`, `WebSite`, `ProfilePage`, breadcrumb, and `BlogPosting` relationships. Both CI
+and CD run it against the final `dist/` output. Google discovers updates through the
+sitemap declared in `robots.txt`; the Indexing API is intentionally not used because
+the site contains neither job postings nor livestream events.
+
 A Husky pre-commit hook runs `lint-staged`, `astro check`, and validates presentation
 PDF metadata.
 

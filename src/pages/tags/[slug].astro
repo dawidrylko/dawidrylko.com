@@ -24,6 +24,7 @@ const title = `Tag: ${tag.tag}`;
 const description = describeTagPage(tag);
 
 const structuredData = createPageSchema({
+  pathname: Astro.url.pathname,
   type: 'CollectionPage',
   title,
   description,

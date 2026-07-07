@@ -57,6 +57,9 @@ jobs:
       - name: Build
         run: pnpm run build
 
+      - name: Validate structured-data graph
+        run: pnpm run check:structured-data
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v5
         with:
@@ -85,14 +88,6 @@ jobs:
 
       # Notifications run after a successful deploy; a failure here must never
       # roll back or block the already-published build, so they are non-blocking.
-      - name: Notify Google via Indexing API
-        continue-on-error: true
-        env:
-          GOOGLE_JSON_KEY_FILE: ${{ secrets.GOOGLE_JSON_KEY_FILE }}
-        working-directory: 'scripts/notify'
-        shell: bash
-        run: ./google.sh
-
       - name: Notify Bing via URL Submission API
         continue-on-error: true
         env:

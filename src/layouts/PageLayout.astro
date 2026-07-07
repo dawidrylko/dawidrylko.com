@@ -73,10 +73,9 @@ const isRootPath = pathname === '/';
 const canonical = new URL(pathname, Astro.site).href;
 const year = new Date().getFullYear();
 
-// Site-wide WebSite node: declares the search box action (sitelinks searchbox)
-// and names the author as publisher. Emitted once per page alongside each page's
-// own WebPage/BlogPosting node.
-const { website } = STRUCTURED_DATA;
+// Site-wide identity graph. The real blog query URL is exposed as SearchAction,
+// and the canonical Person is emitted once for page/article @id references.
+const { website, person } = STRUCTURED_DATA;
 ---
 
 <!doctype html>
@@ -124,7 +123,7 @@ const { website } = STRUCTURED_DATA;
       noIndex={noIndex}
       lang={metaLang}
     />
-    <JsonLd data={website} />
+    <JsonLd data={{ '@context': 'https://schema.org', '@graph': [website, person] }} />
 
     {
       /* Google Analytics 4 — production builds only. The gtag stub, dataLayer
