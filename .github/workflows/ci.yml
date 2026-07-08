@@ -168,7 +168,7 @@ jobs:
       - name: Verify Google Search quality
         uses: SilesianSolutions/search-quality-kit/action@v0
         with:
-          node-version: '24'
+          node-version-file: '.nvmrc'
           package-manager: pnpm
           config: search-quality.config.ts
           summary: 'true'
