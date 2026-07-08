@@ -61,7 +61,13 @@ jobs:
         run: pnpm run check:structured-data
 
       - name: Verify Google Search quality
-        run: pnpm run check:search-quality
+        uses: SilesianSolutions/search-quality-kit/action@v0
+        with:
+          node-version-file: '.nvmrc'
+          package-manager: pnpm
+          config: search-quality.config.ts
+          summary: 'true'
+          upload-artifact: 'true'
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v5

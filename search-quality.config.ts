@@ -1,16 +1,17 @@
-import { defineConfig } from '@silesiansolutions/search-quality-kit';
+import { defineConfig, presets, profiles } from '@silesiansolutions/search-quality-kit';
+
+const preset = presets.astro();
 
 export default defineConfig({
+  ...preset,
+  ...profiles.personalSite(),
   site: {
     baseUrl: 'https://dawidrylko.com',
   },
-  build: {
-    distDir: 'dist',
-  },
   crawl: {
+    ...preset.crawl,
     entrypoints: ['/'],
     maxPages: 150,
-    exclude: ['/admin', '/preview', '/api', '/404', '/404.html'],
   },
   ci: {
     failOn: ['error'],
