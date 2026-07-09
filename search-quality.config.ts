@@ -1,4 +1,4 @@
-import { defineConfig, presets, profiles } from '@silesiansolutions/search-quality-kit';
+import { defineConfig, policyPacks, presets, profiles } from '@silesiansolutions/search-quality-kit';
 
 const preset = presets.astro();
 
@@ -13,6 +13,14 @@ export default defineConfig({
     entrypoints: ['/'],
     maxPages: 150,
   },
+  profiles: {
+    default: 'personal',
+    routes: [
+      { pattern: '/20*', profile: 'blogPost' },
+      { pattern: '/blog/**', profile: 'blog' },
+    ],
+  },
+  plugins: [policyPacks.personalBrand(), policyPacks.aiVisibilitySafe()],
   ci: {
     failOn: ['error'],
   },

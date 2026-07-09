@@ -165,6 +165,9 @@ jobs:
       - name: Build
         run: pnpm run build
 
+      - name: Diagnose search quality setup
+        run: pnpm run doctor:search-quality
+
       - name: Verify Google Search quality
         uses: SilesianSolutions/search-quality-kit/action@v0
         with:
