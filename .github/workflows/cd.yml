@@ -57,6 +57,9 @@ jobs:
       - name: Build
         run: pnpm run build
 
+      - name: Diagnose search quality setup
+        run: pnpm run doctor:search-quality
+
       - name: Validate structured-data graph
         run: pnpm run check:structured-data
 
