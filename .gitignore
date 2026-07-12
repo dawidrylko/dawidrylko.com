@@ -8,6 +8,12 @@ playwright-report/
 test-results/
 .playwright/
 
+# Search quality output
+search-quality-report.json
+search-quality-report.md
+search-quality-contract.json
+search-quality-handoff.md
+
 # Draft
 draft/
 
