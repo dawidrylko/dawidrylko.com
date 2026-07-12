@@ -20,7 +20,13 @@ export default defineConfig({
       { pattern: '/blog/**', profile: 'blog' },
     ],
   },
-  plugins: [policyPacks.personalBrand(), policyPacks.aiVisibilitySafe()],
+  plugins: [
+    policyPacks.personalBrand({
+      contactLinkText: ['Contact', 'Get in touch', 'Email', 'Kontakt'],
+      contactHrefPatterns: ['/contact', 'mailto:'],
+    }),
+    policyPacks.aiVisibilitySafe(),
+  ],
   ci: {
     failOn: ['error'],
   },
