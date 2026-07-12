@@ -19,6 +19,9 @@
  *   - every inline Person node (the canonical #person) carries a non-empty
  *     sameAs (the social profiles that anchor the author's identity)
  *   - the /bio/ profile page is typed ProfilePage with a Person mainEntity
+ *   - every page-level entity (WebPage/Article/BlogPosting) keeps its url/@id
+ *     aligned with the page canonical, so no ancestor (breadcrumb parent) or
+ *     sibling (listed post) URL leaks in as the page's own identity
  *
  * Redirect stubs (meta-refresh pages such as /resume/) are skipped. Zero
  * dependencies; runs against the built output, it does NOT rebuild. Exits
@@ -79,6 +82,23 @@ function nodeTypes(node) {
   return Array.isArray(node['@type']) ? node['@type'] : [node['@type']];
 }
 
+// schema.org types that represent the page itself; a url/@id on one of these is
+// an identity claim about the current page (matches the search-quality-kit
+// url-consistency rule, which scans exactly these three types).
+const PAGE_LEVEL_TYPES = new Set(['WebPage', 'Article', 'BlogPosting']);
+
+// Canonicalise a URL for identity comparison the same way the audit does: drop
+// the hash fragment (a same-page #fragment @id is allowed), lowercase the host,
+// remove a default port and any trailing slashes (except the root).
+function normalizeUrl(value) {
+  const u = new URL(value);
+  u.hash = '';
+  u.hostname = u.hostname.toLowerCase();
+  if ((u.protocol === 'https:' && u.port === '443') || (u.protocol === 'http:' && u.port === '80')) u.port = '';
+  if (u.pathname !== '/') u.pathname = u.pathname.replace(/\/+$/, '');
+  return u.toString();
+}
+
 function rootTypes(block) {
   return rootNodes(block).flatMap(nodeTypes);
 }
@@ -132,7 +152,31 @@ function checkPage(page, html) {
     // Compare the parsed origin (not a substring) so a look-alike host such as
     // https://dawidrylko.com.evil.com/ cannot pass the check.
     const canonicalOrigin = canonical && URL.canParse(canonical[1]) ? new URL(canonical[1]).origin : null;
-    if (canonicalOrigin !== ORIGIN) fail(`${page}: missing or non-canonical canonical link`);
+    if (canonicalOrigin !== ORIGIN) {
+      fail(`${page}: missing or non-canonical canonical link`);
+    } else {
+      // Every page-level entity must identify THIS page. A WebPage/Article/
+      // BlogPosting node whose url or @id resolves elsewhere makes the page
+      // advertise an ancestor's (breadcrumb parent) or sibling's (listed post)
+      // URL as its own identity, which AI-visibility audits flag.
+      const wantUrl = normalizeUrl(canonical[1]);
+      for (const node of allJsonLdNodes(html)) {
+        const types = nodeTypes(node);
+        if (!types.some(type => PAGE_LEVEL_TYPES.has(type))) continue;
+        for (const prop of ['url', '@id']) {
+          const raw = node[prop];
+          // A same-page '#fragment' @id is allowed; only compare absolute http(s) URLs.
+          if (typeof raw !== 'string' || raw.startsWith('#') || !URL.canParse(raw)) continue;
+          const { protocol } = new URL(raw);
+          if (protocol !== 'http:' && protocol !== 'https:') continue;
+          if (normalizeUrl(raw) !== wantUrl) {
+            fail(
+              `${page}: JSON-LD ${prop} '${raw}' on ${types.join(',')} node differs from canonical '${canonical[1]}'`,
+            );
+          }
+        }
+      }
+    }
   }
 
   for (const [i, block] of ldJsonBlocks(html).entries()) {

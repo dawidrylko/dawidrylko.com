@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { buildCrumbs } from './breadcrumbs';
+import { buildCrumbs, breadcrumbListJsonLd } from './breadcrumbs';
 import type { NavLink } from '../types';
 
 const MENU: NavLink[] = [
@@ -67,5 +67,58 @@ describe('buildCrumbs', () => {
       'Tagi',
       'Tag: devops',
     ]);
+  });
+});
+
+describe('breadcrumbListJsonLd', () => {
+  const SITE = 'https://dawidrylko.com/';
+  const CANONICAL = 'https://dawidrylko.com/tags/devops/';
+
+  const build = () => {
+    const crumbs = buildCrumbs({
+      pathname: '/tags/devops/',
+      customTitle: 'Tag: devops',
+      menu: MENU,
+      parents: [
+        { name: 'Blog 🇵🇱', url: '/blog/' },
+        { name: 'Tagi', url: '/tags/' },
+      ],
+    });
+    return { crumbs, jsonLd: breadcrumbListJsonLd(crumbs, CANONICAL, SITE) };
+  };
+
+  it('emits a BreadcrumbList whose @id is the canonical + #breadcrumb fragment', () => {
+    const { jsonLd } = build();
+    expect(jsonLd['@type']).toBe('BreadcrumbList');
+    expect(jsonLd['@id']).toBe(`${CANONICAL}#breadcrumb`);
+  });
+
+  it('sets numberOfItems to the crumb count with 1-based sequential positions', () => {
+    const { crumbs, jsonLd } = build();
+    expect(jsonLd.numberOfItems).toBe(crumbs.length);
+    expect(jsonLd.itemListElement.map(i => i.position)).toEqual([1, 2, 3, 4]);
+  });
+
+  it('emits every non-active item as an absolute URL string, never a typed node', () => {
+    // Regression: ancestor crumbs used to be { '@type': 'WebPage', '@id' } nodes,
+    // which SEO audits read as the current page advertising its parents' URLs as
+    // its own identity. They must be plain URL strings.
+    const { jsonLd } = build();
+    const nonActive = jsonLd.itemListElement.slice(0, -1);
+    expect(nonActive.map(i => i.item)).toEqual([
+      'https://dawidrylko.com/',
+      'https://dawidrylko.com/blog/',
+      'https://dawidrylko.com/tags/',
+    ]);
+    for (const entry of nonActive) {
+      expect(typeof entry.item).toBe('string');
+    }
+  });
+
+  it('omits the item URL on the active (last) crumb — the current page itself', () => {
+    const { jsonLd } = build();
+    const last = jsonLd.itemListElement.at(-1)!;
+    expect(last.name).toBe('Tag: devops');
+    expect('item' in last).toBe(false);
   });
 });

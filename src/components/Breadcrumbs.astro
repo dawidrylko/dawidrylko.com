@@ -1,7 +1,7 @@
 ---
 import { SITE_METADATA } from '../data/site-metadata';
 import JsonLd from './JsonLd.astro';
-import { buildCrumbs } from '../lib/breadcrumbs';
+import { buildCrumbs, breadcrumbListJsonLd } from '../lib/breadcrumbs';
 import type { NavLink } from '../types';
 
 // Builds the trail from the current pathname, mapping known menu segments to
@@ -26,23 +26,7 @@ const crumbs = buildCrumbs({
 });
 const show = crumbs.length > 1;
 
-const structuredData = {
-  '@context': 'https://schema.org',
-  '@type': 'BreadcrumbList',
-  '@id': `${canonical}#breadcrumb`,
-  name: 'Breadcrumb Navigation',
-  description: 'Navigation path showing current location within the website hierarchy',
-  numberOfItems: crumbs.length,
-  itemListElement: crumbs.map((item, index) => ({
-    '@type': 'ListItem',
-    position: index + 1,
-    name: item.name,
-    item:
-      index === crumbs.length - 1
-        ? undefined
-        : { '@type': 'WebPage', '@id': new URL(item.url, siteUrl).href, name: item.title },
-  })),
-};
+const structuredData = breadcrumbListJsonLd(crumbs, canonical, siteUrl);
 ---
 
 {

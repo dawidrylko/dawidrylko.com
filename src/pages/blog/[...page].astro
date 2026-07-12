@@ -1,16 +1,14 @@
 ---
 import type { GetStaticPaths, Page } from 'astro';
 import type { CollectionEntry } from 'astro:content';
-import { Image, getImage } from 'astro:assets';
+import { Image } from 'astro:assets';
 import PageLayout from '../../layouts/PageLayout.astro';
 import JsonLd from '../../components/JsonLd.astro';
 import PostListItem from '../../components/PostListItem.astro';
 import rssIcon from '../../assets/rss.svg';
 import { SITE_METADATA } from '../../data/site-metadata';
 import { STRUCTURED_DATA } from '../../data/structured-data';
-import { excerpt } from '../../lib/excerpt';
 import { getBlogPosts, POSTS_PER_PAGE } from '../../lib/blog';
-import { toISODate } from '../../lib/date';
 import { CONTENT_LANG } from '../../lib/i18n';
 
 const PAGE_METADATA = {
@@ -47,24 +45,6 @@ const isFirstPage = page.currentPage === 1;
 const author = SITE_METADATA.author;
 const { personReference } = STRUCTURED_DATA;
 
-const items = page.data.map(post => {
-  const description = post.data.description || excerpt(post.body ?? '');
-  return { post, description };
-});
-
-// Optimised WebP URL per post for the JSON-LD image, keyed by post id. Using the
-// raw featuredImg.src would emit the full-size original into the build.
-const featuredImageUrls = new Map(
-  await Promise.all(
-    items
-      .filter(({ post }) => post.data.featuredImg)
-      .map(async ({ post }): Promise<[string, string]> => {
-        const image = await getImage({ src: post.data.featuredImg!, width: 1200, format: 'webp' });
-        return [post.id, image.src];
-      }),
-  ),
-);
-
 // Build a stable href for any page number (page 1 keeps the bare /blog/ URL).
 const pageHref = (n: number) => (n === 1 ? '/blog/' : `/blog/${n}/`);
 
@@ -82,28 +62,11 @@ const structuredData = {
   keywords: PAGE_METADATA.keywords.join(', '),
   author: personReference,
   inLanguage: 'pl',
-  blogPost: items.map(({ post, description }) => {
-    const postUrl = `${SITE_METADATA.url}/${post.id}/`;
-    return {
-      '@type': 'BlogPosting',
-      '@id': `${postUrl}#article`,
-      url: postUrl,
-      headline: post.data.title,
-      description,
-      datePublished: toISODate(post.data.date),
-      dateModified: toISODate(post.data.updatedDate ?? post.data.date),
-      author: personReference,
-      publisher: personReference,
-      mainEntityOfPage: { '@id': postUrl },
-      image: post.data.featuredImg
-        ? {
-            '@type': 'ImageObject',
-            url: new URL(featuredImageUrls.get(post.id)!, SITE_METADATA.url).href,
-            description: post.data.featuredImgAlt || '',
-          }
-        : undefined,
-    };
-  }),
+  // Reference each post by @id only: its full BlogPosting node lives on the post
+  // page itself. Inlining full nodes here would advertise other pages' URLs on
+  // the listing, breaking page-level url/@id consistency; the @id edge is enough
+  // for crawlers to resolve the entity across pages.
+  blogPost: page.data.map(post => ({ '@id': `${SITE_METADATA.url}/${post.id}/#article` })),
 };
 ---
 
@@ -143,7 +106,7 @@ const structuredData = {
   <ol id="blog-search-results" class="posts" hidden></ol>
 
   <ol id="blog-posts" class="posts">
-    {items.map(({ post }) => <PostListItem post={post} />)}
+    {page.data.map(post => <PostListItem post={post} />)}
   </ol>
 
   {

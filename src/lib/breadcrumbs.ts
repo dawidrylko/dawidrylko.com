@@ -75,3 +75,30 @@ export function buildCrumbs({ pathname, customTitle, menu, parents = [] }: Build
 
   return crumbs;
 }
+
+// Builds the BreadcrumbList JSON-LD for a page from its crumb trail.
+//
+// Each ListItem's `item` is a PLAIN URL string, not a typed { '@type': 'WebPage',
+// '@id' } node. Google and JSON-LD audit tools read any node typed WebPage /
+// Article / BlogPosting as an identity claim about the *current* page, so
+// emitting ancestor crumbs as WebPage nodes made every subpage advertise its
+// parents' URLs (Home, Blog, …) as its own @id — tripping the url-consistency /
+// id-canonical-mismatch checks. The string form (with `name` on the ListItem) is
+// the canonical breadcrumb shape and carries no such identity claim.
+export function breadcrumbListJsonLd(crumbs: Crumb[], canonical: string, siteUrl: string) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    '@id': `${canonical}#breadcrumb`,
+    name: 'Breadcrumb Navigation',
+    description: 'Navigation path showing current location within the website hierarchy',
+    numberOfItems: crumbs.length,
+    itemListElement: crumbs.map((crumb, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: crumb.name,
+      // The active (last) crumb is the current page itself and carries no item URL.
+      ...(index === crumbs.length - 1 ? {} : { item: new URL(crumb.url, siteUrl).href }),
+    })),
+  };
+}
