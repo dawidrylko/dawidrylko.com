@@ -64,8 +64,8 @@ importers:
         specifier: ^1.61.1
         version: 1.61.1
       '@silesiansolutions/search-quality-kit':
-        specifier: 0.9.0
-        version: 0.9.0
+        specifier: 0.10.0
+        version: 0.10.0
       '@types/react':
         specifier: ^19.2.17
         version: 19.2.17
@@ -1338,8 +1338,8 @@ packages:
   '@shikijs/vscode-textmate@10.0.2':
     resolution: {integrity: sha512-83yeghZ2xxin3Nj8z1NMd/NCuca+gsYXswywDy5bHvwlWL8tpTQmzGeUuHd9FC3E/SBEMvzJRwWEOz5gGes9Qg==}
 
-  '@silesiansolutions/search-quality-kit@0.9.0':
-    resolution: {integrity: sha512-zJD5ALxQ1JntpP042mCt1GX9OTP48x8mWO/XUzFcFxZuHOzeUnrfAm8wrjTA1P4SJv6y4mrQohp/ElhC/dQ8IA==}
+  '@silesiansolutions/search-quality-kit@0.10.0':
+    resolution: {integrity: sha512-IpqPGMIPYLGvTCA3V1DJQnv0KYcgS44oZzgv6O6cyha6ACERDzBGIi4p5+kU0DBle6F1imlUX0eS5Ho8cpyzow==}
     engines: {node: '>=20.11'}
     hasBin: true
 
@@ -5704,7 +5704,7 @@ snapshots:
 
   '@shikijs/vscode-textmate@10.0.2': {}
 
-  '@silesiansolutions/search-quality-kit@0.9.0':
+  '@silesiansolutions/search-quality-kit@0.10.0':
     dependencies:
       cheerio: 1.2.0
       commander: 14.0.3
