@@ -24,6 +24,13 @@ updates:
       # katex is intentionally held back for now — a newer major is a breaking
       # change we are not ready to adopt yet. Bump it manually when ready.
       - dependency-name: 'katex'
+      # TypeScript majors are held back until the toolchain catches up with the
+      # native compiler: `astro check` needs the programmatic API that TS 7 does
+      # not ship (withastro/roadmap#1321) and typescript-eslint does not support
+      # TS 7 yet (typescript-eslint#10940). Minor and patch 6.x updates still flow.
+      - dependency-name: 'typescript'
+        update-types:
+          - 'version-update:semver-major'
 
   - package-ecosystem: 'github-actions'
     directory: '/'
