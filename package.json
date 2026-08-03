@@ -63,7 +63,7 @@
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "globals": "^17.8.0",
     "husky": "^9.1.7",
-    "lint-staged": "^17.2.0",
+    "lint-staged": "^17.3.0",
     "prettier": "^3.9.6",
     "prettier-plugin-astro": "^0.14.1",
     "rehype-autolink-headings": "^7.1.0",
