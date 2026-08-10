@@ -169,7 +169,7 @@ jobs:
         run: pnpm run doctor:search-quality
 
       - name: Verify Google Search quality
-        uses: SilesianSolutions/search-quality-kit/action@v0
+        uses: SilesianSolutions/search-quality-kit@v0
         with:
           node-version-file: '.nvmrc'
           package-manager: pnpm
