@@ -37,3 +37,7 @@ Allow: /
 # llms.txt: https://dawidrylko.com/llms.txt
 
 Sitemap: https://dawidrylko.com/sitemap-index.xml
+
+# Post images (Google Image sitemap extension). Declared separately because
+# @astrojs/sitemap builds sitemap-index.xml and cannot include it.
+Sitemap: https://dawidrylko.com/sitemap-images.xml

@@ -9,6 +9,7 @@ import rehypeSlug from 'rehype-slug';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypeWrapTables from './src/lib/rehype-wrap-tables.ts';
 import webmanifest from './src/integrations/webmanifest';
+import sitemapImages from './src/integrations/sitemap-images';
 import { buildPostLastmodMap } from './src/lib/sitemap.ts';
 
 // Post lastmod dates (updatedDate ?? date), read from frontmatter so the sitemap
@@ -71,6 +72,10 @@ export default defineConfig({
       },
     }),
     webmanifest(),
+    // Must follow sitemap(): both write into dist/ on astro:build:done, and the
+    // image sitemap is a separate file that @astrojs/sitemap cannot include in
+    // its index — robots.txt and /sitemap.xml advertise it instead.
+    sitemapImages(),
   ],
   // Responsive images (stable in Astro 6): every <Image>/<Picture> and Markdown
   // image gets a srcset + sizes + responsive styles automatically. Replaces

@@ -12,10 +12,12 @@
  *     stay client-side only, out of crawler/Ahrefs text extraction)
  *   - robots.txt directives each sit on their own line (none glued together,
  *     which would make a directive unparseable) and a Sitemap is declared
+ *   - every image advertised in the image sitemap was actually emitted, so the
+ *     sitemap can never promise Google an asset the build did not produce
  *
- * The pure helpers (`findArtifactViolations`, `findGluedRobotsDirectives`) are
- * unit-tested in check-crawl-hygiene.test.mjs. Exits non-zero listing every
- * problem found.
+ * The pure helpers (`findArtifactViolations`, `findGluedRobotsDirectives`,
+ * `extractImageLocs`) are unit-tested in check-crawl-hygiene.test.mjs. Exits
+ * non-zero listing every problem found.
  */
 
 import { readFile, readdir, access } from 'node:fs/promises';
@@ -48,6 +50,28 @@ export function findGluedRobotsDirectives(robotsTxt) {
   return offending;
 }
 
+// Pure: return every <image:loc> URL declared in an image sitemap, in order.
+// `&amp;` is undone LAST: unescaping the meta-character first would re-expose an
+// ampersand that the following passes then consume a second time, so an escaped
+// literal "&lt;" (written "&amp;lt;") would decode to "<" instead of "&lt;".
+export function extractImageLocs(xml) {
+  return [...xml.matchAll(/<image:loc>\s*([^<]+?)\s*<\/image:loc>/g)].map(([, loc]) =>
+    loc
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      .replace(/&quot;/g, '"')
+      .replace(/&amp;/g, '&'),
+  );
+}
+
+// Pure: the dist-relative path a sitemap image URL should resolve to. Sitemap
+// URLs are percent-encoded per RFC 3986, but several post images carry Polish
+// diacritics and en-dashes in their filename and land on disk as raw UTF-8 —
+// so the encoding has to be undone before touching the filesystem.
+export function distPathForLoc(loc) {
+  return decodeURIComponent(new URL(loc, 'https://dawidrylko.com').pathname);
+}
+
 // The URLs an SEO/AI crawl must always find. HTML pages plus the machine
 // artifacts that anchor discovery (robots, feeds, sitemaps, llms.txt).
 const REQUIRED_HTML = [
@@ -61,7 +85,15 @@ const REQUIRED_HTML = [
   'tags/index.html',
   '404.html',
 ];
-const REQUIRED_ASSETS = ['robots.txt', 'rss.xml', 'sitemap-index.xml', 'sitemap-0.xml', 'sitemap.xml', 'llms.txt'];
+const REQUIRED_ASSETS = [
+  'robots.txt',
+  'rss.xml',
+  'sitemap-index.xml',
+  'sitemap-0.xml',
+  'sitemap.xml',
+  'sitemap-images.xml',
+  'llms.txt',
+];
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -121,6 +153,20 @@ async function main() {
     if (!/^\s*Sitemap\s*:/im.test(robots)) fail('robots.txt does not declare a Sitemap');
   }
 
+  // The image sitemap must only advertise images the build actually emitted;
+  // a 404 in an image sitemap is a hard error for Google Images.
+  const imageSitemapPath = join(distDir, 'sitemap-images.xml');
+  let imageLocs = [];
+  if (await exists(imageSitemapPath)) {
+    imageLocs = extractImageLocs(await readFile(imageSitemapPath, 'utf8'));
+    if (imageLocs.length === 0) fail('sitemap-images.xml advertises no images');
+    for (const loc of imageLocs) {
+      if (!(await exists(join(distDir, distPathForLoc(loc))))) {
+        fail(`image sitemap points at a file missing from the build: ${loc}`);
+      }
+    }
+  }
+
   console.log('Crawl-hygiene contract (dist/)\n');
   if (problems.length > 0) {
     for (const problem of problems) console.error(`  ✗ ${problem}`);
@@ -129,7 +175,8 @@ async function main() {
   }
   console.log(
     `  ✓ ${REQUIRED_HTML.length + REQUIRED_ASSETS.length} required URL(s) present; ` +
-      `${pages.length} page(s) free of the ASCII artifact; robots.txt directives well-formed.`,
+      `${pages.length} page(s) free of the ASCII artifact; robots.txt directives well-formed; ` +
+      `${imageLocs.length} image sitemap entr(ies) resolve to emitted files.`,
   );
 }
 
