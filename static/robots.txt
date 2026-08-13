@@ -38,6 +38,7 @@ Allow: /
 
 Sitemap: https://dawidrylko.com/sitemap-index.xml
 
-# Post images (Google Image sitemap extension). Declared separately because
-# @astrojs/sitemap builds sitemap-index.xml and cannot include it.
+# Every image used in a post, mapped to the page it appears on (Google image
+# sitemap extension). Also listed in the index above; repeated here so crawlers
+# that read robots.txt without following the index still find it.
 Sitemap: https://dawidrylko.com/sitemap-images.xml
