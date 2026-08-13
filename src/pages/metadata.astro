@@ -23,13 +23,19 @@ const siteDescription = SITE_METADATA.description.en;
 
 // Resources curated for AI/LLM crawlers and agents. Exposed here in addition to
 // /llms.txt and robots.txt so the intent is discoverable from the site itself.
+// Ordered as a crawler would walk them: crawl policy, then the sitemaps it points
+// to, then the feeds, then the LLM summary, with this page last. Human-facing
+// pages (/bio/, /blog/) are deliberately absent — they are already in the
+// sitemaps and in the Pages table below, and are not machine-readable artifacts.
 const aiResources: [string, string][] = [
+  ['/robots.txt', 'Crawl policy — all crawlers, AI included, are explicitly allowed; declares the sitemaps.'],
+  ['/sitemap-index.xml', 'Canonical sitemap index; the one advertised in robots.txt.'],
+  ['/sitemap.xml', 'Conventional sitemap index, for crawlers that probe this path.'],
+  ['/sitemap-0.xml', 'The URL set itself: every page, with lastmod and priority.'],
+  ['/sitemap-images.xml', 'Google image sitemap: every post image, mapped to the page it appears on.'],
+  ['/rss.xml', 'Full-text RSS feed of every blog post.'],
   ['/llms.txt', 'Structured, machine-readable summary of the site for AI/LLM crawlers.'],
   ['/metadata/', 'This page — full inventory of pages and blog posts with build info.'],
-  ['/bio/', 'Author background: experience, education, and philosophy.'],
-  ['/blog/', 'All articles, with search and tag filtering.'],
-  ['/rss.xml', 'Full-text RSS feed of every blog post.'],
-  ['/sitemap-index.xml', 'Canonical list of all URLs.'],
 ];
 
 const siteInfo: [string, string][] = [

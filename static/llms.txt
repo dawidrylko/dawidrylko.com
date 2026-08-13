@@ -35,6 +35,8 @@ automation, cybersecurity, DevOps, IoT, smart home.
 
 - [RSS feed](https://dawidrylko.com/rss.xml): full-text feed of all blog posts.
 - [Sitemap](https://dawidrylko.com/sitemap-index.xml): canonical list of all URLs.
+- [Image sitemap](https://dawidrylko.com/sitemap-images.xml): every post image, mapped to the page it appears on.
+- [Metadata](https://dawidrylko.com/metadata/): full inventory of pages and posts, with build info.
 
 ## Contact
 

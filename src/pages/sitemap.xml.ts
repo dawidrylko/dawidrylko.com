@@ -6,11 +6,15 @@ import type { APIRoute } from 'astro';
 // conventional /sitemap.xml path instead; this thin sitemap index answers them
 // with valid XML — not an HTML meta-refresh redirect, which a strict XML parser
 // would reject — pointing at the same generated url set.
+//
+// It also carries /sitemap-images.xml, which @astrojs/sitemap cannot emit and so
+// is absent from its index; robots.txt advertises that one directly as well.
 export const GET: APIRoute = ({ site }) => {
   const origin = (site ?? new URL('https://dawidrylko.com')).origin;
   const body = `<?xml version="1.0" encoding="UTF-8"?>
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <sitemap><loc>${origin}/sitemap-0.xml</loc></sitemap>
+  <sitemap><loc>${origin}/sitemap-images.xml</loc></sitemap>
 </sitemapindex>
 `;
   return new Response(body, {
