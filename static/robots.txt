@@ -2,8 +2,3 @@ User-agent: *
 Allow: /
 
 Sitemap: https://dawidrylko.com/sitemap-index.xml
-
-# Every image used in a post, mapped to the page it appears on (Google image
-# sitemap extension). Also listed in the index above; repeated here so crawlers
-# that read robots.txt without following the index still find it.
-Sitemap: https://dawidrylko.com/sitemap-images.xml
