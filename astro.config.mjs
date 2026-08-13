@@ -16,13 +16,17 @@ import { buildPostLastmodMap } from './src/lib/sitemap.ts';
 // can advertise per-post freshness. Built once at config load.
 const postLastmod = await buildPostLastmodMap();
 
+// Single source for the deployed origin: `site` and the sitemap index entries
+// must not drift apart.
+const SITE = 'https://dawidrylko.com';
+
 // Content pipeline (migrated from Gatsby):
 //   - MDX with remark-math + rehype-katex (KaTeX, build-time SSR)
 //   - Shiki syntax highlighting with light/dark themes (replaces Prism)
 //   - React islands for interactive components (Mermaid, embedded demos)
 // https://docs.astro.build/en/reference/configuration-reference/
 export default defineConfig({
-  site: 'https://dawidrylko.com',
+  site: SITE,
   // Trailing-slash URLs preserved from the Gatsby site so links/redirects match.
   trailingSlash: 'always',
   // Static assets (resume PDFs, /files, robots.txt, CNAME) served from static/.
@@ -47,6 +51,11 @@ export default defineConfig({
     mdx(),
     react(),
     sitemap({
+      // The image sitemap is written by the sitemapImages() integration below,
+      // outside this plugin's own url set — customSitemaps is what still gets it
+      // listed in the canonical sitemap-index.xml, so the index that robots.txt
+      // advertises is complete and nothing depends on a second discovery path.
+      customSitemaps: [`${SITE}/sitemap-images.xml`],
       // Enrich each entry: per-post lastmod from frontmatter, plus a priority
       // hint by route type (homepage > blog listings > posts > tags).
       serialize(item) {
@@ -72,9 +81,9 @@ export default defineConfig({
       },
     }),
     webmanifest(),
-    // Must follow sitemap(): both write into dist/ on astro:build:done, and the
-    // image sitemap is a separate file that @astrojs/sitemap cannot include in
-    // its index — robots.txt and /sitemap.xml advertise it instead.
+    // Writes sitemap-images.xml, which sitemap() above registers in the index
+    // via customSitemaps. Both run on astro:build:done and touch different files,
+    // so their relative order does not matter.
     sitemapImages(),
   ],
   // Responsive images (stable in Astro 6): every <Image>/<Picture> and Markdown

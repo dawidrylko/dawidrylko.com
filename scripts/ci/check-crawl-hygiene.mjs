@@ -14,10 +14,13 @@
  *     which would make a directive unparseable) and a Sitemap is declared
  *   - every image advertised in the image sitemap was actually emitted, so the
  *     sitemap can never promise Google an asset the build did not produce
+ *   - the canonical sitemap index reaches every sitemap we publish, so no
+ *     sitemap depends on robots.txt alone to be discovered
  *
  * The pure helpers (`findArtifactViolations`, `findGluedRobotsDirectives`,
- * `extractImageLocs`) are unit-tested in check-crawl-hygiene.test.mjs. Exits
- * non-zero listing every problem found.
+ * `extractImageLocs`, `extractSitemapIndexLocs`, `distPathForLoc`) are
+ * unit-tested in check-crawl-hygiene.test.mjs. Exits non-zero listing every
+ * problem found.
  */
 
 import { readFile, readdir, access } from 'node:fs/promises';
@@ -62,6 +65,19 @@ export function extractImageLocs(xml) {
       .replace(/&quot;/g, '"')
       .replace(/&amp;/g, '&'),
   );
+}
+
+// Pure: return every <loc> a sitemap index points at, in order.
+export function extractSitemapIndexLocs(xml) {
+  return [...xml.matchAll(/<sitemap>[\s\S]*?<loc>\s*([^<]+?)\s*<\/loc>/g)].map(([, loc]) => loc.replace(/&amp;/g, '&'));
+}
+
+// Pure: the sitemap URLs a robots.txt advertises via `Sitemap:` directives.
+export function extractRobotsSitemaps(robotsTxt) {
+  return robotsTxt
+    .split(/\r?\n/)
+    .filter(line => !line.trim().startsWith('#'))
+    .flatMap(line => line.match(/^\s*Sitemap\s*:\s*(\S+)/i)?.[1] ?? []);
 }
 
 // Pure: the dist-relative path a sitemap image URL should resolve to. Sitemap
@@ -145,12 +161,55 @@ async function main() {
 
   // robots.txt: one directive per line, and a Sitemap must be advertised.
   const robotsPath = join(distDir, 'robots.txt');
-  if (await exists(robotsPath)) {
-    const robots = await readFile(robotsPath, 'utf8');
-    for (const line of findGluedRobotsDirectives(robots)) {
+  const robotsTxtBody = (await exists(robotsPath)) ? await readFile(robotsPath, 'utf8') : '';
+  if (robotsTxtBody) {
+    for (const line of findGluedRobotsDirectives(robotsTxtBody)) {
       fail(`robots.txt has glued directives on one line: "${line}"`);
     }
-    if (!/^\s*Sitemap\s*:/im.test(robots)) fail('robots.txt does not declare a Sitemap');
+    if (!/^\s*Sitemap\s*:/im.test(robotsTxtBody)) fail('robots.txt does not declare a Sitemap');
+  }
+
+  // Discovery graph. Three places enumerate our sitemaps and drift apart
+  // independently: robots.txt, the canonical sitemap-index.xml, and the
+  // conventional /sitemap.xml. Asserting one of them is what let the image
+  // sitemap ship reachable only via robots.txt, so assert the whole graph —
+  // every url set we publish must be reachable from robots.txt, and no two
+  // indexes may disagree about what exists.
+  const toName = loc => distPathForLoc(loc).replace(/^\//, '');
+  const sitemapFiles = (await readdir(distDir)).filter(name => /^sitemap.*\.xml$/.test(name));
+  const indexes = new Map();
+  const urlSets = [];
+
+  for (const name of sitemapFiles) {
+    const xml = await readFile(join(distDir, name), 'utf8');
+    if (xml.includes('<sitemapindex')) indexes.set(name, extractSitemapIndexLocs(xml).map(toName));
+    else urlSets.push(name);
+  }
+
+  // Nothing may point at a sitemap the build did not emit.
+  for (const [name, refs] of indexes) {
+    for (const ref of refs) {
+      if (!sitemapFiles.includes(ref)) fail(`${name} points at a missing sitemap: ${ref}`);
+    }
+  }
+
+  // Walk robots.txt one level down through any index it names.
+  const reachable = new Set();
+  for (const url of extractRobotsSitemaps(robotsTxtBody)) {
+    const name = toName(url);
+    if (indexes.has(name)) for (const ref of indexes.get(name)) reachable.add(ref);
+    else reachable.add(name);
+  }
+  for (const name of urlSets) {
+    if (!reachable.has(name)) fail(`${name} is unreachable from robots.txt (not advertised, and in no index it names)`);
+  }
+
+  // Two indexes listing different sets means one of them is stale.
+  const [first, ...rest] = [...indexes];
+  for (const [name, refs] of rest) {
+    const expected = [...first[1]].sort().join(', ');
+    const actual = [...refs].sort().join(', ');
+    if (expected !== actual) fail(`${name} lists [${actual}] but ${first[0]} lists [${expected}]`);
   }
 
   // The image sitemap must only advertise images the build actually emitted;

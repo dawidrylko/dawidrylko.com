@@ -7,8 +7,9 @@ import type { APIRoute } from 'astro';
 // with valid XML — not an HTML meta-refresh redirect, which a strict XML parser
 // would reject — pointing at the same generated url set.
 //
-// It also carries /sitemap-images.xml, which @astrojs/sitemap cannot emit and so
-// is absent from its index; robots.txt advertises that one directly as well.
+// It lists the same set as sitemap-index.xml — including /sitemap-images.xml,
+// which sitemap() registers there through its customSitemaps option. Keep the two
+// in sync; check-crawl-hygiene.mjs fails the build when they disagree.
 export const GET: APIRoute = ({ site }) => {
   const origin = (site ?? new URL('https://dawidrylko.com')).origin;
   const body = `<?xml version="1.0" encoding="UTF-8"?>

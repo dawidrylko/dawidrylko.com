@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest';
 import {
   distPathForLoc,
   extractImageLocs,
+  extractRobotsSitemaps,
+  extractSitemapIndexLocs,
   findArtifactViolations,
   findGluedRobotsDirectives,
   SIGNATURE_ARTIFACT,
@@ -80,6 +82,53 @@ describe('extractImageLocs', () => {
 
   it('returns nothing for a sitemap without images', () => {
     expect(extractImageLocs('<urlset><url><loc>https://dawidrylko.com/</loc></url></urlset>')).toEqual([]);
+  });
+});
+
+describe('extractSitemapIndexLocs', () => {
+  it('returns every sitemap the index points at', () => {
+    const xml =
+      '<?xml version="1.0"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' +
+      '<sitemap><loc>https://dawidrylko.com/sitemap-0.xml</loc><lastmod>2025-12-26T00:00:00.000Z</lastmod></sitemap>' +
+      '<sitemap><loc>https://dawidrylko.com/sitemap-images.xml</loc></sitemap></sitemapindex>';
+    expect(extractSitemapIndexLocs(xml)).toEqual([
+      'https://dawidrylko.com/sitemap-0.xml',
+      'https://dawidrylko.com/sitemap-images.xml',
+    ]);
+  });
+
+  it('does not mistake a urlset page entry for a sitemap entry', () => {
+    const xml = '<urlset><url><loc>https://dawidrylko.com/post/</loc></url></urlset>';
+    expect(extractSitemapIndexLocs(xml)).toEqual([]);
+  });
+
+  it('returns nothing for an empty index', () => {
+    expect(extractSitemapIndexLocs('<sitemapindex></sitemapindex>')).toEqual([]);
+  });
+});
+
+describe('extractRobotsSitemaps', () => {
+  it('returns every advertised sitemap, in order', () => {
+    const robots = [
+      'User-agent: *',
+      'Allow: /',
+      'Sitemap: https://dawidrylko.com/sitemap-index.xml',
+      '',
+      'Sitemap: https://dawidrylko.com/sitemap-images.xml',
+    ].join('\n');
+    expect(extractRobotsSitemaps(robots)).toEqual([
+      'https://dawidrylko.com/sitemap-index.xml',
+      'https://dawidrylko.com/sitemap-images.xml',
+    ]);
+  });
+
+  it('ignores a Sitemap mentioned inside a comment', () => {
+    const robots = '# Sitemap: https://dawidrylko.com/old.xml\nSitemap: https://dawidrylko.com/sitemap-index.xml';
+    expect(extractRobotsSitemaps(robots)).toEqual(['https://dawidrylko.com/sitemap-index.xml']);
+  });
+
+  it('returns nothing when none is declared', () => {
+    expect(extractRobotsSitemaps('User-agent: *\nAllow: /')).toEqual([]);
   });
 });
 
