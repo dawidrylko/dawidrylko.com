@@ -33,20 +33,20 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "@astrojs/mdx": "^7.0.5",
-    "@astrojs/react": "^6.0.2",
+    "@astrojs/mdx": "^7.0.7",
+    "@astrojs/react": "^6.0.4",
     "@astrojs/rss": "^4.0.19",
     "@astrojs/sitemap": "^3.7.3",
     "@fontsource-variable/montserrat": "^5.3.0",
     "@fontsource/merriweather": "^5.3.0",
     "katex": "^0.17.0",
-    "mermaid": "^11.16.1",
+    "mermaid": "^11.17.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "rehype-katex": "^7.0.1",
     "remark-math": "^6.0.0",
     "sharp": "^0.35.3",
-    "web-vitals": "^6.1.0"
+    "web-vitals": "^6.1.1"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
@@ -56,8 +56,8 @@
     "@silesiansolutions/search-quality-kit": "0.11.2",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.4",
-    "@vitest/coverage-v8": "^4.1.10",
-    "astro": "^7.2.2",
+    "@vitest/coverage-v8": "^4.1.11",
+    "astro": "^7.2.4",
     "eslint": "^10.8.1",
     "eslint-plugin-astro": "^3.1.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",
@@ -72,7 +72,7 @@
     "stylelint-config-standard": "^40.0.0",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.67.0",
-    "vitest": "^4.1.10"
+    "vitest": "^4.1.11"
   },
   "lint-staged": {
     "**/*.{astro,ts,tsx,js,mjs,json,md}": "prettier --write",
