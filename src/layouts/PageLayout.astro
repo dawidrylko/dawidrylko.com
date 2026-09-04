@@ -47,6 +47,7 @@ interface Props {
   modifiedTime?: string;
   tags?: string[];
   noIndex?: boolean;
+  noIndexFollow?: boolean;
   lang?: string;
 }
 
@@ -64,6 +65,7 @@ const {
   modifiedTime,
   tags,
   noIndex,
+  noIndexFollow,
   lang,
 } = Astro.props;
 
@@ -84,16 +86,18 @@ const { website, person } = STRUCTURED_DATA;
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     {
-      /* noindex pages (e.g. 404) must not advertise a canonical: theirs would
-        point at a non-200 URL, which SEO audits flag. */
+      /* Only `noIndex` suppresses the canonical, and the reason is the URL, not
+        the noindex: a 404 would point its canonical at a non-200 URL, which SEO
+        audits flag. Pages excluded via `noIndexFollow` are ordinary 200 pages,
+        so they keep their self-canonical. */
     }
     {!noIndex && <link rel="canonical" href={canonical} />}
     {
       /* hreflang declares each URL's language to search engines. Every page is
         monolingual (English shell or Polish content) with no translated twin, so
         the page self-references its own language and doubles as x-default. Like
-        the canonical, it is skipped on noindex pages so it never points at a
-        non-200 URL. */
+        the canonical, it is skipped on `noIndex` pages so it never points at a
+        non-200 URL; `noIndexFollow` pages are real 200 URLs and keep it. */
     }
     {!noIndex && <link rel="alternate" hreflang={metaLang} href={canonical} />}
     {!noIndex && <link rel="alternate" hreflang="x-default" href={canonical} />}
@@ -121,6 +125,7 @@ const { website, person } = STRUCTURED_DATA;
       modifiedTime={modifiedTime}
       tags={tags}
       noIndex={noIndex}
+      noIndexFollow={noIndexFollow}
       lang={metaLang}
     />
     <JsonLd data={{ '@context': 'https://schema.org', '@graph': [website, person] }} />

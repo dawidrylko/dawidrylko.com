@@ -14,8 +14,10 @@
  *     stay lang=pl (post pages are detected by og:type=article)
  *   - indexable pages self-reference their language via hreflang and an
  *     x-default, both pointing at the page's own canonical URL
- *   - noindex pages (e.g. 404) emit no hreflang at all, mirroring the canonical
- *     rule (an alternate would point at a non-200 URL, which SEO audits flag)
+ *   - dead-end pages ("noindex, nofollow", e.g. 404) emit no hreflang at all,
+ *     mirroring the canonical rule (an alternate would point at a non-200 URL,
+ *     which SEO audits flag). Pages that are merely "noindex, follow" are real
+ *     200 URLs and self-reference like any indexable page.
  *
  * Redirect stubs (meta-refresh pages such as /resume/) are skipped. Zero
  * dependencies; runs against the built output, it does NOT rebuild. Exits
@@ -25,6 +27,7 @@
 import { readFile, readdir, access } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve, join, relative, sep } from 'node:path';
+import { isDeadEndPage } from './robots-directives.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DIST_DIR = process.argv[2] ? resolve(process.cwd(), process.argv[2]) : resolve(__dirname, '../../dist');
@@ -87,7 +90,7 @@ function checkPage(rel, html) {
   if (/http-equiv="refresh"/i.test(html)) return;
 
   const pathname = toPathname(rel);
-  const isNoindex = /<meta[^>]*name="robots"[^>]*content="[^"]*noindex/i.test(html);
+  const deadEnd = isDeadEndPage(html);
   const isArticle = /<meta[^>]*property="og:type"[^>]*content="article"/.test(html);
 
   const langMatch = html.match(/<html[^>]*\blang="([^"]*)"/i);
@@ -113,13 +116,13 @@ function checkPage(rel, html) {
     fail(`${rel}: expected lang="${wanted}" for this route, found "${lang}"`);
   }
 
-  // hreflang: indexable pages self-reference their language + x-default; noindex
+  // hreflang: every real page self-references its language + x-default; dead-end
   // pages must carry none (an alternate would advertise a non-200 URL).
   const alternates = [...html.matchAll(/<link[^>]*rel="alternate"[^>]*hreflang="([^"]*)"[^>]*href="([^"]*)"/g)].map(
     m => ({ hreflang: m[1], href: m[2] }),
   );
-  if (isNoindex) {
-    if (alternates.length > 0) fail(`${rel}: noindex page must not emit hreflang alternates`);
+  if (deadEnd) {
+    if (alternates.length > 0) fail(`${rel}: noindex, nofollow page must not emit hreflang alternates`);
     return;
   }
 
