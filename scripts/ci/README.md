@@ -11,7 +11,9 @@ Asserts the build-output contract on `dist/` after `pnpm build`:
   and at least one `<enclosure>`,
 - sitemap (`sitemap-index.xml` + `sitemap-0.xml`),
 - PWA manifest (`manifest.webmanifest`) with name, colors and icons,
-- Open Graph / Twitter Card meta on rendered HTML.
+- Open Graph / Twitter Card meta on rendered HTML,
+- the CV PDFs (`resume-pl.pdf`, `resume-en.pdf`) compiled from `resume/*.tex`:
+  gitignored build output, so nothing else would notice them going missing.
 
 Run locally after a build:
 

@@ -1,0 +1,83 @@
+name: Resume
+
+# Guards the CV toolchain, and nothing else. Deliberately its own workflow with
+# a path filter: Actions has no per-job `paths:`, so putting this in ci.yml
+# would spend minutes on every blog and site PR to re-check files that did not
+# change. Here it does not start at all unless the CV toolchain is touched.
+on:
+  pull_request:
+    paths:
+      - 'resume/**'
+      - '.github/workflows/resume.yml'
+      - '.github/workflows/ci.yml'
+      - '.github/workflows/cd.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: 'resume-${{ github.event.pull_request.number }}'
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  builder-image:
+    name: Tectonic image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      # The Tectonic release is pinned in three files. CI and CD install the
+      # binary directly, so they would stay green while resume/Dockerfile drifts
+      # to another version, handing a local Docker build a different engine than
+      # CI. Building the image cannot see that; only comparing the pins can.
+      - name: Tectonic pins agree across ci.yml, cd.yml and the Dockerfile
+        run: |
+          workflow_pin() { grep -E "^  $2:" ".github/workflows/$1.yml" | tr -d " '" | cut -d: -f2; }
+          dockerfile_pin() { grep -E "^ARG $1=" resume/Dockerfile | cut -d= -f2; }
+
+          ci_version=$(workflow_pin ci TECTONIC_VERSION)
+          cd_version=$(workflow_pin cd TECTONIC_VERSION)
+          image_version=$(dockerfile_pin TECTONIC_VERSION)
+          ci_sha=$(workflow_pin ci TECTONIC_SHA256)
+          cd_sha=$(workflow_pin cd TECTONIC_SHA256)
+          image_sha=$(dockerfile_pin TECTONIC_SHA256_AMD64)
+
+          echo "version: ci=$ci_version cd=$cd_version image=$image_version"
+          echo "sha256:  ci=$ci_sha cd=$cd_sha image=$image_sha"
+
+          test -n "$ci_version" && test -n "$ci_sha" || { echo "::error::could not read the pins from ci.yml"; exit 1; }
+
+          if [ "$ci_version" != "$cd_version" ] || [ "$ci_version" != "$image_version" ]; then
+            echo "::error::TECTONIC_VERSION differs between ci.yml, cd.yml and resume/Dockerfile"
+            exit 1
+          fi
+          if [ "$ci_sha" != "$cd_sha" ] || [ "$ci_sha" != "$image_sha" ]; then
+            echo "::error::the x86_64 Tectonic checksum differs between the workflows and resume/Dockerfile"
+            exit 1
+          fi
+
+      # Proves the image still builds (its own checksum check runs inside) and
+      # that the engine in it actually compiles both CVs.
+      - name: Build the builder image
+        run: docker build --tag resume-builder resume
+
+      - name: Compile both CVs with it
+        run: |
+          mkdir -p out
+          docker run --rm --user "$(id -u):$(id -g)" \
+            --volume "$PWD/resume:/work:ro" --volume "$PWD/out:/out" \
+            --workdir /work resume-builder -X compile pl.tex --outdir /out
+          docker run --rm --user "$(id -u):$(id -g)" \
+            --volume "$PWD/resume:/work:ro" --volume "$PWD/out:/out" \
+            --workdir /work resume-builder -X compile en.tex --outdir /out
+
+          for pdf in out/pl.pdf out/en.pdf; do
+            test -s "$pdf" || { echo "::error::$pdf was not produced"; exit 1; }
+            head -c 5 "$pdf" | grep -q '%PDF-' || { echo "::error::$pdf is not a PDF"; exit 1; }
+            echo "$pdf: $(wc -c < "$pdf") bytes"
+          done

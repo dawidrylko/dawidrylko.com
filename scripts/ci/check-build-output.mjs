@@ -13,6 +13,8 @@
  *   - sitemap (index + first shard)
  *   - PWA manifest (valid JSON with name, colors and at least one icon)
  *   - Open Graph / Twitter Card meta on rendered HTML
+ *   - the CV PDFs compiled from resume/*.tex (gitignored, so their absence
+ *     means the LaTeX build silently did not run)
  *
  * Runtime page audits (Lighthouse) and link integrity (linkinator) live in
  * separate CI jobs; this file deliberately stays at the file-contract layer.
@@ -20,7 +22,7 @@
  * Exits non-zero on the first contract that fails, listing every problem found.
  */
 
-import { readFile, access } from 'node:fs/promises';
+import { readFile, access, stat } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve, join } from 'node:path';
 
@@ -129,6 +131,33 @@ async function checkFontPreload() {
   }
 }
 
+/**
+ * The CV PDFs are gitignored build output compiled from resume/*.tex, so unlike
+ * committed assets nothing else would notice them going missing. A skipped or
+ * half-finished LaTeX build would publish a /bio/ page whose download links
+ * 404. The size floor catches a truncated or stubbed file that still has a PDF
+ * header.
+ */
+async function checkResumePdfs() {
+  const MIN_BYTES = 10_000;
+  for (const variant of ['pl', 'en']) {
+    const file = `resume-${variant}.pdf`;
+    if (!(await exists(file))) {
+      fail(`missing CV artifact: dist/${file} (did the resume LaTeX build run?)`);
+      continue;
+    }
+    const { size } = await stat(join(OUTPUT_DIR, file));
+    if (size < MIN_BYTES) {
+      fail(`dist/${file} is only ${size} bytes; expected a real PDF of at least ${MIN_BYTES}`);
+      continue;
+    }
+    const header = (await readFile(join(OUTPUT_DIR, file))).subarray(0, 5).toString('latin1');
+    if (header !== '%PDF-') {
+      fail(`dist/${file} does not start with a PDF header (got ${JSON.stringify(header)})`);
+    }
+  }
+}
+
 async function main() {
   if (!(await exists('.'))) {
     console.error(`Build output not found at ${OUTPUT_DIR}. Run "pnpm build" first.`);
@@ -140,6 +169,7 @@ async function main() {
   await checkManifest();
   await checkSocialMeta();
   await checkFontPreload();
+  await checkResumePdfs();
 
   console.log('Build-output contract (dist/)\n');
   if (problems.length > 0) {
@@ -147,7 +177,7 @@ async function main() {
     console.error(`\nBuild-output contract failed: ${problems.length} problem(s).`);
     process.exit(1);
   }
-  console.log('  ✓ core pages, RSS, sitemap, manifest, social meta and body-font preload all present.');
+  console.log('  ✓ core pages, RSS, sitemap, manifest, social meta, body-font preload and CV PDFs all present.');
 }
 
 main().catch(err => {
