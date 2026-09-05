@@ -1,6 +1,6 @@
 # dawidrylko.com
 
-Instrukcje dla Claude Code. Blog i portfolio Dawida Ryłko: Astro 6 + React 19 (wyspy) + TypeScript + MDX, hostowane na GitHub Pages.
+Instrukcje dla Claude Code. Blog i portfolio Dawida Ryłko: Astro 7 + React 19 (wyspy) + TypeScript + MDX, hostowane na GitHub Pages.
 
 **Zakres pracy:** narzędzia i kod wspierający bloga — komponenty, layouty, strony, konfiguracja Astro, skrypty pomocnicze (`scripts/`) i CI/CD. Treść postów w `content/pl/` pisze autor ręcznie; nie twórz ani nie edytuj postów blogowych.
 
@@ -31,7 +31,7 @@ Przed zatwierdzeniem zmian uruchom `pnpm type:check`, `pnpm lint:check`, `pnpm l
 
 ## Stos i struktura
 
-- **Stack:** Astro 6 (`@astrojs/mdx`, `@astrojs/react`, `@astrojs/sitemap`, `@astrojs/rss`), React 19 jako wyspy, pnpm, Node v24 (`.nvmrc`).
+- **Stack:** Astro 7 (`@astrojs/mdx`, `@astrojs/react`, `@astrojs/sitemap`, `@astrojs/rss`), React 19 jako wyspy, pnpm, Node v24 (`.nvmrc`).
 - **Treść:** posty MDX w `content/pl/`, ładowane przez Content Collection (`src/content.config.ts`, schemat **zod**).
 - **Build:** statyczny, wyjście w `dist/` (publicDir: `static/`).
 

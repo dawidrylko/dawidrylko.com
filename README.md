@@ -10,11 +10,11 @@ and **MDX**, and deployed to **GitHub Pages**.
 
 ## 🧱 Tech stack
 
-- **[Astro 6](https://astro.build)** — static site generator (MDX, RSS, sitemap integrations)
-- **[React 19](https://react.dev)** — interactive islands, hydrated on demand
-- **TypeScript** + **MDX** content collections (Zod-validated frontmatter)
-- **[KaTeX](https://katex.org)** (math), **[Shiki](https://shiki.style)** (code), **[Mermaid](https://mermaid.js.org)** (diagrams)
-- **pnpm** workspaces, **Node** pinned via [`.nvmrc`](./.nvmrc)
+- [Astro 7](https://astro.build) - static site generator (MDX, RSS, sitemap integrations)
+- [React 19](https://react.dev) - interactive islands, hydrated on demand
+- TypeScript + MDX content collections (Zod-validated frontmatter)
+- [KaTeX](https://katex.org) (math), [Shiki](https://shiki.style) (code), [Mermaid](https://mermaid.js.org) (diagrams)
+- pnpm pinned via `packageManager`, Node via [`.nvmrc`](./.nvmrc)
 
 ## 🚀 Getting started
 
