@@ -1,102 +1,99 @@
 # dawidrylko.com
 
-Instrukcje dla Claude Code. Blog i portfolio Dawida Ryłko: Astro 6 + React 19 (wyspy) + TypeScript + MDX, hostowane na GitHub Pages.
+Claude Code instructions. Blog and portfolio of Dawid Ryłko: Astro 7 + React 19 islands + TypeScript + MDX, hosted on GitHub Pages.
 
-**Zakres pracy:** narzędzia i kod wspierający bloga — komponenty, layouty, strony, konfiguracja Astro, skrypty pomocnicze (`scripts/`) i CI/CD. Treść postów w `content/pl/` pisze autor ręcznie; nie twórz ani nie edytuj postów blogowych.
+**Answer Dawid in Polish.** This file is written in English to save context tokens, not to set the language of the conversation. Everything written for a human, chat included, follows the `/d-no-slop` canon: short sentences, no em or en dashes, straight quotes only, three dots instead of a one-character ellipsis, no decorative bold, none of its banned phrases.
 
-## Polecenia
+**Scope:** tooling and code that supports the blog, meaning components, layouts, pages, Astro config, helper scripts (`scripts/`) and CI/CD. The author writes the posts in `content/pl/` by hand. Never create or edit a blog post.
+
+## Commands
 
 ```bash
-pnpm dev            # serwer deweloperski (localhost:4321); alias: pnpm develop
-pnpm build          # produkcyjny build → dist/
-pnpm preview        # podgląd zbudowanego dist/
-pnpm clean          # czyści dist/ i .astro/
-pnpm type:check     # astro check (typy + diagnostyka .astro)
-pnpm format:write   # Prettier — formatowanie
-pnpm format:check   # Prettier — sprawdzenie
-pnpm lint:fix       # ESLint — napraw
-pnpm lint:check     # ESLint — sprawdź
-pnpm lint:css       # Stylelint — sprawdź CSS
-pnpm lint:css:fix   # Stylelint — napraw CSS
-pnpm a11y:contrast  # audyt kontrastu design-tokenów (WCAG AA)
-pnpm test           # testy jednostkowe (Vitest, jednorazowo)
-pnpm test:watch     # Vitest w trybie watch
-pnpm test:coverage  # Vitest + pokrycie (v8)
-pnpm test:e2e       # testy e2e + a11y (Playwright) na zbudowanym dist/
+pnpm dev            # dev server (localhost:4321); aliases: develop, start
+pnpm build          # CV PDFs, then the production site -> dist/
+pnpm build:resume   # rebuild only the CV PDFs from resume/*.tex
+pnpm preview        # preview the built dist/
+pnpm clean          # remove dist/, .astro/ and the generated CV PDFs
+pnpm type:check     # astro check (types + .astro diagnostics)
+pnpm format:check   # Prettier check (format:write to fix)
+pnpm lint:check     # ESLint (lint:fix to fix)
+pnpm lint:css       # Stylelint (lint:css:fix to fix)
+pnpm a11y:contrast  # design-token contrast audit (WCAG AA)
+pnpm test           # unit tests (Vitest); also test:watch, test:coverage
+pnpm test:e2e       # e2e + a11y (Playwright) against the built dist/
 ```
 
-Przed zatwierdzeniem zmian uruchom `pnpm type:check`, `pnpm lint:check`, `pnpm lint:css`, `pnpm format:check` i `pnpm test`.
+Run `pnpm type:check`, `pnpm lint:check`, `pnpm lint:css`, `pnpm format:check` and `pnpm test` before committing.
 
-**Testy:** projekt ma framework testowy. **Vitest** pokrywa logikę bezframeworkową w `src/lib` oraz skrypty CI w `scripts/` (pliki testów obok kodu: `*.test.ts` w `src`, `*.test.mjs` w `scripts`; wirtualny moduł `astro:content` jest aliasowany do `test/mocks/`). **Playwright** (`e2e/*.spec.ts`) uruchamia testy e2e i skan dostępności `@axe-core/playwright` na podglądzie `dist/` (`astro preview`); wymaga przeglądarki `pnpm exec playwright install chromium`. Dodając lub zmieniając czystą logikę w `src/lib`, dopisz testy jednostkowe.
+**Tests.** Vitest covers framework-free logic in `src/lib` and the CI scripts in `scripts/`. Test files sit next to the code: `*.test.ts` in `src`, `*.test.mjs` in `scripts`; the virtual `astro:content` module is aliased to `test/mocks/`. Playwright (`e2e/*.spec.ts`) runs e2e plus an `@axe-core/playwright` accessibility scan against the `dist/` preview (`astro preview`), and needs `pnpm exec playwright install chromium`. Add unit tests whenever you add or change pure logic in `src/lib`.
 
-## Stos i struktura
+## Stack and layout
 
-- **Stack:** Astro 6 (`@astrojs/mdx`, `@astrojs/react`, `@astrojs/sitemap`, `@astrojs/rss`), React 19 jako wyspy, pnpm, Node v24 (`.nvmrc`).
-- **Treść:** posty MDX w `content/pl/`, ładowane przez Content Collection (`src/content.config.ts`, schemat **zod**).
-- **Build:** statyczny, wyjście w `dist/` (publicDir: `static/`).
+Astro 7 (`@astrojs/mdx`, `@astrojs/react`, `@astrojs/sitemap`, `@astrojs/rss`), React 19 as islands, pnpm, Node v24 (`.nvmrc`). Content is MDX in `content/pl/`, loaded through a Content Collection (`src/content.config.ts`, zod schema). The build is static, output in `dist/`, with `publicDir: static/`.
 
 ```
-src/components/    # .astro (Seo, Menu, Breadcrumbs, Bio, Table, JsonLd, ExternalLink, Figure, Faq, HowTo) + wyspy React .tsx (Mermaid)
-src/layouts/       # PageLayout.astro (chrome: head/Seo, header, breadcrumbs, bio, footer)
-src/pages/         # index, blog, bio, contact, setup, metadata, files, 404, [...slug].astro, rss.xml.ts
-src/data/          # site-metadata.ts, structured-data.ts, gtag.ts
-src/lib/           # excerpt.ts, inline-markdown.ts, blog.ts, date.ts, page-metadata.ts (+ *.test.ts)
-src/types.ts       # współdzielone typy (PageMetadata, NavLink)
-e2e/               # testy Playwright (smoke, search, a11y); test/mocks/ — stuby dla Vitest
-src/integrations/  # webmanifest.ts (generuje manifest + ikony przez sharp w astro:build:done)
-src/scripts/       # web-vitals.ts (klienckie raportowanie do GA4) — NIE mylić z tooling /scripts
-src/assets/        # obrazy przetwarzane przez astro:assets
+src/components/    # .astro components + React islands (.tsx)
+src/layouts/       # PageLayout.astro (head/Seo, header, breadcrumbs, bio, footer)
+src/pages/         # routes, including [...slug].astro, rss.xml.ts, sitemap.xml.ts, og/, tags/
+src/lib/           # framework-free logic, every module with its *.test.ts next to it
+src/data/          # site-metadata.ts, structured-data.ts, gtag.ts, capabilities.ts
+src/integrations/  # webmanifest.ts (manifest + icons via sharp on astro:build:done)
+src/scripts/       # web-vitals.ts, client side; NOT the tooling in /scripts
+src/demo/          # memoization-demo.tsx, an island imported by a single post
+src/assets/        # images processed by astro:assets
 src/styles/        # main.css (design tokens), normalize.css
-src/demo/          # memoization-demo.tsx — interaktywna wyspa importowana w jednym poście
-src/content.config.ts  # kolekcja `posts` + schemat zod frontmatter
-content/pl/        # posty blogowe MDX (część postów ma własny chart-source/ — jednorazowe narzędzia)
-static/            # zasoby kopiowane 1:1 (CNAME, robots.txt, /files: prezentacje PDF, CV)
-scripts/           # tooling (zero zależności): ci/ (kontrakty na dist/), a11y/, notify/, presentations/
+src/types.ts       # shared types (PageMetadata, NavLink)
+content/pl/        # MDX posts (some carry their own chart-source/, one-off tooling)
+e2e/               # Playwright e2e + axe-core a11y specs
+resume/            # LaTeX sources for the CV published as /resume-{pl,en}.pdf
+static/            # copied verbatim (CNAME, robots.txt, /files: PDF talks, CV)
+scripts/           # zero-dep tooling: ci/ (dist/ contracts), a11y/, notify/, presentations/, resume/
 .github/           # workflows (ci, cd, pr-meta), ISSUE_TEMPLATE/, pull_request_template.md, dependabot
 ```
 
-## Model treści (kontekst przy pracy nad kodem)
+## Content model (context for code work)
 
-Potrzebne przy modyfikacji `[...slug].astro`, `content.config.ts`, RSS (`rss.xml.ts`) lub sitemap — nie po to, by pisać posty:
+Needed when touching `[...slug].astro`, `content.config.ts`, `rss.xml.ts` or the sitemap, not for writing posts.
 
-- Post to katalog `content/pl/YYYY-MM-DD--slug-po-polsku/index.mdx` (część katalogów ma też strony wtórne, np. `.../ng-help.md`).
-- Slug URL powstaje w `content.config.ts` (`generateId`: usunięcie rozszerzenia, `/index`, oraz prefiksu daty `replace(/.*--/, '')`): `2025-12-26--od-tablicy-do-mapy` → `/od-tablicy-do-mapy/`. **URL-e muszą zostać zachowane** (SEO) — pilnuje tego `scripts/ci/check-astro-url-parity.mjs`.
-- Frontmatter: `title`, `description`, `date`, `tags`, opcjonalnie `updatedDate` (mapuje się na `dateModified` / `article:modified_time`), `featuredImg` + `featuredImgAlt` (gdy jest `featuredImg`, `featuredImgAlt` jest wymagany — reguła w schemacie zod).
-- Renderowanie MDX: **Shiki** (kod, motyw jasny/ciemny), **KaTeX** (matematyka, `remark-math` + `rehype-katex`), **Mermaid** (diagram jako wyspa React `client:*`).
+- A post is a directory `content/pl/YYYY-MM-DD--slug-po-polsku/index.mdx`. Some directories carry secondary pages too, for example `.../ng-help.md`.
+- The URL slug is built in `content.config.ts`: `generateId` strips the extension, `/index` and the date prefix (`replace(/.*--/, '')`), so `2025-12-26--od-tablicy-do-mapy` becomes `/od-tablicy-do-mapy/`. **Post URLs must be preserved** for SEO, and `scripts/ci/check-astro-url-parity.mjs` enforces that.
+- Frontmatter: `title`, `description`, `date`, `tags`, optionally `updatedDate` (maps to `dateModified` and `article:modified_time`), plus `featuredImg` and `featuredImgAlt`. The zod schema requires the alt text whenever the image is present.
+- MDX rendering: Shiki for code (light and dark theme), KaTeX for math (`remark-math` + `rehype-katex`), Mermaid as a React island (`client:*`).
 
-## Konwencje kodu
+## Code conventions
 
-- **Komponenty:** statyczne pisz jako `.astro`; React (`.tsx`) tylko dla realnej interaktywności, jawnie hydratowany dyrektywą `client:*` (np. `client:load`, `client:visible`). Wyspy React: typ `FC`, nazwy PascalCase, importy hooków imienne.
-- **Pliki:** komponenty `.astro` PascalCase; skrypty/dane kebab-case. **Stałe:** UPPER_SNAKE_CASE.
-- **Style:** czyste CSS z custom properties (design tokens), bez preprocesorów; lintowane przez **Stylelint** (`stylelint-config-standard`, `normalize.css` wykluczony). Montserrat (nagłówki), Merriweather (tekst). Dark mode automatyczny przez `prefers-color-scheme` (bez przełącznika JS). **Style trzymaj globalnie w `src/styles/main.css`** (ładowany raz w `PageLayout.astro`) — **nie** używaj scoped bloków `<style>` w `.astro` (uciekłyby Stylelintowi, który lintuje tylko `src/**/*.css`). Pilnuje tego `scripts/ci/check-no-scoped-styles.mjs`.
-- **Mobile-first:** reguły bazowe pisz pod najmniejszy ekran; większe widoki dodawaj wyłącznie przez `min-width` media queries (skala `sm = 30rem`, `md = 48rem` — patrz komentarz w `main.css`). Nie używaj `max-width` do cofania stylów desktopowych. Układy mają się zawijać (`flex-wrap`), a nie obcinać/skrolować w poziomie na wąskich ekranach (wyjątek: okruszki — pojedyncza linia ze scrollem `overflow-x: auto`, by głęboka ścieżka nie stackowała się w wiele rzędów). Separatory inline (np. RSS/tagi, meta wpisu) trzymaj spójne z menu — kropka `•` (`.separator` lub `li::after`), nie `|`. Wyjątek: okruszki (breadcrumbs) używają strzałki `›` jako separatora hierarchii.
-- **Dane strukturalne:** JSON-LD przez `JsonLd.astro` (zwykłe obiekty, bez schema-dts).
-- **Prettier:** single quotes, średniki, 2 spacje, `printWidth: 120`, `arrowParens: avoid`, plugin `prettier-plugin-astro`.
-- **Komentarze:** tylko po angielsku i tylko te realnie wartościowe — wyjaśniaj „dlaczego”, a nie to, co kod już mówi sam.
+- **Components:** write static ones as `.astro`. Use React (`.tsx`) only for real interactivity, hydrated explicitly with a `client:*` directive such as `client:load` or `client:visible`. React islands use the `FC` type, PascalCase names and named hook imports.
+- **Naming:** `.astro` components PascalCase, scripts and data kebab-case, constants UPPER_SNAKE_CASE.
+- **Styles:** plain CSS with custom properties (design tokens), no preprocessors, linted by Stylelint (`stylelint-config-standard`, `normalize.css` excluded). Montserrat for headings, Merriweather for text. Dark mode is automatic through `prefers-color-scheme`, with no JS toggle. **Keep styles global in `src/styles/main.css`**, loaded once in `PageLayout.astro`. Never use scoped `<style>` blocks in `.astro`: they escape Stylelint, which only lints `src/**/*.css`. `scripts/ci/check-no-scoped-styles.mjs` enforces this.
+- **Mobile-first:** write base rules for the smallest screen and add larger views only through `min-width` media queries (scale `sm = 30rem`, `md = 48rem`, see the comment in `main.css`). Never use `max-width` to undo desktop styles. Layouts wrap (`flex-wrap`) instead of clipping or scrolling horizontally on narrow screens. Breadcrumbs are the one exception: a single line with `overflow-x: auto`, so a deep path does not stack into several rows.
+- **Separators:** inline separators (RSS, tags, post meta) stay consistent with the menu, a bullet `•` through `.separator` or `li::after`, never `|`. Breadcrumbs are again the exception and use `›` for hierarchy.
+- **Structured data:** JSON-LD through `JsonLd.astro`, plain objects, no schema-dts.
+- **Prettier:** single quotes, semicolons, 2 spaces, `printWidth: 120`, `arrowParens: avoid`, plugin `prettier-plugin-astro`.
+- **Comments:** English only, and only where they earn their place. Explain why, not what the code already says.
 
-## SEO i metadane (limity Ahrefs)
+## SEO and metadata (Ahrefs limits)
 
-Audyt Ahrefs pilnuje długości i poprawności metadanych. Reguły poniżej dotyczą stron, które kontrolujemy (kod w repo) — pilnują ich testy jednostkowe (`src/lib/seo.test.ts`) i checki na zbudowanym `dist/`.
+The Ahrefs audit checks metadata length and correctness. These rules cover the pages we control from this repo, and unit tests (`src/lib/seo.test.ts`) plus checks against the built `dist/` enforce them.
 
-- **Limity długości** (`src/lib/seo.ts`): `<title>` ≤ **60** znaków, `<meta name="description">` ≤ **160**. Zmieniając tytuł/opis strony statycznej (`src/pages/*`) lub fallback w `site-metadata.ts`, mieść się w limitach. Sprawdza je `scripts/ci/check-seo-lengths.mjs` (twardo dla stron własnych: `/`, `/blog/*`, `/bio/`, `/contact/`, `/setup/`, `/metadata/`, `/files/`; posty z `content/pl` tylko ostrzega — ich tytuł/opis pochodzą z frontmatteru autora).
-- **Tytuł strony głównej** budowany jest z `SITE_METADATA.title` + `titleTagline` (krótki, ≤60 z marką). `author.jobTitle` (pełny opis roli) jest dłuższy i służy tylko do Bio + JSON-LD — nie używaj go w `<title>`.
-- **Fallback opisu** (`SITE_METADATA.description`) musi być ≤160 i **bez** easter-egga „68 97 119…”. Sygnatura żyje na `/metadata/` jako wiersz „Signature”, ale jest **wstrzykiwana po stronie klienta** (skrypt `is:inline` w `metadata.astro`) — nigdy nie trafia do surowego HTML widzianego przez crawlery. Pilnuje tego `scripts/ci/check-crawl-hygiene.mjs`.
-- **Canonical:** canonical odpada tylko wtedy, gdy URL nie jest realnym celem. Strony `noIndex` (`noindex, nofollow`, np. 404) **nie** emitują `<link rel="canonical">` ani `hreflang` (wskazywałyby na URL non-200). Strony `noIndexFollow` (`noindex, follow`, np. cienkie archiwa tagów) to zwykłe strony 200 i **zachowują** self-canonical oraz `hreflang`. Pilnują tego `scripts/ci/check-seo-meta.mjs` i `check-lang-attributes.mjs` (smoke test pokrywa część dotyczącą 404).
-- **Archiwa tagów:** tag z mniej niż `TAG_INDEX_MIN_POSTS` wpisami (`src/lib/tags.ts`, dziś 5) dostaje `noindex, follow` — listing bez własnej treści nie wnosi nic do indeksu, ale ma dalej przekazywać linki wewnętrzne. Próg jest zduplikowany w `scripts/ci/robots-directives.mjs`, bo `scripts/` nie ma zależności; zmieniając go, zmień oba miejsca.
-- **Budżet obrazów:** każdy obraz w `dist/` ≤ **1 MB** (`scripts/ci/check-image-budget.mjs`). Istniejące, cięższe obrazy postów są tymczasowo na liście wyjątków (`image-budget-baseline.json`); **nowe** ponadwymiarowe obrazy blokują CI — optymalizuj/zmniejszaj źródło przed dodaniem. Po świadomej optymalizacji odśwież baseline: `node scripts/ci/check-image-budget.mjs --update-baseline`.
+- **Length limits** (`src/lib/seo.ts`): `<title>` up to **60** characters, `<meta name="description">` up to **160**. Stay inside them when changing the title or description of a static page (`src/pages/*`) or the fallback in `site-metadata.ts`. `scripts/ci/check-seo-lengths.mjs` is hard for our own pages (`/`, `/blog/*`, `/bio/`, `/contact/`, `/setup/`, `/metadata/`, `/files/`) and only warns for `content/pl` posts, whose title and description come from the author's frontmatter.
+- **Homepage title** is built from `SITE_METADATA.title` plus `titleTagline`, short enough to stay under 60 with the brand. `author.jobTitle` is the long role description and belongs to Bio and JSON-LD only. Never put it in `<title>`.
+- **Fallback description** (`SITE_METADATA.description`) must be at most 160 characters and must not carry the `68 97 119` easter egg. That signature lives on `/metadata/` as a "Signature" row, injected client side by an `is:inline` script in `metadata.astro`, so it never reaches the raw HTML a crawler sees. `scripts/ci/check-crawl-hygiene.mjs` enforces this.
+- **Canonical:** a canonical is dropped only when the URL is not a real target. `noIndex` pages (`noindex, nofollow`, for example 404) emit neither `<link rel="canonical">` nor `hreflang`, because both would point at a non-200 URL. `noIndexFollow` pages (`noindex, follow`, for example thin tag archives) are ordinary 200 pages and keep their self-canonical and `hreflang`. `scripts/ci/check-seo-meta.mjs` and `check-lang-attributes.mjs` enforce this, and the smoke test covers the 404 part.
+- **Tag archives:** a tag with fewer than `TAG_INDEX_MIN_POSTS` posts (`src/lib/tags.ts`, currently 5) gets `noindex, follow`. A listing with no content of its own adds nothing to the index, but it should still pass internal links along. The threshold is duplicated in `scripts/ci/robots-directives.mjs`, because `scripts/` has no dependencies. Change both places.
+- **Image budget:** every image in `dist/` is at most **1 MB** (`scripts/ci/check-image-budget.mjs`). Existing heavier post images sit on a temporary exception list (`image-budget-baseline.json`), but **new** oversized images fail CI, so optimise the source before adding it. After a deliberate optimisation refresh the baseline with `node scripts/ci/check-image-budget.mjs --update-baseline`.
 
-## Czego nie zmieniać
+## Do not change
 
-- **Nie zmieniaj `lang="en"`** w `PageLayout.astro` / `Seo.astro` mimo polskich treści — to celowa decyzja.
-- **Zachowaj URL-e postów** (slug logic w `content.config.ts`) i przekierowanie `/resume` → `/bio/` (`astro.config.mjs`).
-- **Główna gałąź to `master`** (nie `main`); deploy na GitHub Pages następuje po pushu do `master`.
+- **Keep the per-page `lang` split** defined in `src/lib/i18n.ts`. The English shell (`/`, `/bio/`, `/contact/`, `/setup/`, `/metadata/`, `/files/`, 404) stays `en`; the blog, individual posts and `/tags/` opt into `CONTENT_LANG` (`pl`). Never hardcode one language in `PageLayout.astro` or `Seo.astro`. `scripts/ci/check-lang-attributes.mjs` locks the split together with `og:locale` and hreflang.
+- **Keep post URLs** (slug logic in `content.config.ts`) and the `/resume` to `/bio/` redirect (`astro.config.mjs`).
+- **The main branch is `master`**, not `main`. A push to `master` deploys to GitHub Pages.
 
 ## Pre-commit (Husky)
 
-Hook uruchamia kolejno: `lint-staged` (Prettier + ESLint na staged) → `pnpm type:check` (astro check) → `scripts/presentations/validate-and-fix-metadata.sh`. Dodając PDF do `static/files/presentations/`, dopisz wpis w `metadata.csv` — w przeciwnym razie hook zablokuje commit (wymaga `exiftool`).
+The hook runs `lint-staged` (Prettier + ESLint on staged files), then `pnpm type:check` (astro check), then `scripts/presentations/validate-and-fix-metadata.sh`. When you add a PDF to `static/files/presentations/`, add its row to `metadata.csv` or the hook blocks the commit. It needs `exiftool`.
 
-## Git i pull requesty
+## Git and pull requests
 
-- Pisz commity oraz tytuły i opisy PR **po angielsku**, w formacie **Conventional Commits** (`docs:`, `feat:`, `fix:`, …). Tytuł PR (egzekwowany przez `pr-meta.yml`) musi trzymać się tej specyfikacji, a opis PR — wypełnić szablon `.github/pull_request_template.md` (sprawdza `scripts/ci/check-pr-template.mjs`). Zgłoszenia otwieraj formularzami z `.github/ISSUE_TEMPLATE/`.
-- **Nie dodawaj atrybucji AI** — żadnych `Co-Authored-By`, `Claude-Session` ani stopek typu „Generated with Claude Code” w commitach i opisach PR. Pilnuje tego CI (`scripts/ci/check-no-ai-attribution.mjs`).
-- **Po zmianie zakresu pilnuj zgodności opisu z treścią** — gdy po rebase, squashu lub odrzuceniu commitów zmieni się faktyczna zawartość gałęzi, zaktualizuj tytuł i opis commita oraz PR-a, tak aby opisywały tylko to, co realnie zostaje w diffie. Nie zostawiaj opisu sprzed zmiany zakresu.
+- Write commits and PR titles **in English**, as Conventional Commits (`docs:`, `feat:`, `fix:` and the rest of the spec). `pr-meta.yml` enforces the title, and the PR body must fill in `.github/pull_request_template.md`, checked by `scripts/ci/check-pr-template.mjs`. Open issues through the forms in `.github/ISSUE_TEMPLATE/`.
+- **No AI attribution.** No `Co-Authored-By`, no `Claude-Session`, no "Generated with Claude Code" footers in commits or PR descriptions. `scripts/ci/check-no-ai-attribution.mjs` enforces it.
+- **Keep the description matching the diff.** When a rebase, a squash or a dropped commit changes what the branch actually contains, update the commit and PR title and description so they describe only what really remains.
