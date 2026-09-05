@@ -30,9 +30,10 @@ pnpm preview        # preview the production build locally
 | Command              | Description                                            |
 | -------------------- | ------------------------------------------------------ |
 | `pnpm dev`           | Start the development server                           |
-| `pnpm build`         | Build the production site to `dist/`                   |
+| `pnpm build`         | Build the CV PDFs, then the production site to `dist/` |
+| `pnpm build:resume`  | Rebuild only the CV PDFs from `resume/*.tex`           |
 | `pnpm preview`       | Preview the built site locally                         |
-| `pnpm clean`         | Remove `dist/` and `.astro/`                           |
+| `pnpm clean`         | Remove `dist/`, `.astro/` and the generated CV PDFs    |
 | `pnpm type:check`    | TypeScript + Astro diagnostics (`astro check`)         |
 | `pnpm lint:check`    | Lint with ESLint (`lint:fix` to autofix)               |
 | `pnpm lint:css`      | Lint CSS with Stylelint (`lint:css:fix` to autofix)    |
@@ -46,9 +47,10 @@ pnpm preview        # preview the production build locally
 ```
 src/            # components, layouts, pages, lib (logic + unit tests), styles
 content/pl/     # authored MDX blog posts (Content Collection)
-static/         # files copied verbatim (CNAME, robots.txt, /files)
+static/         # files copied verbatim (CNAME, robots.txt, /files) + built CV PDFs
+resume/         # LaTeX sources for the CV published as /resume-{pl,en}.pdf
 e2e/            # Playwright end-to-end + axe-core a11y tests
-scripts/        # zero-dep tooling: ci/ (build-output gates), a11y/, notify/, presentations/
+scripts/        # zero-dep tooling: ci/ (build-output gates), a11y/, notify/, presentations/, resume/
 .github/        # workflows, issue forms, PR template, Dependabot
 ```
 

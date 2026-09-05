@@ -8,6 +8,12 @@ on:
 permissions:
   contents: read
 
+env:
+  # Pinned with its checksum: the CV build must not drift under us, and the
+  # tarball is fetched from the network on every run.
+  TECTONIC_VERSION: '0.17.0'
+  TECTONIC_SHA256: '8533d07f9ccbd7a65824b9e0459041bca34af1eb33daba48f59215593753a3b7'
+
 concurrency:
   group: 'ci-${{ github.event.pull_request.number }}'
   cancel-in-progress: true
@@ -161,6 +167,28 @@ jobs:
           key: astro-${{ runner.os }}-${{ hashFiles('src/**', 'content/**', 'astro.config.mjs', 'pnpm-lock.yaml') }}
           restore-keys: |
             astro-${{ runner.os }}-
+
+      # The CV PDFs (/resume-pl.pdf, /resume-en.pdf) are gitignored build output
+      # compiled from resume/*.tex by `pnpm build`. Tectonic is a single static
+      # binary that fetches only the LaTeX packages this document needs, so it
+      # costs seconds where a full TeX Live install costs minutes.
+      - name: Cache Tectonic packages
+        uses: actions/cache@v6
+        with:
+          path: ~/.cache/Tectonic
+          key: tectonic-${{ runner.os }}-${{ env.TECTONIC_VERSION }}-${{ hashFiles('resume/**') }}
+          restore-keys: |
+            tectonic-${{ runner.os }}-${{ env.TECTONIC_VERSION }}-
+
+      - name: Install Tectonic
+        run: |
+          url="https://github.com/tectonic-typesetting/tectonic/releases/download/tectonic%40${TECTONIC_VERSION}/tectonic-${TECTONIC_VERSION}-x86_64-unknown-linux-musl.tar.gz"
+          curl --fail --silent --show-error --location "$url" --output /tmp/tectonic.tar.gz
+          echo "${TECTONIC_SHA256}  /tmp/tectonic.tar.gz" | sha256sum --check --strict
+          mkdir -p "$HOME/.local/bin"
+          tar -xzf /tmp/tectonic.tar.gz -C "$HOME/.local/bin" tectonic
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+          "$HOME/.local/bin/tectonic" --version
 
       - name: Build
         run: pnpm run build
