@@ -5,7 +5,8 @@ export const SITE_METADATA = {
   url: 'https://dawidrylko.com',
   title: 'Dawid Ryłko',
   // Short tagline used only for the homepage <title> (siteTitle | tagline), kept
-  // under the 60-char SEO limit. The full role copy lives in author.jobTitle.
+  // under the 60-char SEO limit. Deliberately different from author.jobTitle,
+  // which is the positioning tagline behind Bio and JSON-LD Person. Keep both.
   titleTagline: 'Software Engineer | Scalable, Secure Systems',
   // Fallback meta description for pages without their own. Kept ≤160 chars and
   // free of the decimal-ASCII easter egg (that lives on the /metadata/ page, not
@@ -17,7 +18,7 @@ export const SITE_METADATA = {
   author: {
     name: 'Dawid Ryłko',
     email: 'hello@dawid.dev',
-    jobTitle: 'Software Engineer | Expert in Designing Scalable, Secure and Resilient Systems',
+    jobTitle: 'Solution Architect | Cybersecurity',
   },
   social: [
     { name: 'Digital Persona', url: 'https://dawid.dev/', follow: true },
