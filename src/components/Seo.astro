@@ -19,6 +19,7 @@ interface Props {
   modifiedTime?: string;
   tags?: string[];
   noIndex?: boolean;
+  noIndexFollow?: boolean;
   lang?: string;
 }
 
@@ -35,6 +36,7 @@ const {
   modifiedTime,
   tags,
   noIndex,
+  noIndexFollow,
   lang,
 } = Astro.props;
 
@@ -72,11 +74,19 @@ const OG_IMAGE_TYPES: Record<string, string> = {
 };
 const ogImageType = OG_IMAGE_TYPES[imageUrl.split('.').pop()?.toLowerCase() ?? ''];
 
+// Two distinct exclusions, and the difference is whether the URL is a real
+// destination. `noIndex` marks a page that is not one (404): nothing to index
+// and nothing worth following out of it. `noIndexFollow` marks a real 200 page
+// deliberately kept out of the index (a thin tag archive), which must still be
+// crawled so the posts it lists keep receiving those internal links.
+//
 // Indexable pages spell out generous snippet/preview limits so search engines
 // and LLM crawlers can surface rich excerpts and large thumbnails.
 const robots = noIndex
   ? 'noindex, nofollow'
-  : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1';
+  : noIndexFollow
+    ? 'noindex, follow'
+    : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1';
 ---
 
 <title>{metaTitle}</title>

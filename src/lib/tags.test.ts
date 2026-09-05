@@ -1,6 +1,14 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { __setEntries, type MockPost } from '../../test/mocks/astro-content';
-import { getTags, postCountLabel, tagCountLabel, describeTagPage, type TagInfo } from './tags';
+import {
+  getTags,
+  postCountLabel,
+  tagCountLabel,
+  describeTagPage,
+  isTagIndexable,
+  TAG_INDEX_MIN_POSTS,
+  type TagInfo,
+} from './tags';
 import { DESCRIPTION_MAX_LENGTH } from './seo';
 
 const post = (id: string, date: string, tags: string[]): MockPost => ({ id, data: { date: new Date(date), tags } });
@@ -59,6 +67,31 @@ describe('tagCountLabel', () => {
     expect(tagCountLabel(5)).toBe('5 tagów');
     expect(tagCountLabel(12)).toBe('12 tagów');
     expect(tagCountLabel(22)).toBe('22 tagi');
+  });
+});
+
+describe('isTagIndexable', () => {
+  it('excludes archives below the threshold and keeps the rest', () => {
+    expect(isTagIndexable(0)).toBe(false);
+    expect(isTagIndexable(1)).toBe(false);
+    expect(isTagIndexable(TAG_INDEX_MIN_POSTS - 1)).toBe(false);
+    expect(isTagIndexable(TAG_INDEX_MIN_POSTS)).toBe(true);
+    expect(isTagIndexable(TAG_INDEX_MIN_POSTS + 1)).toBe(true);
+    expect(isTagIndexable(42)).toBe(true);
+  });
+
+  it('agrees with the counts getTags reports', async () => {
+    __setEntries([
+      post('a', '2025-01-01', ['javascript', 'niszowy']),
+      post('b', '2025-02-01', ['javascript']),
+      post('c', '2025-03-01', ['javascript']),
+      post('d', '2025-04-01', ['javascript']),
+      post('e', '2025-05-01', ['javascript']),
+    ]);
+    const byTag = new Map((await getTags()).map(t => [t.tag, t]));
+
+    expect(isTagIndexable(byTag.get('javascript')!.count)).toBe(true);
+    expect(isTagIndexable(byTag.get('niszowy')!.count)).toBe(false);
   });
 });
 

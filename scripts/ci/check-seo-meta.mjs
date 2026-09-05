@@ -31,6 +31,7 @@
 import { readFile, readdir, access } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve, join, relative } from 'node:path';
+import { isDeadEndPage, tagArchiveViolation, tagHubViolation } from './robots-directives.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DIST_DIR = process.argv[2] ? resolve(process.cwd(), process.argv[2]) : resolve(__dirname, '../../dist');
@@ -141,13 +142,20 @@ function checkPage(page, html) {
   const h1Count = (html.match(/<h1[\s/>]/g) || []).length;
   if (h1Count !== 1) fail(`${page}: expected exactly one <h1>, found ${h1Count}`);
 
+  if (page === 'tags/index.html') {
+    const violation = tagHubViolation(html);
+    if (violation) fail(`${page}: ${violation}`);
+  } else if (/^tags\/[^/]+\/index\.html$/.test(page)) {
+    const violation = tagArchiveViolation(html);
+    if (violation) fail(`${page}: ${violation}`);
+  }
+
   const canonical = html.match(/<link[^>]*rel="canonical"[^>]*href="([^"]*)"/);
-  // noindex pages (e.g. the 404) must not carry a canonical at all: a self
-  // canonical would point at a non-200 URL, which SEO audits flag. Indexable
-  // pages must carry one pointing at the production origin.
-  const isNoindex = /<meta[^>]*name="robots"[^>]*content="[^"]*noindex/i.test(html);
-  if (isNoindex) {
-    if (canonical) fail(`${page}: noindex page must not emit a canonical link`);
+  // What disqualifies a canonical is the URL not being a real destination, not
+  // the noindex itself — see isDeadEndPage. Indexable pages, and pages merely
+  // kept out of the index, must both carry one pointing at the production origin.
+  if (isDeadEndPage(html)) {
+    if (canonical) fail(`${page}: noindex, nofollow page must not emit a canonical link`);
   } else {
     // Compare the parsed origin (not a substring) so a look-alike host such as
     // https://dawidrylko.com.evil.com/ cannot pass the check.

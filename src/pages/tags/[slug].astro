@@ -5,7 +5,7 @@ import JsonLd from '../../components/JsonLd.astro';
 import PostListItem from '../../components/PostListItem.astro';
 import { SITE_METADATA } from '../../data/site-metadata';
 import { createPageSchema } from '../../lib/page-metadata';
-import { getTags, postCountLabel, describeTagPage, type TagInfo } from '../../lib/tags';
+import { getTags, postCountLabel, describeTagPage, isTagIndexable, type TagInfo } from '../../lib/tags';
 import { toISODate } from '../../lib/date';
 import { CONTENT_LANG } from '../../lib/i18n';
 
@@ -56,6 +56,7 @@ const structuredData = createPageSchema({
   title={title}
   description={description}
   lang={CONTENT_LANG}
+  noIndexFollow={!isTagIndexable(tag.count)}
 >
   <JsonLd data={structuredData} />
   <header>

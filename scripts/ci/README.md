@@ -70,7 +70,7 @@ pages: every indexable page declares a supported `<html lang>` (en, pl) with an
 agreeing `og:locale`, the English shell routes (`/`, `/bio/`, `/contact/`,
 `/setup/`, `/metadata/`, `/files/`) stay `lang=en` while the blog, post and tag
 routes stay `lang=pl`, and indexable pages self-reference their language via
-`hreflang` + `x-default` (noindex pages emit none). Runs in the `build-contract`
+`hreflang` + `x-default` (only dead-end pages, i.e. `noindex, nofollow`, emit none). Runs in the `build-contract`
 job.
 
 ```bash
