@@ -32,6 +32,13 @@ export const STRUCTURED_DATA = {
       },
       {
         '@type': 'Organization',
+        name: 'Cyber Katalog',
+        url: 'https://cyberkatalog.pl/',
+        description: 'Cybersecurity-focused project run under Silesian Solutions.',
+        parentOrganization: { '@id': 'https://silesiansolutions.com/#organization' },
+      },
+      {
+        '@type': 'Organization',
         name: 'Proget',
         url: 'https://proget.pl/',
       },
