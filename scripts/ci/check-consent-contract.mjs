@@ -58,6 +58,19 @@ const DOCUMENTS = [
   { path: 'src/pages/privacy-policy.astro', lang: 'en', cookies: false },
 ];
 
+/** Hosts that serve the tag loader; compared as whole hostnames, never as substrings. */
+const TAG_HOSTS = new Set(['googletagmanager.com', 'www.googletagmanager.com']);
+
+const ABSOLUTE_URL = /https?:\/\/[^\s"'`<>\\)]+/g;
+
+const isTagHost = url => {
+  try {
+    return TAG_HOSTS.has(new URL(url).hostname);
+  } catch {
+    return false;
+  }
+};
+
 const problems = [];
 const fail = msg => problems.push(msg);
 
@@ -186,11 +199,15 @@ async function checkDist() {
     const html = await readFile(page, 'utf8');
 
     // The whole point of the gate: the loader is injected by the consent island
-    // after a decision, so it must not be reachable from the static HTML.
-    if (html.includes('googletagmanager.com')) {
-      fail(
-        `${rel}: references googletagmanager.com in the HTML. The loader must be injected only after consent, never shipped in the page.`,
-      );
+    // after a decision, so it must not be reachable from the static HTML. Hosts
+    // are compared as parsed hostnames rather than as substrings, so an
+    // unrelated URL that merely contains the string cannot mask a real one.
+    for (const url of html.match(ABSOLUTE_URL) ?? []) {
+      if (isTagHost(url)) {
+        fail(
+          `${rel}: references ${url} in the HTML. The loader must be injected only after consent, never shipped in the page.`,
+        );
+      }
     }
 
     if (html.includes("gtag('consent','default'")) {
