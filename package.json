@@ -23,6 +23,7 @@
     "lint:css:fix": "stylelint \"src/**/*.css\" --fix",
     "a11y:contrast": "node scripts/a11y/check-contrast.mjs",
     "check:structured-data": "node scripts/ci/check-seo-meta.mjs",
+    "check:consent": "node scripts/ci/check-consent-contract.mjs",
     "doctor:search-quality": "search-quality-kit doctor --config search-quality.config.ts",
     "check:search-quality": "search-quality-kit verify",
     "contract:search-quality": "search-quality-kit contract --config search-quality.config.ts --output search-quality-contract.json",

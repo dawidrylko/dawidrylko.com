@@ -4,7 +4,8 @@
  *
  * The site is bilingual at the site level, monolingual per URL: an English
  * "shell" (home, /bio/, /contact/, /setup/, /metadata/, /files/) wraps a Polish
- * content zone (/blog/, individual posts, /tags/). This check locks that split
+ * content zone (/blog/, individual posts, /tags/), with the legal documents
+ * published in both languages under their own URLs. This check locks that split
  * so the language signals can never silently drift apart:
  *
  *   - every indexable page declares a <html lang> that is one of the supported
@@ -39,7 +40,20 @@ const SUPPORTED_LANGS = Object.keys(OG_LOCALES);
 
 // Routes that make up the English shell. Everything else that is indexable is
 // the Polish content zone (blog listings, posts, tag archive).
-const ENGLISH_ROUTES = new Set(['/', '/bio/', '/contact/', '/setup/', '/metadata/', '/files/']);
+const ENGLISH_ROUTES = new Set([
+  '/',
+  '/bio/',
+  '/contact/',
+  '/setup/',
+  '/metadata/',
+  '/files/',
+  '/privacy-policy/',
+  '/cookie-policy/',
+]);
+
+// The legal documents are the one place the site says the same thing twice, so
+// each language version is a page in its own right and declares its own lang.
+const POLISH_ROUTES = new Set(['/polityka-prywatnosci/', '/polityka-cookies/']);
 
 const problems = [];
 const fail = msg => problems.push(msg);
@@ -79,6 +93,7 @@ function toPathname(rel) {
 /** Expected language for a route, or null when the route is not classified. */
 function expectedLang(pathname, isArticle) {
   if (ENGLISH_ROUTES.has(pathname)) return 'en';
+  if (POLISH_ROUTES.has(pathname)) return 'pl';
   if (pathname === '/blog/' || /^\/blog\/\d+\/$/.test(pathname)) return 'pl';
   if (pathname.startsWith('/tags/')) return 'pl';
   if (isArticle) return 'pl';

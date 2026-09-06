@@ -34,7 +34,20 @@ const DESCRIPTION_MAX_LENGTH = 160;
 // the tag index and each archive (titles/descriptions are app-generated from a
 // short tag label). Everything else (top-level post slugs, 404) is author
 // content and only warned about.
-const OWNED_SEGMENTS = new Set(['', 'bio', 'contact', 'setup', 'metadata', 'files', 'blog', 'tags']);
+const OWNED_SEGMENTS = new Set([
+  '',
+  'bio',
+  'contact',
+  'setup',
+  'metadata',
+  'files',
+  'blog',
+  'tags',
+  'privacy-policy',
+  'cookie-policy',
+  'polityka-prywatnosci',
+  'polityka-cookies',
+]);
 
 const problems = [];
 const warnings = [];

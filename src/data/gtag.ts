@@ -5,7 +5,10 @@ export const GTAG = 'G-1SKESWY49E';
 
 declare global {
   interface Window {
-    gtag?: (command: 'event', eventName: string, params: Record<string, unknown>) => void;
+    // Widened beyond 'event': the consent gate issues 'consent', 'js' and
+    // 'config' commands through the same stub.
+    gtag?: (...args: unknown[]) => void;
+    dataLayer?: unknown[];
   }
 }
 

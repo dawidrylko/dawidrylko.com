@@ -1,0 +1,176 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import JsonLd from '../components/JsonLd.astro';
+import ExternalLink from '../components/ExternalLink.astro';
+import { GTAG } from '../data/gtag';
+import { createPageSchema } from '../lib/page-metadata';
+import type { PageMetadata } from '../types';
+
+const PAGE_METADATA: PageMetadata = {
+  title: 'Cookie policy',
+  description:
+    'Which cookies dawidrylko.com stores, what each one is for, how long it lasts, and how to change or withdraw your consent at any time.',
+  keywords: ['cookie policy', 'cookies', 'consent', 'dawidrylko.com'],
+};
+
+const structuredData = createPageSchema({
+  pathname: Astro.url.pathname,
+  title: PAGE_METADATA.title,
+  description: PAGE_METADATA.description,
+  keywords: PAGE_METADATA.keywords,
+});
+
+// GA4 builds the session cookie name from the measurement ID with the G-
+// prefix stripped. Derived rather than typed out so the document cannot drift
+// from the ID the site actually ships.
+const sessionCookie = `_ga_${GTAG.replace(/^G-/, '')}`;
+---
+
+<PageLayout breadcrumbTitle={PAGE_METADATA.title} title={PAGE_METADATA.title} description={PAGE_METADATA.description}>
+  <JsonLd data={structuredData} />
+  <header>
+    <h1>{PAGE_METADATA.title}</h1>
+  </header>
+  <section>
+    <p>
+      This document lists the cookies and similar technologies used on dawidrylko.com, what each one is for and how long
+      it lasts. How personal data is processed is covered by the <a href="/privacy-policy/">Privacy policy</a>. Polish
+      version of this document: <a href="/polityka-cookies/">Polityka cookies</a>.
+    </p>
+  </section>
+  <section>
+    <h2>The basic rule</h2>
+    <p>
+      Until you consent, the site stores nothing on your device beyond the record of your own decision. The Google
+      Analytics script is not loaded at that point, so your browser sends Google no request at all.
+    </p>
+    <p>
+      Consent is required by art. 399(1) of the Polish Prawo komunikacji elektronicznej of 12 July 2024. Polish law
+      grants analytics no exemption. Nothing is pre-selected: accepting and refusing both sit on the first layer of the
+      banner, carry the same visual weight and cost the same single click.
+    </p>
+  </section>
+  <section>
+    <h2>Local storage needed to run the site</h2>
+    <div class="table-scroll" tabindex="0">
+      <table aria-label="Local storage needed to run the site">
+        <thead>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Type</th>
+            <th scope="col">Purpose</th>
+            <th scope="col">Retention</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>cookieConsent</code></td>
+            <td>localStorage</td>
+            <td>Remembers your consent decision</td>
+            <td>13 months from the decision</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p>
+      This entry is written whether you accept or refuse. Without it the site would have to ask on every visit. It
+      contains nothing that identifies you.
+    </p>
+  </section>
+  <section>
+    <h2>Analytics cookies</h2>
+    <p>Written only after you consent. They serve traffic measurement in Google Analytics 4.</p>
+    <div class="table-scroll" tabindex="0">
+      <table aria-label="Analytics cookies and their retention">
+        <thead>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Purpose</th>
+            <th scope="col">Retention</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>_ga</code></td>
+            <td>Distinguishes unique visitors</td>
+            <td>13 months</td>
+          </tr>
+          <tr>
+            <td><code>{sessionCookie}</code></td>
+            <td>Keeps the measurement session state</td>
+            <td>13 months</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p>
+      The service is provided by Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Ireland. Data may be
+      transferred to Google LLC in the United States on the terms described in the{' '}
+      <a href="/privacy-policy/">Privacy policy</a>.
+    </p>
+    <p>
+      Measurement is configured to keep the data narrow. Google Signals and ad personalisation are off, advertising data
+      is redacted, and the cookies are written with the <code>SameSite=Lax</code> and <code>Secure</code> flags, scoped to
+      dawidrylko.com alone.
+    </p>
+  </section>
+  <section>
+    <h2>Marketing cookies</h2>
+    <p>
+      The site uses none and loads no advertising scripts. The banner has no marketing category, because there is no
+      consent that could switch such tools on. Google Consent Mode holds a permanent refusal for advertising storage,
+      meaning the <code>ad_storage</code>, <code>ad_user_data</code> and <code>ad_personalization</code> signals.
+    </p>
+    <p>
+      If such tools ever appear, the category returns to the banner along with a description of the specific files in
+      this document, before they are used for the first time.
+    </p>
+  </section>
+  <section>
+    <h2>What the site does not do</h2>
+    <p>
+      Fonts, libraries and diagrams are served from the site own domain, so opening a page contacts no external CDN.
+      There are no embedded maps, video players or social media widgets.
+    </p>
+  </section>
+  <section>
+    <h2>Managing your consent</h2>
+    <p>
+      You can change or withdraw consent at any time with the Cookie settings button in the footer of every page.
+      Withdrawing is as easy as giving consent and does not affect the lawfulness of processing carried out beforehand.
+    </p>
+    <p>
+      Withdrawal stops measurement immediately and deletes the <code>_ga</code> and <code>{sessionCookie}</code> files already
+      on your device. They do not wait out their thirteen month period.
+    </p>
+    <p>
+      Thirteen months after your decision the site asks again. The analytics files expire at the same moment. Their
+      lifetime runs from the moment you consented and later visits do not push it forward. Should a
+      <code>_ga</code> file survive on your device anyway, it is deleted on your next visit. That also covers files written
+      by an earlier version of this site, which did not ask.
+    </p>
+    <p>Regardless of the settings here, cookies can be controlled from your browser:</p>
+    <ul>
+      <li>
+        <ExternalLink href="https://support.google.com/chrome/answer/95647" follow={false}>
+          Google Chrome
+        </ExternalLink>
+      </li>
+      <li>
+        <ExternalLink
+          href="https://support.mozilla.org/kb/cookies-information-websites-store-on-your-computer"
+          follow={false}
+        >
+          Mozilla Firefox
+        </ExternalLink>
+      </li>
+      <li>
+        <ExternalLink href="https://support.apple.com/guide/safari/sfri11471/mac" follow={false}> Safari </ExternalLink>
+      </li>
+      <li>
+        <ExternalLink href="https://support.microsoft.com/help/4468242" follow={false}> Microsoft Edge </ExternalLink>
+      </li>
+    </ul>
+    <p>Blocking local storage in your browser means the site will ask for consent on every visit.</p>
+  </section>
+</PageLayout>

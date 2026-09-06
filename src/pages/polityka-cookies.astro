@@ -1,0 +1,190 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import JsonLd from '../components/JsonLd.astro';
+import ExternalLink from '../components/ExternalLink.astro';
+import { GTAG } from '../data/gtag';
+import { CONTENT_LANG } from '../lib/i18n';
+import { createPageSchema } from '../lib/page-metadata';
+import type { PageMetadata } from '../types';
+
+const PAGE_METADATA: PageMetadata = {
+  title: 'Polityka cookies',
+  description:
+    'Jakie pliki cookies zapisuje serwis dawidrylko.com, w jakim celu i na jak długo oraz jak w każdej chwili zmienić lub wycofać zgodę.',
+  keywords: ['polityka cookies', 'cookies', 'zgoda', 'dawidrylko.com'],
+};
+
+const structuredData = createPageSchema({
+  pathname: Astro.url.pathname,
+  title: PAGE_METADATA.title,
+  description: PAGE_METADATA.description,
+  keywords: PAGE_METADATA.keywords,
+});
+
+// The session cookie name comes from the measurement ID with the G- prefix
+// stripped, which is how GA4 actually builds it. Derived rather than typed out
+// so the document cannot drift from the ID the site ships.
+const sessionCookie = `_ga_${GTAG.replace(/^G-/, '')}`;
+---
+
+<PageLayout
+  breadcrumbTitle={PAGE_METADATA.title}
+  title={PAGE_METADATA.title}
+  description={PAGE_METADATA.description}
+  lang={CONTENT_LANG}
+>
+  <JsonLd data={structuredData} />
+  <header>
+    <h1>{PAGE_METADATA.title}</h1>
+  </header>
+  <section>
+    <p>
+      Dokument opisuje, jakie pliki cookies i technologie o podobnym działaniu wykorzystuje serwis dawidrylko.com, w
+      jakim celu i przez jaki czas. Zasady przetwarzania danych osobowych opisuje{' '}
+      <a href="/polityka-prywatnosci/">Polityka prywatności</a>. Wersja angielska tego dokumentu:{' '}
+      <a href="/cookie-policy/">Cookie policy</a>.
+    </p>
+  </section>
+  <section>
+    <h2>Zasada podstawowa</h2>
+    <p>
+      Do momentu wyrażenia zgody serwis nie zapisuje na urządzeniu żadnych plików cookies ani innych informacji poza
+      zapamiętaniem samej decyzji o zgodzie. Skrypt Google Analytics nie jest wtedy w ogóle wczytywany, więc
+      przeglądarka nie wysyła do Google żadnego żądania.
+    </p>
+    <p>
+      Zgoda jest wymagana na podstawie art. 399 ust. 1 ustawy z dnia 12 lipca 2024 r. Prawo komunikacji elektronicznej.
+      Polskie prawo nie przewiduje wyjątku dla analityki. Zgody nie zbieramy w sposób domyślny: akceptacja i odmowa są
+      dostępne na pierwszej warstwie banera, mają tę samą wagę i ten sam koszt kliknięcia.
+    </p>
+  </section>
+  <section>
+    <h2>Pamięć lokalna niezbędna do działania</h2>
+    <div class="table-scroll" tabindex="0">
+      <table aria-label="Pamięć lokalna niezbędna do działania serwisu">
+        <thead>
+          <tr>
+            <th scope="col">Nazwa</th>
+            <th scope="col">Rodzaj</th>
+            <th scope="col">Cel</th>
+            <th scope="col">Czas przechowywania</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>cookieConsent</code></td>
+            <td>localStorage</td>
+            <td>Zapamiętanie decyzji o zgodzie</td>
+            <td>13 miesięcy od zapisania decyzji</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p>
+      Wpis zapisywany jest niezależnie od tego, czy zgoda została udzielona, czy odrzucona. Bez niego serwis pytałby
+      przy każdej wizycie. Nie zawiera danych pozwalających zidentyfikować odwiedzającego.
+    </p>
+  </section>
+  <section>
+    <h2>Cookies analityczne</h2>
+    <p>Zapisywane wyłącznie po wyrażeniu zgody. Odpowiadają za pomiar ruchu w usłudze Google Analytics 4.</p>
+    <div class="table-scroll" tabindex="0">
+      <table aria-label="Cookies analityczne i czas ich przechowywania">
+        <thead>
+          <tr>
+            <th scope="col">Nazwa</th>
+            <th scope="col">Cel</th>
+            <th scope="col">Czas przechowywania</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>_ga</code></td>
+            <td>Rozróżnienie unikalnych odwiedzających</td>
+            <td>13 miesięcy</td>
+          </tr>
+          <tr>
+            <td><code>{sessionCookie}</code></td>
+            <td>Utrzymanie stanu sesji pomiarowej</td>
+            <td>13 miesięcy</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p>
+      Dostawcą usługi jest Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Irlandia. Dane mogą być
+      przekazywane do Google LLC w Stanach Zjednoczonych na zasadach opisanych w{' '}
+      <a href="/polityka-prywatnosci/">Polityce prywatności</a>.
+    </p>
+    <p>
+      Pomiar jest skonfigurowany w sposób ograniczający zakres danych. Sygnały Google Signals oraz personalizacja reklam
+      pozostają wyłączone, dane reklamowe podlegają redakcji, a cookies zapisywane są z flagami{' '}
+      <code>SameSite=Lax</code> i <code>Secure</code>, wyłącznie dla domeny dawidrylko.com.
+    </p>
+  </section>
+  <section>
+    <h2>Cookies marketingowe</h2>
+    <p>
+      Serwis nie stosuje cookies marketingowych i nie wczytuje skryptów reklamowych. Baner nie zawiera kategorii
+      marketingowej, ponieważ nie ma zgody, której udzielenie mogłoby uruchomić takie narzędzia. Mechanizm Google
+      Consent Mode utrzymuje trwałą odmowę dla przechowywania danych reklamowych, czyli sygnałów <code>ad_storage</code
+      >,{' '}
+      <code>ad_user_data</code> i <code>ad_personalization</code>.
+    </p>
+    <p>
+      Jeżeli takie narzędzia kiedykolwiek się pojawią, kategoria wróci do banera wraz z opisem konkretnych plików w tym
+      dokumencie, przed ich pierwszym użyciem.
+    </p>
+  </section>
+  <section>
+    <h2>Czego serwis nie robi</h2>
+    <p>
+      Kroje pisma, biblioteki i wykresy serwowane są z domeny serwisu, więc otwarcie strony nie łączy się z żadnym
+      zewnętrznym CDN-em. Nie ma tu osadzonych map, odtwarzaczy wideo ani widżetów serwisów społecznościowych.
+    </p>
+  </section>
+  <section>
+    <h2>Zarządzanie zgodą</h2>
+    <p>
+      Zgodę można w każdej chwili zmienić lub wycofać przyciskiem Ustawienia cookies w stopce każdej strony. Wycofanie
+      zgody jest równie łatwe jak jej udzielenie i nie wpływa na zgodność z prawem przetwarzania sprzed wycofania.
+    </p>
+    <p>
+      Wycofanie zgody zatrzymuje pomiar natychmiast i usuwa z urządzenia zapisane wcześniej pliki <code>_ga</code> oraz{
+        ' '
+      }
+      <code>{sessionCookie}</code>. Nie czekają one na upływ swojego trzynastomiesięcznego terminu.
+    </p>
+    <p>
+      Po 13 miesiącach od zapisania decyzji serwis zapyta o zgodę ponownie. Pliki analityczne wygasają w tym samym
+      momencie. Ich termin biegnie od udzielenia zgody i kolejne wizyty go nie przesuwają. Jeżeli mimo to jakiś plik <code
+        >_ga</code
+      > pozostanie na urządzeniu, zostanie usunięty przy najbliższym wejściu do serwisu. Dotyczy to również plików zapisanych
+      przez wcześniejszą wersję serwisu, która pytania o zgodę nie zadawała.
+    </p>
+    <p>Niezależnie od ustawień serwisu pliki cookies można kontrolować z poziomu przeglądarki:</p>
+    <ul>
+      <li>
+        <ExternalLink href="https://support.google.com/chrome/answer/95647?hl=pl" follow={false}>
+          Google Chrome
+        </ExternalLink>
+      </li>
+      <li>
+        <ExternalLink href="https://support.mozilla.org/pl/kb/ciasteczka" follow={false}>
+          Mozilla Firefox
+        </ExternalLink>
+      </li>
+      <li>
+        <ExternalLink href="https://support.apple.com/pl-pl/guide/safari/sfri11471/mac" follow={false}>
+          Safari
+        </ExternalLink>
+      </li>
+      <li>
+        <ExternalLink href="https://support.microsoft.com/pl-pl/help/4468242" follow={false}>
+          Microsoft Edge
+        </ExternalLink>
+      </li>
+    </ul>
+    <p>Zablokowanie pamięci lokalnej w przeglądarce sprawi, że serwis będzie pytał o zgodę przy każdej wizycie.</p>
+  </section>
+</PageLayout>
