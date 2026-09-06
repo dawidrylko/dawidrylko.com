@@ -25,17 +25,17 @@ const siteDescription = SITE_METADATA.description.en;
 // /llms.txt and robots.txt so the intent is discoverable from the site itself.
 // Ordered as a crawler would walk them: crawl policy, then the sitemaps it points
 // to, then the feeds, then the LLM summary, with this page last. Human-facing
-// pages (/bio/, /blog/) are deliberately absent — they are already in the
+// pages (/bio/, /blog/) are deliberately absent: they are already in the
 // sitemaps and in the Pages table below, and are not machine-readable artifacts.
 const aiResources: [string, string][] = [
-  ['/robots.txt', 'Crawl policy — all crawlers, AI included, are explicitly allowed; declares the sitemaps.'],
+  ['/robots.txt', 'Crawl policy. Every crawler, AI included, is allowed. Declares the sitemaps.'],
   ['/sitemap-index.xml', 'Canonical sitemap index: the page URL set plus the image sitemap.'],
   ['/sitemap.xml', 'Conventional sitemap index, for crawlers that probe this path.'],
   ['/sitemap-0.xml', 'The URL set itself: every page, with lastmod and priority.'],
   ['/sitemap-images.xml', 'Google image sitemap: every post image, mapped to the page it appears on.'],
   ['/rss.xml', 'Full-text RSS feed of every blog post.'],
   ['/llms.txt', 'Structured, machine-readable summary of the site for AI/LLM crawlers.'],
-  ['/metadata/', 'This page — full inventory of pages and blog posts with build info.'],
+  ['/metadata/', 'This page. Full inventory of pages and blog posts, with build info.'],
 ];
 
 const siteInfo: [string, string][] = [
@@ -47,7 +47,7 @@ const siteInfo: [string, string][] = [
 ];
 // The decimal-ASCII signature easter egg is appended to the table below from a
 // client-side script (see end of file), so the literal sequence never ships in
-// the crawlable HTML — keeping it out of SEO/Ahrefs text extraction while still
+// the crawlable HTML, keeping it out of SEO/Ahrefs text extraction while still
 // rewarding a human who opens this page.
 
 const PAGE_METADATA: PageMetadata = {
@@ -107,7 +107,7 @@ const sourceCode = {
   '@type': 'SoftwareSourceCode',
   name: 'dawidrylko.com',
   description:
-    'Source code of this website — a personal blog and portfolio built with Astro, React islands, TypeScript and MDX, deployed to GitHub Pages.',
+    'Source code of this website: a personal blog and portfolio built with Astro, React islands, TypeScript and MDX, deployed to GitHub Pages.',
   codeRepository: 'https://github.com/dawidrylko/dawidrylko.com',
   url: 'https://github.com/dawidrylko/dawidrylko.com',
   programmingLanguage: ['TypeScript', 'Astro', 'JavaScript', 'CSS'],
@@ -126,8 +126,8 @@ const sourceCode = {
     <h1>{PAGE_METADATA.title}</h1>
   </header>
   <main>
-    <section id="site-info" aria-label="Site Information">
-      <h2>Site Information</h2>
+    <section id="site-info" aria-label="Site information">
+      <h2>Site information</h2>
       <div class="table-scroll" tabindex="0">
         <table id="site-info-table" aria-label="Site information">
           <colgroup><col class="col-w-30" /><col class="col-w-70" /></colgroup>
@@ -145,9 +145,9 @@ const sourceCode = {
         </table>
       </div>
     </section>
-    <section id="ai-resources" aria-label="AI Resources">
-      <h2>AI Resources</h2>
-      <p>Machine-readable resources for AI/LLM crawlers and agents.</p>
+    <section id="ai-resources" aria-label="AI resources">
+      <h2>AI resources</h2>
+      <p>Machine-readable resources for AI and LLM crawlers, in the order a crawler would walk them.</p>
       <div class="table-scroll" tabindex="0">
         <table aria-label="AI resources">
           <colgroup><col class="col-w-30" /><col class="col-w-70" /></colgroup>
@@ -188,8 +188,8 @@ const sourceCode = {
         </table>
       </div>
     </section>
-    <section id="blog-posts" aria-label="Blog Posts">
-      <h2>Blog Posts</h2>
+    <section id="blog-posts" aria-label="Blog posts">
+      <h2>Blog posts</h2>
       <div class="table-scroll" tabindex="0">
         <table aria-label="Blog posts">
           <colgroup><col class="col-w-10" /><col class="col-w-90" /></colgroup>

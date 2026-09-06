@@ -14,17 +14,17 @@ import type { PageMetadata } from '../types';
 const PAGE_METADATA: PageMetadata = {
   title: 'About',
   description:
-    'Dawid Ryłko—Software Engineer with 10+ years building scalable, secure systems. Career, full-stack expertise, AI integration, and cybersecurity.',
+    'Dawid Ryłko, Solution Architect with over 10 years in IT. Career history, education, areas of work, and a CV in PDF.',
   keywords: [
     'Dawid Ryłko',
-    'Software Engineer',
-    'full-stack developer',
+    'Solution Architect',
     'system architecture',
-    'AI integration',
-    'cybersecurity expert',
-    'scalable systems',
-    'technology leadership',
-    'software craftsmanship',
+    'cybersecurity',
+    'full-stack developer',
+    'AI agents',
+    'engineering leadership',
+    'mobile development',
+    'curriculum vitae',
   ],
 };
 
@@ -69,18 +69,18 @@ const citations = [
 // About framing of the shared capability areas: where the experience comes from,
 // written from a track-record angle rather than the home page's tagline style.
 const capabilities = buildCapabilities({
-  'Web platforms':
-    'A decade building React, Angular, and TypeScript frontends on top of Node.js APIs—the backbone of my day-to-day engineering work.',
-  'Mobile apps':
-    'Led cross-platform mobile development end to end, carrying products from prototype through release on the App Store and Google Play.',
-  'Architecture & infrastructure':
-    'Designing systems together with the CI/CD pipelines and automation around them, so teams can ship with confidence.',
-  'AI integration':
-    'Folding LLMs and AI-driven features into production software instead of leaving them as throwaway proofs of concept.',
+  'System architecture':
+    'Designing module architecture, defining the standards around it, and reviewing implementations against the agreed design.',
   Cybersecurity:
-    'A long-standing focus on security that shapes how I review, harden, and reason about everything I build.',
-  'Technical leadership':
-    'Years of leading and mentoring engineers and setting technical direction as teams and products grow.',
+    'A long-standing focus that shapes how I review and harden what I build, and the reason Cyber Katalog exists.',
+  'Full-stack engineering':
+    'A decade of React, Angular, and TypeScript frontends on Node.js APIs, plus mobile releases on the App Store and Google Play.',
+  'Infrastructure and delivery':
+    'Building the CI/CD and automation around the systems I design, and running the production environments that follow.',
+  'AI agents and automation':
+    'Putting LLMs and agent workflows into everyday engineering work, and keeping them running afterwards.',
+  'Engineering leadership':
+    'Years of leading and mentoring engineers, owning a product end to end, and setting technical direction as teams grow.',
 });
 
 const image = {
@@ -103,7 +103,7 @@ const structuredData = createPageSchema({
     about: {
       '@type': 'CreativeWork',
       name: 'Favourite Quote',
-      description: 'Philosophical quotes that inspire approach to technology and software craftsmanship',
+      description: 'Quotes that shape how Dawid Ryłko thinks about technology and craft.',
       citation: citations.map(({ authorName, citation, text }) => ({
         '@type': 'Quotation',
         text,
@@ -114,8 +114,8 @@ const structuredData = createPageSchema({
     mainEntity: personReference,
     potentialAction: {
       '@type': 'DownloadAction',
-      name: 'Download My Full CV',
-      description: 'Download a detailed overview of Dawid Ryłko’s experience and skills in PDF format.',
+      name: 'Download my CV',
+      description: "Download Dawid Ryłko's full CV in PDF, in English or Polish.",
       object: { '@type': 'DigitalDocument', name: 'Dawid Ryłko CV' },
       target: [
         {
@@ -141,38 +141,24 @@ const structuredData = createPageSchema({
   </header>
   <section id="summary">
     <p>
-      Hi, I'm <strong>Dawid Ryłko</strong> - a <strong>Software Engineer</strong> passionate about{' '}
-      <strong>scalable, secure, and resilient systems</strong>. With{' '}
-      <time>over 10 years of professional experience</time> in the <strong>technology industry</strong>, I specialise in
-      designing and delivering{' '}
-      <ExternalLink href="https://silesiansolutions.com/" follow
-        ><strong>end-to-end digital solutions</strong></ExternalLink
-      >. From intuitive <strong>frontend experiences</strong> and high-performance <strong>backend systems</strong> to{
-        ' '
-      }
-      <strong>infrastructure automation</strong>, <strong>AI-driven innovation</strong>, and{' '}
-      <ExternalLink href="https://cyberkatalog.pl/"><strong>cybersecurity</strong></ExternalLink>, I build technology
-      with purpose.
+      I'm <strong>Dawid Ryłko</strong>. I design system architecture and own its security. Over ten years in IT, spent
+      across the whole stack: frontend interfaces, backend services, infrastructure automation, AI integration, and
+      cybersecurity.
     </p>
     <p>
-      My mission is to create <strong>technology that truly matters</strong> - solutions that are <strong
-        >reliable</strong
-      >,
-      {' '}<strong>future-proof</strong>, and aligned with <strong>business goals</strong>. By combining deep{' '}
-      <strong>technical expertise</strong> with <strong>strategic thinking</strong>, I ensure every project is not only{
+      <ExternalLink href="https://silesiansolutions.com/" follow>Silesian Solutions</ExternalLink> is my own business, and{
         ' '
       }
-      <strong>robust</strong> but also <strong>meaningful</strong> and sustainable.
+      <ExternalLink href="https://cyberkatalog.pl/">Cyber Katalog</ExternalLink> is a cybersecurity project under it. Technical
+      decisions get weighed against business goals and the cost of running a system for years. That second cost is the one
+      estimates usually skip.
     </p>
     <p>
-      You can explore my open-source work on{' '}
-      <ExternalLink href="https://github.com/dawidrylko">GitHub</ExternalLink>, share ideas with me on{' '}
-      <ExternalLink href="https://twitter.com/dawidrylko">Twitter</ExternalLink>, or connect professionally on{' '}
-      <ExternalLink href="https://www.linkedin.com/in/dawidrylko">LinkedIn</ExternalLink>. Visit my personal site at{
-        ' '
-      }
-      <ExternalLink href="https://dawid.dev" follow>dawid.dev</ExternalLink> to see experiments, articles, and insights on
-      technology and software craftsmanship.
+      My code is on <ExternalLink href="https://github.com/dawidrylko">GitHub</ExternalLink>, shorter notes on{' '}
+      <ExternalLink href="https://www.linkedin.com/in/dawidrylko">LinkedIn</ExternalLink> and{' '}
+      <ExternalLink href="https://twitter.com/dawidrylko">Twitter</ExternalLink>.{' '}
+      <ExternalLink href="https://dawid.dev" follow>dawid.dev</ExternalLink> holds the rest: engineering notes, and longer
+      write-ups on security.
     </p>
   </section>
   <section id="what-i-do">
@@ -191,9 +177,8 @@ const structuredData = createPageSchema({
   <section id="philosophy">
     <h2>Philosophy</h2>
     <p>
-      <strong>Technology</strong> is more than just <strong>code</strong>. It represents creativity, intuition, and the
-      power to shape meaningful experiences. The quote and image below reflect how I view my craft - a constant process
-      of reinvention, curiosity, and building with purpose.
+      Engineering is a craft, and craft is mostly judgement. The quote and the photo below say that better than a list
+      of principles would.
     </p>
   </section>
   <section id="quote">
@@ -229,17 +214,14 @@ const structuredData = createPageSchema({
     <h2>Education</h2>
     <Table
       data={education}
-      header={['Institution', 'Degree', 'Field of Study']}
+      header={['Institution', 'Degree', 'Field of study']}
       widthConfig={['35%', '35%', '30%']}
       ariaLabel="Education"
     />
   </section>
   <section id="download">
-    <h2>Download My Full CV</h2>
-    <p>
-      For a detailed overview of my career, experience, and technical skills, download the full version of my CV in PDF
-      format below.
-    </p>
+    <h2>Download my CV</h2>
+    <p>The full CV, with dates, roles, and the technology behind each of them. English and Polish, both PDF.</p>
     <ul>
       <li>
         <a href="/resume-en.pdf" download="Dawid_Rylko_CV_EN.pdf" title="Download Full CV (English)">
@@ -254,12 +236,12 @@ const structuredData = createPageSchema({
     </ul>
   </section>
   <section id="contact">
-    <h2>Get in Touch</h2>
+    <h2>Get in touch</h2>
     <p>
-      Interested in working together or have any questions?{' '}
+      Interested in working together, or have a question?{' '}
       <a href="/contact/" title="Contact Dawid Ryłko">Visit my contact page</a> or{' '}
-      <a href={`mailto:${SITE_METADATA.author.email}`} title="Send me an email">send me an email</a>. I'm always open to
-      meaningful conversations about technology, software design, and collaboration.
+      <a href={`mailto:${SITE_METADATA.author.email}`} title="Send me an email">send me an email</a>. Email is the
+      fastest route.
     </p>
   </section>
 </PageLayout>

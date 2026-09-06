@@ -78,7 +78,7 @@ const PAGE_METADATA: PageMetadata = {
     'guitar equipment',
     'acoustic guitar setup',
     'tech setup',
-    'software engineer workspace',
+    'home office setup',
   ],
 };
 
@@ -134,7 +134,7 @@ const structuredData = createPageSchema({
         '@type': 'Thing',
         name: 'Development Workstation',
         description:
-          'Segmented hardware setup with device stations, KVM switching, ultrawide monitor and enterprise-grade NAS storage.',
+          'Two device stations sharing one ultrawide monitor and one set of peripherals through a KVM switch, with a NAS behind them.',
       },
       {
         '@type': 'Thing',
@@ -160,17 +160,17 @@ const structuredData = createPageSchema({
 const sections: { id: string; heading: string; ariaLabel: string; items: SetupItem[] }[] = [
   {
     id: 'desktop',
-    heading: 'Desktop Setup',
+    heading: 'Desktop setup',
     ariaLabel: 'Desktop hardware and equipment specifications',
     items: desktopSetup,
   },
   {
     id: 'additional',
-    heading: 'Additional Equipment',
+    heading: 'Additional equipment',
     ariaLabel: 'Additional equipment specifications',
     items: additionalEquipment,
   },
-  { id: 'guitar', heading: 'Guitar Setup', ariaLabel: 'Guitar and music equipment specifications', items: guitarSetup },
+  { id: 'guitar', heading: 'Guitar setup', ariaLabel: 'Guitar and music equipment specifications', items: guitarSetup },
 ];
 ---
 
@@ -181,11 +181,11 @@ const sections: { id: string; heading: string; ariaLabel: string; items: SetupIt
   </header>
   <main>
     <section id="desktop" aria-labelledby="desktop-heading">
-      <h2 id="desktop-heading">Desktop Setup</h2>
+      <h2 id="desktop-heading">Desktop setup</h2>
       <div class="table-scroll" tabindex="0">
         <table aria-label="Desktop hardware and equipment specifications">
           <colgroup><col class="col-w-30" /><col class="col-w-70" /></colgroup>
-          <thead><tr><th scope="col">Type</th><th scope="col">Full Name</th></tr></thead>
+          <thead><tr><th scope="col">Type</th><th scope="col">Full name</th></tr></thead>
           <tbody>
             {
               desktopSetup.map(([type, name, link, details]) => (
@@ -239,7 +239,7 @@ const sections: { id: string; heading: string; ariaLabel: string; items: SetupIt
                   <tr>
                     <>
                       <th scope="col">Type</th>
-                      <th scope="col">Full Name</th>
+                      <th scope="col">Full name</th>
                     </>
                   </tr>
                 </thead>

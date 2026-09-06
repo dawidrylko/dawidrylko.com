@@ -612,6 +612,20 @@ a:focus {
   }
 }
 
+/* Homepage intro: the role line sits directly under the greeting, so the pair
+   reads as one block. The text comes from SITE_METADATA.author.jobTitle, which
+   also feeds the author card and JSON-LD Person. */
+.page-intro h1 {
+  margin-bottom: var(--spacing-2);
+}
+
+.page-intro .role-tagline {
+  margin-bottom: var(--spacing-8);
+  font-family: var(--font-heading);
+  font-size: var(--fontSize-2);
+  color: var(--color-text-light);
+}
+
 /* Homepage "What I do" grid: capability cards sharing the site's card idiom
    (1px accent border, --spacing-2 radius). One column on phones, two from the
    sm breakpoint up. Overrides the prose-list gutter/markers from `main section
