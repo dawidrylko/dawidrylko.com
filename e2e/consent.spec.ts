@@ -136,6 +136,54 @@ test.describe('consent gate', () => {
     await expect.poll(() => analyticsCookies(page)).toEqual([]);
   });
 
+  test('cookies with no decision behind them are swept on the next visit', async ({ page }) => {
+    // The state every visitor is in on the day this ships: _ga written by the
+    // previous version of the site, which measured without asking.
+    await page.goto('/');
+    await page.context().addCookies([
+      { name: '_ga', value: 'GA1.1.5.5', url: '/', domain: 'localhost', path: '/' },
+      { name: SESSION_COOKIE, value: 'GS1.1.5', url: '/', domain: 'localhost', path: '/' },
+    ]);
+    expect(await analyticsCookies(page)).toEqual(expect.arrayContaining(['_ga', SESSION_COOKIE]));
+
+    await page.reload();
+
+    await expect.poll(() => analyticsCookies(page)).toEqual([]);
+    await expect(banner(page)).toBeVisible();
+  });
+
+  test('a decision past its 13 months clears its cookies and asks again', async ({ page }) => {
+    await page.goto('/');
+    await banner(page).getByRole('button', { name: 'Accept' }).click();
+    await expect.poll(() => analyticsCookies(page)).toContain('_ga');
+
+    // Backdate the record past CONSENT_MAX_AGE_MS, leaving the cookies in place.
+    await page.evaluate(() => {
+      const aged = { analytics: true, timestamp: new Date(Date.now() - 396 * 86400000).toISOString(), version: 1 };
+      window.localStorage.setItem('cookieConsent', JSON.stringify(aged));
+    });
+    await page.reload();
+
+    await expect.poll(() => analyticsCookies(page)).toEqual([]);
+    await expect(banner(page)).toBeVisible();
+  });
+
+  test('the cookie expiry does not slide forward on a later visit', async ({ page }) => {
+    await page.goto('/');
+    await banner(page).getByRole('button', { name: 'Accept' }).click();
+    await expect.poll(() => analyticsCookies(page)).toContain('_ga');
+
+    const expiryOf = async () => (await page.context().cookies()).find(cookie => cookie.name === '_ga')?.expires;
+    const first = await expiryOf();
+
+    await page.goto('/bio/');
+    await page.waitForTimeout(1500);
+
+    // cookie_update: false anchors the lifetime to the moment of consent, so a
+    // frequent visitor's cookies can never outlive the record behind them.
+    expect(await expiryOf()).toBe(first);
+  });
+
   test('the banner speaks the language of the page it sits on', async ({ page }) => {
     await page.goto('/');
     await expect(banner(page).getByRole('button', { name: 'Accept' })).toBeVisible();

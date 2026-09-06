@@ -131,9 +131,18 @@ async function checkSource() {
     );
   }
 
-  if (!/clearAnalyticsCookies\(\);/.test(effects)) {
+  // Scoped to applyStoredConsent on purpose. A bare search for the call would
+  // match the one in the refusal branch, which predates the sweep, so the
+  // assertion would pass with the sweep deleted.
+  const storedConsentBody = effects.match(/export const applyStoredConsent[^]*?\n};/)?.[0];
+
+  if (!storedConsentBody) {
     fail(
-      `${EFFECTS_SOURCE}: nothing erases the analytics cookies when no valid decision is on record. Without that sweep an expired decision, or one never given, leaves \`_ga\` on the device.`,
+      `${EFFECTS_SOURCE}: applyStoredConsent is missing. It is what puts an existing decision into effect and sweeps up when there is none.`,
+    );
+  } else if (!/clearAnalyticsCookies\(\);/.test(storedConsentBody)) {
+    fail(
+      `${EFFECTS_SOURCE}: applyStoredConsent does not erase the analytics cookies when no valid decision is on record. Without that sweep an expired decision, or one never given, leaves \`_ga\` on the device with nothing authorising it.`,
     );
   }
 

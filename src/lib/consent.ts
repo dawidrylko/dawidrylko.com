@@ -97,6 +97,12 @@ const loadAnalytics = (): void => {
     // forward on every visit. With the default (true) a frequent visitor's
     // cookies would outlive the consent record that authorised them, which is
     // the one state this whole module exists to make unreachable.
+    //
+    // The cost is real and deliberate: a client id now expires 13 months after
+    // consent no matter how often someone visits, so a regular reader is
+    // counted as a new user once a year. There is no lawful way around it. An
+    // analytics cookie may not outlive the consent behind it, so do not set
+    // this back to true to make the returning-user numbers look better.
     cookie_update: false,
     cookie_flags: 'SameSite=Lax;Secure',
     // Pins the cookies to this exact host. GA4's `auto` writes them on the
