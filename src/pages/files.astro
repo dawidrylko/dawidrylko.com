@@ -42,7 +42,7 @@ const nodes = readFilesRecursively(filesDir, filesDir).filter(node => node.exten
 
 // metadata.csv is the source of truth for each presentation's document metadata
 // and is kept in sync with the PDFs by the pre-commit validator. Reusing it
-// here gives the table — and search engines — descriptive titles and context
+// here gives the table (and search engines) descriptive titles and context
 // instead of terse filename fragments.
 const metadataCsvPath = path.join(filesDir, 'presentations', 'metadata.csv');
 const presentationMeta = fs.existsSync(metadataCsvPath)
@@ -211,8 +211,8 @@ const structuredData = createPageSchema({
     <section aria-labelledby="presentations-heading">
       <h2 id="presentations-heading">Presentations</h2>
       <p class="presentations-intro">
-        Slides from my technical talks and workshops on Node.js, JavaScript, and modern web development. Each
-        presentation opens or downloads as a PDF — titles link straight to the document.
+        Slides from my talks and workshops on Node.js, JavaScript, and web development. Each one opens or downloads as a
+        PDF, and the title links straight to the document.
       </p>
       <div class="table-scroll" tabindex="0">
         <table class="presentations-table" data-presentations>

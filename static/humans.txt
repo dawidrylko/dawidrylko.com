@@ -1,5 +1,5 @@
 /* TEAM */
-Software Engineer: Dawid Ryłko
+Solution Architect: Dawid Ryłko
 Contact: hello [at] dawid.dev
 GitHub: @dawidrylko
 LinkedIn: in/dawidrylko

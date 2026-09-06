@@ -1,6 +1,7 @@
 ---
 import PageLayout from '../layouts/PageLayout.astro';
 import JsonLd from '../components/JsonLd.astro';
+import { SITE_METADATA } from '../data/site-metadata';
 import { STRUCTURED_DATA } from '../data/structured-data';
 import { buildCapabilities } from '../data/capabilities';
 import { createPageSchema } from '../lib/page-metadata';
@@ -9,47 +10,48 @@ import type { PageMetadata } from '../types';
 const PAGE_METADATA: PageMetadata = {
   title: 'Home',
   description:
-    'Dawid Ryłko—Software Engineer building scalable, secure, and resilient systems. Articles on software engineering, architecture, and emerging tech.',
+    'Dawid Ryłko designs system architecture and owns its security. Personal site, a CV, a hardware setup, and a blog written in Polish.',
   keywords: [
     'Dawid Ryłko',
-    'Software Engineer',
-    'scalable systems',
-    'secure systems',
+    'Solution Architect',
     'system architecture',
+    'cybersecurity',
     'software engineering',
-    'technology blog',
     'full-stack development',
+    'AI agents',
+    'technology blog',
   ],
 };
 
-// Home framing of the shared capability areas: concrete, punchy taglines for the
-// "What I do" block. The visible list and the JSON-LD ItemList below both read
-// from this array, so they never drift apart.
+// Home framing of the shared capability areas: short taglines for the "What I
+// do" block. The visible list and the JSON-LD ItemList below both read from
+// this array, so they never drift apart.
 const CAPABILITIES = buildCapabilities({
-  'Web platforms':
-    'Production frontends in React, Angular, and TypeScript, backed by Node.js APIs—shipped end to end, from first commit to deployment.',
-  'Mobile apps': 'Cross-platform mobile applications taken from prototype to the App Store and Google Play.',
-  'Architecture & infrastructure':
-    'System design, CI/CD pipelines, and infrastructure automation that keep releases fast, repeatable, and predictable.',
-  'AI integration':
-    'Bringing LLMs and AI-driven features into real products that ship—not demos that stall in a notebook.',
-  Cybersecurity: 'Security reviews and hardening so the systems I build stay resilient when it matters.',
-  'Technical leadership':
-    'Leading engineering teams, mentoring developers, and setting technical direction that scales with the product.',
+  'System architecture':
+    'Designing platform modules and setting technical direction. The hard part is what a system costs to keep running, not what it costs to build.',
+  Cybersecurity: 'Threat modelling, security reviews, and hardening, done while the design is still on the table.',
+  'Full-stack engineering':
+    'TypeScript on both ends. React and Angular frontends, Node.js services behind them, cross-platform mobile apps on both stores.',
+  'Infrastructure and delivery':
+    'CI/CD and cloud infrastructure, plus the production environments and monitoring that come after the release.',
+  'AI agents and automation': 'LLMs, MCP, and multi-agent workflows put to work on real engineering tasks.',
+  'Engineering leadership': 'Leading a team, owning a product, and setting the standards other teams build against.',
 });
 
 const { personReference } = STRUCTURED_DATA;
 const structuredData = createPageSchema({
   pathname: Astro.url.pathname,
   title: PAGE_METADATA.title,
-  headline: 'Dawid Ryłko - Software Engineer',
+  // Derived from the single source of truth so the headline cannot drift from
+  // the role title again the way the hardcoded one did.
+  headline: `${SITE_METADATA.author.name} - ${SITE_METADATA.author.jobTitle}`,
   description: PAGE_METADATA.description,
   keywords: PAGE_METADATA.keywords,
   extra: {
     about: {
       '@type': 'ItemList',
       name: 'What I do',
-      description: 'Concrete areas where Dawid Ryłko designs, builds, and ships software.',
+      description: 'Areas of work Dawid Ryłko takes on.',
       itemListElement: CAPABILITIES.map((capability, index) => ({
         '@type': 'ListItem',
         position: index + 1,
@@ -67,18 +69,19 @@ const structuredData = createPageSchema({
 
 <PageLayout breadcrumbTitle={PAGE_METADATA.title} description={PAGE_METADATA.description}>
   <JsonLd data={structuredData} />
-  <header>
+  <header class="page-intro">
     <h1>Hi, I'm Dawid Ryłko</h1>
+    <p class="role-tagline">{SITE_METADATA.author.jobTitle}</p>
   </header>
   <section>
     <p>
-      I'm a <strong>Software Engineer</strong> passionate about designing and building{' '}
-      <strong>scalable, secure, and future-proof systems</strong> that address real-world challenges and drive meaningful
-      impact.
+      I design <strong>system architecture</strong> and own its security. Over ten years in IT. The work spans the whole stack:
+      frontend interfaces, backend services, infrastructure automation, AI integration, and cybersecurity.
     </p>
+    <p>I weigh technical decisions against business goals and the cost of running a system for years.</p>
     <p>
-      Discover my <a href="/blog/">latest articles</a> on software engineering, system architecture, and emerging technologies,
-      or learn more <a href="/bio/">about my journey</a> and professional background.
+      My <a href="/blog/">blog</a> is in Polish, and it follows whatever I wanted to understand properly at the time. Career
+      and background are <a href="/bio/">on the about page</a>.
     </p>
   </section>
   <section id="what-i-do">
@@ -96,7 +99,7 @@ const structuredData = createPageSchema({
   </section>
   <section id="cta">
     <p>
-      Interested in working together? <a href="/contact/">Get in touch</a> and let's create technology that lasts.
+      Interested in working together? <a href="/contact/">Get in touch</a>. Email is the fastest route.
     </p>
   </section>
 </PageLayout>

@@ -4,16 +4,17 @@ export const SITE_METADATA = {
   lang: 'en',
   url: 'https://dawidrylko.com',
   title: 'Dawid Ryłko',
-  // Short tagline used only for the homepage <title> (siteTitle | tagline), kept
-  // under the 60-char SEO limit. Deliberately different from author.jobTitle,
-  // which is the positioning tagline behind Bio and JSON-LD Person. Keep both.
-  titleTagline: 'Software Engineer | Scalable, Secure Systems',
+  // Short tagline used only for the homepage <title> (siteTitle | tagline). It
+  // currently repeats author.jobTitle, but the two stay separate fields: this
+  // one is bound by the 60-char title budget, jobTitle is not, so a longer
+  // headline must never reach <title> by aliasing them.
+  titleTagline: 'Solution Architect | Cybersecurity',
   // Fallback meta description for pages without their own. Kept ≤160 chars and
   // free of the decimal-ASCII easter egg (that lives on the /metadata/ page, not
   // in search snippets).
   description: {
-    en: 'Personal website and blog of Dawid Ryłko, Software Engineer—articles and insights on software architecture, scalable systems, and modern web.',
-    pl: 'Osobista strona i blog Dawida Ryłko, Software Engineera — artykuły o architekturze systemów, skalowalności i nowoczesnym wytwarzaniu oprogramowania.',
+    en: 'Personal website and blog of Dawid Ryłko, Solution Architect. Articles on software architecture, security, and engineering practice.',
+    pl: 'Osobista strona i blog Dawida Ryłko, architekta rozwiązań. Artykuły o architekturze oprogramowania, bezpieczeństwie i praktyce inżynierskiej.',
   },
   author: {
     name: 'Dawid Ryłko',

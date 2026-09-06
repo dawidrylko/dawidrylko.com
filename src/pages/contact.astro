@@ -11,16 +11,16 @@ import type { PageMetadata } from '../types';
 const PAGE_METADATA: PageMetadata = {
   title: 'Contact',
   description:
-    'Get in touch with Dawid Ryłko for software engineering, system architecture consulting, and technology collaboration across the full stack.',
+    'Get in touch with Dawid Ryłko about system architecture, security reviews, full-stack delivery, and technical leadership.',
   keywords: [
     'contact Dawid Ryłko',
-    'software engineering services',
     'system architecture consulting',
-    'technology collaboration',
+    'cybersecurity consulting',
+    'security review',
     'full-stack development',
     'cloud infrastructure',
-    'AI integration',
-    'cybersecurity consulting',
+    'AI agents',
+    'technology collaboration',
   ],
 };
 
@@ -31,12 +31,12 @@ const { personReference } = STRUCTURED_DATA;
 // Contact framing of the shared capability areas: short, engagement-oriented
 // lines describing what we can work on together, distinct from the home/about copy.
 const capabilities = buildCapabilities({
-  'Web platforms': 'Building or scaling React, Angular, and TypeScript products with Node.js backends.',
-  'Mobile apps': 'Taking a cross-platform mobile idea from prototype to the App Store and Google Play.',
-  'Architecture & infrastructure': 'Shaping architecture, CI/CD, and infrastructure for fast, predictable releases.',
-  'AI integration': 'Adding LLM and AI-driven features that actually make it into production.',
-  Cybersecurity: 'Security reviews and hardening for systems that need to stay resilient.',
-  'Technical leadership': 'Leading an engineering team or providing senior technical direction.',
+  'System architecture': 'Designing a system, or reviewing an architecture that has stopped scaling.',
+  Cybersecurity: 'A security review, threat model, or hardening pass on something already running.',
+  'Full-stack engineering': 'Building or scaling a TypeScript product, web or mobile.',
+  'Infrastructure and delivery': 'Shaping CI/CD, containers, and cloud so releases stop being events.',
+  'AI agents and automation': 'Adding LLM or agent-driven automation to work your team does by hand today.',
+  'Engineering leadership': 'Leading an engineering team, or providing senior technical direction.',
 });
 
 const structuredData = createPageSchema({
@@ -55,14 +55,10 @@ const structuredData = createPageSchema({
   </header>
   <section>
     <p>
-      Interested in collaborating on <strong>innovative technology projects</strong>? I'm open to working on ideas that
-      require a thoughtful approach and a long-term vision. My focus is on creating meaningful, reliable solutions that
-      make a real impact.
+      I take on work where the architecture matters and the system has to keep running long after the launch. A
+      greenfield project is fine. So is a platform that has grown past its original design.
     </p>
-    <p>
-      Whether you're starting from scratch or improving an existing platform, I bring a{' '}
-      <strong>strategic and pragmatic mindset</strong> to ensure your technology supports long-term business goals.
-    </p>
+    <p>Tell me what the problem is and what you have already tried. That is enough to start.</p>
   </section>
   <section id="what-i-do">
     <h2>What we can work on</h2>
@@ -78,7 +74,7 @@ const structuredData = createPageSchema({
     </ul>
   </section>
   <section>
-    <h2>How to Reach Me</h2>
+    <h2>How to reach me</h2>
     <p>
       The best way to get in touch is by email:&nbsp;
       <a href={`mailto:${author.email}`} title="Send email"><strong>{author.email}</strong></a>
@@ -86,8 +82,8 @@ const structuredData = createPageSchema({
     <p>I usually respond within 24 hours on business days.</p>
   </section>
   <section>
-    <h2>Find Me Online</h2>
-    <p>Connect with me on professional and developer platforms:</p>
+    <h2>Find me online</h2>
+    <p>The accounts I actually use:</p>
     <ul>
       {
         social
