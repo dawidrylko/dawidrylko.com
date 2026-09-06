@@ -1432,6 +1432,104 @@ a:focus {
   color: var(--color-text-light);
 }
 
+/* Consent */
+
+/* Footer control that reopens the consent banner. A button, not a link: it
+   changes state rather than navigating, but it has to read as part of the
+   secondary footer nav next to it. */
+.link-button {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: var(--color-text-light);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.footer-consent {
+  margin-top: var(--spacing-2);
+  font-size: var(--fontSize-0);
+}
+
+/* Cookie banner. Fixed to the bottom so it never pushes content around (no
+   layout shift) and never locks scrolling: the page stays readable and fully
+   navigable while the question is open. It does overlay the strip of content
+   behind it, the footer included, until the question is answered. */
+.cookie-consent {
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+  padding: var(--spacing-4);
+  border-top: 1px solid var(--color-accent);
+  background: var(--color-background);
+  box-shadow: 0 -4px 16px rgb(0 0 0 / 12%);
+  font-size: var(--fontSize-0);
+}
+
+.cookie-consent h2 {
+  margin: 0 0 var(--spacing-2);
+  font-size: var(--fontSize-1);
+}
+
+.cookie-consent p {
+  margin: 0 0 var(--spacing-2);
+}
+
+.cookie-consent-text {
+  max-width: var(--maxWidth-3xl);
+}
+
+.cookie-consent-state {
+  color: var(--color-text-light);
+}
+
+.cookie-consent-links {
+  margin-bottom: 0;
+}
+
+.cookie-consent-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-3);
+}
+
+/* Both answers carry identical weight. Consent is only freely given when
+   refusing costs no more effort or attention than accepting, so the two
+   buttons deliberately share one rule instead of a primary/secondary pair. */
+.cookie-consent-actions button {
+  flex: 1 1 auto;
+  padding: var(--spacing-2) var(--spacing-5);
+  border: 1px solid var(--color-primary);
+  border-radius: 4px;
+  background: var(--color-background);
+  color: var(--color-primary);
+  font: inherit;
+  font-weight: var(--fontWeight-bold);
+  cursor: pointer;
+}
+
+.cookie-consent-actions button:hover {
+  background: var(--color-accent);
+}
+
+@media (width >= 48rem) {
+  .cookie-consent {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-5) var(--spacing-8);
+  }
+
+  .cookie-consent-actions button {
+    flex: 0 0 auto;
+  }
+}
+
 /* Accessibility */
 
 /* Visible keyboard focus for all interactive elements. Browsers hide the
@@ -1467,7 +1565,8 @@ a:focus {
   .menu,
   .breadcrumbs,
   .rss,
-  .footer {
+  .footer,
+  .cookie-consent {
     display: none;
   }
 

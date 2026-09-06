@@ -1,0 +1,158 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import JsonLd from '../components/JsonLd.astro';
+import ExternalLink from '../components/ExternalLink.astro';
+import { SITE_METADATA } from '../data/site-metadata';
+import { CONTENT_LANG } from '../lib/i18n';
+import { createPageSchema } from '../lib/page-metadata';
+import type { PageMetadata } from '../types';
+
+const PAGE_METADATA: PageMetadata = {
+  title: 'Polityka prywatności',
+  description:
+    'Kto przetwarza dane osobowe w serwisie dawidrylko.com, na jakiej podstawie, komu je powierza i jakie prawa przysługują odwiedzającym.',
+  keywords: ['polityka prywatności', 'RODO', 'dane osobowe', 'dawidrylko.com'],
+};
+
+const structuredData = createPageSchema({
+  pathname: Astro.url.pathname,
+  title: PAGE_METADATA.title,
+  description: PAGE_METADATA.description,
+  keywords: PAGE_METADATA.keywords,
+});
+
+const email = SITE_METADATA.author.email;
+---
+
+<PageLayout
+  breadcrumbTitle={PAGE_METADATA.title}
+  title={PAGE_METADATA.title}
+  description={PAGE_METADATA.description}
+  lang={CONTENT_LANG}
+>
+  <JsonLd data={structuredData} />
+  <header>
+    <h1>{PAGE_METADATA.title}</h1>
+  </header>
+  <section>
+    <p>
+      Dokument opisuje, jak przetwarzane są dane osobowe osób odwiedzających serwis dawidrylko.com. Wykaz plików cookies
+      wraz z ich nazwami i czasem przechowywania zawiera odrębna <a href="/polityka-cookies/">Polityka cookies</a>.
+      Wersja angielska tego dokumentu: <a href="/privacy-policy/">Privacy policy</a>.
+    </p>
+  </section>
+  <section>
+    <h2>Administrator danych</h2>
+    <p>
+      Administratorem danych osobowych jest Dawid Ryłko. Kontakt w sprawach dotyczących danych osobowych:{' '}
+      <a href={`mailto:${email}`}>{email}</a>.
+    </p>
+    <p>
+      Administrator nie wyznaczył inspektora ochrony danych, ponieważ nie zachodzi żadna z przesłanek z art. 37 RODO.
+    </p>
+  </section>
+  <section>
+    <h2>Jakie dane są przetwarzane</h2>
+    <p>
+      Serwis nie ma formularzy, kont użytkowników, komentarzy ani newslettera. Przetwarzane są trzy kategorie danych.
+    </p>
+    <ul>
+      <li>
+        <strong>Dane techniczne z logów serwera</strong>, w tym adres IP, typ przeglądarki i czas żądania. Zapisuje je
+        dostawca hostingu w celu dostarczenia i zabezpieczenia serwisu. Podstawa prawna: prawnie uzasadniony interes
+        administratora, art. 6 ust. 1 lit. f RODO.
+      </li>
+      <li>
+        <strong>Dane o korzystaniu z serwisu</strong>, czyli odwiedzane podstrony i wskaźniki wydajności strony,
+        przetwarzane w Google Analytics 4 wyłącznie po wyrażeniu zgody. Podstawa prawna: zgoda, art. 6 ust. 1 lit. a
+        RODO oraz art. 399 ust. 1 ustawy Prawo komunikacji elektronicznej.
+      </li>
+      <li>
+        <strong>Dane z korespondencji</strong>, jeżeli odwiedzający napisze na podany adres e-mail. Zakres wyznacza sama
+        wiadomość. Podstawa prawna: prawnie uzasadniony interes w postaci prowadzenia korespondencji, art. 6 ust. 1 lit.
+        f RODO, a przy rozmowie o współpracy działania przed zawarciem umowy, art. 6 ust. 1 lit. b RODO.
+      </li>
+    </ul>
+    <p>
+      Podanie danych jest dobrowolne. Odmowa zgody na analitykę nie ogranicza korzystania z serwisu w żadnym zakresie.
+    </p>
+  </section>
+  <section>
+    <h2>Odbiorcy danych</h2>
+    <ul>
+      <li>
+        <strong>GitHub, Inc.</strong> jako dostawca hostingu GitHub Pages. Przetwarza dane techniczne opisane wyżej, niezależnie
+        od zgody, ponieważ bez nich strona nie może zostać wysłana do przeglądarki.
+      </li>
+      <li>
+        <strong>Google Ireland Limited</strong>, Gordon House, Barrow Street, Dublin 4, Irlandia, jako dostawca Google
+        Analytics 4. Otrzymuje dane wyłącznie od osób, które wyraziły zgodę na analitykę. Bez zgody skrypt Google nie
+        jest wczytywany i przeglądarka nie wysyła do Google żadnego żądania.
+      </li>
+    </ul>
+    <p>Dane nie są sprzedawane ani udostępniane w celach marketingowych. Serwis nie wczytuje skryptów reklamowych.</p>
+  </section>
+  <section>
+    <h2>Przekazywanie danych poza Europejski Obszar Gospodarczy</h2>
+    <p>
+      Obaj odbiorcy należą do grup kapitałowych ze Stanów Zjednoczonych, więc dane mogą być przekazywane do USA.
+      Przekazanie odbywa się na podstawie decyzji wykonawczej Komisji Europejskiej z 10 lipca 2023 r. stwierdzającej
+      odpowiedni stopień ochrony w ramach Data Privacy Framework, a w zakresie nieobjętym tą decyzją na podstawie
+      standardowych klauzul umownych zatwierdzonych przez Komisję Europejską.
+    </p>
+    <p>
+      Prawo Stanów Zjednoczonych daje tamtejszym organom szersze uprawnienia dostępu do danych niż prawo Unii
+      Europejskiej. Bez zgody na analitykę żadne dane nie trafiają do Google.
+    </p>
+  </section>
+  <section>
+    <h2>Okres przechowywania</h2>
+    <ul>
+      <li>Pliki cookies analityczne: 13 miesięcy od zapisania na urządzeniu.</li>
+      <li>Zapis decyzji o zgodzie: 13 miesięcy, po tym czasie serwis pyta ponownie.</li>
+      <li>
+        Dane zdarzeń w Google Analytics 4: zgodnie z ustawieniem retencji w usłudze, nie dłużej niż 14 miesięcy, co jest
+        maksimum dla standardowej wersji Google Analytics.
+      </li>
+      <li>Logi serwera: zgodnie z polityką dostawcy hostingu.</li>
+      <li>
+        Korespondencja e-mail: do czasu zakończenia sprawy, a następnie przez okres przedawnienia ewentualnych roszczeń.
+      </li>
+    </ul>
+  </section>
+  <section>
+    <h2>Prawa osoby, której dane dotyczą</h2>
+    <p>Przysługuje prawo do:</p>
+    <ul>
+      <li>dostępu do danych oraz otrzymania ich kopii, art. 15 RODO,</li>
+      <li>sprostowania danych, art. 16 RODO,</li>
+      <li>usunięcia danych, art. 17 RODO,</li>
+      <li>ograniczenia przetwarzania, art. 18 RODO,</li>
+      <li>przenoszenia danych przetwarzanych na podstawie zgody, art. 20 RODO,</li>
+      <li>sprzeciwu wobec przetwarzania opartego na prawnie uzasadnionym interesie, art. 21 RODO,</li>
+      <li>
+        wycofania zgody w dowolnym momencie, art. 7 ust. 3 RODO. Służy do tego przycisk Ustawienia cookies w stopce
+        każdej strony. Wycofanie nie wpływa na zgodność z prawem przetwarzania sprzed wycofania.
+      </li>
+    </ul>
+    <p>
+      Przysługuje też prawo wniesienia skargi do Prezesa Urzędu Ochrony Danych Osobowych, ul. Stawki 2, 00-193 Warszawa.
+    </p>
+  </section>
+  <section>
+    <h2>Profilowanie i decyzje automatyczne</h2>
+    <p>
+      Dane nie są wykorzystywane do profilowania ani do podejmowania decyzji opartych wyłącznie na zautomatyzowanym
+      przetwarzaniu w rozumieniu art. 22 RODO. W Google Analytics 4 wyłączone są sygnały Google Signals oraz
+      personalizacja reklam.
+    </p>
+  </section>
+  <section>
+    <h2>Zmiany dokumentu</h2>
+    <p>
+      Dokument jest aktualizowany razem ze zmianą wykorzystywanych narzędzi. Zgodność wykazu cookies z kodem serwisu
+      pilnuje test uruchamiany przy każdej zmianie w repozytorium{' '}
+      <ExternalLink href="https://github.com/dawidrylko/dawidrylko.com" follow={false}> dawidrylko.com </ExternalLink>.
+    </p>
+  </section>
+</PageLayout>

@@ -255,6 +255,9 @@ jobs:
       - name: Verify SEO title/description lengths
         run: node scripts/ci/check-seo-lengths.mjs
 
+      - name: Verify consent contract
+        run: node scripts/ci/check-consent-contract.mjs
+
       - name: Verify image weight budget
         run: node scripts/ci/check-image-budget.mjs
 

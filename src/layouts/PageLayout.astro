@@ -27,7 +27,9 @@ import Bio from '../components/Bio.astro';
 import JsonLd from '../components/JsonLd.astro';
 import { SITE_METADATA } from '../data/site-metadata';
 import { STRUCTURED_DATA } from '../data/structured-data';
-import { GTAG } from '../data/gtag';
+import CookieConsent from '../components/CookieConsent.tsx';
+import { CONSENT_DEFAULTS } from '../lib/consent-model';
+import { consentCopyFor } from '../data/consent-copy';
 import { DEFAULT_LANG } from '../lib/i18n';
 import type { NavLink } from '../types';
 
@@ -78,6 +80,14 @@ const year = new Date().getFullYear();
 // Site-wide identity graph. The real blog query URL is exposed as SearchAction,
 // and the canonical Person is emitted once for page/article @id references.
 const { website, person } = STRUCTURED_DATA;
+
+// Consent banner and footer control speak the language of the page they sit on.
+const consentCopy = consentCopyFor(metaLang);
+
+// Serialised once so the inline defaults and the runtime update share a single
+// list of consent types. Leaving a declared type unanswered in the update makes
+// gtag.js queue every hit, measurement included.
+const consentDefaults = JSON.stringify(CONSENT_DEFAULTS);
 ---
 
 <!doctype html>
@@ -85,6 +95,22 @@ const { website, person } = STRUCTURED_DATA;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {
+      /* Google Consent Mode v2 defaults. Every signal starts denied except what
+        the site itself needs, and gtag.js is not referenced here at all: the
+        loader is injected by the consent island only once the visitor agrees,
+        so before consent the browser makes no request to Google whatsoever.
+        Placed after charset and viewport, neither of which touches dataLayer,
+        so the encoding declaration stays well inside the first 1024 bytes. */
+    }
+    {
+      import.meta.env.PROD && (
+        <script
+          is:inline
+          set:html={`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('consent','default',${consentDefaults});gtag('set','ads_data_redaction',true);`}
+        />
+      )
+    }
     {
       /* Only `noIndex` suppresses the canonical, and the reason is the URL, not
         the noindex: a 404 would point its canonical at a non-200 URL, which SEO
@@ -131,26 +157,22 @@ const { website, person } = STRUCTURED_DATA;
     <JsonLd data={{ '@context': 'https://schema.org', '@graph': [website, person] }} />
 
     {
-      /* Google Analytics 4 — production builds only. The gtag stub, dataLayer
-        and config call run synchronously so window.gtag exists immediately and
-        the Core Web Vitals island can queue metrics from first paint. The
-        ~90 KB gtag.js is loaded lazily — on the first of user interaction, the
-        page being hidden, or a 5 s fallback — so it no longer competes with
-        rendering on the critical path. Queued hits (pageview + web vitals)
-        flush as soon as it arrives. */
+      /* Core Web Vitals → GA4. The module checks consent before reporting, so
+        metrics measured before the visitor answers are dropped, not queued. */
     }
     {
-      import.meta.env.PROD && (
-        <script
-          is:inline
-          set:html={`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${GTAG}');(function(){var loaded=false;function load(){if(loaded)return;loaded=true;var s=document.createElement('script');s.async=true;s.src='https://www.googletagmanager.com/gtag/js?id=${GTAG}';document.head.appendChild(s);}var o={once:true,passive:true},evs=['pointerdown','keydown','touchstart','scroll'];evs.forEach(function(e){addEventListener(e,load,o);});document.addEventListener('visibilitychange',function(){if(document.visibilityState==='hidden')load();});setTimeout(load,5000);}());`}
-        />
-      )
+      /* Applies an existing decision before the metrics below register, so a
+        returning visitor who accepted is measured from the start of the visit. */
     }
-
-    {/* Core Web Vitals → GA4 (no-ops without gtag, e.g. in dev). */}
+    <script>
+      import '../scripts/consent-boot';
+    </script>
     <script>
       import '../scripts/web-vitals';
+    </script>
+    {/* Reopens the consent banner from the footer control. */}
+    <script>
+      import '../scripts/cookie-settings';
     </script>
   </head>
   <body>
@@ -175,8 +197,20 @@ const { website, person } = STRUCTURED_DATA;
           <a href="/files/">Files</a>
           <span class="separator" aria-hidden="true">•</span>
           <a href="/metadata/">Metadata</a>
+          <span class="separator" aria-hidden="true">•</span>
+          <a href={consentCopy.privacyPolicy.href}>{consentCopy.privacyPolicy.label}</a>
+          <span class="separator" aria-hidden="true">•</span>
+          <a href={consentCopy.cookiePolicy.href}>{consentCopy.cookiePolicy.label}</a>
         </nav>
+        {
+          /* Withdrawing consent has to be as easy as giving it (art. 7(3) GDPR),
+            so the way back to the decision lives in the chrome of every page. */
+        }
+        <div class="footer-consent">
+          <button type="button" class="link-button" data-cookie-settings>{consentCopy.settings}</button>
+        </div>
       </footer>
+      <CookieConsent client:load lang={metaLang} />
     </div>
   </body>
 </html>

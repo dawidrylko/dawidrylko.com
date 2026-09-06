@@ -1,0 +1,149 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import JsonLd from '../components/JsonLd.astro';
+import ExternalLink from '../components/ExternalLink.astro';
+import { SITE_METADATA } from '../data/site-metadata';
+import { createPageSchema } from '../lib/page-metadata';
+import type { PageMetadata } from '../types';
+
+const PAGE_METADATA: PageMetadata = {
+  title: 'Privacy policy',
+  description:
+    'Who processes personal data on dawidrylko.com, on what legal basis, which processors receive it, and what rights visitors have under the GDPR.',
+  keywords: ['privacy policy', 'GDPR', 'personal data', 'dawidrylko.com'],
+};
+
+const structuredData = createPageSchema({
+  pathname: Astro.url.pathname,
+  title: PAGE_METADATA.title,
+  description: PAGE_METADATA.description,
+  keywords: PAGE_METADATA.keywords,
+});
+
+const email = SITE_METADATA.author.email;
+---
+
+<PageLayout breadcrumbTitle={PAGE_METADATA.title} title={PAGE_METADATA.title} description={PAGE_METADATA.description}>
+  <JsonLd data={structuredData} />
+  <header>
+    <h1>{PAGE_METADATA.title}</h1>
+  </header>
+  <section>
+    <p>
+      This document explains how personal data of visitors to dawidrylko.com is processed. The cookies themselves, with
+      their names and retention periods, are listed in the separate <a href="/cookie-policy/">Cookie policy</a>. Polish
+      version of this document: <a href="/polityka-prywatnosci/">Polityka prywatności</a>.
+    </p>
+    <p>
+      The site is operated from Poland, so it follows the GDPR together with the Polish Prawo komunikacji
+      elektronicznej, which requires prior consent for anything stored on your device and grants analytics no exemption.
+    </p>
+  </section>
+  <section>
+    <h2>Data controller</h2>
+    <p>
+      The controller is Dawid Ryłko. For anything concerning personal data, write to{' '}
+      <a href={`mailto:${email}`}>{email}</a>.
+    </p>
+    <p>No data protection officer has been appointed, as none of the conditions in art. 37 GDPR apply.</p>
+  </section>
+  <section>
+    <h2>What is processed</h2>
+    <p>The site has no forms, no accounts, no comments and no newsletter. Three categories of data are involved.</p>
+    <ul>
+      <li>
+        <strong>Server log data</strong>, including your IP address, browser type and request time, recorded by the
+        hosting provider to deliver and protect the site. Legal basis: legitimate interest, art. 6(1)(f) GDPR.
+      </li>
+      <li>
+        <strong>Usage data</strong>, meaning the pages you open and the page performance metrics, processed in Google
+        Analytics 4 only after you consent. Legal basis: consent, art. 6(1)(a) GDPR and art. 399(1) of the Prawo
+        komunikacji elektronicznej.
+      </li>
+      <li>
+        <strong>Correspondence</strong>, if you write to the address above. The scope is whatever your message contains.
+        Legal basis: legitimate interest in handling correspondence, art. 6(1)(f) GDPR, or steps before entering a
+        contract where the exchange is about working together, art. 6(1)(b) GDPR.
+      </li>
+    </ul>
+    <p>Providing data is voluntary. Refusing analytics limits nothing on the site.</p>
+  </section>
+  <section>
+    <h2>Recipients</h2>
+    <ul>
+      <li>
+        <strong>GitHub, Inc.</strong> as the provider of GitHub Pages hosting. It processes the log data described above regardless
+        of consent, because without it the page cannot be delivered to your browser.
+      </li>
+      <li>
+        <strong>Google Ireland Limited</strong>, Gordon House, Barrow Street, Dublin 4, Ireland, as the provider of
+        Google Analytics 4. It receives data only from visitors who consented to analytics. Without consent the Google
+        script is not loaded at all and your browser sends Google no request.
+      </li>
+    </ul>
+    <p>Data is never sold or shared for marketing. The site loads no advertising scripts.</p>
+  </section>
+  <section>
+    <h2>Transfers outside the European Economic Area</h2>
+    <p>
+      Both recipients belong to United States groups, so data may be transferred to the USA. Transfers rely on the
+      European Commission implementing decision of 10 July 2023 on the adequate level of protection under the Data
+      Privacy Framework, and, where that decision does not apply, on the standard contractual clauses approved by the
+      Commission.
+    </p>
+    <p>
+      United States law gives its authorities broader access to data than European Union law does. Without consent to
+      analytics, no data reaches Google.
+    </p>
+  </section>
+  <section>
+    <h2>Retention</h2>
+    <ul>
+      <li>Analytics cookies: 13 months from the moment they are written to your device.</li>
+      <li>The record of your consent decision: 13 months, after which the site asks again.</li>
+      <li>
+        Event data in Google Analytics 4: as configured by the property data retention setting, no longer than 14
+        months, which is the maximum for standard Google Analytics.
+      </li>
+      <li>Server logs: according to the hosting provider policy.</li>
+      <li>Email correspondence: until the matter is closed, then for the limitation period of any related claims.</li>
+    </ul>
+  </section>
+  <section>
+    <h2>Your rights</h2>
+    <p>You have the right to:</p>
+    <ul>
+      <li>access your data and obtain a copy of it, art. 15 GDPR,</li>
+      <li>have it corrected, art. 16 GDPR,</li>
+      <li>have it erased, art. 17 GDPR,</li>
+      <li>restrict processing, art. 18 GDPR,</li>
+      <li>data portability for data processed on consent, art. 20 GDPR,</li>
+      <li>object to processing based on legitimate interest, art. 21 GDPR,</li>
+      <li>
+        withdraw consent at any time, art. 7(3) GDPR. The Cookie settings button in the footer of every page does
+        exactly that. Withdrawal does not affect the lawfulness of processing carried out beforehand.
+      </li>
+    </ul>
+    <p>
+      You may also lodge a complaint with the President of the Personal Data Protection Office, ul. Stawki 2, 00-193
+      Warsaw, Poland.
+    </p>
+  </section>
+  <section>
+    <h2>Profiling and automated decisions</h2>
+    <p>
+      Data is not used for profiling or for decisions based solely on automated processing within the meaning of art. 22
+      GDPR. Google Signals and ad personalisation are switched off in Google Analytics 4.
+    </p>
+  </section>
+  <section>
+    <h2>Changes</h2>
+    <p>
+      This document is updated whenever the tools change. A test run on every change to the{' '}
+      <ExternalLink href="https://github.com/dawidrylko/dawidrylko.com" follow={false}> dawidrylko.com </ExternalLink>{
+        ' '
+      }
+      repository keeps the cookie list in step with the code.
+    </p>
+  </section>
+</PageLayout>

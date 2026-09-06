@@ -3,7 +3,20 @@ import AxeBuilder from '@axe-core/playwright';
 
 // axe-core scan per page — deeper than the design-token contrast audit: catches
 // ARIA, landmark, label and structural issues in the rendered DOM.
-const ROUTES = ['/', '/blog/', '/bio/', '/contact/', '/setup/', '/metadata/', '/files/', '/tags/'];
+const ROUTES = [
+  '/',
+  '/blog/',
+  '/bio/',
+  '/contact/',
+  '/setup/',
+  '/metadata/',
+  '/files/',
+  '/tags/',
+  '/privacy-policy/',
+  '/cookie-policy/',
+  '/polityka-prywatnosci/',
+  '/polityka-cookies/',
+];
 
 for (const route of ROUTES) {
   test(`${route} has no detectable WCAG A/AA violations`, async ({ page }) => {
