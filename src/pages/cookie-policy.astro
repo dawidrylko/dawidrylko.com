@@ -143,7 +143,12 @@ const sessionCookie = `_ga_${GTAG.replace(/^G-/, '')}`;
       Withdrawal stops measurement immediately and deletes the <code>_ga</code> and <code>{sessionCookie}</code> files already
       on your device. They do not wait out their thirteen month period.
     </p>
-    <p>Thirteen months after your decision the site asks again.</p>
+    <p>
+      Thirteen months after your decision the site asks again. The analytics files expire at the same moment, because
+      their lifetime is counted from the moment consent was given and is not pushed forward by later visits. Should a
+      <code>_ga</code> file survive on your device anyway, it is deleted on your next visit. That also covers files written
+      by an earlier version of this site, which did not ask.
+    </p>
     <p>Regardless of the settings here, cookies can be controlled from your browser:</p>
     <ul>
       <li>

@@ -1,5 +1,10 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { CONSENT_STORAGE_KEY, ANALYTICS_COOKIE_EXPIRES_SECONDS, createDecision } from './consent-model';
+import {
+  CONSENT_STORAGE_KEY,
+  CONSENT_MAX_AGE_MS,
+  ANALYTICS_COOKIE_EXPIRES_SECONDS,
+  createDecision,
+} from './consent-model';
 import { GTAG } from '../data/gtag';
 
 // The three-pass consent audit at module level: before any decision, after a
@@ -50,6 +55,7 @@ const setupBrowser = ({ withStub = true, cookies = '' } = {}): Harness => {
     localStorage: {
       getItem: (key: string) => harness.store.get(key) ?? null,
       setItem: (key: string, value: string) => void harness.store.set(key, value),
+      removeItem: (key: string) => void harness.store.delete(key),
     },
     document: documentStub,
   };
@@ -89,7 +95,7 @@ describe('consent gate', () => {
     it('loads no analytics script and issues no consent update', async () => {
       const harness = setupBrowser();
       const consent = await loadModule();
-      consent.readStoredConsent();
+      consent.applyStoredConsent();
 
       expect(harness.injected).toEqual([]);
       expect(harness.calls).toEqual([]);
@@ -259,6 +265,50 @@ describe('consent gate', () => {
       expect(consentUpdates(harness)).toHaveLength(2);
       expect(consentUpdates(harness)[1].analytics_storage).toBe('denied');
       expect(consent.isAnalyticsActive()).toBe(false);
+    });
+
+    it('erases cookies left by a decision that has aged out', async () => {
+      const harness = setupBrowser({ cookies: '_ga=GA1.1; _ga_1SKESWY49E=GS1.1' });
+      // Written 13 months and a day ago: past CONSENT_MAX_AGE_MS.
+      harness.store.set(
+        CONSENT_STORAGE_KEY,
+        JSON.stringify(createDecision(true, new Date(Date.now() - CONSENT_MAX_AGE_MS - 1))),
+      );
+      const consent = await loadModule();
+
+      expect(consent.applyStoredConsent()).toBeNull();
+      expect(harness.cookieWrites.some(write => write.startsWith('_ga='))).toBe(true);
+      expect(harness.cookieWrites.every(write => write.includes('expires=Thu, 01 Jan 1970'))).toBe(true);
+      expect(harness.injected).toEqual([]);
+    });
+
+    it('erases cookies written before the gate existed, with no record at all', async () => {
+      // The state every current visitor is in on the day this ships: _ga set
+      // without consent by the previous version of the site.
+      const harness = setupBrowser({ cookies: '_ga=GA1.1; _ga_1SKESWY49E=GS1.1' });
+      const consent = await loadModule();
+
+      expect(consent.applyStoredConsent()).toBeNull();
+      expect(harness.cookieWrites.some(write => write.startsWith('_ga='))).toBe(true);
+      expect(consent.isAnalyticsActive()).toBe(false);
+    });
+
+    it('drops a record it refuses to honour instead of leaving it behind', async () => {
+      const harness = setupBrowser();
+      harness.store.set(CONSENT_STORAGE_KEY, 'not json at all');
+      const consent = await loadModule();
+
+      expect(consent.applyStoredConsent()).toBeNull();
+      expect(harness.store.has(CONSENT_STORAGE_KEY)).toBe(false);
+    });
+
+    it('leaves unrelated cookies alone while sweeping', async () => {
+      const harness = setupBrowser({ cookies: 'theme=dark' });
+      const consent = await loadModule();
+
+      consent.applyStoredConsent();
+
+      expect(harness.cookieWrites).toEqual([]);
     });
 
     it('treats a storage failure as no decision rather than as consent', async () => {

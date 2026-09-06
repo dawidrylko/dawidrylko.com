@@ -125,6 +125,18 @@ async function checkSource() {
     );
   }
 
+  if (!/cookie_update: false/.test(effects)) {
+    fail(
+      `${EFFECTS_SOURCE}: gtag config does not set cookie_update: false. The default slides the cookie expiry forward on every visit, so a frequent visitor's cookies outlive the consent record that authorised them.`,
+    );
+  }
+
+  if (!/clearAnalyticsCookies\(\);/.test(effects)) {
+    fail(
+      `${EFFECTS_SOURCE}: nothing erases the analytics cookies when no valid decision is on record. Without that sweep an expired decision, or one never given, leaves \`_ga\` on the device.`,
+    );
+  }
+
   if (!/CONSENT_MAX_AGE_MS = ANALYTICS_COOKIE_EXPIRES_SECONDS \* 1000/.test(model)) {
     fail(
       `${MODEL_SOURCE}: CONSENT_MAX_AGE_MS must be derived from ${CONSTANT}. A consent record that expires first leaves the analytics cookies on the device with nothing on record to justify them.`,
