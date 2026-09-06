@@ -141,8 +141,9 @@ test.describe('consent gate', () => {
     // previous version of the site, which measured without asking.
     await page.goto('/');
     await page.context().addCookies([
-      { name: '_ga', value: 'GA1.1.5.5', url: '/', domain: 'localhost', path: '/' },
-      { name: SESSION_COOKIE, value: 'GS1.1.5', url: '/', domain: 'localhost', path: '/' },
+      // Playwright takes either a url or a domain/path pair, never both.
+      { name: '_ga', value: 'GA1.1.5.5', domain: 'localhost', path: '/' },
+      { name: SESSION_COOKIE, value: 'GS1.1.5', domain: 'localhost', path: '/' },
     ]);
     expect(await analyticsCookies(page)).toEqual(expect.arrayContaining(['_ga', SESSION_COOKIE]));
 
