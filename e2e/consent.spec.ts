@@ -209,6 +209,49 @@ test.describe('consent gate', () => {
     expect(Math.abs(refuseBox!.y - acceptBox!.y)).toBeLessThan(2);
   });
 
+  // Regression. The bar is focused programmatically when it opens, so the
+  // keyboard and a screen reader land inside it. It is not tab-reachable and it
+  // is not a control, so the global :focus-visible ring framed the whole strip.
+  test('the bar carries no focus ring of its own, while its controls keep theirs', async ({ page }) => {
+    await page.goto('/');
+    await expect(banner(page)).toBeVisible();
+
+    // The rule itself. Chromium rarely matches :focus-visible on programmatic
+    // focus, so asserting only the computed style here would stay green with
+    // the fix deleted, while Firefox and Safari kept painting the ring.
+    const suppressed = await page.evaluate(() =>
+      [...document.styleSheets]
+        .flatMap(sheet => {
+          try {
+            return [...sheet.cssRules];
+          } catch {
+            return [];
+          }
+        })
+        .filter((rule): rule is CSSStyleRule => rule instanceof CSSStyleRule)
+        .some(
+          rule => /\.cookie-consent:focus(-visible)?/.test(rule.selectorText) && rule.style.outlineStyle === 'none',
+        ),
+    );
+    expect(suppressed).toBe(true);
+
+    // And the ring the controls must keep, once focus is genuinely keyboard-driven.
+    await page.keyboard.press('Tab');
+    const rings = await page.evaluate(() => {
+      const bar = document.querySelector<HTMLElement>('.cookie-consent')!;
+      const button = document.querySelector<HTMLElement>('.cookie-consent-actions button')!;
+      bar.focus();
+      const barStyle = getComputedStyle(bar).outlineStyle;
+      button.focus();
+      const buttonStyle = getComputedStyle(button);
+      return { barStyle, buttonStyle: buttonStyle.outlineStyle, buttonWidth: buttonStyle.outlineWidth };
+    });
+
+    expect(rings.barStyle).toBe('none');
+    expect(rings.buttonStyle).not.toBe('none');
+    expect(parseFloat(rings.buttonWidth)).toBeGreaterThanOrEqual(3);
+  });
+
   test('the legal documents are reachable and cross-linked', async ({ page }) => {
     for (const [route, heading] of [
       ['/privacy-policy/', 'Privacy policy'],
