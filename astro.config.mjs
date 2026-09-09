@@ -20,6 +20,13 @@ const postLastmod = await buildPostLastmodMap();
 // must not drift apart.
 const SITE = 'https://dawidrylko.com';
 
+// Legal pages are linked from every footer and stay fully reachable, but they
+// are not search landing pages: they carry "noindex, follow" and are kept out
+// of the sitemap, the same rule silesiansolutions.com applies to its own.
+// scripts/ci/robots-directives.mjs asserts both halves against the build, so
+// removing one here reddens rather than half-applying the decision.
+export const NOINDEX_ROUTES = ['/privacy-policy/', '/cookie-policy/', '/polityka-prywatnosci/', '/polityka-cookies/'];
+
 // Content pipeline (migrated from Gatsby):
 //   - MDX with remark-math + rehype-katex (KaTeX, build-time SSR)
 //   - Shiki syntax highlighting with light/dark themes (replaces Prism)
@@ -51,6 +58,9 @@ export default defineConfig({
     mdx(),
     react(),
     sitemap({
+      // Legal pages carry "noindex, follow"; advertising them here would
+      // be a mixed signal to a crawler that reads both.
+      filter: page => !NOINDEX_ROUTES.some(route => page.endsWith(route)),
       // The image sitemap is written by the sitemapImages() integration below,
       // outside this plugin's own url set — customSitemaps is what still gets it
       // listed in the canonical sitemap-index.xml, so the index that robots.txt

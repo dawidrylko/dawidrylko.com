@@ -28,6 +28,7 @@ const sessionCookie = `_ga_${GTAG.replace(/^G-/, '')}`;
 ---
 
 <PageLayout
+  noIndexFollow
   breadcrumbTitle={PAGE_METADATA.title}
   title={PAGE_METADATA.title}
   description={PAGE_METADATA.description}
@@ -59,9 +60,9 @@ const sessionCookie = `_ga_${GTAG.replace(/^G-/, '')}`;
     </p>
   </section>
   <section>
-    <h2>Pamięć lokalna niezbędna do działania</h2>
+    <h2>Pamięć przeglądarki niezbędna do działania</h2>
     <div class="table-scroll" tabindex="0">
-      <table aria-label="Pamięć lokalna niezbędna do działania serwisu">
+      <table aria-label="Pamięć przeglądarki niezbędna do działania serwisu">
         <thead>
           <tr>
             <th scope="col">Nazwa</th>

@@ -1485,6 +1485,17 @@ a:focus {
   font-size: var(--fontSize-0);
 }
 
+/* The bar is focused programmatically when it opens, so the keyboard and a
+   screen reader land inside it rather than at the top of the document. It is
+   not tab-reachable and it is not a control, so the global focus ring only
+   frames the whole bar for no one's benefit. Firefox and Safari do match
+   :focus-visible on that programmatic focus. Suppressed here on the container
+   alone: every button and link inside keeps its own ring. */
+.cookie-consent:focus,
+.cookie-consent:focus-visible {
+  outline: none;
+}
+
 .cookie-consent h2 {
   margin: 0 0 var(--spacing-2);
   font-size: var(--fontSize-1);

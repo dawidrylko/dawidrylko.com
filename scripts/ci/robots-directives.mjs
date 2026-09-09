@@ -63,3 +63,26 @@ export function tagArchiveViolation(html) {
   if (isDeadEndPage(html)) return `archive lists ${posts} post(s) and must be "noindex, follow", not a dead end`;
   return null;
 }
+
+// Kept in sync with NOINDEX_ROUTES in astro.config.mjs, duplicated for the same
+// reason TAG_INDEX_MIN_POSTS is: this gate has zero dependencies and importing
+// the Astro config would pull in every integration it configures.
+export const LEGAL_ROUTES = ['/privacy-policy/', '/cookie-policy/', '/polityka-prywatnosci/', '/polityka-cookies/'];
+
+// The same routes as dist-relative page paths, which is how the SEO contract
+// walks the build.
+export const LEGAL_PAGES = new Set(LEGAL_ROUTES.map(route => `${route.slice(1, -1)}/index.html`));
+
+// The legal page contract. These are ordinary 200 pages linked from every
+// footer, kept out of the index because nobody should reach a privacy policy
+// from a search result instead of the page it belongs to. That makes them the
+// same shape as a thin tag archive, not a dead end: "noindex, follow", keeping
+// the self-canonical. Picking `noIndex` instead of `noIndexFollow` at the call
+// site strips the canonical from a live page with nothing else going red, which
+// is the regression this catches. Returns null when the page is fine.
+export function legalPageViolation(html) {
+  const noindex = /<meta[^>]*name="robots"[^>]*content="[^"]*noindex/i.test(html);
+  if (!noindex) return 'legal page must be kept out of the index';
+  if (isDeadEndPage(html)) return 'legal page must be "noindex, follow", not a dead end';
+  return null;
+}

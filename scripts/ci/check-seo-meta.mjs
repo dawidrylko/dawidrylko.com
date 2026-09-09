@@ -31,7 +31,13 @@
 import { readFile, readdir, access } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve, join, relative } from 'node:path';
-import { isDeadEndPage, tagArchiveViolation, tagHubViolation } from './robots-directives.mjs';
+import {
+  LEGAL_PAGES,
+  isDeadEndPage,
+  legalPageViolation,
+  tagArchiveViolation,
+  tagHubViolation,
+} from './robots-directives.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DIST_DIR = process.argv[2] ? resolve(process.cwd(), process.argv[2]) : resolve(__dirname, '../../dist');
@@ -147,6 +153,9 @@ function checkPage(page, html) {
     if (violation) fail(`${page}: ${violation}`);
   } else if (/^tags\/[^/]+\/index\.html$/.test(page)) {
     const violation = tagArchiveViolation(html);
+    if (violation) fail(`${page}: ${violation}`);
+  } else if (LEGAL_PAGES.has(page)) {
+    const violation = legalPageViolation(html);
     if (violation) fail(`${page}: ${violation}`);
   }
 

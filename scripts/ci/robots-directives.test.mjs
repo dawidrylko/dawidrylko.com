@@ -3,6 +3,7 @@ import { readFileSync } from 'node:fs';
 import {
   isDeadEndPage,
   tagArchiveViolation,
+  legalPageViolation,
   tagHubViolation,
   countArchivePosts,
   POST_LIST_ITEM_TAG,
@@ -109,5 +110,28 @@ describe('tagHubViolation', () => {
     // Unlike an archive, the hub is judged on its directive alone: it lists
     // archives, not posts, so countArchivePosts reports zero for it.
     expect(tagHubViolation('<meta name="robots" content="index, follow" />')).toBeNull();
+  });
+});
+
+// Same axis as tagArchiveViolation above, for the same reason: a legal page and
+// a thin tag archive are the identical shape, and the two exclusions are one
+// word apart at the call site (`noIndex` instead of `noIndexFollow`). Picking
+// the wrong one strips the self-canonical from a live 200 page while nothing
+// else in the build goes red, so the contract has to name the difference.
+describe('legalPageViolation', () => {
+  it('accepts a legal page kept out of the index but still followable', () => {
+    expect(legalPageViolation(robots('noindex, follow'))).toBeNull();
+  });
+
+  it('rejects a legal page marked as a dead end', () => {
+    expect(legalPageViolation(robots('noindex, nofollow'))).toMatch(/not a dead end/);
+  });
+
+  it('rejects a legal page that is still indexable', () => {
+    expect(legalPageViolation(robots('index, follow'))).toMatch(/kept out of the index/);
+  });
+
+  it('rejects a legal page carrying no directive at all', () => {
+    expect(legalPageViolation('<html><head></head></html>')).toMatch(/kept out of the index/);
   });
 });

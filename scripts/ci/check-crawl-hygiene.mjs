@@ -26,6 +26,7 @@
 import { readFile, readdir, access } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve, join, relative } from 'node:path';
+import { LEGAL_ROUTES } from './robots-directives.mjs';
 
 // The signature easter egg decodes "Dawid Rylko" from decimal char codes; it
 // must only ever be injected client-side, so its leading bytes (D a w = 68 97
@@ -184,6 +185,17 @@ async function main() {
     const xml = await readFile(join(distDir, name), 'utf8');
     if (xml.includes('<sitemapindex')) indexes.set(name, extractSitemapIndexLocs(xml).map(toName));
     else urlSets.push(name);
+  }
+
+  // Legal pages carry "noindex, follow", so listing them in a sitemap would
+  // hand a crawler two contradictory instructions about one URL. The directive
+  // half is asserted by check-seo-meta.mjs; this is the other half, and the
+  // exclusion only means something while both hold.
+  for (const name of urlSets) {
+    const xml = await readFile(join(distDir, name), 'utf8');
+    for (const route of LEGAL_ROUTES) {
+      if (xml.includes(`${route}</loc>`)) fail(`${name} advertises ${route}, which is noindex`);
+    }
   }
 
   // Nothing may point at a sitemap the build did not emit.
