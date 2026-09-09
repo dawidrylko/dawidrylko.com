@@ -26,7 +26,12 @@ const structuredData = createPageSchema({
 const sessionCookie = `_ga_${GTAG.replace(/^G-/, '')}`;
 ---
 
-<PageLayout breadcrumbTitle={PAGE_METADATA.title} title={PAGE_METADATA.title} description={PAGE_METADATA.description}>
+<PageLayout
+  noIndexFollow
+  breadcrumbTitle={PAGE_METADATA.title}
+  title={PAGE_METADATA.title}
+  description={PAGE_METADATA.description}
+>
   <JsonLd data={structuredData} />
   <header>
     <h1>{PAGE_METADATA.title}</h1>

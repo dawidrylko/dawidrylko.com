@@ -2,6 +2,25 @@ import { defineConfig, policyPacks, presets, profiles } from '@silesiansolutions
 
 const preset = presets.astro();
 
+// Kept in sync with NOINDEX_ROUTES in astro.config.mjs and LEGAL_ROUTES in
+// scripts/ci/robots-directives.mjs. Recorded as suppressions rather than
+// through the policy pack's allowNoindexOn, for the reason spelled out below
+// the tag entries: allowNoindexOn silences the finding without leaving a
+// reviewed decision in the report.
+const LEGAL_ROUTES = ['/privacy-policy/', '/cookie-policy/', '/polityka-prywatnosci/', '/polityka-cookies/'];
+
+const LEGAL_REASON =
+  'Legal pages are excluded from the index deliberately; check-seo-meta.mjs asserts the directive and check-crawl-hygiene.mjs asserts they stay out of the sitemap.';
+
+const legalSuppressions = LEGAL_ROUTES.flatMap(route =>
+  (['indexability.noindex', 'ai-visibility-safe.public-snippet-directives'] as const).map(code => ({
+    code,
+    urlPattern: `${route}**`,
+    reason: LEGAL_REASON,
+    owner: 'dawidrylko',
+  })),
+);
+
 export default defineConfig({
   ...preset,
   ...profiles.personalSite(),
@@ -62,6 +81,7 @@ export default defineConfig({
         'Thin tag archives are excluded from the index deliberately; check-seo-meta.mjs asserts exactly which ones.',
       owner: 'dawidrylko',
     },
+    ...legalSuppressions,
   ],
   ci: {
     failOn: ['error'],
