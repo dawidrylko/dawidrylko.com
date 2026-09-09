@@ -187,27 +187,31 @@ const consentDefaults = JSON.stringify(CONSENT_DEFAULTS);
       <Bio />
       <hr />
       <footer class="footer">
+        {
+          /* A list with the bullet on ::after, like the main menu: the separator
+            belongs to the item before it, so a wrapped row never opens with a
+            stray bullet the way free-standing <span> separators did. */
+        }
+        <nav class="footer-metadata" aria-label="Site links and cookie settings">
+          <ul>
+            <li><a href="/setup/">Setup</a></li>
+            <li><a href="/files/">Files</a></li>
+            <li><a href="/metadata/">Metadata</a></li>
+            <li><a href={consentCopy.privacyPolicy.href}>{consentCopy.privacyPolicy.label}</a></li>
+            <li><a href={consentCopy.cookiePolicy.href}>{consentCopy.cookiePolicy.label}</a></li>
+            {
+              /* Withdrawing consent has to be as easy as giving it (art. 7(3)
+                GDPR), so the way back to the decision lives in the chrome of
+                every page, in the same row as the policies it undoes. */
+            }
+            <li>
+              <button type="button" class="link-button" data-cookie-settings>{consentCopy.settings}</button>
+            </li>
+          </ul>
+        </nav>
         <div class="footer-copyright">
           Copyright © {year}{' '}
           <a href={SITE_METADATA.url}>{SITE_METADATA.author.name}</a>
-        </div>
-        <nav class="footer-metadata" aria-label="More pages">
-          <a href="/setup/">Setup</a>
-          <span class="separator" aria-hidden="true">•</span>
-          <a href="/files/">Files</a>
-          <span class="separator" aria-hidden="true">•</span>
-          <a href="/metadata/">Metadata</a>
-          <span class="separator" aria-hidden="true">•</span>
-          <a href={consentCopy.privacyPolicy.href}>{consentCopy.privacyPolicy.label}</a>
-          <span class="separator" aria-hidden="true">•</span>
-          <a href={consentCopy.cookiePolicy.href}>{consentCopy.cookiePolicy.label}</a>
-        </nav>
-        {
-          /* Withdrawing consent has to be as easy as giving it (art. 7(3) GDPR),
-            so the way back to the decision lives in the chrome of every page. */
-        }
-        <div class="footer-consent">
-          <button type="button" class="link-button" data-cookie-settings>{consentCopy.settings}</button>
         </div>
       </footer>
       <CookieConsent client:load lang={metaLang} />

@@ -1427,10 +1427,14 @@ a:focus {
 
 /* Footer */
 
+/* Two stacked rows: the secondary nav (including the consent control) first,
+   the copyright last. Stacking rather than a space-between line keeps the row
+   of links intact on narrow screens instead of splitting it around the
+   copyright. */
 .footer {
   display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: var(--spacing-2);
 
   /* Match the bio's --spacing-6 gap so the footer sits a uniform distance below
      the rule above it. Font size matches the rest of the page chrome
@@ -1439,10 +1443,34 @@ a:focus {
   font-size: var(--fontSize-0);
 }
 
+.footer-metadata ul {
+  display: flex;
+  flex-wrap: wrap;
+  margin: var(--spacing-0);
+}
+
+.footer-metadata li {
+  display: inline;
+  margin: var(--spacing-0);
+
+  /* Keep each label whole: the row wraps between items, never mid-word. Without
+     this the page-wide hyphenation splits "Privacy poli-cy" across two lines. */
+  white-space: nowrap;
+}
+
+/* Same bullet, margin and token as .menu ul li::after, so the two navs read as
+   one system. Carried by the item rather than a standalone <span> so it cannot
+   be orphaned at the start of a wrapped row. */
+.footer-metadata li:not(:last-child)::after {
+  content: '•';
+  margin: 0 var(--spacing-2);
+  color: var(--color-text-light);
+}
+
 .footer-metadata a {
-  /* Secondary footer nav (Setup • Files • Metadata) stays understated, but uses
-     the muted text token (WCAG AA in both themes) rather than --color-accent
-     (~1.4:1) so it is not an accessibility failure. */
+  /* Secondary footer nav (Setup • Files • … • Cookie settings) stays
+     understated, but uses the muted text token (WCAG AA in both themes) rather
+     than --color-accent (~1.4:1) so it is not an accessibility failure. */
   color: var(--color-text-light);
 }
 
@@ -1459,11 +1487,6 @@ a:focus {
   color: var(--color-text-light);
   text-decoration: underline;
   cursor: pointer;
-}
-
-.footer-consent {
-  margin-top: var(--spacing-2);
-  font-size: var(--fontSize-0);
 }
 
 /* Cookie banner. Fixed to the bottom so it never pushes content around (no
