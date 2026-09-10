@@ -139,7 +139,13 @@ test.describe('consent gate', () => {
   test('cookies with no decision behind them are swept on the next visit', async ({ page }) => {
     // The state every visitor is in on the day this ships: _ga written by the
     // previous version of the site, which measured without asking.
-    await page.goto('/');
+    //
+    // Seeded before the first visit rather than after one, because a visit is
+    // exactly what erases these cookies. Two callers sweep when nothing is on
+    // record: consent-boot.ts from the head, which as a deferred module always
+    // lands before the load event, and the client:load banner island from its
+    // mount effect, which can land well after it. Seeding into a page that
+    // still owes the island's sweep is a race the seeding loses.
     await page.context().addCookies([
       // Playwright takes either a url or a domain/path pair, never both.
       { name: '_ga', value: 'GA1.1.5.5', domain: 'localhost', path: '/' },
@@ -147,7 +153,7 @@ test.describe('consent gate', () => {
     ]);
     expect(await analyticsCookies(page)).toEqual(expect.arrayContaining(['_ga', SESSION_COOKIE]));
 
-    await page.reload();
+    await page.goto('/');
 
     await expect.poll(() => analyticsCookies(page)).toEqual([]);
     await expect(banner(page)).toBeVisible();
