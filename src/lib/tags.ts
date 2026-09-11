@@ -2,9 +2,13 @@ import { getBlogPosts } from './blog';
 import { slugifyTag } from './slugify-tag';
 import { plPlural } from './pl-plural';
 
-// Re-exported so existing server-side imports (`../lib/tags`) keep working; the
-// implementation lives in a dependency-free module the client search can import.
+// Re-exported so existing server-side imports (`../lib/tags`) keep working. Both
+// implementations live in dependency-free modules, because two callers cannot
+// pull in astro:content through this one: the client search bundle
+// (slugifyTag) and astro.config.mjs, which filters thin archives out of the
+// sitemap before the content pipeline exists (tag-index).
 export { slugifyTag };
+export { TAG_INDEX_MIN_POSTS, isTagIndexable } from './tag-index';
 
 // A blog post entry, inferred from getBlogPosts so this stays in sync with the
 // content collection type without importing astro:content directly (the unit
@@ -51,19 +55,6 @@ export async function getTags(): Promise<TagInfo[]> {
   }
 
   return [...byTag.values()].sort((a, b) => b.count - a.count || a.tag.localeCompare(b.tag, 'pl'));
-}
-
-// A tag archive is a listing page: its only content is a title and the posts it
-// links to, all of which live on their own indexed pages. Below this threshold
-// the archive is a near-duplicate of a handful of post entries, which is the
-// case search engines routinely drop from the index anyway. Thin archives are
-// therefore excluded deliberately (noindex) but stay crawlable (follow), so they
-// keep passing internal links to the posts they list.
-export const TAG_INDEX_MIN_POSTS = 5;
-
-// Whether a tag archive of this size belongs in the search index.
-export function isTagIndexable(count: number): boolean {
-  return count >= TAG_INDEX_MIN_POSTS;
 }
 
 // "<n> wpis/wpisy/wpisów" with the correct Polish plural form for the count.

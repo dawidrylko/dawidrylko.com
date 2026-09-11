@@ -1,6 +1,9 @@
 import { readdir, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
+import { slugifyTag } from './slugify-tag';
+import { isTagIndexable } from './tag-index';
+
 // Derive the URL slug for a top-level post directory. Mirrors generateId in
 // content.config.ts: strip the leading YYYY-MM-DD-- prefix.
 export function postSlug(dirName: string): string {
@@ -65,21 +68,28 @@ ${urls}
 `;
 }
 
-// Map each top-level post slug to its lastmod by reading frontmatter directly
-// from disk. Used by the sitemap serializer in astro.config.mjs, which runs
-// outside the Astro content pipeline and so cannot use getCollection().
-export async function buildPostLastmodMap(baseDir = 'content/pl'): Promise<Map<string, string>> {
-  const map = new Map<string, string>();
+// One post as the sitemap builders see it: its URL slug and its raw frontmatter
+// block. Read straight from disk because astro.config.mjs runs before the Astro
+// content pipeline exists and so cannot call getCollection().
+interface PostFrontmatter {
+  slug: string;
+  frontmatter: string;
+}
+
+// Walk the top-level post directories once and return the frontmatter of each
+// post's index.{mdx,md}. Scoped to top-level entries on purpose: that is the
+// same set getBlogPosts() lists, so secondary pages (.../ng-help) neither carry
+// a lastmod nor count towards a tag's size.
+async function readPostFrontmatter(baseDir: string): Promise<PostFrontmatter[]> {
   const dirs = await readdir(baseDir, { withFileTypes: true });
+  const posts: PostFrontmatter[] = [];
 
   for (const dir of dirs) {
     if (!dir.isDirectory()) continue;
     for (const file of ['index.mdx', 'index.md']) {
       try {
         const raw = await readFile(join(baseDir, dir.name, file), 'utf8');
-        const frontmatter = raw.match(/^---\n([\s\S]*?)\n---/)?.[1] ?? '';
-        const lastmod = lastmodFromFrontmatter(frontmatter);
-        if (lastmod) map.set(postSlug(dir.name), lastmod);
+        posts.push({ slug: postSlug(dir.name), frontmatter: raw.match(/^---\n([\s\S]*?)\n---/)?.[1] ?? '' });
         break;
       } catch {
         // Try the other extension; a directory may hold index.md or index.mdx.
@@ -87,5 +97,74 @@ export async function buildPostLastmodMap(baseDir = 'content/pl'): Promise<Map<s
     }
   }
 
+  return posts;
+}
+
+// One item of a YAML sequence as a bare value: quotes are optional in this
+// corpus, and a flow sequence may wrap across lines, where the newline stands
+// for a single space.
+const unquote = (value: string) =>
+  value
+    .replace(/\s+/g, ' ')
+    .trim()
+    .replace(/^['"]|['"]$/g, '')
+    .trim();
+
+// The tags a post declares, from either YAML shape the corpus uses: a flow
+// sequence (`tags: ['css', 'javascript']`) or a block sequence of `- ` items.
+// Comment lines inside a block are skipped rather than ending it, because a
+// parser that stops early would silently undercount a tag — and an undercounted
+// tag is how an archive drops out of the sitemap while still asking to be
+// indexed, the exact contradiction this module exists to prevent.
+export function tagsFromFrontmatter(frontmatter: string): string[] {
+  const flow = frontmatter.match(/^tags:[ \t]*\[([^\]]*)\]/m);
+  if (flow) return flow[1].split(',').map(unquote).filter(Boolean);
+
+  const block = frontmatter.match(/^tags:[ \t]*\n((?:[ \t]*(?:-[ \t]*\S.*|#.*)?(?:\n|$))+)/m);
+  if (!block) return [];
+  return block[1]
+    .split('\n')
+    .filter(line => /^[ \t]*-/.test(line))
+    .map(line => unquote(line.replace(/^[ \t]*-[ \t]*/, '')))
+    .filter(Boolean);
+}
+
+// Map each top-level post slug to its lastmod by reading frontmatter directly
+// from disk. Used by the sitemap serializer in astro.config.mjs.
+export async function buildPostLastmodMap(baseDir = 'content/pl'): Promise<Map<string, string>> {
+  const map = new Map<string, string>();
+
+  for (const { slug, frontmatter } of await readPostFrontmatter(baseDir)) {
+    const lastmod = lastmodFromFrontmatter(frontmatter);
+    if (lastmod) map.set(slug, lastmod);
+  }
+
   return map;
+}
+
+// How many posts carry each tag, keyed by the tag's URL slug. Mirrors getTags()
+// over the same file set, one layer lower: frontmatter text instead of the
+// parsed collection.
+export async function buildTagCounts(baseDir = 'content/pl'): Promise<Map<string, number>> {
+  const counts = new Map<string, number>();
+
+  for (const { frontmatter } of await readPostFrontmatter(baseDir)) {
+    for (const tag of tagsFromFrontmatter(frontmatter)) {
+      const slug = slugifyTag(tag);
+      counts.set(slug, (counts.get(slug) ?? 0) + 1);
+    }
+  }
+
+  return counts;
+}
+
+// The /tags/<slug>/ routes whose archive is too thin to be indexed. Those pages
+// are still built and still linked from the /tags/ hub; keeping them out of the
+// sitemap is what stops it advertising a URL that answers "noindex" — the two
+// signals contradict each other, and an SEO audit reads both.
+export async function buildThinTagRoutes(baseDir = 'content/pl'): Promise<Set<string>> {
+  const counts = await buildTagCounts(baseDir);
+  const thin = [...counts].filter(([, count]) => !isTagIndexable(count));
+
+  return new Set(thin.map(([slug]) => `/tags/${slug}/`));
 }
