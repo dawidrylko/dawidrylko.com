@@ -6,6 +6,10 @@ import {
   extractSitemapIndexLocs,
   findArtifactViolations,
   findGluedRobotsDirectives,
+  findSitemapIndexabilityViolations,
+  noindexPathnames,
+  extractUrlSetLocs,
+  pathnameForPage,
   SIGNATURE_ARTIFACT,
 } from './check-crawl-hygiene.mjs';
 
@@ -146,5 +150,84 @@ describe('distPathForLoc', () => {
     expect(distPathForLoc('https://dawidrylko.com/_astro/domino.BBW36BnX_Z2wNLpc.webp')).toBe(
       '/_astro/domino.BBW36BnX_Z2wNLpc.webp',
     );
+  });
+});
+
+describe('extractUrlSetLocs', () => {
+  it('reads the page URLs of a url set, ignoring the sitemap index shape', () => {
+    const xml =
+      '<urlset><url><loc>https://dawidrylko.com/</loc><priority>1.0</priority></url>' +
+      '<url><loc>https://dawidrylko.com/tags/go/</loc></url></urlset>';
+    expect(extractUrlSetLocs(xml)).toEqual(['https://dawidrylko.com/', 'https://dawidrylko.com/tags/go/']);
+  });
+
+  it('unescapes the ampersands a sitemap writes escaped', () => {
+    expect(extractUrlSetLocs('<urlset><url><loc>https://dawidrylko.com/a?b=1&amp;c=2</loc></url></urlset>')).toEqual([
+      'https://dawidrylko.com/a?b=1&c=2',
+    ]);
+  });
+});
+
+describe('pathnameForPage', () => {
+  it('maps a directory index back to the URL it answers on', () => {
+    expect(pathnameForPage('tags/go/index.html')).toBe('/tags/go/');
+  });
+
+  it('maps the root index to /', () => {
+    expect(pathnameForPage('index.html')).toBe('/');
+  });
+
+  it('leaves a page emitted as a bare file alone', () => {
+    expect(pathnameForPage('404.html')).toBe('/404.html');
+  });
+});
+
+describe('noindexPathnames', () => {
+  it('collects the pages that exclude themselves from the index', () => {
+    const pages = [
+      { path: 'index.html', html: '<meta name="robots" content="index, follow">' },
+      { path: 'tags/css/index.html', html: '<meta name="robots" content="noindex, follow">' },
+      { path: '404.html', html: '<meta name="robots" content="noindex, nofollow">' },
+    ];
+    expect([...noindexPathnames(pages)]).toEqual(['/tags/css/', '/404.html']);
+  });
+
+  it('treats a page with no robots meta as indexable', () => {
+    expect([...noindexPathnames([{ path: 'bio/index.html', html: '<title>Bio</title>' }])]).toEqual([]);
+  });
+});
+
+describe('findSitemapIndexabilityViolations', () => {
+  const indexable = html => `<meta name="robots" content="index, follow">${html ?? ''}`;
+  const excluded = '<meta name="robots" content="noindex, follow">';
+
+  it('passes when the sitemap lists exactly the indexable pages', () => {
+    const pages = [
+      { path: 'index.html', html: indexable() },
+      { path: 'tags/css/index.html', html: excluded },
+    ];
+    expect(findSitemapIndexabilityViolations(pages, new Set(['/']))).toEqual([]);
+  });
+
+  it('catches a noindex page the sitemap still advertises', () => {
+    const pages = [{ path: 'tags/css/index.html', html: excluded }];
+    expect(findSitemapIndexabilityViolations(pages, new Set(['/tags/css/']))).toEqual([
+      'the sitemap advertises /tags/css/, which is noindex',
+    ]);
+  });
+
+  it('catches an indexable page the filter dropped from the sitemap', () => {
+    const pages = [{ path: 'tags/go/index.html', html: indexable() }];
+    expect(findSitemapIndexabilityViolations(pages, new Set())).toEqual([
+      '/tags/go/ is indexable but missing from the sitemap',
+    ]);
+  });
+
+  it('reports both directions at once rather than stopping at the first', () => {
+    const pages = [
+      { path: 'tags/css/index.html', html: excluded },
+      { path: 'tags/go/index.html', html: indexable() },
+    ];
+    expect(findSitemapIndexabilityViolations(pages, new Set(['/tags/css/']))).toHaveLength(2);
   });
 });

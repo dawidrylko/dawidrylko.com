@@ -1,6 +1,18 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
-import { postSlug, lastmodFromFrontmatter, extractPostImageUrls, buildImageSitemap, POST_ARTICLE_TAG } from './sitemap';
+import { mkdtemp, mkdir, writeFile } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import {
+  postSlug,
+  lastmodFromFrontmatter,
+  extractPostImageUrls,
+  buildImageSitemap,
+  tagsFromFrontmatter,
+  buildTagCounts,
+  buildThinTagRoutes,
+  POST_ARTICLE_TAG,
+} from './sitemap';
 
 describe('postSlug', () => {
   it('strips the YYYY-MM-DD-- date prefix', () => {
@@ -106,5 +118,89 @@ describe('buildImageSitemap', () => {
     const xml = buildImageSitemap([], 'https://dawidrylko.com');
     expect(xml.startsWith('<?xml version="1.0" encoding="UTF-8"?>')).toBe(true);
     expect(xml.trimEnd().endsWith('</urlset>')).toBe(true);
+  });
+});
+
+describe('tagsFromFrontmatter', () => {
+  it('reads a flow sequence, the shape the corpus uses', () => {
+    expect(tagsFromFrontmatter('title: Post\ntags: ["math", "javascript", "datascience"]\n')).toEqual([
+      'math',
+      'javascript',
+      'datascience',
+    ]);
+  });
+
+  it('accepts single quotes and unquoted items alike', () => {
+    expect(tagsFromFrontmatter("tags: ['css', javascript]\n")).toEqual(['css', 'javascript']);
+  });
+
+  it('reads a block sequence', () => {
+    expect(tagsFromFrontmatter('title: Post\ntags:\n  - smart home\n  - "iot"\ndate: 2024-01-01\n')).toEqual([
+      'smart home',
+      'iot',
+    ]);
+  });
+
+  it('stops a block sequence at the next key rather than swallowing it', () => {
+    expect(tagsFromFrontmatter('tags:\n  - css\ndescription: A post about css\n')).toEqual(['css']);
+  });
+
+  it('skips a comment inside a block sequence instead of ending the list there', () => {
+    expect(tagsFromFrontmatter('tags:\n  - css\n  # still to categorise\n  - javascript\ndate: 2024-01-01\n')).toEqual([
+      'css',
+      'javascript',
+    ]);
+  });
+
+  it('reads a flow sequence that wraps across lines, where the newline is a space', () => {
+    expect(tagsFromFrontmatter('tags: [css,\n  smart home]\n')).toEqual(['css', 'smart home']);
+  });
+
+  it('returns nothing for a post that declares no tags', () => {
+    expect(tagsFromFrontmatter('title: Post\ndate: 2024-01-01\n')).toEqual([]);
+  });
+
+  it('ignores an empty list', () => {
+    expect(tagsFromFrontmatter('tags: []\n')).toEqual([]);
+  });
+});
+
+describe('buildTagCounts / buildThinTagRoutes', () => {
+  // A post directory named the way the content collection expects, so the
+  // builders are exercised against the real layout rather than a flat fixture.
+  const writePost = async (baseDir: string, dirName: string, frontmatter: string, file = 'index.mdx') => {
+    await mkdir(join(baseDir, dirName), { recursive: true });
+    await writeFile(join(baseDir, dirName, file), `---\n${frontmatter}\n---\n\nBody.\n`, 'utf8');
+  };
+
+  it('counts posts per tag slug and keeps only the thin archives out of the sitemap', async () => {
+    const baseDir = await mkdtemp(join(tmpdir(), 'tags-'));
+    // Five posts carry "Astro", which clears the threshold; one carries "IoT".
+    for (let i = 1; i <= 5; i += 1) {
+      await writePost(baseDir, `2024-01-0${i}--post-${i}`, `title: Post ${i}\ntags: ['Astro']`);
+    }
+    await writePost(baseDir, '2024-02-01--lone', "title: Lone\ntags: ['IoT']", 'index.md');
+
+    expect(await buildTagCounts(baseDir)).toEqual(new Map([['astro', 5]]).set('iot', 1));
+    expect([...(await buildThinTagRoutes(baseDir))]).toEqual(['/tags/iot/']);
+  });
+
+  // getTags() throws on this input instead (a slug collision fails the build),
+  // so the two agree on every corpus that builds at all — which is the only
+  // case where this map is ever consulted.
+  it('merges tags that slugify the same into one archive', async () => {
+    const baseDir = await mkdtemp(join(tmpdir(), 'tags-'));
+    await writePost(baseDir, '2024-01-01--a', "title: A\ntags: ['Smart Home']");
+    await writePost(baseDir, '2024-01-02--b', "title: B\ntags: ['smart home']");
+
+    expect(await buildTagCounts(baseDir)).toEqual(new Map([['smart-home', 2]]));
+  });
+
+  it('ignores secondary pages, which the blog listing and the tag archives also skip', async () => {
+    const baseDir = await mkdtemp(join(tmpdir(), 'tags-'));
+    await writePost(baseDir, '2024-01-01--a', "title: A\ntags: ['css']");
+    await writeFile(join(baseDir, '2024-01-01--a', 'ng-help.md'), "---\ntags: ['css']\n---\n", 'utf8');
+
+    expect(await buildTagCounts(baseDir)).toEqual(new Map([['css', 1]]));
   });
 });

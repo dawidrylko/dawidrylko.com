@@ -10,11 +10,16 @@ import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypeWrapTables from './src/lib/rehype-wrap-tables.ts';
 import webmanifest from './src/integrations/webmanifest';
 import sitemapImages from './src/integrations/sitemap-images';
-import { buildPostLastmodMap } from './src/lib/sitemap.ts';
+import { buildPostLastmodMap, buildThinTagRoutes } from './src/lib/sitemap.ts';
 
 // Post lastmod dates (updatedDate ?? date), read from frontmatter so the sitemap
 // can advertise per-post freshness. Built once at config load.
 const postLastmod = await buildPostLastmodMap();
+
+// Tag archives below the indexing threshold (src/lib/tag-index.ts). Built here
+// rather than listed like NOINDEX_ROUTES below, because which archives are thin
+// follows from how many posts carry the tag and changes with every post.
+const thinTagRoutes = await buildThinTagRoutes();
 
 // Single source for the deployed origin: `site` and the sitemap index entries
 // must not drift apart.
@@ -58,9 +63,9 @@ export default defineConfig({
     mdx(),
     react(),
     sitemap({
-      // Legal pages carry "noindex, follow"; advertising them here would
-      // be a mixed signal to a crawler that reads both.
-      filter: page => !NOINDEX_ROUTES.some(route => page.endsWith(route)),
+      // Legal pages and thin tag archives carry "noindex, follow"; advertising
+      // them here would be a mixed signal to a crawler that reads both.
+      filter: page => !NOINDEX_ROUTES.some(route => page.endsWith(route)) && !thinTagRoutes.has(new URL(page).pathname),
       // The image sitemap is written by the sitemapImages() integration below,
       // outside this plugin's own url set — customSitemaps is what still gets it
       // listed in the canonical sitemap-index.xml, so the index that robots.txt

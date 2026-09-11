@@ -26,7 +26,6 @@
 import { readFile, readdir, access } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve, join, relative } from 'node:path';
-import { LEGAL_ROUTES } from './robots-directives.mjs';
 
 // The signature easter egg decodes "Dawid Rylko" from decimal char codes; it
 // must only ever be injected client-side, so its leading bytes (D a w = 68 97
@@ -73,6 +72,49 @@ export function extractSitemapIndexLocs(xml) {
   return [...xml.matchAll(/<sitemap>[\s\S]*?<loc>\s*([^<]+?)\s*<\/loc>/g)].map(([, loc]) => loc.replace(/&amp;/g, '&'));
 }
 
+// Pure: return every <loc> a sitemap url set declares, in order.
+export function extractUrlSetLocs(xml) {
+  return [...xml.matchAll(/<url>[\s\S]*?<loc>\s*([^<]+?)\s*<\/loc>/g)].map(([, loc]) => loc.replace(/&amp;/g, '&'));
+}
+
+// Pure: the URL path a built page answers on. A static build maps one to the
+// other by filename, which is what lets a page be matched against a sitemap
+// entry without serving it.
+export function pathnameForPage(path) {
+  const pathname = `/${path.replace(/\\/g, '/')}`;
+  return pathname.endsWith('/index.html') ? pathname.slice(0, -'index.html'.length) : pathname;
+}
+
+// Pure: the paths of every emitted page that excludes itself from the index.
+export function noindexPathnames(pages) {
+  return new Set(
+    pages
+      .filter(({ html }) => /<meta[^>]*name="robots"[^>]*content="[^"]*noindex/i.test(html))
+      .map(({ path }) => pathnameForPage(path)),
+  );
+}
+
+// Pure: every page whose robots directive and sitemap membership disagree.
+// The sitemap is a statement about what belongs in the index, so the two have
+// to say the same thing in both directions: advertising a "noindex" URL asks a
+// crawler to follow contradictory instructions, and omitting an indexable one
+// hides it from discovery. Asserting only the first direction is what would let
+// the filter quietly grow until it drops real pages — the failure the narrower
+// per-route version of this check could not see.
+export function findSitemapIndexabilityViolations(pages, sitemapPathnames) {
+  const excluded = noindexPathnames(pages);
+
+  return pages.flatMap(({ path }) => {
+    const pathname = pathnameForPage(path);
+    const noindex = excluded.has(pathname);
+    const listed = sitemapPathnames.has(pathname);
+
+    if (noindex && listed) return [`the sitemap advertises ${pathname}, which is noindex`];
+    if (!noindex && !listed) return [`${pathname} is indexable but missing from the sitemap`];
+    return [];
+  });
+}
+
 // Pure: the sitemap URLs a robots.txt advertises via `Sitemap:` directives.
 export function extractRobotsSitemaps(robotsTxt) {
   return robotsTxt
@@ -111,6 +153,13 @@ const REQUIRED_ASSETS = [
   'sitemap-images.xml',
   'llms.txt',
 ];
+
+// The image sitemap our own integration writes (astro.config.mjs registers it in
+// the index via customSitemaps). Named once: it is a url set like sitemap-0.xml
+// but a different kind of statement, and two assertions below depend on telling
+// them apart. The image namespace cannot do that job — @astrojs/sitemap declares
+// xmlns:image on every url set it writes, used or not.
+const IMAGE_SITEMAP = 'sitemap-images.xml';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -187,16 +236,25 @@ async function main() {
     else urlSets.push(name);
   }
 
-  // Legal pages carry "noindex, follow", so listing them in a sitemap would
-  // hand a crawler two contradictory instructions about one URL. The directive
-  // half is asserted by check-seo-meta.mjs; this is the other half, and the
-  // exclusion only means something while both hold.
-  for (const name of urlSets) {
-    const xml = await readFile(join(distDir, name), 'utf8');
-    for (const route of LEGAL_ROUTES) {
-      if (xml.includes(`${route}</loc>`)) fail(`${name} advertises ${route}, which is noindex`);
+  // The sitemap and the robots directive are two statements about the same
+  // URL, and an SEO audit reads both: every page the build emits must have them
+  // agree. This subsumes the per-route legal-page exclusion it replaces and
+  // covers thin tag archives, whose set follows from the post count and so
+  // cannot be written down here. The directive half is asserted separately by
+  // check-seo-meta.mjs; the exclusion only means something while both hold.
+  //
+  // The image sitemap is deliberately not part of this set: it declares which
+  // pages carry images, not which belong in the index, so counting it would let
+  // a page dropped from sitemap-0.xml still look listed. It gets its own
+  // assertion below instead of a silent exemption.
+  const indexUrlSets = urlSets.filter(name => name !== IMAGE_SITEMAP);
+  const sitemapPathnames = new Set();
+  for (const name of indexUrlSets) {
+    for (const loc of extractUrlSetLocs(await readFile(join(distDir, name), 'utf8'))) {
+      sitemapPathnames.add(distPathForLoc(loc));
     }
   }
+  for (const violation of findSitemapIndexabilityViolations(pages, sitemapPathnames)) fail(violation);
 
   // Nothing may point at a sitemap the build did not emit.
   for (const [name, refs] of indexes) {
@@ -226,10 +284,22 @@ async function main() {
 
   // The image sitemap must only advertise images the build actually emitted;
   // a 404 in an image sitemap is a hard error for Google Images.
-  const imageSitemapPath = join(distDir, 'sitemap-images.xml');
+  const imageSitemapPath = join(distDir, IMAGE_SITEMAP);
   let imageLocs = [];
   if (await exists(imageSitemapPath)) {
-    imageLocs = extractImageLocs(await readFile(imageSitemapPath, 'utf8'));
+    const imageSitemapXml = await readFile(imageSitemapPath, 'utf8');
+
+    // Google reaches an image through the page that shows it, so listing a
+    // noindex page here promises a listing that cannot happen. This is the
+    // assertion that lets the contract above exclude this file from the set of
+    // sitemaps it walks, instead of leaving it merely unchecked.
+    const excluded = noindexPathnames(pages);
+    for (const loc of extractUrlSetLocs(imageSitemapXml)) {
+      const pathname = distPathForLoc(loc);
+      if (excluded.has(pathname)) fail(`${IMAGE_SITEMAP} advertises images on ${pathname}, which is noindex`);
+    }
+
+    imageLocs = extractImageLocs(imageSitemapXml);
     if (imageLocs.length === 0) fail('sitemap-images.xml advertises no images');
     for (const loc of imageLocs) {
       if (!(await exists(join(distDir, distPathForLoc(loc))))) {
