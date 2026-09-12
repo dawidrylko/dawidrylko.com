@@ -1446,11 +1446,13 @@ a:focus {
 .footer-metadata ul {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   margin: var(--spacing-0);
 }
 
 .footer-metadata li {
-  display: inline;
+  display: flex;
+  align-items: center;
   margin: var(--spacing-0);
 
   /* Keep each label whole: the row wraps between items, never mid-word. Without
@@ -1472,6 +1474,22 @@ a:focus {
      understated, but uses the muted text token (WCAG AA in both themes) rather
      than --color-accent (~1.4:1) so it is not an accessibility failure. */
   color: var(--color-text-light);
+}
+
+/* WCAG 2.2 SC 2.5.8 (Target Size, Minimum): 24x24 CSS px per target. The row is
+   set in --fontSize-0, so the text box alone is 17 px tall, and once the nav
+   wraps on a narrow screen the two rows sit 20 px apart, which fails the
+   spacing fallback as well. Growing each box to 24 px fixes both axes at once:
+   the line grows with it, so wrapped rows can no longer crowd each other.
+
+   The 24 px is written as a literal on purpose. --spacing-6 happens to be the
+   same value today, but this is the threshold the standard names, not a step on
+   our spacing scale: it must not drift when the scale is retuned. */
+.footer-metadata a,
+.footer-metadata .link-button {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
 }
 
 /* Consent */
