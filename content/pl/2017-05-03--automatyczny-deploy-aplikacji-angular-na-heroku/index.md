@@ -1,6 +1,8 @@
 ---
 title: Automatyczny deploy aplikacji Angular na Heroku
 date: 2017-05-03T11:48:43.000Z
+featuredImg: ./alberto-rodriguez-qVpGF1mlaM8-unsplash.jpg
+featuredImgAlt: 'Rolkowy przenośnik taśmowy biegnący łukiem przez halę magazynową.'
 tags: ['shopping manager', 'angular', 'cloud']
 ---
 

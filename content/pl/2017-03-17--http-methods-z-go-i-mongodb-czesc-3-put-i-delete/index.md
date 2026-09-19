@@ -1,6 +1,8 @@
 ---
 title: HTTP methods z Go i MongoDB - część 3 - PUT i DELETE
 date: 2017-03-17T14:41:43.000Z
+featuredImg: ./pop-zebra-BQg5brNg8RQ-unsplash.jpg
+featuredImgAlt: 'Sterta kolorowych ścinków papieru po niszczarce.'
 tags: ['shopping manager', 'go', 'mongo']
 ---
 

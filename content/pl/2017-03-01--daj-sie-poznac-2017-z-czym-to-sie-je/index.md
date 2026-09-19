@@ -1,6 +1,8 @@
 ---
 title: Daj się poznać 2017 - z czym to się je
 date: 2017-03-01T19:04:24.000Z
+featuredImg: ./charlie-wollborg-28hWxVXOQG4-unsplash.jpg
+featuredImgAlt: 'Czerwona bieżnia lekkoatletyczna z namalowanymi numerami torów.'
 tags: ['shopping manager']
 ---
 

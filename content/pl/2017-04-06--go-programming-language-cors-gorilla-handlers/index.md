@@ -1,6 +1,8 @@
 ---
 title: Go Programming Language - CORS - gorilla/handlers
 date: 2017-04-06T17:28:38.000Z
+featuredImg: ./kelly-sikkema-r077pfFsdaU-unsplash.jpg
+featuredImgAlt: 'Zbliżenie goryla siedzącego przy skalnej ścianie.'
 tags: ['shopping manager', 'go']
 ---
 

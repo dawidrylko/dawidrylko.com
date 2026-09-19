@@ -1,6 +1,8 @@
 ---
 title: Shopping Manager - jadłospis, produkt, przepis
 date: 2017-03-26T14:32:25.000Z
+featuredImg: ./shelley-pauls-Zaiuy5dKeCk-unsplash.jpg
+featuredImgAlt: 'Skrzynki ze świeżymi warzywami na straganie: kalafior, brokuły, rzodkiewki i cebula dymka.'
 tags: ['shopping manager', 'go']
 ---
 

@@ -1,6 +1,8 @@
 ---
 title: Angular 2 - Reactive Forms - tworzenie formularza reaktywnego
 date: 2017-04-02T12:44:39.000Z
+featuredImg: ./dylan-mcleod-VRdZBLqnoMU-unsplash.jpg
+featuredImgAlt: 'Zbliżenie konsolety realizatora dźwięku z rzędami podświetlonych przycisków i suwaków.'
 tags: ['shopping manager', 'angular']
 ---
 

@@ -1,6 +1,8 @@
 ---
 title: Daj się poznać 2017 - podsumowanie
 date: 2017-06-01T17:27:29.000Z
+featuredImg: ./thecurlyone-ed45rw905E8-unsplash.jpg
+featuredImgAlt: 'Żółta tablica z napisem FINISH ustawiona przy nadmorskiej promenadzie.'
 tags: ['shopping manager']
 ---
 

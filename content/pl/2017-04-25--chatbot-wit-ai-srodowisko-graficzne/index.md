@@ -1,6 +1,8 @@
 ---
 title: Chatbot, Wit.ai - środowisko graficzne
 date: 2017-04-25T19:10:58.000Z
+featuredImg: ./jakub-zerdzicki-fQOyF0D0cDU-unsplash.jpg
+featuredImgAlt: 'Biała tablica z kolorowymi karteczkami samoprzylepnymi i odręcznym schematem.'
 tags: ['wit', 'ai']
 ---
 

@@ -1,6 +1,8 @@
 ---
 title: Angular 2 - HTTP - pobieranie danych - @angular/http
 date: 2017-03-23T20:36:32.000Z
+featuredImg: ./taichi-nakamura-_QzQ-C6PkXw-unsplash.jpg
+featuredImgAlt: 'Mosiężny kran ogrodowy z tryskającą strugą wody.'
 tags: ['shopping manager', 'angular']
 ---
 

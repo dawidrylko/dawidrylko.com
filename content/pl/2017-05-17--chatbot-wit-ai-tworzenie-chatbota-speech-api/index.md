@@ -1,6 +1,8 @@
 ---
 title: Chatbot, Wit.ai - tworzenie chatbota - Speech API
 date: 2017-05-17T21:03:15.000Z
+featuredImg: ./michal-czyz-ALM7RNZuDH8-unsplash.jpg
+featuredImgAlt: 'Mikrofon pojemnościowy w zawieszeniu, w tle rozmyte kolorowe plamy.'
 tags: ['wit', 'ai']
 ---
 

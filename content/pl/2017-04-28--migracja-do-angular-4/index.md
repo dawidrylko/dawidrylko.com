@@ -1,6 +1,8 @@
 ---
 title: Migracja do Angular 4
 date: 2017-04-28T19:35:58.000Z
+featuredImg: ./jakub-pabis-gDdC3P7W6kc-unsplash.jpg
+featuredImgAlt: 'Klucz ptaków lecących nad wodą pod ciemnymi chmurami.'
 tags: ['shopping manager', 'angular']
 ---
 
