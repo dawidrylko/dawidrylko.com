@@ -45,11 +45,13 @@ jobs:
 
   # The PR description must follow .github/pull_request_template.md rather than
   # being left as the empty scaffold. Dependabot opens template-less PRs, so it
-  # is exempt. The body is passed via env (never interpolated into a shell).
+  # is exempt. The exemption follows the PR author, not the actor: after the
+  # autofix push rylkobot is the actor on a Dependabot PR. The body is passed
+  # via env (never interpolated into a shell).
   description:
     name: PR description template
     runs-on: ubuntu-latest
-    if: github.actor != 'dependabot[bot]'
+    if: github.event.pull_request.user.login != 'dependabot[bot]'
     steps:
       - name: Checkout
         uses: actions/checkout@v7
