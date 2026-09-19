@@ -4,9 +4,9 @@
 [![Continuous Deployment](https://github.com/dawidrylko/dawidrylko.com/actions/workflows/cd.yml/badge.svg)](https://github.com/dawidrylko/dawidrylko.com/actions/workflows/cd.yml)
 [![CodeQL](https://github.com/dawidrylko/dawidrylko.com/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/dawidrylko/dawidrylko.com/actions/workflows/github-code-scanning/codeql)
 
-Personal website and blog of [Dawid Ryłko](https://dawidrylko.com). It is a static site built with
-[Astro](https://astro.build) and [React](https://react.dev) islands, written in TypeScript and MDX.
-Posts live in `content/pl/`. Every push to `master` deploys to GitHub Pages.
+Personal website and blog of [Dawid Ryłko](https://dawidrylko.com). A static site built with
+[Astro](https://astro.build), [React](https://react.dev) islands, TypeScript and MDX. Posts live in
+`content/pl/`. Every push to `master` deploys to GitHub Pages.
 
 ## 🧱 Tech stack
 
@@ -57,72 +57,48 @@ scripts/        # zero-dep tooling: ci/ (build-output gates), a11y/, notify/, pr
 
 ## ✅ Quality gates
 
-Every pull request runs type-checking, ESLint, Stylelint, Prettier, a WCAG-AA contrast audit and
-unit tests. It also builds the production site and checks it against build-output contracts for
-RSS, sitemap, SEO, image and bundle budgets. Lighthouse, internal link integrity and Playwright
-e2e/a11y tests belong to the same run. So do a dependency review, a Google Search quality check,
-and a scan for AI attribution in commits and PR metadata. PR titles are checked against
-[Conventional Commits](https://www.conventionalcommits.org), descriptions against the template.
+Every pull request goes through the same gates.
 
-`pnpm check:structured-data` validates every generated JSON-LD block, along with the canonical
-`Person`, `WebSite`, `ProfilePage`, breadcrumb and `BlogPosting` relationships. CI and CD both run
-it against the final `dist/` output. Google picks up updates through the sitemap declared in
-`robots.txt`. The Indexing API is not used, because the site has neither job postings nor
-livestream events.
+The source gets type-checking, ESLint, Stylelint, Prettier, a WCAG AA contrast audit and unit
+tests. CI then builds the site once and checks that `dist/` against contracts for RSS, the
+sitemap, SEO metadata and the image and bundle budgets. Lighthouse, a link check, Playwright e2e
+and accessibility tests and a Google Search quality check run on the same build.
 
-A Husky pre-commit hook runs `lint-staged` and `astro check`, then validates presentation PDF
-metadata.
+The pull request itself gets a dependency review and a scan for AI attribution in commits and PR
+text. Its title must follow [Conventional Commits](https://www.conventionalcommits.org), and its
+description must fill in the template.
+
+`pnpm check:structured-data` validates every JSON-LD block. It also checks how `Person`,
+`WebSite`, `ProfilePage`, breadcrumbs and `BlogPosting` point at each other. CI and CD both run it
+on the final `dist/`. Google finds new pages through the sitemap declared in `robots.txt`. The site
+does not use the Indexing API, which serves only job postings and livestreams.
+
+A Husky pre-commit hook runs `lint-staged` and `astro check`, then validates the metadata of
+presentation PDFs.
 
 ## 🤖 Dependency updates
 
-Dependabot opens one grouped pull request a week for npm minor and patch updates, and every npm
-major gets its own pull request. GitHub Actions updates share one weekly pull request of any kind,
-so an Actions major lands next to its minors and sends the whole pull request to a human. CI
-handles Dependabot pull requests in three extra jobs:
+Dependabot opens one pull request a week with the npm minor and patch updates. Each npm major gets
+a pull request of its own. GitHub Actions updates share one weekly pull request, majors included, so
+an Actions major sends the whole pull request to a human.
 
-- **Dependabot autofix** runs `eslint --fix`, `stylelint --fix` and `format:write` on the updated
-  npm packages with a read-only token, and keeps any change as a patch. GitHub Actions updates
-  skip it.
-- **Dependabot autofix push** checks the patch with `scripts/ci/check-autofix-paths.mjs` before
-  applying it, then commits it as `rylkobot`. A patch touching `content/`, `.github/`, `.husky/`,
-  the manifest, the lockfile or the pnpm and Node settings is refused, and the pull request stays
-  for a human. The push starts a new CI run.
-- **Dependabot merge** waits for every CI job. A green minor or patch update gets native auto-merge
-  (merge commit), so GitHub merges it once the ruleset's required checks pass. A major, a red
-  check, a failed or refused autofix, or an unreadable update type assigns `dawidrylko` instead.
+Three CI jobs handle these pull requests. `Dependabot autofix` runs `eslint --fix`,
+`stylelint --fix` and `format:write` on the updated npm packages. It holds a read-only token and
+keeps any change as a patch. `Dependabot autofix push` checks the patch with
+`scripts/ci/check-autofix-paths.mjs` and commits it as `rylkobot`. The guard refuses any change to
+`content/`, `.github/`, `.husky/`, the manifest, the lockfile and the pnpm and Node settings. The
+commit starts a new CI run.
 
-A merge to `master` deploys at once, so an automatic merge ships the update, and any autofix
-commit, with no human review. That is a deliberate trade-off. Auto-merge is enabled with the
-`RYLKOBOT_TOKEN` secret, because a merge made with `GITHUB_TOKEN` would not start the deployment.
+`Dependabot merge` waits for every CI job. A green minor or patch update gets auto-merge with a
+merge commit, and GitHub merges it once the required checks pass. Everything else is assigned to
+`dawidrylko`: a major, a red check, a failed or refused autofix, an unknown update type.
 
-Once `rylkobot` pushes a commit, Dependabot stops rebasing that pull request. Merge it, or comment
+A merge to `master` deploys at once. An automatic merge therefore ships the update, autofix commit
+included, with no human review. That is deliberate. Auto-merge runs on the `rylkobot` token,
+because a merge made with `GITHUB_TOKEN` would not start the deployment.
+
+Once `rylkobot` pushes a commit, Dependabot stops rebasing the pull request. Merge it or comment
 `@dependabot recreate`.
-
-### One-time setup
-
-1. As `rylkobot`, create a classic personal access token with the `public_repo` and `workflow`
-   scopes. A fine-grained token cannot reach a repository of another user where its owner is only a
-   collaborator. `workflow` lets it merge the GitHub Actions updates.
-2. Under Settings → Collaborators, raise `rylkobot` from Read to Write.
-3. Add the token as `RYLKOBOT_TOKEN` under Settings → Secrets and variables, both in **Dependabot**
-   and in **Actions**. A run started by Dependabot sees only Dependabot secrets, and the run started
-   by the autofix push sees only Actions secrets.
-4. Under Settings → General → Pull Requests, turn on **Allow auto-merge**.
-5. In the ruleset "Default (master)", add **Require status checks to pass** with source GitHub
-   Actions and these checks: `Static checks`, `Unit tests`, `No AI attribution`,
-   `Dependency review`, `Build`, `Build-output contract`, `Link check`, `Lighthouse`,
-   `End-to-end (Playwright)`, `Conventional Commits title`, `PR description template`. Leave
-   "Require branches to be up to date" off. Do not add the `Resume` jobs: a `paths` filter skips
-   that workflow, and a required check that never reports keeps the pull request pending.
-
-The token expires, and an expired one fails the push and the merge alike. Renew it in both places.
-
-## 🤝 Contributing
-
-Commits and PR titles follow [Conventional Commits](https://www.conventionalcommits.org)
-(`feat:`, `fix:`, `docs:` and the rest). Open issues with the
-[issue forms](./.github/ISSUE_TEMPLATE) and fill in the
-[pull request template](./.github/pull_request_template.md).
 
 ## 📄 License
 
