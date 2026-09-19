@@ -472,8 +472,9 @@ jobs:
   # pr-meta ones this workflow cannot wait for. It runs with the rylkobot token,
   # not GITHUB_TOKEN, so the merge push starts the deployment. A major update,
   # a red check, a failed or refused autofix, or an unreadable update type is
-  # assigned to the owner instead. No checkout: nothing from the pull request
-  # runs next to the token.
+  # assigned to the owner instead, through the REST API: `gh pr edit` also reads
+  # team fields, which a classic token without read:org is refused. No
+  # checkout: nothing from the pull request runs next to the token.
   dependabot:
     name: Dependabot merge
     needs:
@@ -512,6 +513,8 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.RYLKOBOT_TOKEN }}
           PR_URL: ${{ github.event.pull_request.html_url }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          REPO: ${{ github.repository }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
           RESULTS: >-
             ${{ needs.static.result }} ${{ needs.unit.result }} ${{ needs.attribution.result }}
@@ -533,6 +536,6 @@ jobs:
               gh pr merge "$PR_URL" --auto --merge --match-head-commit "$HEAD_SHA"
               ;;
             *)
-              gh pr edit "$PR_URL" --add-assignee dawidrylko
+              gh api --method POST "repos/$REPO/issues/$PR_NUMBER/assignees" -f 'assignees[]=dawidrylko' --silent
               ;;
           esac
