@@ -100,13 +100,6 @@ because a merge made with `GITHUB_TOKEN` would not start the deployment.
 Once `rylkobot` pushes a commit, Dependabot stops rebasing the pull request. Merge it or comment
 `@dependabot recreate`.
 
-## 🤝 Contributing
-
-Commits and PR titles follow [Conventional Commits](https://www.conventionalcommits.org)
-(`feat:`, `fix:`, `docs:` and the rest). Open issues with the
-[issue forms](./.github/ISSUE_TEMPLATE) and fill in the
-[pull request template](./.github/pull_request_template.md).
-
 ## 📄 License
 
 MIT. See [LICENSE](./LICENSE).
