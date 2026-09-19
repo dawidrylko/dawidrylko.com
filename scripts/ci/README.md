@@ -94,3 +94,16 @@ read from `git log BASE_SHA..HEAD_SHA`. Run it locally against a range:
 ```bash
 BASE_SHA=origin/master HEAD_SHA=HEAD node scripts/ci/check-no-ai-attribution.mjs
 ```
+
+## `check-autofix-paths.mjs`
+
+Path guard for the Dependabot autofix patch (README > "Dependency updates").
+Reads paths from stdin, one per line or as `git apply --numstat` output, and
+fails when any of them sits under `content/`, `.github/` or `.husky/`, or is the
+manifest, the lockfile, `pnpm-workspace.yaml`, `.npmrc` or `.nvmrc`. The
+`autofix-push` job runs it from the pull request head before applying the patch,
+so the patch cannot rewrite its own guard.
+
+```bash
+git diff --name-only | node scripts/ci/check-autofix-paths.mjs
+```

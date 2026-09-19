@@ -360,3 +360,179 @@ jobs:
 
       - name: Run Playwright tests
         run: pnpm run test:e2e
+
+  # Dependabot pull requests only (see README > "Dependency updates"). A
+  # formatter or linter release often changes nothing but style, so the fixers
+  # run on the updated packages with a read-only token and hand over a patch.
+  # GitHub Actions updates change no package, so they skip it.
+  autofix:
+    name: Dependabot autofix
+    if: >-
+      github.actor == 'dependabot[bot]' && github.event.pull_request.user.login == 'dependabot[bot]' &&
+      !startsWith(github.head_ref, 'dependabot/github_actions/')
+    runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.patch.outputs.changed }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v6.1.0
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Apply lint fixes, leaving the rest to the lint checks
+        run: |
+          pnpm exec eslint . --fix || true
+          pnpm exec stylelint "src/**/*.css" --fix || true
+
+      - name: Apply formatting
+        run: pnpm run format:write
+
+      - name: Collect patch
+        id: patch
+        run: |
+          git diff --binary > "$RUNNER_TEMP/autofix.patch"
+          if [ -s "$RUNNER_TEMP/autofix.patch" ]; then
+            git diff --stat
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Upload patch
+        if: steps.patch.outputs.changed == 'true'
+        uses: actions/upload-artifact@v7
+        with:
+          name: autofix-patch
+          path: ${{ runner.temp }}/autofix.patch
+          retention-days: 7
+
+  # Installs nothing and runs no updated package: it checks the patch against
+  # the path guard from the pull request head, applies it and pushes it as
+  # rylkobot. The push starts a new CI run, which decides the merge.
+  autofix-push:
+    name: Dependabot autofix push
+    needs: autofix
+    if: needs.autofix.outputs.changed == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require the rylkobot token
+        env:
+          RYLKOBOT_TOKEN: ${{ secrets.RYLKOBOT_TOKEN }}
+        run: |
+          if [ -z "$RYLKOBOT_TOKEN" ]; then
+            echo "::error::The RYLKOBOT_TOKEN Dependabot secret is not set. The patch is attached to this run as the autofix-patch artifact."
+            exit 1
+          fi
+
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          token: ${{ secrets.RYLKOBOT_TOKEN }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Download patch
+        uses: actions/download-artifact@v8
+        with:
+          name: autofix-patch
+          path: ${{ runner.temp }}
+
+      - name: Refuse changes to content, workflows and manifests
+        run: git apply --numstat "$RUNNER_TEMP/autofix.patch" | node scripts/ci/check-autofix-paths.mjs
+
+      - name: Apply patch
+        run: git apply --index "$RUNNER_TEMP/autofix.patch"
+
+      - name: Commit and push as rylkobot
+        env:
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+        run: |
+          git config user.name rylkobot
+          git config user.email 204860200+rylkobot@users.noreply.github.com
+          git commit -m "style: apply formatter and lint fixes after dependency update"
+          git push origin "HEAD:refs/heads/${HEAD_REF}"
+
+  # Enables native auto-merge for a green minor or patch update. GitHub then
+  # merges once every required check of the ruleset passes, including the
+  # pr-meta ones this workflow cannot wait for. It runs with the rylkobot token,
+  # not GITHUB_TOKEN, so the merge push starts the deployment. A major update,
+  # a red check, a failed or refused autofix, or an unreadable update type is
+  # assigned to the owner instead. No checkout: nothing from the pull request
+  # runs next to the token.
+  dependabot:
+    name: Dependabot merge
+    needs:
+      - static
+      - unit
+      - attribution
+      - dependency-review
+      - build
+      - build-contract
+      - links
+      - lighthouse
+      - e2e
+      - autofix
+      - autofix-push
+    if: ${{ !cancelled() && github.event.pull_request.user.login == 'dependabot[bot]' && needs.autofix-push.result != 'success' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    steps:
+      - name: Require the rylkobot token
+        env:
+          RYLKOBOT_TOKEN: ${{ secrets.RYLKOBOT_TOKEN }}
+        run: |
+          if [ -z "$RYLKOBOT_TOKEN" ]; then
+            echo "::error::RYLKOBOT_TOKEN is not set as a Dependabot secret or an Actions secret."
+            exit 1
+          fi
+
+      - name: Fetch update metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@v3
+        continue-on-error: true
+
+      - name: Enable auto-merge for minor and patch updates, assign the rest
+        env:
+          GH_TOKEN: ${{ secrets.RYLKOBOT_TOKEN }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          RESULTS: >-
+            ${{ needs.static.result }} ${{ needs.unit.result }} ${{ needs.attribution.result }}
+            ${{ needs.dependency-review.result }} ${{ needs.build.result }} ${{ needs.build-contract.result }}
+            ${{ needs.links.result }} ${{ needs.lighthouse.result }} ${{ needs.e2e.result }}
+          AUTOFIX_RESULTS: ${{ needs.autofix.result }} ${{ needs.autofix-push.result }}
+          UPDATE_TYPE: ${{ steps.metadata.outputs.update-type }}
+        run: |
+          checks=success
+          for result in $RESULTS; do
+            [ "$result" = success ] || checks=failure
+          done
+          for result in $AUTOFIX_RESULTS; do
+            [ "$result" = success ] || [ "$result" = skipped ] || checks=failure
+          done
+          echo "checks=$checks results=[$RESULTS] autofix=[$AUTOFIX_RESULTS] update-type=${UPDATE_TYPE:-unknown}"
+          case "$checks/$UPDATE_TYPE" in
+            success/version-update:semver-minor | success/version-update:semver-patch)
+              gh pr merge "$PR_URL" --auto --merge --match-head-commit "$HEAD_SHA"
+              ;;
+            *)
+              gh pr edit "$PR_URL" --add-assignee dawidrylko
+              ;;
+          esac

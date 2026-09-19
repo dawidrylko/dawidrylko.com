@@ -73,6 +73,50 @@ livestream events.
 A Husky pre-commit hook runs `lint-staged` and `astro check`, then validates presentation PDF
 metadata.
 
+## 🤖 Dependency updates
+
+Dependabot opens one grouped pull request a week for npm minor and patch updates, and every npm
+major gets its own pull request. GitHub Actions updates share one weekly pull request of any kind,
+so an Actions major lands next to its minors and sends the whole pull request to a human. CI
+handles Dependabot pull requests in three extra jobs:
+
+- **Dependabot autofix** runs `eslint --fix`, `stylelint --fix` and `format:write` on the updated
+  npm packages with a read-only token, and keeps any change as a patch. GitHub Actions updates
+  skip it.
+- **Dependabot autofix push** checks the patch with `scripts/ci/check-autofix-paths.mjs` before
+  applying it, then commits it as `rylkobot`. A patch touching `content/`, `.github/`, `.husky/`,
+  the manifest, the lockfile or the pnpm and Node settings is refused, and the pull request stays
+  for a human. The push starts a new CI run.
+- **Dependabot merge** waits for every CI job. A green minor or patch update gets native auto-merge
+  (merge commit), so GitHub merges it once the ruleset's required checks pass. A major, a red
+  check, a failed or refused autofix, or an unreadable update type assigns `dawidrylko` instead.
+
+A merge to `master` deploys at once, so an automatic merge ships the update, and any autofix
+commit, with no human review. That is a deliberate trade-off. Auto-merge is enabled with the
+`RYLKOBOT_TOKEN` secret, because a merge made with `GITHUB_TOKEN` would not start the deployment.
+
+Once `rylkobot` pushes a commit, Dependabot stops rebasing that pull request. Merge it, or comment
+`@dependabot recreate`.
+
+### One-time setup
+
+1. As `rylkobot`, create a classic personal access token with the `public_repo` and `workflow`
+   scopes. A fine-grained token cannot reach a repository of another user where its owner is only a
+   collaborator. `workflow` lets it merge the GitHub Actions updates.
+2. Under Settings → Collaborators, raise `rylkobot` from Read to Write.
+3. Add the token as `RYLKOBOT_TOKEN` under Settings → Secrets and variables, both in **Dependabot**
+   and in **Actions**. A run started by Dependabot sees only Dependabot secrets, and the run started
+   by the autofix push sees only Actions secrets.
+4. Under Settings → General → Pull Requests, turn on **Allow auto-merge**.
+5. In the ruleset "Default (master)", add **Require status checks to pass** with source GitHub
+   Actions and these checks: `Static checks`, `Unit tests`, `No AI attribution`,
+   `Dependency review`, `Build`, `Build-output contract`, `Link check`, `Lighthouse`,
+   `End-to-end (Playwright)`, `Conventional Commits title`, `PR description template`. Leave
+   "Require branches to be up to date" off. Do not add the `Resume` jobs: a `paths` filter skips
+   that workflow, and a required check that never reports keeps the pull request pending.
+
+The token expires, and an expired one fails the push and the merge alike. Renew it in both places.
+
 ## 🤝 Contributing
 
 Commits and PR titles follow [Conventional Commits](https://www.conventionalcommits.org)
