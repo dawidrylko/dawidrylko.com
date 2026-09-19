@@ -10,8 +10,9 @@ updates:
     # One grouped PR a week for minor and patch updates. Every major gets its own
     # PR, so one breaking release cannot hold back the rest. No default assignee:
     # CI merges a green minor or patch update and assigns dawidrylko to the rest
-    # (see README > "Dependency updates").
-    open-pull-requests-limit: 1
+    # (see README > "Dependency updates"). The limit leaves room for the majors:
+    # at 1, a red or waiting PR held back every other npm update.
+    open-pull-requests-limit: 10
     rebase-strategy: 'auto'
     commit-message:
       prefix: 'chore'
