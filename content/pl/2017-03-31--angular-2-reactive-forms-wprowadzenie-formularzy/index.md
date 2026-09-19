@@ -1,6 +1,8 @@
 ---
 title: Angular 2 – Reactive Forms – wprowadzenie do formularzy
 date: 2017-03-31T17:41:07.000Z
+featuredImg: ./babak-eshaghian-WYbvU7X_OqU-unsplash.jpg
+featuredImgAlt: 'Niebieska podkładka z czystą kartką w linie leżąca na drewnianym stole.'
 tags: ['shopping manager', 'angular']
 ---
 

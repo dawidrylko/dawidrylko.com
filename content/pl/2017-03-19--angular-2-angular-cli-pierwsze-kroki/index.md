@@ -1,6 +1,8 @@
 ---
 title: Angular 2 - Angular CLI - pierwsze kroki
 date: 2017-03-19T18:34:53.000Z
+featuredImg: ./paul-becker-mSBsUw5R8y0-unsplash.jpg
+featuredImgAlt: 'Budynek w trakcie remontu otoczony kratownicą rusztowań.'
 tags: ['shopping manager', 'angular']
 ---
 

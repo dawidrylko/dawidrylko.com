@@ -1,6 +1,8 @@
 ---
 title: Git - Submodules - rozdzielenie repozytoriów
 date: 2017-04-17T15:25:43.000Z
+featuredImg: ./pavel-ondera-HwmUiC1vPUE-unsplash.jpg
+featuredImgAlt: 'Rozjazd kolejowy z żółtymi dźwigniami przestawnicy przy torach.'
 tags: ['shopping manager', 'git']
 ---
 

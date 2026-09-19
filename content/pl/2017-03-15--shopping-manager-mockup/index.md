@@ -1,6 +1,8 @@
 ---
 title: Shopping Manager mockup
 date: 2017-03-15T19:09:54.000Z
+featuredImg: ./hal-gatewood-tZc3vjPCk-Q-unsplash.jpg
+featuredImgAlt: 'Odręczne szkice układu stron narysowane tuszem i akwarelą na papierze.'
 tags: ['shopping manager']
 ---
 

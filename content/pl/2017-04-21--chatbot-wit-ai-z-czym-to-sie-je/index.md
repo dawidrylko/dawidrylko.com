@@ -1,6 +1,8 @@
 ---
 title: Chatbot, Wit.ai - z czym to się je
 date: 2017-04-21T20:24:34.000Z
+featuredImg: ./eric-krull-Ejcuhcdfwrs-unsplash.jpg
+featuredImgAlt: 'Cztery blaszane roboty zabawki ustawione obok siebie na białym tle.'
 tags: ['wit', 'ai']
 ---
 

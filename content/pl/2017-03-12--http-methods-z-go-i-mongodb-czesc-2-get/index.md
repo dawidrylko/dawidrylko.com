@@ -1,6 +1,8 @@
 ---
 title: HTTP methods z Go i MongoDB - część 2 - GET
 date: 2017-03-12T08:45:59.000Z
+featuredImg: ./haberdoedas-jHh-7E3NR9Y-unsplash.jpg
+featuredImgAlt: 'Rząd zielonych skrzynek na listy przymocowanych do jasnej ściany.'
 tags: ['shopping manager', 'go', 'mongo']
 ---
 

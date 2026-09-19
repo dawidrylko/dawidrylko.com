@@ -1,6 +1,8 @@
 ---
 title: MongoDB i mgo - czyli kilka słów o bazie danych dla języka Go
 date: 2017-03-09T18:39:30.000Z
+featuredImg: ./domaintechnik-VHmBX7FnXw0-unsplash.jpg
+featuredImgAlt: 'Front szafy serwerowej z rzędem dysków i zielonymi diodami.'
 tags: ['shopping manager', 'go', 'mongo']
 ---
 

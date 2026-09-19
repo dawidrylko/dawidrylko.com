@@ -1,6 +1,8 @@
 ---
 title: Angular 2 - HTTP - wysyłanie danych - @angular/http
 date: 2017-04-10T17:46:29.000Z
+featuredImg: ./rohit-choudhari-qO2ztAz5g7A-unsplash.jpg
+featuredImgAlt: 'Stos kartonowych paczek zaklejonych niebieską taśmą.'
 tags: ['shopping manager', 'angular']
 ---
 

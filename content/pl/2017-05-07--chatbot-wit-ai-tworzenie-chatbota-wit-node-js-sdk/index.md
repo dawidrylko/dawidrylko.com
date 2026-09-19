@@ -1,6 +1,8 @@
 ---
 title: Chatbot, Wit.ai - tworzenie chatbota - Wit Node.js SDK
 date: 2017-05-07T04:06:19.000Z
+featuredImg: ./michal-bozek-RcxR1aLw8X0-unsplash.jpg
+featuredImgAlt: 'Dziecięca dłoń układająca kolorowe drewniane klocki na stole.'
 tags: ['wit', 'ai']
 ---
 

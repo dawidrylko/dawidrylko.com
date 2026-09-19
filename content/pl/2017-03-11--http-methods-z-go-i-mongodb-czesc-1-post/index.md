@@ -1,6 +1,8 @@
 ---
 title: HTTP methods z Go i MongoDB - część 1 - POST
 date: 2017-03-11T09:18:40.000Z
+featuredImg: ./andrew-w-aV4IOrXFHb0-unsplash.jpg
+featuredImgAlt: 'Czerwona skrzynka pocztowa stojąca na łące, w tle wzgórza.'
 tags: ['shopping manager', 'go', 'mongo']
 ---
 
