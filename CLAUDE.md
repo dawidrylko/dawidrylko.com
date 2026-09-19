@@ -4,7 +4,9 @@ Claude Code instructions. Blog and portfolio of Dawid Ryłko: Astro 7 + React 19
 
 **Answer Dawid in Polish.** This file is written in English to save context tokens, not to set the language of the conversation. Everything written for a human, chat included, follows the `/d-no-slop` canon: short sentences, no em or en dashes, straight quotes only, three dots instead of a one-character ellipsis, no decorative bold, none of its banned phrases.
 
-**Scope:** tooling and code that supports the blog, meaning components, layouts, pages, Astro config, helper scripts (`scripts/`) and CI/CD. The author writes the posts in `content/pl/` by hand. Never create or edit a blog post.
+**Scope:** tooling and code that supports the blog, meaning components, layouts, pages, Astro config, helper scripts (`scripts/`) and CI/CD. The author writes the posts in `content/pl/` by hand. Never write or rewrite the body of a blog post.
+
+Post metadata and images are the one exception, and only when the author asks for that work. Picking a featured image, swapping one, setting `featuredImg` and `featuredImgAlt`, adding or removing the image file next to `index.md(x)`: all of that is allowed on request. The canon for choosing the photo is the `/d-stock-images` skill, except that its ban on the agent downloading the file comes from ADR 0074 in `cyberkatalog-docs` and does not bind this repository. Here the agent downloads the file itself, from the photo page and never through the Unsplash API. Everything else in that skill applies: the four rejects, the Polish audience, judging a candidate on the listing crop rather than the full frame, and the `<photographer>-<unsplash-id>-unsplash.jpg` filename. Frontmatter fields other than the image pair, and every line of prose in the body, stay the author's.
 
 ## Commands
 
