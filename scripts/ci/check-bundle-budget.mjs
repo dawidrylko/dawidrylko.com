@@ -9,9 +9,10 @@
  *
  * Only statically-referenced modules count: Mermaid's per-diagram chunks are
  * imported at runtime by the hydrated island, not preloaded in the HTML, so they
- * are correctly excluded. Today the heaviest page is /setup/ (the Mermaid
- * client:load island) at ~187 KB; the budget leaves headroom while still
- * catching a heavy dependency that starts shipping site-wide.
+ * are correctly excluded. The heaviest page is /setup/ (the Mermaid client:load
+ * island): 228 KB on React 19.2 and 256 KB on React 19.3, whose client runtime
+ * grew by 28 KB. The budget follows the React runtime every island shares, and
+ * still catches a heavy dependency that starts shipping site-wide.
  *
  * Zero dependencies; runs against the built output, it does NOT rebuild.
  */
@@ -23,7 +24,7 @@ import { dirname, resolve, join, relative } from 'node:path';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DIST_DIR = process.argv[2] ? resolve(process.cwd(), process.argv[2]) : resolve(__dirname, '../../dist');
 
-const MAX_PAGE_JS_BYTES = 240 * 1024;
+const MAX_PAGE_JS_BYTES = 260 * 1024;
 
 async function exists(path) {
   try {
