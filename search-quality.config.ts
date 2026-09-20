@@ -82,6 +82,23 @@ export default defineConfig({
       owner: 'dawidrylko',
     },
     ...legalSuppressions,
+    // The ng help dump: a verbatim copy of Angular CLI 2017 output that drew 32
+    // percent of the domain's Search Console impressions and zero clicks, all
+    // from operator strings emitted by tooling. Excluded from the index with
+    // `noIndex: true` in its frontmatter, which renders "noindex, follow" and
+    // drops the route from the sitemap.
+    //
+    // Scoped to this one route rather than a pattern, so any other page going
+    // noindex still fails this gate. check-crawl-hygiene.mjs asserts the other
+    // half in both directions: a noindex page advertised in the sitemap fails
+    // there, and so does an indexable page missing from it.
+    ...(['indexability.noindex', 'ai-visibility-safe.public-snippet-directives'] as const).map(code => ({
+      code,
+      urlPattern: '/angular-2-angular-cli-pierwsze-kroki/ng-help/**',
+      reason:
+        'Secondary page excluded from the index deliberately (noIndex frontmatter flag); check-crawl-hygiene.mjs asserts the sitemap agrees.',
+      owner: 'dawidrylko',
+    })),
   ],
   ci: {
     failOn: ['error'],
