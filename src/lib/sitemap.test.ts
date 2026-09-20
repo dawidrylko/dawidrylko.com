@@ -237,6 +237,13 @@ describe('isNoIndexFrontmatter', () => {
   it('does not match a similarly named field', () => {
     expect(isNoIndexFrontmatter('noIndexFollow: true')).toBe(false);
   });
+
+  // YAML 1.1 spellings the content collection's parser accepts as booleans.
+  // Missing one renders the page noindex while leaving it in the sitemap.
+  it('accepts the capitalised YAML booleans the parser also accepts', () => {
+    expect(isNoIndexFrontmatter('noIndex: True')).toBe(true);
+    expect(isNoIndexFrontmatter('noIndex: TRUE')).toBe(true);
+  });
 });
 
 describe('buildNoIndexRoutes', () => {
@@ -250,5 +257,19 @@ describe('buildNoIndexRoutes', () => {
     const routes = await buildNoIndexRoutes(base);
 
     expect([...routes]).toEqual(['/angular-2-angular-cli-pierwsze-kroki/ng-help/']);
+  });
+
+  // The loader's glob is **/*.{md,mdx}, so a nested page is a real page. A walk
+  // that stopped at one level would leave it advertised in the sitemap while it
+  // renders noindex.
+  it('reaches pages nested deeper than one level, like the loader glob does', async () => {
+    const base = await mkdtemp(join(tmpdir(), 'noindex-nested-'));
+    const dir = join(base, '2017-03-19--post', 'sub');
+    await mkdir(dir, { recursive: true });
+    await writeFile(join(dir, 'deep.md'), '---\ntitle: Deep\ntags: [x]\nnoIndex: true\n---\n');
+
+    const routes = await buildNoIndexRoutes(base);
+
+    expect([...routes]).toEqual(['/post/sub/deep/']);
   });
 });

@@ -182,9 +182,14 @@ export function routeFromContentPath(relativePath: string): string {
   return `/${id}/`;
 }
 
-// Whether a frontmatter block opts the page out of the search index.
+// Whether a frontmatter block opts the page out of the search index. Matched
+// case-insensitively because the YAML parser behind the content collection
+// accepts True and TRUE as booleans too: a spelling the page renders as
+// "noindex" but this reader misses is exactly the contradiction the module
+// exists to prevent, and it would surface as a crawl-hygiene failure whose
+// message says nothing about capitalisation.
 export function isNoIndexFrontmatter(frontmatter: string): boolean {
-  return /^noIndex:[ \t]*true[ \t]*$/m.test(frontmatter);
+  return /^noIndex:[ \t]*true[ \t]*$/im.test(frontmatter);
 }
 
 // The routes of content pages that declare `noIndex: true`. They stay built and
@@ -194,21 +199,30 @@ export function isNoIndexFrontmatter(frontmatter: string): boolean {
 //
 // Walks every .md/.mdx under the content root, not just each directory's
 // index.*, because the pages this flag exists for are the secondary ones.
+// Recursive to match the loader's own glob (**/*.{md,mdx} in
+// content.config.ts): a page the collection builds but this walk never reaches
+// would render "noindex" and stay advertised in the sitemap.
 export async function buildNoIndexRoutes(baseDir = 'content/pl'): Promise<Set<string>> {
   const routes = new Set<string>();
-  const dirs = await readdir(baseDir, { withFileTypes: true });
 
-  for (const dir of dirs) {
-    if (!dir.isDirectory()) continue;
-    const files = await readdir(join(baseDir, dir.name), { withFileTypes: true });
+  async function walk(dir: string, relative: string): Promise<void> {
+    for (const entry of await readdir(dir, { withFileTypes: true })) {
+      const childPath = join(dir, entry.name);
+      const childRelative = relative ? `${relative}/${entry.name}` : entry.name;
 
-    for (const file of files) {
-      if (!file.isFile() || !/\.mdx?$/.test(file.name)) continue;
-      const raw = await readFile(join(baseDir, dir.name, file.name), 'utf8');
+      if (entry.isDirectory()) {
+        await walk(childPath, childRelative);
+        continue;
+      }
+      if (!entry.isFile() || !/\.mdx?$/.test(entry.name)) continue;
+
+      const raw = await readFile(childPath, 'utf8');
       const frontmatter = raw.match(/^---\n([\s\S]*?)\n---/)?.[1] ?? '';
-      if (isNoIndexFrontmatter(frontmatter)) routes.add(routeFromContentPath(`${dir.name}/${file.name}`));
+      if (isNoIndexFrontmatter(frontmatter)) routes.add(routeFromContentPath(childRelative));
     }
   }
+
+  await walk(baseDir, '');
 
   return routes;
 }

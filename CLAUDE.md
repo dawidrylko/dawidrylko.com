@@ -59,7 +59,7 @@ Needed when touching `[...slug].astro`, `content.config.ts`, `rss.xml.ts` or the
 
 - A post is a directory `content/pl/YYYY-MM-DD--slug-po-polsku/index.mdx`. Some directories carry secondary pages too, for example `.../ng-help.md`.
 - The URL slug is built in `content.config.ts`: `generateId` strips the extension, `/index` and the date prefix (`replace(/.*--/, '')`), so `2025-12-26--od-tablicy-do-mapy` becomes `/od-tablicy-do-mapy/`. **Post URLs must be preserved** for SEO, and `scripts/ci/check-astro-url-parity.mjs` enforces that.
-- Frontmatter: `title`, `description`, `date`, `tags`, optionally `updatedDate` (maps to `dateModified` and `article:modified_time`), plus `featuredImg` and `featuredImgAlt`. The zod schema requires the alt text whenever the image is present.
+- Frontmatter: `title`, `description`, `date`, `tags`, optionally `updatedDate` (maps to `dateModified` and `article:modified_time`), plus `featuredImg` and `featuredImgAlt`. The zod schema requires the alt text whenever the image is present. An optional `noIndex: true` keeps a page out of the search index: it renders as `noindex, follow` and drops the route from the sitemap, so both signals stay in agreement.
 - MDX rendering: Shiki for code (light and dark theme), KaTeX for math (`remark-math` + `rehype-katex`), Mermaid as a React island (`client:*`).
 
 ## Code conventions
