@@ -168,3 +168,47 @@ export async function buildThinTagRoutes(baseDir = 'content/pl'): Promise<Set<st
 
   return new Set(thin.map(([slug]) => `/tags/${slug}/`));
 }
+
+// The route a content file answers on, mirroring generateId in
+// content.config.ts: drop the extension, drop a trailing /index, and strip
+// everything up to the date prefix. Kept here rather than imported from the
+// content config because astro.config.mjs runs before the content pipeline.
+export function routeFromContentPath(relativePath: string): string {
+  const id = relativePath
+    .replace(/\.mdx?$/, '')
+    .replace(/\/index$/, '')
+    .replace(/.*--/, '');
+
+  return `/${id}/`;
+}
+
+// Whether a frontmatter block opts the page out of the search index.
+export function isNoIndexFrontmatter(frontmatter: string): boolean {
+  return /^noIndex:[ \t]*true[ \t]*$/m.test(frontmatter);
+}
+
+// The routes of content pages that declare `noIndex: true`. They stay built and
+// stay linked from the post they belong to, but advertising them in the sitemap
+// while they answer "noindex" would be the same contradiction thin tag archives
+// avoid, and check-crawl-hygiene.mjs fails the build on it either way.
+//
+// Walks every .md/.mdx under the content root, not just each directory's
+// index.*, because the pages this flag exists for are the secondary ones.
+export async function buildNoIndexRoutes(baseDir = 'content/pl'): Promise<Set<string>> {
+  const routes = new Set<string>();
+  const dirs = await readdir(baseDir, { withFileTypes: true });
+
+  for (const dir of dirs) {
+    if (!dir.isDirectory()) continue;
+    const files = await readdir(join(baseDir, dir.name), { withFileTypes: true });
+
+    for (const file of files) {
+      if (!file.isFile() || !/\.mdx?$/.test(file.name)) continue;
+      const raw = await readFile(join(baseDir, dir.name, file.name), 'utf8');
+      const frontmatter = raw.match(/^---\n([\s\S]*?)\n---/)?.[1] ?? '';
+      if (isNoIndexFrontmatter(frontmatter)) routes.add(routeFromContentPath(`${dir.name}/${file.name}`));
+    }
+  }
+
+  return routes;
+}
