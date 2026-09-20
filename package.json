@@ -77,7 +77,7 @@
     "vitest": "^4.1.11"
   },
   "lint-staged": {
-    "**/*.{astro,ts,tsx,js,mjs,json,md}": "prettier --write",
+    "**/!(AGENTS).{astro,ts,tsx,js,mjs,json,md}": "prettier --write",
     "**/*.{astro,ts,tsx,js,mjs}": "eslint --fix",
     "src/**/*.css": "stylelint --fix"
   },
