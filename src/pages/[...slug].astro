@@ -54,7 +54,7 @@ const showToc = tocHeadings.length >= 3;
 // Nest h3s under their parent h2 so the list numbers hierarchically (5 → 5.1)
 // and strip the autolink "#" each heading's text carries.
 const tocTree = buildTocTree(tocHeadings);
-const { title, description, date, updatedDate, tags, featuredImg, featuredImgAlt } = post.data;
+const { title, description, date, updatedDate, tags, featuredImg, featuredImgAlt, noIndex } = post.data;
 
 const dateFormatted = formatPolishDate(date);
 const { personReference } = STRUCTURED_DATA;
@@ -130,6 +130,7 @@ const structuredData = {
   publishedTime={publishedTime}
   modifiedTime={modifiedTime}
   tags={tags}
+  noIndexFollow={noIndex}
   lang={CONTENT_LANG}
 >
   <JsonLd data={structuredData} />

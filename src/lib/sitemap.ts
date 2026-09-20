@@ -168,3 +168,61 @@ export async function buildThinTagRoutes(baseDir = 'content/pl'): Promise<Set<st
 
   return new Set(thin.map(([slug]) => `/tags/${slug}/`));
 }
+
+// The route a content file answers on, mirroring generateId in
+// content.config.ts: drop the extension, drop a trailing /index, and strip
+// everything up to the date prefix. Kept here rather than imported from the
+// content config because astro.config.mjs runs before the content pipeline.
+export function routeFromContentPath(relativePath: string): string {
+  const id = relativePath
+    .replace(/\.mdx?$/, '')
+    .replace(/\/index$/, '')
+    .replace(/.*--/, '');
+
+  return `/${id}/`;
+}
+
+// Whether a frontmatter block opts the page out of the search index. Matched
+// case-insensitively because the YAML parser behind the content collection
+// accepts True and TRUE as booleans too: a spelling the page renders as
+// "noindex" but this reader misses is exactly the contradiction the module
+// exists to prevent, and it would surface as a crawl-hygiene failure whose
+// message says nothing about capitalisation.
+export function isNoIndexFrontmatter(frontmatter: string): boolean {
+  return /^noIndex:[ \t]*true[ \t]*$/im.test(frontmatter);
+}
+
+// The routes of content pages that declare `noIndex: true`. They stay built and
+// stay linked from the post they belong to, but advertising them in the sitemap
+// while they answer "noindex" would be the same contradiction thin tag archives
+// avoid, and check-crawl-hygiene.mjs fails the build on it either way.
+//
+// Walks every .md/.mdx under the content root, not just each directory's
+// index.*, because the pages this flag exists for are the secondary ones.
+// Recursive to match the loader's own glob (**/*.{md,mdx} in
+// content.config.ts): a page the collection builds but this walk never reaches
+// would render "noindex" and stay advertised in the sitemap.
+export async function buildNoIndexRoutes(baseDir = 'content/pl'): Promise<Set<string>> {
+  const routes = new Set<string>();
+
+  async function walk(dir: string, relative: string): Promise<void> {
+    for (const entry of await readdir(dir, { withFileTypes: true })) {
+      const childPath = join(dir, entry.name);
+      const childRelative = relative ? `${relative}/${entry.name}` : entry.name;
+
+      if (entry.isDirectory()) {
+        await walk(childPath, childRelative);
+        continue;
+      }
+      if (!entry.isFile() || !/\.mdx?$/.test(entry.name)) continue;
+
+      const raw = await readFile(childPath, 'utf8');
+      const frontmatter = raw.match(/^---\n([\s\S]*?)\n---/)?.[1] ?? '';
+      if (isNoIndexFrontmatter(frontmatter)) routes.add(routeFromContentPath(childRelative));
+    }
+  }
+
+  await walk(baseDir, '');
+
+  return routes;
+}

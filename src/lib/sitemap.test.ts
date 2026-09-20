@@ -11,6 +11,9 @@ import {
   tagsFromFrontmatter,
   buildTagCounts,
   buildThinTagRoutes,
+  buildNoIndexRoutes,
+  routeFromContentPath,
+  isNoIndexFrontmatter,
   POST_ARTICLE_TAG,
 } from './sitemap';
 
@@ -202,5 +205,71 @@ describe('buildTagCounts / buildThinTagRoutes', () => {
     await writeFile(join(baseDir, '2024-01-01--a', 'ng-help.md'), "---\ntags: ['css']\n---\n", 'utf8');
 
     expect(await buildTagCounts(baseDir)).toEqual(new Map([['css', 1]]));
+  });
+});
+
+describe('routeFromContentPath', () => {
+  it('derives the route of a post index the same way generateId does', () => {
+    expect(routeFromContentPath('2017-03-19--angular-2-angular-cli-pierwsze-kroki/index.md')).toBe(
+      '/angular-2-angular-cli-pierwsze-kroki/',
+    );
+  });
+
+  it('keeps the nested segment of a secondary page', () => {
+    expect(routeFromContentPath('2017-03-19--angular-2-angular-cli-pierwsze-kroki/ng-help.md')).toBe(
+      '/angular-2-angular-cli-pierwsze-kroki/ng-help/',
+    );
+  });
+});
+
+describe('isNoIndexFrontmatter', () => {
+  it('reads the opt-out flag', () => {
+    expect(isNoIndexFrontmatter('title: X\nnoIndex: true')).toBe(true);
+  });
+
+  it('leaves a page in the index by default', () => {
+    expect(isNoIndexFrontmatter('title: X')).toBe(false);
+    expect(isNoIndexFrontmatter('title: X\nnoIndex: false')).toBe(false);
+  });
+
+  // A page that is excluded must also be dropped from the sitemap; the flag is
+  // the single input to both, so misreading it here contradicts the two signals.
+  it('does not match a similarly named field', () => {
+    expect(isNoIndexFrontmatter('noIndexFollow: true')).toBe(false);
+  });
+
+  // YAML 1.1 spellings the content collection's parser accepts as booleans.
+  // Missing one renders the page noindex while leaving it in the sitemap.
+  it('accepts the capitalised YAML booleans the parser also accepts', () => {
+    expect(isNoIndexFrontmatter('noIndex: True')).toBe(true);
+    expect(isNoIndexFrontmatter('noIndex: TRUE')).toBe(true);
+  });
+});
+
+describe('buildNoIndexRoutes', () => {
+  it('collects the routes of flagged pages and leaves the rest alone', async () => {
+    const base = await mkdtemp(join(tmpdir(), 'noindex-'));
+    const dir = join(base, '2017-03-19--angular-2-angular-cli-pierwsze-kroki');
+    await mkdir(dir, { recursive: true });
+    await writeFile(join(dir, 'index.md'), '---\ntitle: Post\ntags: [angular]\n---\n');
+    await writeFile(join(dir, 'ng-help.md'), '---\ntitle: Help\ntags: [angular]\nnoIndex: true\n---\n');
+
+    const routes = await buildNoIndexRoutes(base);
+
+    expect([...routes]).toEqual(['/angular-2-angular-cli-pierwsze-kroki/ng-help/']);
+  });
+
+  // The loader's glob is **/*.{md,mdx}, so a nested page is a real page. A walk
+  // that stopped at one level would leave it advertised in the sitemap while it
+  // renders noindex.
+  it('reaches pages nested deeper than one level, like the loader glob does', async () => {
+    const base = await mkdtemp(join(tmpdir(), 'noindex-nested-'));
+    const dir = join(base, '2017-03-19--post', 'sub');
+    await mkdir(dir, { recursive: true });
+    await writeFile(join(dir, 'deep.md'), '---\ntitle: Deep\ntags: [x]\nnoIndex: true\n---\n');
+
+    const routes = await buildNoIndexRoutes(base);
+
+    expect([...routes]).toEqual(['/post/sub/deep/']);
   });
 });

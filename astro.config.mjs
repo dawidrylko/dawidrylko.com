@@ -10,7 +10,7 @@ import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypeWrapTables from './src/lib/rehype-wrap-tables.ts';
 import webmanifest from './src/integrations/webmanifest';
 import sitemapImages from './src/integrations/sitemap-images';
-import { buildPostLastmodMap, buildThinTagRoutes } from './src/lib/sitemap.ts';
+import { buildPostLastmodMap, buildThinTagRoutes, buildNoIndexRoutes } from './src/lib/sitemap.ts';
 
 // Post lastmod dates (updatedDate ?? date), read from frontmatter so the sitemap
 // can advertise per-post freshness. Built once at config load.
@@ -20,6 +20,11 @@ const postLastmod = await buildPostLastmodMap();
 // rather than listed like NOINDEX_ROUTES below, because which archives are thin
 // follows from how many posts carry the tag and changes with every post.
 const thinTagRoutes = await buildThinTagRoutes();
+
+// Content pages that opt out of the index via `noIndex: true` in frontmatter.
+// Built from the files rather than listed like NOINDEX_ROUTES, because the flag
+// belongs to the page and should not need a second edit here to take effect.
+const noIndexContentRoutes = await buildNoIndexRoutes();
 
 // Single source for the deployed origin: `site` and the sitemap index entries
 // must not drift apart.
@@ -63,9 +68,12 @@ export default defineConfig({
     mdx(),
     react(),
     sitemap({
-      // Legal pages and thin tag archives carry "noindex, follow"; advertising
+      // Legal pages, thin tag archives and noIndex content carry "noindex, follow"; advertising
       // them here would be a mixed signal to a crawler that reads both.
-      filter: page => !NOINDEX_ROUTES.some(route => page.endsWith(route)) && !thinTagRoutes.has(new URL(page).pathname),
+      filter: page =>
+        !NOINDEX_ROUTES.some(route => page.endsWith(route)) &&
+        !thinTagRoutes.has(new URL(page).pathname) &&
+        !noIndexContentRoutes.has(new URL(page).pathname),
       // The image sitemap is written by the sitemapImages() integration below,
       // outside this plugin's own url set — customSitemaps is what still gets it
       // listed in the canonical sitemap-index.xml, so the index that robots.txt

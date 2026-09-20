@@ -29,6 +29,10 @@ const posts = defineCollection({
         // Optional last-modified date; surfaces as dateModified / article:modified_time.
         updatedDate: z.coerce.date().optional(),
         tags: z.array(z.string()).min(1),
+        // Opt-in exclusion from the search index for a page that is part of the
+        // corpus but is not a search landing page. Renders as "noindex, follow"
+        // and drops out of the sitemap, so both signals agree by construction.
+        noIndex: z.boolean().optional(),
         featuredImg: image().optional(),
         featuredImgAlt: z.string().optional(),
       })

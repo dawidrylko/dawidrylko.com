@@ -4,6 +4,7 @@ description: Angular CLI to potężne narzędzie, które usprawnia i automatyzuj
 date: 2017-03-19T18:34:53.000Z
 tags: ['angular']
 homePage: false
+noIndex: true
 ---
 
 Uruchomienie komendy `ng help` wyświetla obszerną pomoc:
