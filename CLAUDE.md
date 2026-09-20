@@ -1,6 +1,6 @@
 # dawidrylko.com
 
-Claude Code instructions. Blog and portfolio of Dawid Ryłko: Astro 7 + React 19 islands + TypeScript + MDX, hosted on GitHub Pages.
+Agent instructions, read by Claude Code as `CLAUDE.md` and by Codex and OpenCode as `AGENTS.md`, which is a symlink to this file. Blog and portfolio of Dawid Ryłko: Astro 7 + React 19 islands + TypeScript + MDX, hosted on GitHub Pages.
 
 **Answer Dawid in Polish.** This file is written in English to save context tokens, not to set the language of the conversation. Everything written for a human, chat included, follows the `/d-no-slop` canon: short sentences, no em or en dashes, straight quotes only, three dots instead of a one-character ellipsis, no decorative bold, none of its banned phrases.
 
