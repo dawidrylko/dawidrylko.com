@@ -37,45 +37,48 @@ const readingTime = readingTimeMinutes(words);
       </h2>
       <small>
         <span>{dateFormatted}</span>
-        <span class="separator" aria-hidden="true">•</span>
+        <span class="separator" aria-hidden="true">
+          •
+        </span>
         <span>
           <a href="/bio/">{author.name}</a>
         </span>
-        <span class="separator" aria-hidden="true">•</span>
+        <span class="separator" aria-hidden="true">
+          •
+        </span>
         <span>
-          {readingTime} min czytania <span class="separator" aria-hidden="true">•</span>
+          {readingTime} min czytania{' '}
+          <span class="separator" aria-hidden="true">
+            •
+          </span>
           {words}
           {plPlural(words, ['słowo', 'słowa', 'słów'])}
         </span>
       </small>
     </header>
     <section>
-      {
-        post.data.featuredImg && (
-          <a href={`/${post.id}/`} class="post-thumb" aria-hidden="true" tabindex="-1">
-            <Picture
-              src={post.data.featuredImg}
-              formats={['avif', 'webp']}
-              fallbackFormat="webp"
-              width={600}
-              sizes="(min-width: 37.5rem) 200px, 100vw"
-              alt={post.data.featuredImgAlt || ''}
-            />
-          </a>
-        )
-      }
+      {post.data.featuredImg && (
+        <a href={`/${post.id}/`} class="post-thumb" aria-hidden="true" tabindex="-1">
+          <Picture
+            src={post.data.featuredImg}
+            formats={['avif', 'webp']}
+            fallbackFormat="webp"
+            width={600}
+            sizes="(min-width: 37.5rem) 200px, 100vw"
+            alt={post.data.featuredImgAlt || ''}
+          />
+        </a>
+      )}
       <p set:html={descriptionHtml} />
     </section>
     <ul class="tags" aria-label="Tagi">
-      {
-        post.data.tags.map(tag => (
-          <li>
-            <a class="tag" href={`/tags/${slugifyTag(tag)}/`}>
-              #{tag}
-            </a>
-          </li>
-        ))
-      }
+      {post.data.tags.map(tag => (
+        <li>
+          <a class="tag" href={`/tags/${slugifyTag(tag)}/`}>
+            #{tag}
+          </a>
+        </li>
+      ))}
     </ul>
   </article>
 </li>

@@ -64,6 +64,8 @@ const structuredData = createPageSchema({
     <small>{postCountLabel(tag.count)}</small>
   </header>
   <ol class="posts">
-    {tag.posts.map(post => <PostListItem post={post} />)}
+    {tag.posts.map(post => (
+      <PostListItem post={post} />
+    ))}
   </ol>
 </PageLayout>

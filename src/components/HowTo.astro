@@ -28,14 +28,12 @@ const { name, steps, totalTime, title = name } = Astro.props;
 <section class="howto" aria-label={title}>
   <h2>{title}</h2>
   <ol class="howto-steps">
-    {
-      steps.map(step => (
-        <li class="howto-step">
-          {step.name && <strong class="howto-step-name">{step.name}</strong>}
-          <span class="howto-step-text" set:html={inlineMarkdown(step.text)} />
-        </li>
-      ))
-    }
+    {steps.map(step => (
+      <li class="howto-step">
+        {step.name && <strong class="howto-step-name">{step.name}</strong>}
+        <span class="howto-step-text" set:html={inlineMarkdown(step.text)} />
+      </li>
+    ))}
   </ol>
   <JsonLd data={buildHowToJsonLd({ name, totalTime, steps })} />
 </section>

@@ -146,32 +146,32 @@ const structuredData = createPageSchema({
       cybersecurity.
     </p>
     <p>
-      <ExternalLink href="https://silesiansolutions.com/" follow>Silesian Solutions</ExternalLink> is my own business, and{
-        ' '
-      }
-      <ExternalLink href="https://cyberkatalog.pl/">Cyber Katalog</ExternalLink> is a cybersecurity project under it. Technical
-      decisions get weighed against business goals and the cost of running a system for years. That second cost is the one
-      estimates usually skip.
+      <ExternalLink href="https://silesiansolutions.com/" follow>
+        Silesian Solutions
+      </ExternalLink>{' '}
+      is my own business, and <ExternalLink href="https://cyberkatalog.pl/">Cyber Katalog</ExternalLink> is a
+      cybersecurity project under it. Technical decisions get weighed against business goals and the cost of running a
+      system for years. That second cost is the one estimates usually skip.
     </p>
     <p>
       My code is on <ExternalLink href="https://github.com/dawidrylko">GitHub</ExternalLink>, shorter notes on{' '}
       <ExternalLink href="https://www.linkedin.com/in/dawidrylko">LinkedIn</ExternalLink> and{' '}
       <ExternalLink href="https://twitter.com/dawidrylko">Twitter</ExternalLink>.{' '}
-      <ExternalLink href="https://dawid.dev" follow>dawid.dev</ExternalLink> holds the rest: engineering notes, and longer
-      write-ups on security.
+      <ExternalLink href="https://dawid.dev" follow>
+        dawid.dev
+      </ExternalLink>{' '}
+      holds the rest: engineering notes, and longer write-ups on security.
     </p>
   </section>
   <section id="what-i-do">
     <h2>What I do</h2>
     <ul class="capabilities">
-      {
-        capabilities.map(({ term, description }) => (
-          <li>
-            <strong>{term}</strong>
-            {description}
-          </li>
-        ))
-      }
+      {capabilities.map(({ term, description }) => (
+        <li>
+          <strong>{term}</strong>
+          {description}
+        </li>
+      ))}
     </ul>
   </section>
   <section id="philosophy">
@@ -182,23 +182,21 @@ const structuredData = createPageSchema({
     </p>
   </section>
   <section id="quote">
-    {
-      citations.map(({ authorName, citation, text, extraDetails }) => (
-        <blockquote>
-          {text}
-          <br />
-          <cite>
-            - {authorName}, {citation}
-          </cite>
-          {extraDetails.map(({ note }) => (
-            <>
-              <br />
-              <small>{note}</small>
-            </>
-          ))}
-        </blockquote>
-      ))
-    }
+    {citations.map(({ authorName, citation, text, extraDetails }) => (
+      <blockquote>
+        {text}
+        <br />
+        <cite>
+          - {authorName}, {citation}
+        </cite>
+        {extraDetails.map(({ note }) => (
+          <>
+            <br />
+            <small>{note}</small>
+          </>
+        ))}
+      </blockquote>
+    ))}
   </section>
   <Figure src={motto} alt={image.alt} caption={image.figcaption} />
   <section id="experience">
@@ -239,9 +237,14 @@ const structuredData = createPageSchema({
     <h2>Get in touch</h2>
     <p>
       Interested in working together, or have a question?{' '}
-      <a href="/contact/" title="Contact Dawid Ryłko">Visit my contact page</a> or{' '}
-      <a href={`mailto:${SITE_METADATA.author.email}`} title="Send me an email">send me an email</a>. Email is the
-      fastest route.
+      <a href="/contact/" title="Contact Dawid Ryłko">
+        Visit my contact page
+      </a>{' '}
+      or{' '}
+      <a href={`mailto:${SITE_METADATA.author.email}`} title="Send me an email">
+        send me an email
+      </a>
+      . Email is the fastest route.
     </p>
   </section>
 </PageLayout>

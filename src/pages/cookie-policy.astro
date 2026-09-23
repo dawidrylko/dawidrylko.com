@@ -69,7 +69,9 @@ const sessionCookie = `_ga_${GTAG.replace(/^G-/, '')}`;
         </thead>
         <tbody>
           <tr>
-            <td><code>cookieConsent</code></td>
+            <td>
+              <code>cookieConsent</code>
+            </td>
             <td>localStorage</td>
             <td>Remembers your consent decision</td>
             <td>13 months from the decision</td>
@@ -96,12 +98,16 @@ const sessionCookie = `_ga_${GTAG.replace(/^G-/, '')}`;
         </thead>
         <tbody>
           <tr>
-            <td><code>_ga</code></td>
+            <td>
+              <code>_ga</code>
+            </td>
             <td>Distinguishes unique visitors</td>
             <td>13 months</td>
           </tr>
           <tr>
-            <td><code>{sessionCookie}</code></td>
+            <td>
+              <code>{sessionCookie}</code>
+            </td>
             <td>Keeps the measurement session state</td>
             <td>13 months</td>
           </tr>
@@ -115,8 +121,8 @@ const sessionCookie = `_ga_${GTAG.replace(/^G-/, '')}`;
     </p>
     <p>
       Measurement is configured to keep the data narrow. Google Signals and ad personalisation are off, advertising data
-      is redacted, and the cookies are written with the <code>SameSite=Lax</code> and <code>Secure</code> flags, scoped to
-      dawidrylko.com alone.
+      is redacted, and the cookies are written with the <code>SameSite=Lax</code> and <code>Secure</code> flags, scoped
+      to dawidrylko.com alone.
     </p>
   </section>
   <section>
@@ -145,14 +151,14 @@ const sessionCookie = `_ga_${GTAG.replace(/^G-/, '')}`;
       Withdrawing is as easy as giving consent and does not affect the lawfulness of processing carried out beforehand.
     </p>
     <p>
-      Withdrawal stops measurement immediately and deletes the <code>_ga</code> and <code>{sessionCookie}</code> files already
-      on your device. They do not wait out their thirteen month period.
+      Withdrawal stops measurement immediately and deletes the <code>_ga</code> and <code>{sessionCookie}</code> files
+      already on your device. They do not wait out their thirteen month period.
     </p>
     <p>
       Thirteen months after your decision the site asks again. The analytics files expire at the same moment. Their
-      lifetime runs from the moment you consented and later visits do not push it forward. Should a
-      <code>_ga</code> file survive on your device anyway, it is deleted on your next visit. That also covers files written
-      by an earlier version of this site, which did not ask.
+      lifetime runs from the moment you consented and later visits do not push it forward. Should a<code>_ga</code> file
+      survive on your device anyway, it is deleted on your next visit. That also covers files written by an earlier
+      version of this site, which did not ask.
     </p>
     <p>Regardless of the settings here, cookies can be controlled from your browser:</p>
     <ul>
@@ -170,10 +176,16 @@ const sessionCookie = `_ga_${GTAG.replace(/^G-/, '')}`;
         </ExternalLink>
       </li>
       <li>
-        <ExternalLink href="https://support.apple.com/guide/safari/sfri11471/mac" follow={false}> Safari </ExternalLink>
+        <ExternalLink href="https://support.apple.com/guide/safari/sfri11471/mac" follow={false}>
+          {' '}
+          Safari{' '}
+        </ExternalLink>
       </li>
       <li>
-        <ExternalLink href="https://support.microsoft.com/help/4468242" follow={false}> Microsoft Edge </ExternalLink>
+        <ExternalLink href="https://support.microsoft.com/help/4468242" follow={false}>
+          {' '}
+          Microsoft Edge{' '}
+        </ExternalLink>
       </li>
     </ul>
     <p>Blocking local storage in your browser means the site will ask for consent on every visit.</p>

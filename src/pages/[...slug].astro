@@ -139,63 +139,66 @@ const structuredData = {
       <h1>{title}</h1>
       <small>
         <span>{dateFormatted}</span>
-        <span class="separator" aria-hidden="true">•</span>
-        <span><a href="/bio/">{SITE_METADATA.author.name}</a></span>
-        <span class="separator" aria-hidden="true">•</span>
-        <span
-          >{readingTime} min czytania <span class="separator" aria-hidden="true">•</span>
+        <span class="separator" aria-hidden="true">
+          •
+        </span>
+        <span>
+          <a href="/bio/">{SITE_METADATA.author.name}</a>
+        </span>
+        <span class="separator" aria-hidden="true">
+          •
+        </span>
+        <span>
+          {readingTime} min czytania{' '}
+          <span class="separator" aria-hidden="true">
+            •
+          </span>
           {words}
-          {plPlural(words, ['słowo', 'słowa', 'słów'])}</span
-        >
+          {plPlural(words, ['słowo', 'słowa', 'słów'])}
+        </span>
       </small>
     </header>
-    {
-      featuredImg && (
-        <Picture
-          src={featuredImg}
-          formats={['avif', 'webp']}
-          fallbackFormat="webp"
-          layout="full-width"
-          alt={featuredImgAlt ?? ''}
-        />
-      )
-    }
-    {
-      showToc && (
-        <nav class="toc" aria-label="Spis treści">
-          <h2 class="toc-title">Spis treści</h2>
-          <ol class="toc-list">
-            {tocTree.map(entry => (
-              <li>
-                <a href={`#${entry.slug}`}>{entry.text}</a>
-                {entry.children.length > 0 && (
-                  <ol>
-                    {entry.children.map(child => (
-                      <li>
-                        <a href={`#${child.slug}`}>{child.text}</a>
-                      </li>
-                    ))}
-                  </ol>
-                )}
-              </li>
-            ))}
-          </ol>
-        </nav>
-      )
-    }
+    {featuredImg && (
+      <Picture
+        src={featuredImg}
+        formats={['avif', 'webp']}
+        fallbackFormat="webp"
+        layout="full-width"
+        alt={featuredImgAlt ?? ''}
+      />
+    )}
+    {showToc && (
+      <nav class="toc" aria-label="Spis treści">
+        <h2 class="toc-title">Spis treści</h2>
+        <ol class="toc-list">
+          {tocTree.map(entry => (
+            <li>
+              <a href={`#${entry.slug}`}>{entry.text}</a>
+              {entry.children.length > 0 && (
+                <ol>
+                  {entry.children.map(child => (
+                    <li>
+                      <a href={`#${child.slug}`}>{child.text}</a>
+                    </li>
+                  ))}
+                </ol>
+              )}
+            </li>
+          ))}
+        </ol>
+      </nav>
+    )}
     <section>
       <Content />
     </section>
     <ul class="tags" aria-label="Tagi">
-      {
-        tags.map(tag => (
-          <li>
-            <a class="tag" href={`/tags/${slugifyTag(tag)}/`}>
-              #{tag}
-            </a>
-          </li>
-        ))
-      }
+      {tags.map(tag => (
+        <li>
+          <a class="tag" href={`/tags/${slugifyTag(tag)}/`}>
+            #{tag}
+          </a>
+        </li>
+      ))}
     </ul>
     <Share title={title} />
   </article>

@@ -184,86 +184,88 @@ const sections: { id: string; heading: string; ariaLabel: string; items: SetupIt
       <h2 id="desktop-heading">Desktop setup</h2>
       <div class="table-scroll" tabindex="0">
         <table aria-label="Desktop hardware and equipment specifications">
-          <colgroup><col class="col-w-30" /><col class="col-w-70" /></colgroup>
-          <thead><tr><th scope="col">Type</th><th scope="col">Full name</th></tr></thead>
+          <colgroup>
+            <col class="col-w-30" />
+            <col class="col-w-70" />
+          </colgroup>
+          <thead>
+            <tr>
+              <th scope="col">Type</th>
+              <th scope="col">Full name</th>
+            </tr>
+          </thead>
           <tbody>
-            {
-              desktopSetup.map(([type, name, link, details]) => (
-                <tr>
-                  <td>{type}</td>
-                  <td>
-                    {link ? (
-                      <ExternalLink href={link} follow aria-label={`View ${name} on external site`}>
-                        {name}
-                      </ExternalLink>
-                    ) : (
-                      name
-                    )}
-                    {details && ` (${details})`}
-                  </td>
-                </tr>
-              ))
-            }
+            {desktopSetup.map(([type, name, link, details]) => (
+              <tr>
+                <td>{type}</td>
+                <td>
+                  {link ? (
+                    <ExternalLink href={link} follow aria-label={`View ${name} on external site`}>
+                      {name}
+                    </ExternalLink>
+                  ) : (
+                    name
+                  )}
+                  {details && ` (${details})`}
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
     </section>
 
     <section id="diagram" aria-labelledby="diagram-heading">
-      {
-        /* Hydrate when scrolled into view: keeps the ~1 MB mermaid + cytoscape
+      {/* Hydrate when scrolled into view: keeps the ~1 MB mermaid + cytoscape
         bundle off the initial load (the diagram sits well below the fold). The
         skeleton is server-rendered so its height is reserved up front and the
-        page does not shift when hydration swaps in the SVG. */
-      }
+        page does not shift when hydration swaps in the SVG. */}
       <Mermaid client:visible chart={setupDiagram} ariaLabel="Hardware setup workflow diagram" />
     </section>
 
     <Figure src={hardwareSetup} alt={image.alt} caption={image.figcaption} />
 
-    {
-      sections
-        .filter(s => s.id !== 'desktop')
-        .map(({ id, heading, ariaLabel, items }) => (
-          <section id={id} aria-labelledby={`${id}-heading`}>
-            <h2 id={`${id}-heading`}>{heading}</h2>
-            <div class="table-scroll" tabindex="0">
-              <table aria-label={ariaLabel}>
-                <colgroup>
+    {sections
+      .filter(s => s.id !== 'desktop')
+      .map(({ id, heading, ariaLabel, items }) => (
+        <section id={id} aria-labelledby={`${id}-heading`}>
+          <h2 id={`${id}-heading`}>{heading}</h2>
+          <div class="table-scroll" tabindex="0">
+            <table aria-label={ariaLabel}>
+              <colgroup>
+                <>
+                  <col class="col-w-30" />
+                  <col class="col-w-70" />
+                </>
+              </colgroup>
+              <thead>
+                <tr>
                   <>
-                    <col class="col-w-30" />
-                    <col class="col-w-70" />
+                    <th scope="col">Type</th>
+                    <th scope="col">Full name</th>
                   </>
-                </colgroup>
-                <thead>
+                </tr>
+              </thead>
+              <tbody>
+                {items.map(([type, name, link, details]) => (
                   <tr>
-                    <>
-                      <th scope="col">Type</th>
-                      <th scope="col">Full name</th>
-                    </>
+                    <td>{type}</td>
+                    <td>
+                      {link ? (
+                        <ExternalLink href={link} follow aria-label={`View ${name} on external site`}>
+                          {name}
+                        </ExternalLink>
+                      ) : (
+                        name
+                      )}
+                      {details && ` (${details})`}
+                    </td>
                   </tr>
-                </thead>
-                <tbody>
-                  {items.map(([type, name, link, details]) => (
-                    <tr>
-                      <td>{type}</td>
-                      <td>
-                        {link ? (
-                          <ExternalLink href={link} follow aria-label={`View ${name} on external site`}>
-                            {name}
-                          </ExternalLink>
-                        ) : (
-                          name
-                        )}
-                        {details && ` (${details})`}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </section>
-        ))
-    }
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      ))}
   </main>
 </PageLayout>

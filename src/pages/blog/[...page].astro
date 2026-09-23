@@ -83,9 +83,13 @@ const structuredData = {
   <div class="rss">
     <span class="rss-feed">
       <Image src={rssIcon} alt="Ikona RSS" width={20} height={20} layout="fixed" />
-      <a href="/rss.xml" type="application/rss+xml">Subskrybuj kanał RSS</a>
+      <a href="/rss.xml" type="application/rss+xml">
+        Subskrybuj kanał RSS
+      </a>
     </span>
-    <span class="separator" aria-hidden="true">•</span>
+    <span class="separator" aria-hidden="true">
+      •
+    </span>
     <a href="/tags/">Przeglądaj tagi</a>
   </div>
 
@@ -106,52 +110,52 @@ const structuredData = {
   <ol id="blog-search-results" class="posts" hidden></ol>
 
   <ol id="blog-posts" class="posts">
-    {page.data.map(post => <PostListItem post={post} />)}
+    {page.data.map(post => (
+      <PostListItem post={post} />
+    ))}
   </ol>
 
-  {
-    page.lastPage > 1 && (
-      <nav class="pagination" aria-label="Nawigacja po stronach bloga" id="blog-pagination">
-        <ol class="pagination-pages">
+  {page.lastPage > 1 && (
+    <nav class="pagination" aria-label="Nawigacja po stronach bloga" id="blog-pagination">
+      <ol class="pagination-pages">
+        <li>
+          {page.url.prev ? (
+            <a class="pagination-edge" href={page.url.prev} rel="prev" aria-label="Poprzednia strona">
+              ←
+            </a>
+          ) : (
+            <span class="pagination-edge is-disabled" aria-hidden="true">
+              ←
+            </span>
+          )}
+        </li>
+        {Array.from({ length: page.lastPage }, (_, i) => i + 1).map(n => (
           <li>
-            {page.url.prev ? (
-              <a class="pagination-edge" href={page.url.prev} rel="prev" aria-label="Poprzednia strona">
-                ←
-              </a>
-            ) : (
-              <span class="pagination-edge is-disabled" aria-hidden="true">
-                ←
+            {n === page.currentPage ? (
+              <span class="is-current" aria-current="page">
+                {n}
               </span>
+            ) : (
+              <a href={pageHref(n)} aria-label={`Strona ${n}`}>
+                {n}
+              </a>
             )}
           </li>
-          {Array.from({ length: page.lastPage }, (_, i) => i + 1).map(n => (
-            <li>
-              {n === page.currentPage ? (
-                <span class="is-current" aria-current="page">
-                  {n}
-                </span>
-              ) : (
-                <a href={pageHref(n)} aria-label={`Strona ${n}`}>
-                  {n}
-                </a>
-              )}
-            </li>
-          ))}
-          <li>
-            {page.url.next ? (
-              <a class="pagination-edge" href={page.url.next} rel="next" aria-label="Następna strona">
-                →
-              </a>
-            ) : (
-              <span class="pagination-edge is-disabled" aria-hidden="true">
-                →
-              </span>
-            )}
-          </li>
-        </ol>
-      </nav>
-    )
-  }
+        ))}
+        <li>
+          {page.url.next ? (
+            <a class="pagination-edge" href={page.url.next} rel="next" aria-label="Następna strona">
+              →
+            </a>
+          ) : (
+            <span class="pagination-edge is-disabled" aria-hidden="true">
+              →
+            </span>
+          )}
+        </li>
+      </ol>
+    </nav>
+  )}
 </PageLayout>
 
 <script>

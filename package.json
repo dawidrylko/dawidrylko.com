@@ -67,7 +67,7 @@
     "husky": "^9.1.7",
     "lint-staged": "^17.5.1",
     "prettier": "^3.9.8",
-    "prettier-plugin-astro": "^0.14.1",
+    "prettier-plugin-astro": "^1.0.1",
     "rehype-autolink-headings": "^7.1.0",
     "rehype-slug": "^6.0.0",
     "stylelint": "^17.15.0",

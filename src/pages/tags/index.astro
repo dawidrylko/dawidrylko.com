@@ -51,14 +51,12 @@ const structuredData = createPageSchema({
   </header>
   <p>Przeglądaj {tagCountLabel(tags.length)} i wybierz temat, który Cię interesuje.</p>
   <ul class="tags tag-cloud" aria-label="Wszystkie tagi">
-    {
-      tags.map(tag => (
-        <li>
-          <a class="tag" href={`/tags/${tag.slug}/`}>
-            #{tag.tag} <span class="tag-count">({tag.count})</span>
-          </a>
-        </li>
-      ))
-    }
+    {tags.map(tag => (
+      <li>
+        <a class="tag" href={`/tags/${tag.slug}/`}>
+          #{tag.tag} <span class="tag-count">({tag.count})</span>
+        </a>
+      </li>
+    ))}
   </ul>
 </PageLayout>

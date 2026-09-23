@@ -24,13 +24,11 @@ const { items, title = 'Najczęściej zadawane pytania' } = Astro.props;
 
 <section class="faq" aria-label={title}>
   <h2>{title}</h2>
-  {
-    items.map(item => (
-      <details class="faq-item">
-        <summary>{item.question}</summary>
-        <div class="faq-answer" set:html={inlineMarkdown(item.answer)} />
-      </details>
-    ))
-  }
+  {items.map(item => (
+    <details class="faq-item">
+      <summary>{item.question}</summary>
+      <div class="faq-answer" set:html={inlineMarkdown(item.answer)} />
+    </details>
+  ))}
   <JsonLd data={buildFaqJsonLd(items)} />
 </section>

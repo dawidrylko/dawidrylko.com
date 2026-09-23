@@ -29,28 +29,26 @@ const show = crumbs.length > 1;
 const structuredData = breadcrumbListJsonLd(crumbs, canonical, siteUrl);
 ---
 
-{
-  show && (
-    <>
-      <JsonLd data={structuredData} />
-      <hr />
-      <nav class="breadcrumbs" aria-label="Breadcrumb">
-        <ol>
-          {crumbs.map(item => (
-            <li class={item.isActive ? 'active' : ''}>
-              {item.isActive ? (
-                <span aria-current="page" title={item.title}>
-                  {item.name}
-                </span>
-              ) : (
-                <a href={item.url} title={item.title}>
-                  {item.name}
-                </a>
-              )}
-            </li>
-          ))}
-        </ol>
-      </nav>
-    </>
-  )
-}
+{show && (
+  <>
+    <JsonLd data={structuredData} />
+    <hr />
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <ol>
+        {crumbs.map(item => (
+          <li class={item.isActive ? 'active' : ''}>
+            {item.isActive ? (
+              <span aria-current="page" title={item.title}>
+                {item.name}
+              </span>
+            ) : (
+              <a href={item.url} title={item.title}>
+                {item.name}
+              </a>
+            )}
+          </li>
+        ))}
+      </ol>
+    </nav>
+  </>
+)}

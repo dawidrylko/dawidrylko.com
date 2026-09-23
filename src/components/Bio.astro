@@ -18,15 +18,13 @@ const social = SITE_METADATA.social;
       <li>
         <a href={`mailto:${author.email}`}>Email</a>
       </li>
-      {
-        social.map(({ name, url, follow }) => (
-          <li>
-            <ExternalLink href={url} follow={follow}>
-              {name}
-            </ExternalLink>
-          </li>
-        ))
-      }
+      {social.map(({ name, url, follow }) => (
+        <li>
+          <ExternalLink href={url} follow={follow}>
+            {name}
+          </ExternalLink>
+        </li>
+      ))}
     </ul>
   </div>
 </div>

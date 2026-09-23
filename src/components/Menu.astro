@@ -7,14 +7,12 @@ const menu = SITE_METADATA.menu;
 
 <nav class="menu">
   <ul>
-    {
-      menu.map(item => (
-        <li>
-          <a href={item.url}>
-            <span>{item.name}</span>
-          </a>
-        </li>
-      ))
-    }
+    {menu.map(item => (
+      <li>
+        <a href={item.url}>
+          <span>{item.name}</span>
+        </a>
+      </li>
+    ))}
   </ul>
 </nav>

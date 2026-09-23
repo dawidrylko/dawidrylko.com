@@ -75,26 +75,24 @@ const structuredData = createPageSchema({
   </header>
   <section>
     <p>
-      I design <strong>system architecture</strong> and own its security. Over ten years in IT. The work spans the whole stack:
-      frontend interfaces, backend services, infrastructure automation, AI integration, and cybersecurity.
+      I design <strong>system architecture</strong> and own its security. Over ten years in IT. The work spans the whole
+      stack: frontend interfaces, backend services, infrastructure automation, AI integration, and cybersecurity.
     </p>
     <p>I weigh technical decisions against business goals and the cost of running a system for years.</p>
     <p>
-      My <a href="/blog/">blog</a> is in Polish, and it follows whatever I wanted to understand properly at the time. Career
-      and background are <a href="/bio/">on the about page</a>.
+      My <a href="/blog/">blog</a> is in Polish, and it follows whatever I wanted to understand properly at the time.
+      Career and background are <a href="/bio/">on the about page</a>.
     </p>
   </section>
   <section id="what-i-do">
     <h2>What I do</h2>
     <ul class="capabilities">
-      {
-        CAPABILITIES.map(({ term, description }) => (
-          <li>
-            <strong>{term}</strong>
-            {description}
-          </li>
-        ))
-      }
+      {CAPABILITIES.map(({ term, description }) => (
+        <li>
+          <strong>{term}</strong>
+          {description}
+        </li>
+      ))}
     </ul>
   </section>
   <section id="cta">
