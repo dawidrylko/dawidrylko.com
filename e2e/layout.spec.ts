@@ -119,3 +119,12 @@ test('setup page renders the mermaid diagram once scrolled into view', async ({ 
   await page.locator('#diagram').scrollIntoViewIfNeeded();
   await expect(page.locator('#diagram .mermaid-diagram svg')).toBeVisible({ timeout: 20000 });
 });
+
+for (const path of ['/bio/', '/cookie-policy/']) {
+  test(`outbound links on ${path} carry no whitespace around their text`, async ({ page }) => {
+    await page.goto(path);
+    const texts = await page.locator('a[target="_blank"]').evaluateAll(els => els.map(el => el.textContent ?? ''));
+    expect(texts.length).toBeGreaterThan(0);
+    expect(texts.filter(text => text !== text.trim())).toEqual([]);
+  });
+}

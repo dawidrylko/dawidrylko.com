@@ -73,7 +73,9 @@ const sessionCookie = `_ga_${GTAG.replace(/^G-/, '')}`;
         </thead>
         <tbody>
           <tr>
-            <td><code>cookieConsent</code></td>
+            <td>
+              <code>cookieConsent</code>
+            </td>
             <td>localStorage</td>
             <td>Zapamiętanie decyzji o zgodzie</td>
             <td>13 miesięcy od zapisania decyzji</td>
@@ -100,12 +102,16 @@ const sessionCookie = `_ga_${GTAG.replace(/^G-/, '')}`;
         </thead>
         <tbody>
           <tr>
-            <td><code>_ga</code></td>
+            <td>
+              <code>_ga</code>
+            </td>
             <td>Rozróżnienie unikalnych odwiedzających</td>
             <td>13 miesięcy</td>
           </tr>
           <tr>
-            <td><code>{sessionCookie}</code></td>
+            <td>
+              <code>{sessionCookie}</code>
+            </td>
             <td>Utrzymanie stanu sesji pomiarowej</td>
             <td>13 miesięcy</td>
           </tr>
@@ -128,9 +134,8 @@ const sessionCookie = `_ga_${GTAG.replace(/^G-/, '')}`;
     <p>
       Serwis nie stosuje cookies marketingowych i nie wczytuje skryptów reklamowych. Baner nie zawiera kategorii
       marketingowej, ponieważ nie ma zgody, której udzielenie mogłoby uruchomić takie narzędzia. Mechanizm Google
-      Consent Mode utrzymuje trwałą odmowę dla przechowywania danych reklamowych, czyli sygnałów <code>ad_storage</code
-      >,{' '}
-      <code>ad_user_data</code> i <code>ad_personalization</code>.
+      Consent Mode utrzymuje trwałą odmowę dla przechowywania danych reklamowych, czyli sygnałów <code>ad_storage</code>
+      , <code>ad_user_data</code> i <code>ad_personalization</code>.
     </p>
     <p>
       Jeżeli takie narzędzia kiedykolwiek się pojawią, kategoria wróci do banera wraz z opisem konkretnych plików w tym
@@ -151,17 +156,14 @@ const sessionCookie = `_ga_${GTAG.replace(/^G-/, '')}`;
       zgody jest równie łatwe jak jej udzielenie i nie wpływa na zgodność z prawem przetwarzania sprzed wycofania.
     </p>
     <p>
-      Wycofanie zgody zatrzymuje pomiar natychmiast i usuwa z urządzenia zapisane wcześniej pliki <code>_ga</code> oraz{
-        ' '
-      }
+      Wycofanie zgody zatrzymuje pomiar natychmiast i usuwa z urządzenia zapisane wcześniej pliki <code>_ga</code> oraz{' '}
       <code>{sessionCookie}</code>. Nie czekają one na upływ swojego trzynastomiesięcznego terminu.
     </p>
     <p>
       Po 13 miesiącach od zapisania decyzji serwis zapyta o zgodę ponownie. Pliki analityczne wygasają w tym samym
-      momencie. Ich termin biegnie od udzielenia zgody i kolejne wizyty go nie przesuwają. Jeżeli mimo to jakiś plik <code
-        >_ga</code
-      > pozostanie na urządzeniu, zostanie usunięty przy najbliższym wejściu do serwisu. Dotyczy to również plików zapisanych
-      przez wcześniejszą wersję serwisu, która pytania o zgodę nie zadawała.
+      momencie. Ich termin biegnie od udzielenia zgody i kolejne wizyty go nie przesuwają. Jeżeli mimo to jakiś plik{' '}
+      <code>_ga</code> pozostanie na urządzeniu, zostanie usunięty przy najbliższym wejściu do serwisu. Dotyczy to
+      również plików zapisanych przez wcześniejszą wersję serwisu, która pytania o zgodę nie zadawała.
     </p>
     <p>Niezależnie od ustawień serwisu pliki cookies można kontrolować z poziomu przeglądarki:</p>
     <ul>

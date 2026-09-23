@@ -2,6 +2,8 @@
 // Outbound link that opens in a new tab with a safe `rel`. `noopener noreferrer`
 // is always set; `nofollow` is added unless `follow` is true. Any extra
 // attributes (title, aria-label, class…) pass through to the anchor.
+// The slot is trimmed so a formatter wrapping the link text onto its own lines
+// does not leak spaces into the underlined anchor.
 interface Props {
   href: string;
   follow?: boolean;
@@ -10,6 +12,7 @@ interface Props {
 
 const { href, follow = false, ...rest } = Astro.props;
 const rel = follow ? 'noopener noreferrer' : 'noopener noreferrer nofollow';
+const content = (await Astro.slots.render('default')).trim();
 ---
 
-<a href={href} target="_blank" rel={rel} {...rest}><slot /></a>
+<a href={href} target="_blank" rel={rel} {...rest} set:html={content} />

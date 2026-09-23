@@ -63,21 +63,21 @@ const structuredData = createPageSchema({
   <section id="what-i-do">
     <h2>What we can work on</h2>
     <ul class="capabilities">
-      {
-        capabilities.map(({ term, description }) => (
-          <li>
-            <strong>{term}</strong>
-            {description}
-          </li>
-        ))
-      }
+      {capabilities.map(({ term, description }) => (
+        <li>
+          <strong>{term}</strong>
+          {description}
+        </li>
+      ))}
     </ul>
   </section>
   <section>
     <h2>How to reach me</h2>
     <p>
       The best way to get in touch is by email:&nbsp;
-      <a href={`mailto:${author.email}`} title="Send email"><strong>{author.email}</strong></a>
+      <a href={`mailto:${author.email}`} title="Send email">
+        <strong>{author.email}</strong>
+      </a>
     </p>
     <p>I usually respond within 24 hours on business days.</p>
   </section>
@@ -85,17 +85,15 @@ const structuredData = createPageSchema({
     <h2>Find me online</h2>
     <p>The accounts I actually use:</p>
     <ul>
-      {
-        social
-          .filter(({ name }) => ['GitHub', 'Twitter', 'Linkedin'].includes(name))
-          .map(({ name, url, follow }) => (
-            <li>
-              <ExternalLink href={url} follow={follow} title={`Find Dawid Ryłko on ${name}`}>
-                {name}
-              </ExternalLink>
-            </li>
-          ))
-      }
+      {social
+        .filter(({ name }) => ['GitHub', 'Twitter', 'Linkedin'].includes(name))
+        .map(({ name, url, follow }) => (
+          <li>
+            <ExternalLink href={url} follow={follow} title={`Find Dawid Ryłko on ${name}`}>
+              {name}
+            </ExternalLink>
+          </li>
+        ))}
     </ul>
   </section>
 </PageLayout>

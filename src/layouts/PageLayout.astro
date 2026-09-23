@@ -95,36 +95,28 @@ const consentDefaults = JSON.stringify(CONSENT_DEFAULTS);
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    {
-      /* Google Consent Mode v2 defaults. Every signal starts denied except what
+    {/* Google Consent Mode v2 defaults. Every signal starts denied except what
         the site itself needs, and gtag.js is not referenced here at all: the
         loader is injected by the consent island only once the visitor agrees,
         so before consent the browser makes no request to Google whatsoever.
         Placed after charset and viewport, neither of which touches dataLayer,
-        so the encoding declaration stays well inside the first 1024 bytes. */
-    }
-    {
-      import.meta.env.PROD && (
-        <script
-          is:inline
-          set:html={`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('consent','default',${consentDefaults});gtag('set','ads_data_redaction',true);`}
-        />
-      )
-    }
-    {
-      /* Only `noIndex` suppresses the canonical, and the reason is the URL, not
+        so the encoding declaration stays well inside the first 1024 bytes. */}
+    {import.meta.env.PROD && (
+      <script
+        is:inline
+        set:html={`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('consent','default',${consentDefaults});gtag('set','ads_data_redaction',true);`}
+      ></script>
+    )}
+    {/* Only `noIndex` suppresses the canonical, and the reason is the URL, not
         the noindex: a 404 would point its canonical at a non-200 URL, which SEO
         audits flag. Pages excluded via `noIndexFollow` are ordinary 200 pages,
-        so they keep their self-canonical. */
-    }
+        so they keep their self-canonical. */}
     {!noIndex && <link rel="canonical" href={canonical} />}
-    {
-      /* hreflang declares each URL's language to search engines. Every page is
+    {/* hreflang declares each URL's language to search engines. Every page is
         monolingual (English shell or Polish content) with no translated twin, so
         the page self-references its own language and doubles as x-default. Like
         the canonical, it is skipped on `noIndex` pages so it never points at a
-        non-200 URL; `noIndexFollow` pages are real 200 URLs and keep it. */
-    }
+        non-200 URL; `noIndexFollow` pages are real 200 URLs and keep it. */}
     {!noIndex && <link rel="alternate" hreflang={metaLang} href={canonical} />}
     {!noIndex && <link rel="alternate" hreflang="x-default" href={canonical} />}
     <link rel="manifest" href="/manifest.webmanifest" />
@@ -133,10 +125,8 @@ const consentDefaults = JSON.stringify(CONSENT_DEFAULTS);
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="alternate" type="application/rss+xml" title={SITE_METADATA.title} href="/rss.xml" />
     <link rel="author" href="/humans.txt" />
-    {
-      /* Preload the above-the-fold body font so the critical text face is
-      fetched before CSS is parsed, cutting LCP and swap-driven CLS. */
-    }
+    {/* Preload the above-the-fold body font so the critical text face is
+      fetched before CSS is parsed, cutting LCP and swap-driven CLS. */}
     <link rel="preload" href={merriweatherBody} as="font" type="font/woff2" crossorigin />
     <Seo
       title={title}
@@ -156,14 +146,10 @@ const consentDefaults = JSON.stringify(CONSENT_DEFAULTS);
     />
     <JsonLd data={{ '@context': 'https://schema.org', '@graph': [website, person] }} />
 
-    {
-      /* Core Web Vitals → GA4. The module checks consent before reporting, so
-        metrics measured before the visitor answers are dropped, not queued. */
-    }
-    {
-      /* Applies an existing decision before the metrics below register, so a
-        returning visitor who accepted is measured from the start of the visit. */
-    }
+    {/* Core Web Vitals → GA4. The module checks consent before reporting, so
+        metrics measured before the visitor answers are dropped, not queued. */}
+    {/* Applies an existing decision before the metrics below register, so a
+        returning visitor who accepted is measured from the start of the visit. */}
     <script>
       import '../scripts/consent-boot';
     </script>
@@ -178,40 +164,51 @@ const consentDefaults = JSON.stringify(CONSENT_DEFAULTS);
   <body>
     <div class="global-wrapper" data-is-root-path={isRootPath}>
       <header class="header">
-        <div class="header-title"><a href="/">{SITE_METADATA.title}</a></div>
+        <div class="header-title">
+          <a href="/">{SITE_METADATA.title}</a>
+        </div>
         <Menu />
       </header>
-      <main><slot /></main>
+      <main>
+        <slot />
+      </main>
       <Breadcrumbs customTitle={breadcrumbTitle} parents={breadcrumbParents} />
       <hr />
       <Bio />
       <hr />
       <footer class="footer">
-        {
-          /* A list with the bullet on ::after, like the main menu: the separator
+        {/* A list with the bullet on ::after, like the main menu: the separator
             belongs to the item before it, so a wrapped row never opens with a
-            stray bullet the way free-standing <span> separators did. */
-        }
+            stray bullet the way free-standing <span> separators did. */}
         <nav class="footer-metadata" aria-label="Site links and cookie settings">
           <ul>
-            <li><a href="/setup/">Setup</a></li>
-            <li><a href="/files/">Files</a></li>
-            <li><a href="/metadata/">Metadata</a></li>
-            <li><a href={consentCopy.privacyPolicy.href}>{consentCopy.privacyPolicy.label}</a></li>
-            <li><a href={consentCopy.cookiePolicy.href}>{consentCopy.cookiePolicy.label}</a></li>
-            {
-              /* Withdrawing consent has to be as easy as giving it (art. 7(3)
-                GDPR), so the way back to the decision lives in the chrome of
-                every page, in the same row as the policies it undoes. */
-            }
             <li>
-              <button type="button" class="link-button" data-cookie-settings>{consentCopy.settings}</button>
+              <a href="/setup/">Setup</a>
+            </li>
+            <li>
+              <a href="/files/">Files</a>
+            </li>
+            <li>
+              <a href="/metadata/">Metadata</a>
+            </li>
+            <li>
+              <a href={consentCopy.privacyPolicy.href}>{consentCopy.privacyPolicy.label}</a>
+            </li>
+            <li>
+              <a href={consentCopy.cookiePolicy.href}>{consentCopy.cookiePolicy.label}</a>
+            </li>
+            {/* Withdrawing consent has to be as easy as giving it (art. 7(3)
+                GDPR), so the way back to the decision lives in the chrome of
+                every page, in the same row as the policies it undoes. */}
+            <li>
+              <button type="button" class="link-button" data-cookie-settings>
+                {consentCopy.settings}
+              </button>
             </li>
           </ul>
         </nav>
         <div class="footer-copyright">
-          Copyright © {year}{' '}
-          <a href={SITE_METADATA.url}>{SITE_METADATA.author.name}</a>
+          Copyright © {year} <a href={SITE_METADATA.url}>{SITE_METADATA.author.name}</a>
         </div>
       </footer>
       <CookieConsent client:load lang={metaLang} />

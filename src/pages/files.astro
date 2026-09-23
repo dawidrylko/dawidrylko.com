@@ -233,66 +233,64 @@ const structuredData = createPageSchema({
             </tr>
           </thead>
           <tbody>
-            {
-              rows.map(row => (
-                <tr>
-                  <td>{row.index}</td>
-                  <td class="presentation-cell">
-                    <a
-                      class="presentation-title"
-                      href={row.openHref}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={`Open ${row.title} (PDF) in a new tab`}
-                    >
-                      {row.title}
-                    </a>
-                  </td>
-                  <td class="presentation-cell">{row.description || '—'}</td>
-                  <td>{row.topic}</td>
-                  <td class="presentation-cell presentation-keywords">{row.keywords || '—'}</td>
-                  <td>{row.language}</td>
-                  <td>{row.size}</td>
-                  <td>
-                    <div class="file-actions">
-                      {row.links.map(link =>
-                        link.action === 'open' ? (
-                          <a
-                            class:list={['file-link', { 'is-hidden-variant': link.hidden }]}
-                            href={link.href}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            aria-label={`Open ${link.title} ${link.type} in new tab`}
-                            title={`Open ${link.type} in new tab (${link.size})`}
-                          >
-                            {link.icon}
-                          </a>
-                        ) : (
-                          <a
-                            class:list={['file-link', { 'is-hidden-variant': link.hidden }]}
-                            href={link.href}
-                            download={link.download}
-                            aria-label={`Download ${link.title} as ${link.type}`}
-                            title={`Download ${link.type} (${link.size})`}
-                          >
-                            {link.icon}
-                          </a>
-                        ),
-                      )}
-                    </div>
-                  </td>
-                  <td>
-                    {row.relatedArticle ? (
-                      <a href={row.relatedArticle} class="presentation-article-link">
-                        →
-                      </a>
-                    ) : (
-                      <span class="presentation-no-article">—</span>
+            {rows.map(row => (
+              <tr>
+                <td>{row.index}</td>
+                <td class="presentation-cell">
+                  <a
+                    class="presentation-title"
+                    href={row.openHref}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`Open ${row.title} (PDF) in a new tab`}
+                  >
+                    {row.title}
+                  </a>
+                </td>
+                <td class="presentation-cell">{row.description || '—'}</td>
+                <td>{row.topic}</td>
+                <td class="presentation-cell presentation-keywords">{row.keywords || '—'}</td>
+                <td>{row.language}</td>
+                <td>{row.size}</td>
+                <td>
+                  <div class="file-actions">
+                    {row.links.map(link =>
+                      link.action === 'open' ? (
+                        <a
+                          class:list={['file-link', { 'is-hidden-variant': link.hidden }]}
+                          href={link.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label={`Open ${link.title} ${link.type} in new tab`}
+                          title={`Open ${link.type} in new tab (${link.size})`}
+                        >
+                          {link.icon}
+                        </a>
+                      ) : (
+                        <a
+                          class:list={['file-link', { 'is-hidden-variant': link.hidden }]}
+                          href={link.href}
+                          download={link.download}
+                          aria-label={`Download ${link.title} as ${link.type}`}
+                          title={`Download ${link.type} (${link.size})`}
+                        >
+                          {link.icon}
+                        </a>
+                      ),
                     )}
-                  </td>
-                </tr>
-              ))
-            }
+                  </div>
+                </td>
+                <td>
+                  {row.relatedArticle ? (
+                    <a href={row.relatedArticle} class="presentation-article-link">
+                      →
+                    </a>
+                  ) : (
+                    <span class="presentation-no-article">—</span>
+                  )}
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
