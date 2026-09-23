@@ -361,15 +361,37 @@ jobs:
       - name: Run Playwright tests
         run: pnpm run test:e2e
 
+  # Reads the update type once for the autofix and the merge decision. An empty
+  # output, when the metadata cannot be read, sends the pull request to a human.
+  metadata:
+    name: Dependabot metadata
+    if: github.event.pull_request.user.login == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      update-type: ${{ steps.metadata.outputs.update-type }}
+    steps:
+      - name: Fetch update metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@v3
+        continue-on-error: true
+
   # Dependabot pull requests only (see README > "Dependency updates"). A
   # formatter or linter release often changes nothing but style, so the fixers
   # run on the updated packages with a read-only token and hand over a patch.
+  # Only minor and patch updates get it, because only they merge on their own.
+  # A rylkobot commit stops Dependabot from rebasing, so on a major, which waits
+  # for a human, it would leave the pull request to go stale in conflict.
   # GitHub Actions updates change no package, so they skip it.
   autofix:
     name: Dependabot autofix
+    needs: metadata
     if: >-
       github.actor == 'dependabot[bot]' && github.event.pull_request.user.login == 'dependabot[bot]' &&
-      !startsWith(github.head_ref, 'dependabot/github_actions/')
+      !startsWith(github.head_ref, 'dependabot/github_actions/') &&
+      contains(fromJSON('["version-update:semver-minor", "version-update:semver-patch"]'), needs.metadata.outputs.update-type)
     runs-on: ubuntu-latest
     outputs:
       changed: ${{ steps.patch.outputs.changed }}
@@ -487,6 +509,7 @@ jobs:
       - links
       - lighthouse
       - e2e
+      - metadata
       - autofix
       - autofix-push
     if: ${{ !cancelled() && github.event.pull_request.user.login == 'dependabot[bot]' && needs.autofix-push.result != 'success' }}
@@ -504,11 +527,6 @@ jobs:
             exit 1
           fi
 
-      - name: Fetch update metadata
-        id: metadata
-        uses: dependabot/fetch-metadata@v3
-        continue-on-error: true
-
       - name: Enable auto-merge for minor and patch updates, assign the rest
         env:
           GH_TOKEN: ${{ secrets.RYLKOBOT_TOKEN }}
@@ -521,7 +539,7 @@ jobs:
             ${{ needs.dependency-review.result }} ${{ needs.build.result }} ${{ needs.build-contract.result }}
             ${{ needs.links.result }} ${{ needs.lighthouse.result }} ${{ needs.e2e.result }}
           AUTOFIX_RESULTS: ${{ needs.autofix.result }} ${{ needs.autofix-push.result }}
-          UPDATE_TYPE: ${{ steps.metadata.outputs.update-type }}
+          UPDATE_TYPE: ${{ needs.metadata.outputs.update-type }}
         run: |
           checks=success
           for result in $RESULTS; do

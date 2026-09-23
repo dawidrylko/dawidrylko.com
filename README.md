@@ -82,8 +82,9 @@ Dependabot opens one pull request a week with the npm minor and patch updates. E
 a pull request of its own. GitHub Actions updates share one weekly pull request, majors included, so
 an Actions major sends the whole pull request to a human.
 
-Three CI jobs handle these pull requests. `Dependabot autofix` runs `eslint --fix`,
-`stylelint --fix` and `format:write` on the updated npm packages. It holds a read-only token and
+Four CI jobs handle these pull requests. `Dependabot metadata` reads the update type.
+`Dependabot autofix` runs `eslint --fix`, `stylelint --fix` and `format:write` on the updated npm
+packages, only for a minor or patch update. It holds a read-only token and
 keeps any change as a patch. `Dependabot autofix push` checks the patch with
 `scripts/ci/check-autofix-paths.mjs` and commits it as `rylkobot`. The guard refuses any change to
 `content/`, `.github/`, `.husky/`, the manifest, the lockfile and the pnpm and Node settings. The
@@ -98,7 +99,8 @@ included, with no human review. That is deliberate. Auto-merge runs on the `rylk
 because a merge made with `GITHUB_TOKEN` would not start the deployment.
 
 Once `rylkobot` pushes a commit, Dependabot stops rebasing the pull request. Merge it or comment
-`@dependabot recreate`.
+`@dependabot recreate`. That is why a major gets no autofix: it waits for a human, and a rylkobot
+commit would leave it stuck in conflict after the next merge to `master`.
 
 ## 📄 License
 
