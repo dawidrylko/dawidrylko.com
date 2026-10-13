@@ -91,13 +91,13 @@ graph TD
   subgraph SecondaryStation ["Secondary Device Station"]
     Secondary["Secondary Device"]
     Hub
-    Secondary -- "Thunderbolt 5<br/><small>0.5 m extension</small>" --> Hub
+    Secondary -- "USB-C ↔ USB-C<br/><small>Video + data</small>" --> Hub
   end
 
   subgraph PrimaryStation ["Primary Device Station"]
     Computer
     Dock
-    Dock -- "USB-C ↔ USB-C<br/><small>Dock cable</small>" --> Computer
+    Dock -- "USB-C ↔ USB-C<br/><small>Data</small>" --> Computer
   end
 
   KVM
@@ -111,29 +111,41 @@ graph TD
 
   Monitor
 
-  Computer -- "USB-C ↔ DisplayPort 1.4<br/><small>8K@60 Hz</small>" --> KVM
-  Computer -- "Thunderbolt 5<br/><small>1 m</small>" --> KVM
+  Computer -- "USB-C ↔ DisplayPort<br/><small>Video</small>" --> KVM
+  Computer -- "USB-C ↔ USB-C<br/><small>Data</small>" --> KVM
 
-  Hub -- "DisplayPort ↔ DisplayPort<br/><small>Monitor cable</small>" --> KVM
-  Hub -- "Thunderbolt 5<br/><small>0.5 m</small>" --> KVM
+  Hub -- "DisplayPort ↔ DisplayPort<br/><small>Video</small>" --> KVM
+  Hub -- "USB-C ↔ USB-C<br/><small>Data</small>" --> KVM
 
-  KVM -- "DisplayPort ↔ DisplayPort<br/><small>Monitor cable</small>" --> Monitor
-  KVM -- "USB-A ↔ USB-B<br/><small>Monitor cable</small>" --> Monitor
+  KVM -- "DisplayPort ↔ DisplayPort<br/><small>Video</small>" --> Monitor
+  KVM -- "USB-A ↔ USB-B<br/><small>Data</small>" --> Monitor
 
-  Mouse -- "USB dongle" --> KVM
-  Keyboard -- "USB-C ↔ USB-A<br/><small>Keyboard cable</small>" --> KVM
-  Microphone -- "USB-B ↔ USB-C<br/><small>2 m</small>" --> KVM
+  Mouse -- "Wireless ↔ USB-A<br/><small>Data</small>" --> KVM
+  Keyboard -- "USB-C ↔ USB-A<br/><small>Data</small>" --> KVM
+  Microphone -- "USB-B ↔ USB-C<br/><small>Audio</small>" --> KVM
 
-  Monitor -- "USB-A ↔ USB-C<br/><small>Light Bar cable</small>" --> Lightbar
+  Monitor -- "USB-A ↔ USB-C<br/><small>Power</small>" --> Lightbar
+
+  linkStyle default font-size:14px
 `;
 
-// Full cable specs, shown when a cable on the diagram is hovered or focused;
-// keys are Mermaid's edge ids (L_<from>_<to>_<n>).
+// Every cable is labelled with its connector pair (source end first) over what
+// it carries; the full spec lives here and shows when the cable is hovered or
+// focused. Keys are Mermaid's edge ids (L_<from>_<to>_<n>); a repeated pair
+// gets n = 0, then 2.
 const cableDetails: Record<string, string> = {
-  L_Secondary_Hub_0: 'USB-C ↔ USB-C, Thunderbolt 5, 80 Gbps, PD 240 W, 16K@30 Hz, 0.5 m extension',
+  L_Secondary_Hub_0: 'USB-C ↔ USB-C, Thunderbolt 5 cable rated 80 Gbps, PD 240 W, 16K@30 Hz, 0.5 m extension',
+  L_Dock_Computer_0: 'USB-C ↔ USB-C, original RayCue dock cable',
   L_Computer_KVM_0: 'USB-C ↔ DisplayPort 1.4, Ugreen, 32.4 Gbps, 8K@60 Hz, 1 m',
-  L_Computer_KVM_2: 'USB-C ↔ USB-C, Thunderbolt 5, 80 Gbps, PD 240 W, 16K@30 Hz, 1 m',
-  L_Hub_KVM_2: 'USB-C ↔ USB-C, Thunderbolt 5, 80 Gbps, PD 240 W, 16K@30 Hz, 0.5 m',
+  L_Computer_KVM_2: 'USB-C ↔ USB-C, Thunderbolt 5 cable rated 80 Gbps, PD 240 W, 16K@30 Hz, 1 m',
+  L_Hub_KVM_0: 'DisplayPort ↔ DisplayPort, original iiyama cable',
+  L_Hub_KVM_2: 'USB-C ↔ USB-C, Thunderbolt 5 cable rated 80 Gbps, PD 240 W, 16K@30 Hz, 0.5 m',
+  L_KVM_Monitor_0: 'DisplayPort ↔ DisplayPort, original iiyama cable',
+  L_KVM_Monitor_2: 'USB-A ↔ USB-B, original iiyama USB hub cable, USB data link',
+  L_Mouse_KVM_0: 'Wireless ↔ USB-A, USB receiver in the KVM',
+  L_Keyboard_KVM_0: 'USB-C ↔ USB-A, original NuPhy keyboard cable',
+  L_Microphone_KVM_0: 'USB-B ↔ USB-C, USB 2.0, 2 m',
+  L_Monitor_Lightbar_0: 'USB-A ↔ USB-C, original Xiaomi Light Bar cable, powered by the monitor USB hub',
 };
 
 const structuredData = createPageSchema({

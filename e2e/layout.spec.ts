@@ -203,12 +203,39 @@ test('setup diagram keeps cable labels short and shows the full spec on focus', 
   const svg = await renderSetupDiagram(page);
   const labels = await svg.locator('.edgeLabel').allTextContents();
   expect(labels.filter(text => text.includes('Gbps'))).toEqual([]);
-  await expect(svg.locator('.edge-hit[aria-label]')).toHaveCount(4);
+  await expect(svg.locator('.edge-hit[aria-label]')).toHaveCount(12);
   await expect(svg.locator('.edge-hit[data-edge="L_Hub_KVM_2"]')).toHaveAttribute('aria-label', /^Hub to KVM: /);
   await svg.locator('.edge-hit[data-edge="L_Computer_KVM_2"]').focus();
   await expect(page.locator('#diagram .mermaid-diagram-tooltip')).toContainText('80 Gbps');
   await page.keyboard.press('Escape');
   await expect(page.locator('#diagram .mermaid-diagram-tooltip')).toHaveCount(0);
+});
+
+test('setup diagram labels every cable as connector pair over what it carries', async ({ page }) => {
+  const svg = await renderSetupDiagram(page);
+  const labels = await svg.locator('g.edgeLabel').evaluateAll(els =>
+    els.map(el => {
+      const carries = el.querySelector('small')?.textContent ?? '';
+      const connectors = (el.textContent ?? '').replace(carries, '').trim();
+      const id = el.querySelector('[data-id]')?.getAttribute('data-id') ?? '';
+      const height = Math.round(el.querySelector('p')?.getBoundingClientRect().height ?? 0);
+      return { id, connectors, carries, height };
+    }),
+  );
+  expect(labels).toHaveLength(12);
+  expect(labels).toHaveLength(await svg.locator('path.flowchart-link').count());
+  const end = '(USB-[ABC]|DisplayPort)';
+  const off = labels.filter(
+    ({ connectors, carries }) =>
+      !new RegExp(`^(${end}|Wireless) ↔ ${end}$`).test(connectors) ||
+      !['Video', 'Data', 'Audio', 'Power', 'Video + data'].includes(carries),
+  );
+  expect(off).toEqual([]);
+  expect(new Set(labels.map(({ height }) => height)).size).toBe(1);
+  for (const { id, connectors } of labels) {
+    const hit = (await svg.locator(`.edge-hit[data-edge="${id}"]`).getAttribute('aria-label')) ?? '';
+    expect(hit.slice(hit.indexOf(': ') + 2), id).toMatch(new RegExp(`^${connectors}`));
+  }
 });
 
 test('setup diagram shows the full spec when the cable label is hovered', async ({ page }) => {
