@@ -221,6 +221,30 @@ test('setup diagram shows the full spec when the cable label is hovered', async 
   expect(related).toEqual(['L_Secondary_Hub_0']);
 });
 
+test('setup diagram tooltip stays open when the pointer moves onto it', async ({ page }) => {
+  const svg = await renderSetupDiagram(page);
+  await svg.locator('g.label[data-id="L_Computer_KVM_2"]').hover();
+  const tooltip = page.locator('#diagram .mermaid-diagram-tooltip');
+  await expect(tooltip).toBeVisible();
+  await tooltip.hover();
+  await expect(tooltip).toContainText('80 Gbps');
+});
+
+test('setup diagram tooltip stays closed after Escape when the pointer leaves', async ({ page }) => {
+  const svg = await renderSetupDiagram(page);
+  // Pointer inside the diagram but over no device or cable, so only leaving
+  // the box can fire, not a hover on whatever the closed tooltip uncovers.
+  const frame = await page.locator('#diagram .mermaid-diagram').boundingBox();
+  await page.mouse.move((frame?.x ?? 0) + 3, (frame?.y ?? 0) + 3);
+  await svg.locator('.edge-hit[data-edge="L_Computer_KVM_2"]').focus();
+  const tooltip = page.locator('#diagram .mermaid-diagram-tooltip');
+  await expect(tooltip).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(tooltip).toHaveCount(0);
+  await page.mouse.move(5, 5);
+  await expect(tooltip).toHaveCount(0);
+});
+
 test('setup diagram lights up a device cables on hover and dims the rest', async ({ page }) => {
   const svg = await renderSetupDiagram(page);
   await svg.locator('[data-node="Computer"]').hover();

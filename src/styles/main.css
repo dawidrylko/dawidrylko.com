@@ -1454,6 +1454,24 @@ a:focus {
   transform: translate(-50%, 10px);
 }
 
+/* Bridges the 10px gap to the pointer, so moving onto the tooltip keeps it
+   open (WCAG 1.4.13, hoverable). */
+.mermaid-diagram-tooltip::before {
+  position: absolute;
+  inset: 100% 0 auto;
+  height: 12px;
+  content: '';
+}
+
+.mermaid-diagram-tooltip.is-below::before {
+  inset: auto 0 100%;
+}
+
+.mermaid-diagram-details {
+  margin: var(--spacing-2) 0 var(--spacing-6);
+  font-size: var(--fontSize-0);
+}
+
 /* Phones: keep the diagram at a readable width and let it scroll sideways in
    its own box, like the tables on this page, instead of shrinking the labels
    to a few pixels. From md up the column is wide enough to scale freely. */

@@ -140,6 +140,7 @@ const MermaidInner: FC<Required<MermaidProps>> = ({ chart, ariaLabel, edgeDetail
   const [hasError, setHasError] = useState(false);
   const [tooltip, setTooltip] = useState<{ text: string; x: number; y: number; below: boolean } | null>(null);
   const rootRef = useRef<HTMLDivElement>(null);
+  const dismissedRef = useRef(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -175,6 +176,7 @@ const MermaidInner: FC<Required<MermaidProps>> = ({ chart, ariaLabel, edgeDetail
     }
     const onKey = (event: KeyboardEvent): void => {
       if (event.key === 'Escape') {
+        dismissedRef.current = true;
         setTooltip(null);
       }
     };
@@ -213,6 +215,7 @@ const MermaidInner: FC<Required<MermaidProps>> = ({ chart, ariaLabel, edgeDetail
       deactivate();
       return;
     }
+    dismissedRef.current = false;
     const edge = el.dataset.edge ?? (el.matches('g.label') ? el.dataset.id : undefined);
     applyActive(root, edge ? { edge } : { node: el.dataset.node ?? '' });
     const text = edge ? edgeDetails[edge] : undefined;
@@ -249,7 +252,7 @@ const MermaidInner: FC<Required<MermaidProps>> = ({ chart, ariaLabel, edgeDetail
       onPointerOver={(event: PointerEvent) => activate(event.target, { x: event.clientX, y: event.clientY })}
       onPointerLeave={() => {
         const focused = document.activeElement;
-        if (focused && rootRef.current?.contains(focused)) {
+        if (focused && rootRef.current?.contains(focused) && !dismissedRef.current) {
           activate(focused);
         } else {
           deactivate();
