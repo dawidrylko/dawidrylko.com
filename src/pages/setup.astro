@@ -82,35 +82,40 @@ const PAGE_METADATA: PageMetadata = {
   ],
 };
 
-const setupDiagram = `graph TD
+const setupDiagram = `---
+config:
+  flowchart:
+    curve: linear
+---
+graph TD
+  subgraph SecondaryStation ["Secondary Device Station"]
+    Secondary["Secondary Device"]
+    Hub
+    Secondary -- "Thunderbolt 5<br/><small>0.5 m extension</small>" --> Hub
+  end
+
   subgraph PrimaryStation ["Primary Device Station"]
     Computer
     Dock
     Dock -- "USB-C ↔ USB-C<br/><small>Dock cable</small>" --> Computer
   end
 
-  subgraph SecondaryStation ["Secondary Device Station"]
-    Secondary["Secondary Device"]
-    Hub
-    Secondary -- "USB-C ↔ USB-C<br/><small>Thunderbolt 5, 80 Gbps, PD 240 W, 16K@30 Hz, 0.5 m extension</small>" --> Hub
-  end
-
   KVM
 
   subgraph Peripherals
+    Lightbar["Light Bar"]
     Mouse
     Keyboard
     Microphone
-    Lightbar["Light Bar"]
   end
 
   Monitor
 
-  Computer -- "USB-C ↔ DisplayPort 1.4<br/><small>Ugreen, 32.4 Gbps, 8K@60 Hz, 1 m</small>" --> KVM
-  Computer -- "USB-C ↔ USB-C<br/><small>Thunderbolt 5, 80 Gbps, PD 240 W, 16K@30 Hz, 1 m</small>" --> KVM
+  Computer -- "USB-C ↔ DisplayPort 1.4<br/><small>8K@60 Hz</small>" --> KVM
+  Computer -- "Thunderbolt 5<br/><small>1 m</small>" --> KVM
 
   Hub -- "DisplayPort ↔ DisplayPort<br/><small>Monitor cable</small>" --> KVM
-  Hub -- "USB-C ↔ USB-C<br/><small>Thunderbolt 5, 80 Gbps, PD 240 W, 16K@30 Hz, 0.5 m</small>" --> KVM
+  Hub -- "Thunderbolt 5<br/><small>0.5 m</small>" --> KVM
 
   KVM -- "DisplayPort ↔ DisplayPort<br/><small>Monitor cable</small>" --> Monitor
   KVM -- "USB-A ↔ USB-B<br/><small>Monitor cable</small>" --> Monitor
@@ -121,6 +126,15 @@ const setupDiagram = `graph TD
 
   Monitor -- "USB-A ↔ USB-C<br/><small>Light Bar cable</small>" --> Lightbar
 `;
+
+// Full cable specs, shown when a cable on the diagram is hovered or focused;
+// keys are Mermaid's edge ids (L_<from>_<to>_<n>).
+const cableDetails: Record<string, string> = {
+  L_Secondary_Hub_0: 'USB-C ↔ USB-C, Thunderbolt 5, 80 Gbps, PD 240 W, 16K@30 Hz, 0.5 m extension',
+  L_Computer_KVM_0: 'USB-C ↔ DisplayPort 1.4, Ugreen, 32.4 Gbps, 8K@60 Hz, 1 m',
+  L_Computer_KVM_2: 'USB-C ↔ USB-C, Thunderbolt 5, 80 Gbps, PD 240 W, 16K@30 Hz, 1 m',
+  L_Hub_KVM_2: 'USB-C ↔ USB-C, Thunderbolt 5, 80 Gbps, PD 240 W, 16K@30 Hz, 0.5 m',
+};
 
 const structuredData = createPageSchema({
   pathname: Astro.url.pathname,
@@ -215,12 +229,17 @@ const sections: { id: string; heading: string; ariaLabel: string; items: SetupIt
       </div>
     </section>
 
-    <section id="diagram" aria-labelledby="diagram-heading">
+    <section id="diagram" class="setup-diagram" aria-label="Connection diagram">
       {/* Hydrate when scrolled into view: keeps the ~1 MB mermaid + cytoscape
         bundle off the initial load (the diagram sits well below the fold). The
         skeleton is server-rendered so its height is reserved up front and the
         page does not shift when hydration swaps in the SVG. */}
-      <Mermaid client:visible chart={setupDiagram} ariaLabel="Hardware setup workflow diagram" />
+      <Mermaid
+        client:visible
+        chart={setupDiagram}
+        edgeDetails={cableDetails}
+        ariaLabel="Hardware setup workflow diagram"
+      />
     </section>
 
     <Figure src={hardwareSetup} alt={image.alt} caption={image.figcaption} />

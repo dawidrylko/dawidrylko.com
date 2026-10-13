@@ -1344,9 +1344,13 @@ a:focus {
 /* Mermaid diagrams */
 
 .mermaid-diagram {
+  position: relative;
   display: flex;
   align-items: center;
-  justify-content: center;
+
+  /* safe: once the SVG is wider than the box (phones) it starts at the left
+     edge and scrolls, instead of centring and clipping its left part. */
+  justify-content: safe center;
   margin: var(--spacing-6) 0;
 
   /* Match the skeleton's reserved height so the swap from placeholder to SVG
@@ -1371,6 +1375,201 @@ a:focus {
   /* Flex children default to min-width: auto, which would let the SVG keep its
      intrinsic width and overrun max-width: 100% on narrow viewports. */
   min-width: 0;
+}
+
+.mermaid-diagram-canvas {
+  display: contents;
+}
+
+/* Wide transparent stroke over each edge: the hover and focus target. */
+.mermaid-diagram .edge-hit {
+  fill: none;
+  stroke: transparent;
+  stroke-width: 16px;
+  pointer-events: stroke;
+  cursor: help;
+}
+
+.mermaid-diagram [data-node] {
+  cursor: default;
+}
+
+.mermaid-diagram :is([data-node], .edge-hit):focus {
+  outline: none;
+}
+
+.mermaid-diagram [data-node]:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* An outline would frame the edge's whole bounding box; tint the stroke. */
+.mermaid-diagram .edge-hit:focus-visible {
+  stroke: color-mix(in srgb, var(--color-primary) 30%, transparent);
+}
+
+/* Hovering or focusing a device lights up its cables and dims the rest;
+   hovering a cable lights up that cable alone. */
+.mermaid-diagram.has-active :is(path.flowchart-link, g.label[data-id], [data-node]) {
+  opacity: 0.25;
+  transition: opacity 0.2s ease;
+}
+
+.mermaid-diagram.has-active :is(path.flowchart-link, g.label[data-id], [data-node]).is-related {
+  opacity: 1;
+}
+
+/* The KVM keyframes own .edge-flow opacity, so unrelated flows are hidden
+   rather than dimmed. */
+.mermaid-diagram.has-active .edge-flow:not(.is-related) {
+  visibility: hidden;
+}
+
+/* !important: Mermaid scopes its own edge stroke under the SVG's id. */
+.mermaid-diagram.has-active path.flowchart-link.is-related {
+  stroke: var(--color-primary) !important;
+  stroke-width: 2.5px !important;
+}
+
+.mermaid-diagram g.label[data-id] {
+  cursor: help;
+}
+
+.mermaid-diagram-tooltip {
+  position: absolute;
+  z-index: 1;
+  max-width: 18rem;
+  padding: var(--spacing-1) var(--spacing-2);
+  font-size: var(--fontSize-0);
+  line-height: 1.4;
+  color: var(--color-text);
+  background: var(--color-background);
+  border: 1px solid var(--color-primary);
+  border-radius: 6px;
+  transform: translate(-50%, calc(-100% - 10px));
+}
+
+/* Near the top of the box the tooltip opens below the pointer instead. */
+.mermaid-diagram-tooltip.is-below {
+  transform: translate(-50%, 10px);
+}
+
+/* Bridges the 10px gap to the pointer, so moving onto the tooltip keeps it
+   open (WCAG 1.4.13, hoverable). */
+.mermaid-diagram-tooltip::before {
+  position: absolute;
+  inset: 100% 0 auto;
+  height: 12px;
+  content: '';
+}
+
+.mermaid-diagram-tooltip.is-below::before {
+  inset: auto 0 100%;
+}
+
+.mermaid-diagram-details {
+  margin: var(--spacing-2) 0 var(--spacing-6);
+  font-size: var(--fontSize-0);
+}
+
+/* Phones: keep the diagram at a readable width and let it scroll sideways in
+   its own box, like the tables on this page, instead of shrinking the labels
+   to a few pixels. From md up the column is wide enough to scale freely. */
+.setup-diagram .mermaid-diagram svg {
+  min-width: 40rem;
+}
+
+@media (width >= 48rem) {
+  .setup-diagram .mermaid-diagram svg {
+    min-width: 0;
+  }
+}
+
+/* Current flowing along diagram edges (twin paths added by the Mermaid
+   island). The still frame is complete without it, so the twins stay hidden
+   unless motion is allowed. A diagram opts in through its own rules below. */
+.mermaid-diagram .edge-flow-line {
+  fill: none;
+  stroke: var(--color-primary);
+  stroke-width: 2px;
+  stroke-linecap: round;
+  stroke-dasharray: 2 8;
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .setup-diagram .edge-flow-line {
+    opacity: 0.9;
+    animation: edge-current 0.6s linear infinite;
+  }
+
+  /* The KVM feeds the monitor and peripherals from one station at a time, so
+     the two stations' links take turns while the rest always run. */
+  .setup-diagram .edge-flow[data-id^='L_Computer_KVM'] {
+    animation: kvm-primary 12s step-end infinite;
+  }
+
+  .setup-diagram .edge-flow[data-id^='L_Hub_KVM'] {
+    animation: kvm-secondary 12s step-end infinite;
+  }
+
+  .setup-diagram [id$='-PrimaryStation'] > rect {
+    animation: kvm-primary-frame 12s step-end infinite;
+  }
+
+  .setup-diagram [id$='-SecondaryStation'] > rect {
+    animation: kvm-secondary-frame 12s step-end infinite;
+  }
+}
+
+@keyframes edge-current {
+  from {
+    stroke-dashoffset: 0;
+  }
+
+  to {
+    stroke-dashoffset: -10;
+  }
+}
+
+@keyframes kvm-primary {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes kvm-secondary {
+  0% {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes kvm-primary-frame {
+  0% {
+    stroke: var(--color-primary);
+  }
+
+  50% {
+    stroke: var(--color-text-light);
+  }
+}
+
+@keyframes kvm-secondary-frame {
+  0% {
+    stroke: var(--color-text-light);
+  }
+
+  50% {
+    stroke: var(--color-primary);
+  }
 }
 
 .mermaid-diagram-fallback {
@@ -1418,8 +1617,13 @@ a:focus {
   }
 }
 
+/* Mermaid measures labels in a temporary #d<id> container right after styling
+   them. The global reduced-motion rule below gives every element a 0.01ms
+   transition, so those reads return pre-transition values and the layout
+   blows up to a ~16000px viewBox. No transition at all keeps reads exact. */
 @media (prefers-reduced-motion: reduce) {
-  .mermaid-diagram svg * {
+  .mermaid-diagram svg *,
+  [id^='dmermaid-'] * {
     animation: none !important;
     transition: none !important;
   }
