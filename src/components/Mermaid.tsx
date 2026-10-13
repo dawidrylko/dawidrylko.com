@@ -1,5 +1,5 @@
-import type { FC } from 'react';
-import { Component, useEffect, useId, useState } from 'react';
+import type { FC, FocusEvent, PointerEvent } from 'react';
+import { Component, useEffect, useId, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
 import mermaid from 'mermaid';
 
@@ -10,7 +10,14 @@ import mermaid from 'mermaid';
 interface MermaidProps {
   chart: string;
   ariaLabel?: string;
+  // Full text per edge, keyed by Mermaid's edge id (L_<from>_<to>_<n>), shown
+  // as a tooltip when the edge is hovered or focused.
+  edgeDetails?: Record<string, string>;
 }
+
+const SVG_NS = 'http://www.w3.org/2000/svg';
+const NODE_ID = /-flowchart-(.+)-\d+$/;
+const EDGE_ID = /^L_(.+?)_(.+)_\d+$/;
 
 let mermaidInitialized = false;
 
@@ -48,25 +55,79 @@ const SITE_THEME_CSS = `
   .edgeLabel small { color: var(--color-text-light); }
 `;
 
-// Every edge gets a twin path drawn on top of it. The twin is invisible until
-// page CSS animates it (see .edge-flow in main.css), which shows current
-// flowing along the edge in the direction of its arrow.
-const addEdgeFlows = (svg: string): string => {
+// Every edge gets two twins drawn on top of it: a line page CSS animates (see
+// .edge-flow in main.css) to show current flowing along the arrow, and a wide
+// transparent hit area for hover and focus. Nodes become focusable so the
+// highlight that shows a device's cables also works from the keyboard.
+const enhanceSvg = (svg: string, edgeDetails: Record<string, string>): string => {
   // HTML parsing, not XML: Mermaid's HTML labels carry void tags such as <br>.
   const template = document.createElement('template');
   template.innerHTML = svg;
   template.content.querySelectorAll('path.flowchart-link').forEach(edge => {
-    const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-    group.setAttribute('class', 'edge-flow');
-    group.setAttribute('data-id', edge.getAttribute('data-id') ?? '');
-    group.setAttribute('aria-hidden', 'true');
-    const line = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    const id = edge.getAttribute('data-id') ?? '';
+    const d = edge.getAttribute('d') ?? '';
+
+    const flow = document.createElementNS(SVG_NS, 'g');
+    flow.setAttribute('class', 'edge-flow');
+    flow.setAttribute('data-id', id);
+    flow.setAttribute('aria-hidden', 'true');
+    const line = document.createElementNS(SVG_NS, 'path');
     line.setAttribute('class', 'edge-flow-line');
-    line.setAttribute('d', edge.getAttribute('d') ?? '');
-    group.appendChild(line);
-    edge.after(group);
+    line.setAttribute('d', d);
+    flow.appendChild(line);
+
+    const hit = document.createElementNS(SVG_NS, 'path');
+    hit.setAttribute('class', 'edge-hit');
+    hit.setAttribute('d', d);
+    hit.setAttribute('data-edge', id);
+    const detail = edgeDetails[id];
+    if (detail) {
+      hit.setAttribute('tabindex', '0');
+      hit.setAttribute('role', 'img');
+      hit.setAttribute('aria-label', detail);
+    } else {
+      hit.setAttribute('aria-hidden', 'true');
+    }
+
+    edge.after(flow, hit);
+  });
+  template.content.querySelectorAll('g.node').forEach(node => {
+    const name = NODE_ID.exec(node.id)?.[1];
+    if (!name) {
+      return;
+    }
+    node.setAttribute('data-node', name);
+    node.setAttribute('tabindex', '0');
+    node.setAttribute('role', 'img');
+    node.setAttribute('aria-label', node.textContent?.trim() || name);
   });
   return template.innerHTML;
+};
+
+type Active = { node: string } | { edge: string };
+
+// Marks the edges, labels and nodes tied to the hovered or focused element so
+// CSS can light them up and dim the rest of the diagram.
+const applyActive = (root: HTMLElement, active: Active | null): void => {
+  root.classList.toggle('has-active', active !== null);
+  const related = new Set<string>();
+  const nodes = new Set<string>();
+  root.querySelectorAll<SVGElement>('path.flowchart-link').forEach(edge => {
+    const id = edge.dataset.id ?? '';
+    const [, from, to] = EDGE_ID.exec(id) ?? [];
+    const hit = active && ('edge' in active ? active.edge === id : active.node === from || active.node === to);
+    if (hit) {
+      related.add(id);
+      nodes.add(from);
+      nodes.add(to);
+    }
+  });
+  root.querySelectorAll<SVGElement>('[data-id]').forEach(el => {
+    el.classList.toggle('is-related', related.has(el.dataset.id ?? ''));
+  });
+  root.querySelectorAll<SVGElement>('[data-node]').forEach(el => {
+    el.classList.toggle('is-related', nodes.has(el.dataset.node ?? ''));
+  });
 };
 
 const Fallback: FC<{ chart: string; ariaLabel: string }> = ({ chart, ariaLabel }) => (
@@ -75,10 +136,12 @@ const Fallback: FC<{ chart: string; ariaLabel: string }> = ({ chart, ariaLabel }
   </pre>
 );
 
-const MermaidInner: FC<Required<MermaidProps>> = ({ chart, ariaLabel }) => {
+const MermaidInner: FC<Required<MermaidProps>> = ({ chart, ariaLabel, edgeDetails }) => {
   const id = `mermaid-${useId().replace(/[^a-zA-Z0-9]/g, '')}`;
   const [svg, setSvg] = useState<string | null>(null);
   const [hasError, setHasError] = useState(false);
+  const [tooltip, setTooltip] = useState<{ text: string; x: number; y: number } | null>(null);
+  const rootRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -90,7 +153,7 @@ const MermaidInner: FC<Required<MermaidProps>> = ({ chart, ariaLabel }) => {
         initializeMermaid();
         const { svg: renderedSvg } = await mermaid.render(id, chart);
         if (!cancelled) {
-          setSvg(addEdgeFlows(renderedSvg));
+          setSvg(enhanceSvg(renderedSvg, edgeDetails));
         }
       } catch {
         document.getElementById(id)?.remove();
@@ -106,7 +169,7 @@ const MermaidInner: FC<Required<MermaidProps>> = ({ chart, ariaLabel }) => {
     return () => {
       cancelled = true;
     };
-  }, [chart, id]);
+  }, [chart, id, edgeDetails]);
 
   if (hasError) {
     return <Fallback chart={chart} ariaLabel={ariaLabel} />;
@@ -121,8 +184,58 @@ const MermaidInner: FC<Required<MermaidProps>> = ({ chart, ariaLabel }) => {
     );
   }
 
+  const deactivate = (): void => {
+    if (rootRef.current) {
+      applyActive(rootRef.current, null);
+    }
+    setTooltip(null);
+  };
+
+  const activate = (target: EventTarget, point?: { x: number; y: number }): void => {
+    const root = rootRef.current;
+    const el = target instanceof Element ? target.closest<SVGElement>('[data-node], [data-edge]') : null;
+    if (!root) {
+      return;
+    }
+    if (!el) {
+      deactivate();
+      return;
+    }
+    const edge = el.dataset.edge;
+    applyActive(root, edge ? { edge } : { node: el.dataset.node ?? '' });
+    const text = edge ? edgeDetails[edge] : undefined;
+    if (!text) {
+      setTooltip(null);
+      return;
+    }
+    const box = root.getBoundingClientRect();
+    const anchor =
+      point ??
+      (() => {
+        const r = el.getBoundingClientRect();
+        return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+      })();
+    setTooltip({ text, x: anchor.x - box.left + root.scrollLeft, y: anchor.y - box.top });
+  };
+
   return (
-    <div className="mermaid-diagram" role="img" aria-label={ariaLabel} dangerouslySetInnerHTML={{ __html: svg }} />
+    <div
+      ref={rootRef}
+      className="mermaid-diagram"
+      role="group"
+      aria-label={ariaLabel}
+      onPointerOver={(event: PointerEvent) => activate(event.target, { x: event.clientX, y: event.clientY })}
+      onPointerLeave={deactivate}
+      onFocus={(event: FocusEvent) => activate(event.target)}
+      onBlur={deactivate}
+    >
+      <div className="mermaid-diagram-canvas" dangerouslySetInnerHTML={{ __html: svg }} />
+      {tooltip && (
+        <div className="mermaid-diagram-tooltip" role="tooltip" style={{ left: tooltip.x, top: tooltip.y }}>
+          {tooltip.text}
+        </div>
+      )}
+    </div>
   );
 };
 
@@ -143,9 +256,11 @@ class ErrorBoundary extends Component<BoundaryProps, { hasError: boolean }> {
   }
 }
 
-const Mermaid: FC<MermaidProps> = ({ chart, ariaLabel = 'Diagram' }) => (
+const NO_DETAILS: Record<string, string> = {};
+
+const Mermaid: FC<MermaidProps> = ({ chart, ariaLabel = 'Diagram', edgeDetails = NO_DETAILS }) => (
   <ErrorBoundary fallback={<Fallback chart={chart} ariaLabel={ariaLabel} />}>
-    <MermaidInner chart={chart} ariaLabel={ariaLabel} />
+    <MermaidInner chart={chart} ariaLabel={ariaLabel} edgeDetails={edgeDetails} />
   </ErrorBoundary>
 );
 

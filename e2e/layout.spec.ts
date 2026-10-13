@@ -147,6 +147,9 @@ test('setup diagram keeps still under reduced motion', async ({ page }) => {
     .evaluateAll(els => els.map(el => [getComputedStyle(el).animationName, getComputedStyle(el).opacity]));
   expect(styles.length).toBeGreaterThan(0);
   expect(styles.filter(([name, opacity]) => name !== 'none' || opacity !== '0')).toEqual([]);
+  const [, , width, height] = ((await svg.getAttribute('viewBox')) ?? '').split(' ').map(Number);
+  expect(width).toBeLessThan(2000);
+  expect(height).toBeLessThan(2000);
 });
 
 test('setup diagram draws nodes in the site palette, not the Mermaid theme', async ({ page }) => {
@@ -194,6 +197,41 @@ test('setup diagram alternates the two stations through the KVM', async ({ page 
   expect(await animationOf('.edge-flow[data-id^="L_Hub_KVM"]')).toEqual(['kvm-secondary']);
   expect(await animationOf('[id$="-PrimaryStation"] > rect')).toEqual(['kvm-primary-frame']);
   expect(await animationOf('[id$="-SecondaryStation"] > rect')).toEqual(['kvm-secondary-frame']);
+});
+
+test('setup diagram keeps cable labels short and shows the full spec on focus', async ({ page }) => {
+  const svg = await renderSetupDiagram(page);
+  const labels = await svg.locator('.edgeLabel').allTextContents();
+  expect(labels.filter(text => text.includes('Gbps'))).toEqual([]);
+  await svg.locator('.edge-hit[data-edge="L_Computer_KVM_2"]').focus();
+  await expect(page.locator('#diagram .mermaid-diagram-tooltip')).toContainText('80 Gbps');
+});
+
+test('setup diagram lights up a device cables on hover and dims the rest', async ({ page }) => {
+  const svg = await renderSetupDiagram(page);
+  await svg.locator('[data-node="Computer"]').hover();
+  await expect(page.locator('#diagram .mermaid-diagram')).toHaveClass(/has-active/);
+  const related = await svg
+    .locator('path.flowchart-link.is-related')
+    .evaluateAll(els => els.map(el => el.getAttribute('data-id')).sort());
+  expect(related).toEqual(['L_Computer_KVM_0', 'L_Computer_KVM_2', 'L_Dock_Computer_0']);
+  // The dim fades in over 0.2s, so let the assertion retry until it settles.
+  await expect(svg.locator('path.flowchart-link[data-id="L_Hub_KVM_0"]')).toHaveCSS('opacity', '0.25');
+});
+
+test('setup diagram scrolls inside its box on a phone instead of shrinking', async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 812 });
+  const svg = await renderSetupDiagram(page);
+  const box = await svg.boundingBox();
+  expect(box?.width ?? 0).toBeGreaterThanOrEqual(600);
+  const overflow = await page.evaluate(() => {
+    const diagram = document.querySelector('#diagram .mermaid-diagram') as HTMLElement;
+    return {
+      page: document.documentElement.scrollWidth > document.documentElement.clientWidth,
+      diagram: diagram.scrollWidth > diagram.clientWidth,
+    };
+  });
+  expect(overflow).toEqual({ page: false, diagram: true });
 });
 
 test('setup page has no aria-labelledby pointing at a missing element', async ({ page }) => {
