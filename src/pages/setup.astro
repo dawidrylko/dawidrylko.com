@@ -82,26 +82,31 @@ const PAGE_METADATA: PageMetadata = {
   ],
 };
 
-const setupDiagram = `graph TD
-  subgraph PrimaryStation ["Primary Device Station"]
-    Computer
-    Dock
-    Dock -- "USB-C ↔ USB-C<br/><small>Dock cable</small>" --> Computer
-  end
-
+const setupDiagram = `---
+config:
+  flowchart:
+    curve: linear
+---
+graph TD
   subgraph SecondaryStation ["Secondary Device Station"]
     Secondary["Secondary Device"]
     Hub
     Secondary -- "USB-C ↔ USB-C<br/><small>Thunderbolt 5, 80 Gbps, PD 240 W, 16K@30 Hz, 0.5 m extension</small>" --> Hub
   end
 
+  subgraph PrimaryStation ["Primary Device Station"]
+    Computer
+    Dock
+    Dock -- "USB-C ↔ USB-C<br/><small>Dock cable</small>" --> Computer
+  end
+
   KVM
 
   subgraph Peripherals
+    Lightbar["Light Bar"]
     Mouse
     Keyboard
     Microphone
-    Lightbar["Light Bar"]
   end
 
   Monitor
@@ -215,7 +220,7 @@ const sections: { id: string; heading: string; ariaLabel: string; items: SetupIt
       </div>
     </section>
 
-    <section id="diagram" aria-labelledby="diagram-heading">
+    <section id="diagram" class="setup-diagram" aria-label="Connection diagram">
       {/* Hydrate when scrolled into view: keeps the ~1 MB mermaid + cytoscape
         bundle off the initial load (the diagram sits well below the fold). The
         skeleton is server-rendered so its height is reserved up front and the

@@ -1373,6 +1373,93 @@ a:focus {
   min-width: 0;
 }
 
+/* Current flowing along diagram edges (twin paths added by the Mermaid
+   island). The still frame is complete without it, so the twins stay hidden
+   unless motion is allowed. A diagram opts in through its own rules below. */
+.mermaid-diagram .edge-flow-line {
+  fill: none;
+  stroke: var(--color-primary);
+  stroke-width: 2px;
+  stroke-linecap: round;
+  stroke-dasharray: 2 8;
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .setup-diagram .edge-flow-line {
+    opacity: 0.9;
+    animation: edge-current 0.6s linear infinite;
+  }
+
+  /* The KVM feeds the monitor and peripherals from one station at a time, so
+     the two stations' links take turns while the rest always run. */
+  .setup-diagram .edge-flow[data-id^='L_Computer_KVM'] {
+    animation: kvm-primary 12s step-end infinite;
+  }
+
+  .setup-diagram .edge-flow[data-id^='L_Hub_KVM'] {
+    animation: kvm-secondary 12s step-end infinite;
+  }
+
+  .setup-diagram [id$='-PrimaryStation'] > rect {
+    animation: kvm-primary-frame 12s step-end infinite;
+  }
+
+  .setup-diagram [id$='-SecondaryStation'] > rect {
+    animation: kvm-secondary-frame 12s step-end infinite;
+  }
+}
+
+@keyframes edge-current {
+  from {
+    stroke-dashoffset: 0;
+  }
+
+  to {
+    stroke-dashoffset: -10;
+  }
+}
+
+@keyframes kvm-primary {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes kvm-secondary {
+  0% {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes kvm-primary-frame {
+  0% {
+    stroke: var(--color-primary);
+  }
+
+  50% {
+    stroke: var(--color-text-light);
+  }
+}
+
+@keyframes kvm-secondary-frame {
+  0% {
+    stroke: var(--color-text-light);
+  }
+
+  50% {
+    stroke: var(--color-primary);
+  }
+}
+
 .mermaid-diagram-fallback {
   overflow-x: auto;
 }

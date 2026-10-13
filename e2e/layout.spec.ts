@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, type Page } from '@playwright/test';
 
 // Layout regression guards for the footer/list/diagram spacing fixes. These all
 // assert computed geometry on the built site so a future CSS change that drops
@@ -118,6 +118,94 @@ test('setup page renders the mermaid diagram once scrolled into view', async ({ 
   // the diagram scrolls into the viewport, so bring it into view first.
   await page.locator('#diagram').scrollIntoViewIfNeeded();
   await expect(page.locator('#diagram .mermaid-diagram svg')).toBeVisible({ timeout: 20000 });
+});
+
+const renderSetupDiagram = async (page: Page) => {
+  await page.goto('/setup/');
+  await page.locator('#diagram').scrollIntoViewIfNeeded();
+  await expect(page.locator('#diagram .mermaid-diagram svg')).toBeVisible({ timeout: 20000 });
+  return page.locator('#diagram .mermaid-diagram svg');
+};
+
+test('setup diagram animates current along every edge', async ({ page }) => {
+  const svg = await renderSetupDiagram(page);
+  const edges = await svg.locator('path.flowchart-link').count();
+  expect(edges).toBeGreaterThan(0);
+  await expect(svg.locator('.edge-flow')).toHaveCount(edges);
+  const animation = await svg
+    .locator('.edge-flow[data-id^="L_KVM_Monitor"] .edge-flow-line')
+    .first()
+    .evaluate(el => getComputedStyle(el).animationName);
+  expect(animation).toBe('edge-current');
+});
+
+test('setup diagram keeps still under reduced motion', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  const svg = await renderSetupDiagram(page);
+  const styles = await svg
+    .locator('.edge-flow-line')
+    .evaluateAll(els => els.map(el => [getComputedStyle(el).animationName, getComputedStyle(el).opacity]));
+  expect(styles.length).toBeGreaterThan(0);
+  expect(styles.filter(([name, opacity]) => name !== 'none' || opacity !== '0')).toEqual([]);
+});
+
+test('setup diagram draws nodes in the site palette, not the Mermaid theme', async ({ page }) => {
+  const svg = await renderSetupDiagram(page);
+  const [stroke, primary] = await svg
+    .locator('.node rect')
+    .first()
+    .evaluate(el => {
+      const probe = document.createElement('div');
+      probe.style.color = getComputedStyle(document.documentElement).getPropertyValue('--color-primary');
+      document.body.append(probe);
+      const resolved = getComputedStyle(probe).color;
+      probe.remove();
+      return [getComputedStyle(el).stroke, resolved];
+    });
+  expect(stroke).toBe(primary);
+});
+
+test('setup diagram places the primary station left of the secondary one', async ({ page }) => {
+  const svg = await renderSetupDiagram(page);
+  const primary = await svg.locator('[id$="-PrimaryStation"]').boundingBox();
+  const secondary = await svg.locator('[id$="-SecondaryStation"]').boundingBox();
+  expect(primary).not.toBeNull();
+  expect(secondary).not.toBeNull();
+  expect(primary?.x ?? 0).toBeLessThan(secondary?.x ?? 0);
+});
+
+test('setup diagram puts the light bar first so its cable crosses no peripheral link', async ({ page }) => {
+  const svg = await renderSetupDiagram(page);
+  const xs = await Promise.all(
+    ['Lightbar', 'Mouse', 'Keyboard', 'Microphone'].map(async name => {
+      const box = await svg.locator(`[id*="flowchart-${name}-"]`).boundingBox();
+      expect(box).not.toBeNull();
+      return box?.x ?? 0;
+    }),
+  );
+  expect(xs[0]).toBeLessThan(Math.min(...xs.slice(1)));
+});
+
+test('setup diagram alternates the two stations through the KVM', async ({ page }) => {
+  const svg = await renderSetupDiagram(page);
+  const animationOf = (selector: string) =>
+    svg.locator(selector).evaluateAll(els => [...new Set(els.map(el => getComputedStyle(el).animationName))]);
+  expect(await animationOf('.edge-flow[data-id^="L_Computer_KVM"]')).toEqual(['kvm-primary']);
+  expect(await animationOf('.edge-flow[data-id^="L_Hub_KVM"]')).toEqual(['kvm-secondary']);
+  expect(await animationOf('[id$="-PrimaryStation"] > rect')).toEqual(['kvm-primary-frame']);
+  expect(await animationOf('[id$="-SecondaryStation"] > rect')).toEqual(['kvm-secondary-frame']);
+});
+
+test('setup page has no aria-labelledby pointing at a missing element', async ({ page }) => {
+  await page.goto('/setup/');
+  const dangling = await page
+    .locator('[aria-labelledby]')
+    .evaluateAll(els =>
+      els
+        .flatMap(el => (el.getAttribute('aria-labelledby') ?? '').split(/\s+/).filter(Boolean))
+        .filter(id => !document.getElementById(id)),
+    );
+  expect(dangling).toEqual([]);
 });
 
 for (const path of ['/bio/', '/cookie-policy/']) {
