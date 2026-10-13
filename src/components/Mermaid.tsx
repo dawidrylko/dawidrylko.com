@@ -1,7 +1,7 @@
 import type { FC, FocusEvent, PointerEvent } from 'react';
 import { Component, useEffect, useId, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
-import mermaid from 'mermaid';
+import type { Mermaid as MermaidApi } from 'mermaid';
 import { EDGE_ID, Fallback } from './MermaidFallback';
 
 // React island ported from the Gatsby src/components/mermaid-diagram.tsx:
@@ -19,13 +19,19 @@ interface MermaidProps {
 const SVG_NS = 'http://www.w3.org/2000/svg';
 const NODE_ID = /-flowchart-(.+)-\d+$/;
 
-let mermaidInitialized = false;
+let mermaidReady: Promise<MermaidApi> | null = null;
 
-const initializeMermaid = (): void => {
-  if (mermaidInitialized) {
-    return;
-  }
+// Loaded on first render rather than imported up front, which keeps Mermaid's
+// entry module out of the page's initial JS (scripts/ci/check-bundle-budget.mjs).
+const loadMermaid = (): Promise<MermaidApi> => {
+  mermaidReady ??= import('mermaid').then(({ default: mermaid }) => {
+    initializeMermaid(mermaid);
+    return mermaid;
+  });
+  return mermaidReady;
+};
 
+const initializeMermaid = (mermaid: MermaidApi): void => {
   const prefersDark =
     typeof window !== 'undefined' && typeof window.matchMedia === 'function'
       ? window.matchMedia('(prefers-color-scheme: dark)').matches
@@ -38,7 +44,6 @@ const initializeMermaid = (): void => {
     fontFamily: 'inherit',
     themeCSS: SITE_THEME_CSS,
   });
-  mermaidInitialized = true;
 };
 
 // Inline SVG inherits the page's custom properties, so the diagram follows the
@@ -149,7 +154,7 @@ const MermaidInner: FC<Required<MermaidProps>> = ({ chart, ariaLabel, edgeDetail
 
     const renderChart = async (): Promise<void> => {
       try {
-        initializeMermaid();
+        const mermaid = await loadMermaid();
         const { svg: renderedSvg } = await mermaid.render(id, chart);
         if (!cancelled) {
           setSvg(enhanceSvg(renderedSvg, edgeDetails));
