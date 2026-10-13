@@ -2,6 +2,7 @@ import type { FC, FocusEvent, PointerEvent } from 'react';
 import { Component, useEffect, useId, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
 import mermaid from 'mermaid';
+import { EDGE_ID, Fallback } from './MermaidFallback';
 
 // React island ported from the Gatsby src/components/mermaid-diagram.tsx:
 // per-instance rendering via mermaid.render, single initialization with
@@ -17,7 +18,6 @@ interface MermaidProps {
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 const NODE_ID = /-flowchart-(.+)-\d+$/;
-const EDGE_ID = /^L_(.+?)_(.+)_\d+$/;
 
 let mermaidInitialized = false;
 
@@ -63,6 +63,19 @@ const enhanceSvg = (svg: string, edgeDetails: Record<string, string>): string =>
   // HTML parsing, not XML: Mermaid's HTML labels carry void tags such as <br>.
   const template = document.createElement('template');
   template.innerHTML = svg;
+  const labels = new Map<string, string>();
+  template.content.querySelectorAll('g.node').forEach(node => {
+    const name = NODE_ID.exec(node.id)?.[1];
+    if (!name) {
+      return;
+    }
+    const label = node.textContent?.trim() || name;
+    labels.set(name, label);
+    node.setAttribute('data-node', name);
+    node.setAttribute('tabindex', '0');
+    node.setAttribute('role', 'img');
+    node.setAttribute('aria-label', label);
+  });
   template.content.querySelectorAll('path.flowchart-link').forEach(edge => {
     const id = edge.getAttribute('data-id') ?? '';
     const d = edge.getAttribute('d') ?? '';
@@ -82,24 +95,15 @@ const enhanceSvg = (svg: string, edgeDetails: Record<string, string>): string =>
     hit.setAttribute('data-edge', id);
     const detail = edgeDetails[id];
     if (detail) {
+      const [, from = '', to = ''] = EDGE_ID.exec(id) ?? [];
       hit.setAttribute('tabindex', '0');
       hit.setAttribute('role', 'img');
-      hit.setAttribute('aria-label', detail);
+      hit.setAttribute('aria-label', `${labels.get(from) ?? from} to ${labels.get(to) ?? to}: ${detail}`);
     } else {
       hit.setAttribute('aria-hidden', 'true');
     }
 
     edge.after(flow, hit);
-  });
-  template.content.querySelectorAll('g.node').forEach(node => {
-    const name = NODE_ID.exec(node.id)?.[1];
-    if (!name) {
-      return;
-    }
-    node.setAttribute('data-node', name);
-    node.setAttribute('tabindex', '0');
-    node.setAttribute('role', 'img');
-    node.setAttribute('aria-label', node.textContent?.trim() || name);
   });
   return template.innerHTML;
 };
@@ -130,17 +134,11 @@ const applyActive = (root: HTMLElement, active: Active | null): void => {
   });
 };
 
-const Fallback: FC<{ chart: string; ariaLabel: string }> = ({ chart, ariaLabel }) => (
-  <pre className="mermaid-diagram-fallback" role="img" aria-label={ariaLabel}>
-    {chart.replace(/^---\n[\s\S]*?\n---\n/, '')}
-  </pre>
-);
-
 const MermaidInner: FC<Required<MermaidProps>> = ({ chart, ariaLabel, edgeDetails }) => {
   const id = `mermaid-${useId().replace(/[^a-zA-Z0-9]/g, '')}`;
   const [svg, setSvg] = useState<string | null>(null);
   const [hasError, setHasError] = useState(false);
-  const [tooltip, setTooltip] = useState<{ text: string; x: number; y: number } | null>(null);
+  const [tooltip, setTooltip] = useState<{ text: string; x: number; y: number; below: boolean } | null>(null);
   const rootRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -171,8 +169,21 @@ const MermaidInner: FC<Required<MermaidProps>> = ({ chart, ariaLabel, edgeDetail
     };
   }, [chart, id, edgeDetails]);
 
+  useEffect(() => {
+    if (!tooltip) {
+      return;
+    }
+    const onKey = (event: KeyboardEvent): void => {
+      if (event.key === 'Escape') {
+        setTooltip(null);
+      }
+    };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [tooltip]);
+
   if (hasError) {
-    return <Fallback chart={chart} ariaLabel={ariaLabel} />;
+    return <Fallback chart={chart} ariaLabel={ariaLabel} edgeDetails={edgeDetails} />;
   }
 
   if (!svg) {
@@ -193,15 +204,16 @@ const MermaidInner: FC<Required<MermaidProps>> = ({ chart, ariaLabel, edgeDetail
 
   const activate = (target: EventTarget, point?: { x: number; y: number }): void => {
     const root = rootRef.current;
-    const el = target instanceof Element ? target.closest<SVGElement>('[data-node], [data-edge]') : null;
-    if (!root) {
+    if (!root || (target instanceof Element && target.closest('.mermaid-diagram-tooltip'))) {
       return;
     }
+    const el =
+      target instanceof Element ? target.closest<SVGElement>('[data-node], [data-edge], g.label[data-id]') : null;
     if (!el) {
       deactivate();
       return;
     }
-    const edge = el.dataset.edge;
+    const edge = el.dataset.edge ?? (el.matches('g.label') ? el.dataset.id : undefined);
     applyActive(root, edge ? { edge } : { node: el.dataset.node ?? '' });
     const text = edge ? edgeDetails[edge] : undefined;
     if (!text) {
@@ -215,7 +227,17 @@ const MermaidInner: FC<Required<MermaidProps>> = ({ chart, ariaLabel, edgeDetail
         const r = el.getBoundingClientRect();
         return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
       })();
-    setTooltip({ text, x: anchor.x - box.left + root.scrollLeft, y: anchor.y - box.top });
+    // Keep the tooltip inside the scroll box: flip it below the pointer near the
+    // top edge and hold it clear of the left and right edges.
+    const half = Math.min(144, root.clientWidth / 2);
+    const x = anchor.x - box.left + root.scrollLeft;
+    const y = anchor.y - box.top;
+    setTooltip({
+      text,
+      x: Math.min(Math.max(x, root.scrollLeft + half), root.scrollLeft + root.clientWidth - half),
+      y,
+      below: y < 110,
+    });
   };
 
   return (
@@ -225,13 +247,24 @@ const MermaidInner: FC<Required<MermaidProps>> = ({ chart, ariaLabel, edgeDetail
       role="group"
       aria-label={ariaLabel}
       onPointerOver={(event: PointerEvent) => activate(event.target, { x: event.clientX, y: event.clientY })}
-      onPointerLeave={deactivate}
+      onPointerLeave={() => {
+        const focused = document.activeElement;
+        if (focused && rootRef.current?.contains(focused)) {
+          activate(focused);
+        } else {
+          deactivate();
+        }
+      }}
       onFocus={(event: FocusEvent) => activate(event.target)}
       onBlur={deactivate}
     >
       <div className="mermaid-diagram-canvas" dangerouslySetInnerHTML={{ __html: svg }} />
       {tooltip && (
-        <div className="mermaid-diagram-tooltip" role="tooltip" style={{ left: tooltip.x, top: tooltip.y }}>
+        <div
+          className={`mermaid-diagram-tooltip${tooltip.below ? ' is-below' : ''}`}
+          role="tooltip"
+          style={{ left: tooltip.x, top: tooltip.y }}
+        >
           {tooltip.text}
         </div>
       )}
@@ -259,7 +292,7 @@ class ErrorBoundary extends Component<BoundaryProps, { hasError: boolean }> {
 const NO_DETAILS: Record<string, string> = {};
 
 const Mermaid: FC<MermaidProps> = ({ chart, ariaLabel = 'Diagram', edgeDetails = NO_DETAILS }) => (
-  <ErrorBoundary fallback={<Fallback chart={chart} ariaLabel={ariaLabel} />}>
+  <ErrorBoundary fallback={<Fallback chart={chart} ariaLabel={ariaLabel} edgeDetails={edgeDetails} />}>
     <MermaidInner chart={chart} ariaLabel={ariaLabel} edgeDetails={edgeDetails} />
   </ErrorBoundary>
 );

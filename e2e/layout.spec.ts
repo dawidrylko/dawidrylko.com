@@ -203,8 +203,22 @@ test('setup diagram keeps cable labels short and shows the full spec on focus', 
   const svg = await renderSetupDiagram(page);
   const labels = await svg.locator('.edgeLabel').allTextContents();
   expect(labels.filter(text => text.includes('Gbps'))).toEqual([]);
+  await expect(svg.locator('.edge-hit[aria-label]')).toHaveCount(4);
+  await expect(svg.locator('.edge-hit[data-edge="L_Hub_KVM_2"]')).toHaveAttribute('aria-label', /^Hub to KVM: /);
   await svg.locator('.edge-hit[data-edge="L_Computer_KVM_2"]').focus();
   await expect(page.locator('#diagram .mermaid-diagram-tooltip')).toContainText('80 Gbps');
+  await page.keyboard.press('Escape');
+  await expect(page.locator('#diagram .mermaid-diagram-tooltip')).toHaveCount(0);
+});
+
+test('setup diagram shows the full spec when the cable label is hovered', async ({ page }) => {
+  const svg = await renderSetupDiagram(page);
+  await svg.locator('g.label[data-id="L_Secondary_Hub_0"]').hover();
+  await expect(page.locator('#diagram .mermaid-diagram-tooltip')).toContainText('0.5 m extension');
+  const related = await svg
+    .locator('path.flowchart-link.is-related')
+    .evaluateAll(els => els.map(el => el.getAttribute('data-id')));
+  expect(related).toEqual(['L_Secondary_Hub_0']);
 });
 
 test('setup diagram lights up a device cables on hover and dims the rest', async ({ page }) => {
@@ -217,6 +231,8 @@ test('setup diagram lights up a device cables on hover and dims the rest', async
   expect(related).toEqual(['L_Computer_KVM_0', 'L_Computer_KVM_2', 'L_Dock_Computer_0']);
   // The dim fades in over 0.2s, so let the assertion retry until it settles.
   await expect(svg.locator('path.flowchart-link[data-id="L_Hub_KVM_0"]')).toHaveCSS('opacity', '0.25');
+  await expect(svg.locator('[data-node="Computer"] g.label')).toHaveCSS('opacity', '1');
+  await expect(svg.locator('[data-node="Computer"]')).toHaveCSS('opacity', '1');
 });
 
 test('setup diagram scrolls inside its box on a phone instead of shrinking', async ({ page }) => {
@@ -232,6 +248,8 @@ test('setup diagram scrolls inside its box on a phone instead of shrinking', asy
     };
   });
   expect(overflow).toEqual({ page: false, diagram: true });
+  const frame = await page.locator('#diagram .mermaid-diagram').boundingBox();
+  expect(box?.x ?? 0).toBeGreaterThanOrEqual((frame?.x ?? 0) - 1);
 });
 
 test('setup page has no aria-labelledby pointing at a missing element', async ({ page }) => {

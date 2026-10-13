@@ -1410,12 +1410,12 @@ a:focus {
 
 /* Hovering or focusing a device lights up its cables and dims the rest;
    hovering a cable lights up that cable alone. */
-.mermaid-diagram.has-active :is(path.flowchart-link, g.label, [data-node]) {
+.mermaid-diagram.has-active :is(path.flowchart-link, g.label[data-id], [data-node]) {
   opacity: 0.25;
   transition: opacity 0.2s ease;
 }
 
-.mermaid-diagram.has-active :is(path.flowchart-link, g.label, [data-node]).is-related {
+.mermaid-diagram.has-active :is(path.flowchart-link, g.label[data-id], [data-node]).is-related {
   opacity: 1;
 }
 
@@ -1425,9 +1425,14 @@ a:focus {
   visibility: hidden;
 }
 
+/* !important: Mermaid scopes its own edge stroke under the SVG's id. */
 .mermaid-diagram.has-active path.flowchart-link.is-related {
-  stroke: var(--color-primary);
-  stroke-width: 2.5px;
+  stroke: var(--color-primary) !important;
+  stroke-width: 2.5px !important;
+}
+
+.mermaid-diagram g.label[data-id] {
+  cursor: help;
 }
 
 .mermaid-diagram-tooltip {
@@ -1438,19 +1443,27 @@ a:focus {
   font-size: var(--fontSize-0);
   line-height: 1.4;
   color: var(--color-text);
-  pointer-events: none;
   background: var(--color-background);
   border: 1px solid var(--color-primary);
   border-radius: 6px;
   transform: translate(-50%, calc(-100% - 10px));
 }
 
+/* Near the top of the box the tooltip opens below the pointer instead. */
+.mermaid-diagram-tooltip.is-below {
+  transform: translate(-50%, 10px);
+}
+
 /* Phones: keep the diagram at a readable width and let it scroll sideways in
    its own box, like the tables on this page, instead of shrinking the labels
-   to a few pixels. */
-@media (width <= 42rem) {
+   to a few pixels. From md up the column is wide enough to scale freely. */
+.setup-diagram .mermaid-diagram svg {
+  min-width: 40rem;
+}
+
+@media (width >= 48rem) {
   .setup-diagram .mermaid-diagram svg {
-    min-width: 40rem;
+    min-width: 0;
   }
 }
 
