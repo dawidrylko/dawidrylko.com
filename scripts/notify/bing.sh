@@ -69,9 +69,10 @@ resolve_base() {
 
 # True when the file's frontmatter sets `noIndex: true`.
 has_noindex_frontmatter() {
-  awk 'NR == 1 && $0 != "---" { exit }
+  awk '{ sub(/\r$/, "") }
+       NR == 1 && $0 != "---" { exit }
        NR > 1 && $0 == "---" { exit }
-       /^noIndex:[[:space:]]*true[[:space:]]*$/ { found = 1; exit }
+       /^noIndex:[[:space:]]*true[[:space:]]*(#.*)?$/ { found = 1; exit }
        END { exit !found }' "$1"
 }
 
@@ -86,8 +87,9 @@ content_url() {
   fi
 }
 
-# Prints the public URL a changed (still existing) path renders to, or nothing
-# when the path is shared code, tooling, a dynamic route or a noindex page.
+# Prints "<rank>\t<date>\t<url>" for the public page a changed (still existing)
+# path renders to, or nothing when the path is shared code, tooling, a dynamic
+# route or a noindex page. Rank 1 is a post, 2 a static page, 3 a listing.
 path_to_url() {
   local path="$1" rest dir file page source candidate
 
@@ -116,7 +118,7 @@ path_to_url() {
           ;;
       esac
       has_noindex_frontmatter "$source" && return 0
-      content_url "$dir" "$page"
+      printf '1\t%s\t%s\n' "${dir%%--*}" "$(content_url "$dir" "$page")"
       ;;
     "$PAGES_DIR"/*.astro)
       page="${path#"$PAGES_DIR"/}"
@@ -125,22 +127,31 @@ path_to_url() {
       # Covers both noIndex and noIndexFollow.
       grep -q 'noIndex' "$path" && return 0
       if [ "$page" = "index" ]; then
-        echo "$BASE_URL/"
+        printf '2\t-\t%s\n' "$BASE_URL/"
       else
-        echo "$BASE_URL/$page/"
+        printf '2\t-\t%s\n' "$BASE_URL/$page/"
       fi
       ;;
   esac
   return 0
 }
 
+# Changed URLs in submission order: posts newest first, then static pages,
+# then the listings a changed post appears on (the homepage and /blog/). The
+# order decides what survives when the batch is capped at the quota.
 collect_urls() {
-  local path
-  git diff --name-only --no-renames --diff-filter=d "$1" HEAD |
+  local path lines
+  lines=$(git diff --name-only --no-renames --diff-filter=d "$1" HEAD |
     while IFS= read -r path; do
       path_to_url "$path"
-    done |
-    sort -u
+    done) || return 1
+  [ -n "$lines" ] || return 0
+  case "$lines" in
+    1* | *$'\n'1*) lines+=$'\n'"3"$'\t'"-"$'\t'"$BASE_URL/"$'\n'"3"$'\t'"-"$'\t'"$BASE_URL/blog/" ;;
+  esac
+  printf '%s\n' "$lines" |
+    sort -t $'\t' -k1,1 -k2,2r -k3,3 |
+    awk -F '\t' '!seen[$3]++ { print $3 }'
 }
 
 # The remaining daily quota, or nothing when Bing does not report it.
@@ -172,9 +183,11 @@ submit_attempt() {
 
   case "$http_code" in
     2??) return 0 ;;
-    429 | 5?? | 000) return $ATTEMPT_RETRYABLE ;;
   esac
   LAST_MESSAGE="HTTP $http_code: $body"
+  case "$http_code" in
+    429 | 5?? | 000) return $ATTEMPT_RETRYABLE ;;
+  esac
   if [ "$(echo "$body" | jq -r '.ErrorCode // empty' 2>/dev/null)" = "8" ]; then
     return $ATTEMPT_QUOTA
   fi
@@ -193,7 +206,7 @@ submit_with_retry() {
       "$ATTEMPT_FATAL") log_error "Bing rejected the submission. ${LAST_MESSAGE}" ;;
     esac
     if [ "$attempt" -ge "$MAX_RETRIES" ]; then
-      log_error "Failed submitting to Bing API after ${attempt} attempt(s)."
+      log_error "Failed submitting to Bing API after ${attempt} attempt(s). ${LAST_MESSAGE}"
     fi
     echo "Attempt ${attempt}/${MAX_RETRIES} failed. Retrying in ${delay}s..." >&2
     sleep "$delay"
@@ -209,10 +222,11 @@ cd "$(git rev-parse --show-toplevel)" || log_error "Not inside a git checkout."
 base=$(resolve_base) || skip "No previous commit to diff against."
 echo "Changed since: $base"
 
+changed=$(collect_urls "$base") || log_error "Failed listing the files changed since ${base}."
 URLS=()
 while IFS= read -r url; do
   [ -n "$url" ] && URLS+=("$url")
-done < <(collect_urls "$base")
+done <<<"$changed"
 
 if [ "${#URLS[@]}" -eq 0 ]; then
   skip "No public page changed since ${base}, nothing to submit."
@@ -228,7 +242,8 @@ elif [ "${#URLS[@]}" -gt "$quota" ]; then
   URLS=("${URLS[@]:0:$quota}")
 fi
 
-payload_file=$(mktemp)
+# An explicit template: bare mktemp on macOS ignores TMPDIR.
+payload_file=$(mktemp "${TMPDIR:-/tmp}/bing-payload.XXXXXX")
 trap 'rm -f "$payload_file"' EXIT
 printf '%s\n' "${URLS[@]}" |
   jq -R . |

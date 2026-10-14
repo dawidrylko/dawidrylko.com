@@ -65,7 +65,7 @@ function writeFiles(root, files) {
 
 // A repo with the base commit (the previous deploy) and one commit on top that
 // applies `changes`; a null value deletes the file.
-function makeRepo(changes) {
+function makeRepo(changes, { rootOnly = false } = {}) {
   const root = mkdtempSync(join(tmpdir(), 'bing-notify-'));
   tempDirs.push(root);
   const repo = join(root, 'repo');
@@ -78,14 +78,18 @@ function makeRepo(changes) {
   git(repo, 'add', '-A');
   git(repo, 'commit', '--quiet', '-m', 'base');
   const before = git(repo, 'rev-parse', 'HEAD');
+  if (rootOnly) return { root, repo, before };
   writeFiles(repo, changes);
   git(repo, 'add', '-A');
   git(repo, 'commit', '--quiet', '--allow-empty', '-m', 'change');
   return { root, repo, before };
 }
 
-function run(changes, { quota = 100, submitStatus = 200, submitBody = '{"d":null}', env = {} } = {}) {
-  const { root, repo, before } = makeRepo(changes);
+function run(
+  changes,
+  { quota = 100, quotaStatus = 200, submitStatus = 200, submitBody = '{"d":null}', rootOnly = false, env = {} } = {},
+) {
+  const { root, repo, before } = makeRepo(changes, { rootOnly });
   const stubDir = join(root, 'stub');
   mkdirSync(stubDir);
   const curl = join(stubDir, 'curl');
@@ -101,7 +105,7 @@ function run(changes, { quota = 100, submitStatus = 200, submitBody = '{"d":null
       PATH: `${stubDir}:${process.env.PATH}`,
       STUB_DIR: stubDir,
       STUB_QUOTA_BODY: JSON.stringify({ d: { DailyQuota: quota, MonthlyQuota: 2800 } }),
-      STUB_QUOTA_STATUS: '200',
+      STUB_QUOTA_STATUS: String(quotaStatus),
       STUB_SUBMIT_BODY: submitBody,
       STUB_SUBMIT_STATUS: String(submitStatus),
       BING_API_KEY: 'test-key',
@@ -134,7 +138,9 @@ describe('bing.sh', () => {
     });
 
     expect(result.status).toBe(0);
-    expect(result.payloads).toEqual([{ siteUrl: SITE, urlList: [`${SITE}/setup/`, `${SITE}/stary-wpis/`] }]);
+    expect(result.payloads).toEqual([
+      { siteUrl: SITE, urlList: [`${SITE}/stary-wpis/`, `${SITE}/setup/`, `${SITE}/`, `${SITE}/blog/`] },
+    ]);
   });
 
   it('submits nothing when only shared code changed', () => {
@@ -145,7 +151,13 @@ describe('bing.sh', () => {
     expect(result.output).toContain('nothing to submit');
   });
 
-  it('maps new posts, post assets, secondary pages and the homepage to their URLs', () => {
+  it('submits a changed static page without the post listings', () => {
+    const result = run({ 'src/pages/setup.astro': '<Page changed />\n' });
+
+    expect(result.payloads[0].urlList).toEqual([`${SITE}/setup/`]);
+  });
+
+  it('maps new posts, post assets, secondary pages and the homepage, newest post first', () => {
     const result = run({
       'content/pl/2026-10-14--nowy-wpis/index.mdx': '---\ntitle: Nowy\n---\nTekst\n',
       'content/pl/2021-02-02--drugi-wpis/cover.jpg': 'jpg',
@@ -155,10 +167,11 @@ describe('bing.sh', () => {
     });
 
     expect(result.payloads[0].urlList).toEqual([
-      `${SITE}/`,
+      `${SITE}/nowy-wpis/`,
       `${SITE}/drugi-wpis/`,
       `${SITE}/drugi-wpis/ng-help/`,
-      `${SITE}/nowy-wpis/`,
+      `${SITE}/`,
+      `${SITE}/blog/`,
     ]);
   });
 
@@ -168,6 +181,9 @@ describe('bing.sh', () => {
       'content/pl/2022-03-03--ukryty/index.mdx': '---\ntitle: Ukryty\nnoIndex: true\n---\nZmiana\n',
       'src/pages/cookie-policy.astro': '<PageLayout noIndexFollow changed />\n',
       'src/pages/404.astro': '<Page />\n',
+      'content/pl/2022-03-03--ukryty/cover.jpg': 'jpg',
+      'content/pl/2023-04-04--bez-indeksu/data.csv': 'a,b\n',
+      'content/pl/2023-05-05--crlf/index.md': '---\r\ntitle: CRLF\r\nnoIndex: true # draft\r\n---\r\nTekst\r\n',
     });
 
     expect(result.status).toBe(0);
@@ -184,8 +200,8 @@ describe('bing.sh', () => {
     );
 
     expect(result.status).toBe(0);
-    expect(result.payloads[0].urlList).toHaveLength(1);
-    expect(result.output).toContain('::warning');
+    expect(result.payloads[0].urlList).toEqual([`${SITE}/drugi-wpis/`]);
+    expect(result.output).toMatch(/::warning.*not submitted: .*\/stary-wpis\/ .*\/blog\//);
   });
 
   it('does not submit at all when the daily quota is already spent', () => {
@@ -218,11 +234,37 @@ describe('bing.sh', () => {
     expect(result.output).toContain('::error');
   });
 
-  it('retries transient server errors before failing', () => {
-    const result = run({ 'src/pages/setup.astro': '<Page changed />\n' }, { submitStatus: 503, submitBody: '' });
+  it.each([503, 429])('retries HTTP %i before failing', submitStatus => {
+    const result = run({ 'src/pages/setup.astro': '<Page changed />\n' }, { submitStatus, submitBody: '' });
 
     expect(result.status).toBe(1);
     expect(result.submits).toBe(4);
+    expect(result.output).toContain(`HTTP ${submitStatus}`);
+  });
+
+  it('submits every changed URL when Bing does not report the quota', () => {
+    const result = run({ 'src/pages/setup.astro': '<Page changed />\n' }, { quotaStatus: 500 });
+
+    expect(result.status).toBe(0);
+    expect(result.payloads[0].urlList).toEqual([`${SITE}/setup/`]);
+  });
+
+  it.each([
+    ['zeroed', '0000000000000000000000000000000000000000'],
+    ['unreachable', 'deadbeefdeadbeefdeadbeefdeadbeefdeadbeef'],
+  ])('falls back to the parent commit when the previous deploy sha is %s', (_, sha) => {
+    const result = run({ 'src/pages/setup.astro': '<Page changed />\n' }, { env: { BEFORE_SHA: sha } });
+
+    expect(result.status).toBe(0);
+    expect(result.payloads[0].urlList).toEqual([`${SITE}/setup/`]);
+  });
+
+  it('skips when there is no previous commit to diff against', () => {
+    const result = run({}, { rootOnly: true, env: { BEFORE_SHA: '' } });
+
+    expect(result.status).toBe(0);
+    expect(result.submits).toBe(0);
+    expect(result.output).toContain('No previous commit');
   });
 
   it('skips without calling Bing when the API key is missing', () => {
