@@ -37,6 +37,11 @@ const desktopSetup: SetupItem[] = [
 ];
 
 const additionalEquipment: SetupItem[] = [
+  ['Printer', 'Brother HL-L2352DW'],
+  ['E-Ink Badge', 'Pimoroni Badger 2040 W'],
+];
+
+const nasSetup: SetupItem[] = [
   ['NAS', 'Synology DiskStation DS423+', 'https://www.ceneo.pl/149801785#crid=774138&pid=29997'],
   [
     'Storage',
@@ -45,27 +50,23 @@ const additionalEquipment: SetupItem[] = [
     'Data, 2 pcs',
   ],
   ['Storage', 'WD Red SN700, 500 GB, M.2 NVMe', 'https://www.ceneo.pl/119197771#crid=774139&pid=29997', 'Cache, 2 pcs'],
-  ['Printer', 'Brother HL-L2352DW'],
 ];
 
 const raspberryPi8: SetupItem[] = [
   ['Single-Board Computer', 'Raspberry Pi 5, 8 GB RAM', 'https://www.ceneo.pl/162849793#crid=815155&pid=29997'],
+  ['Case', 'Argon ONE V3 M.2 NVMe, aluminium', 'https://www.ceneo.pl/175861754#crid=815160&pid=29997', 'Black'],
+  ['Cooling', 'Argon ONE V3 fan and heatsink', undefined, 'Built into the case'],
   ['Storage', 'Raspberry Pi SSD, 256 GB, M.2 2230 NVMe', 'https://www.ceneo.pl/187393063#crid=815158&pid=29997'],
-  [
-    'Case',
-    'Argon ONE V3 M.2 NVMe, aluminium, fan and heatsink',
-    'https://www.ceneo.pl/175861754#crid=815160&pid=29997',
-    'Black',
-  ],
+  ['M.2 Adapter', 'Argon ONE V3 M.2 NVMe board', undefined, 'Built into the case'],
   ['Power Supply', 'Argon40 27 W USB-C, 5.1 V / 5 A', 'https://www.ceneo.pl/176251670#crid=815162&pid=29997', 'White'],
 ];
 
 const raspberryPi4: SetupItem[] = [
   ['Single-Board Computer', 'Raspberry Pi 5, 4 GB RAM', 'https://www.ceneo.pl/163902694#crid=815156&pid=29997'],
-  ['Storage', 'Transcend MTE400S, 256 GB, M.2 2242 NVMe', 'https://www.ceneo.pl/152325243#crid=815159&pid=29997'],
-  ['M.2 Adapter', 'Pineboards HatDrive! Nano, NVMe 2230/2242'],
   ['Case', 'Raspberry Pi 5 Official Case', 'https://www.ceneo.pl/163562681#crid=815163&pid=29997', 'Red and white'],
   ['Cooling', 'Raspberry Pi Active Cooler', 'https://www.ceneo.pl/191259207#crid=815165&pid=29997'],
+  ['Storage', 'Transcend MTE400S, 256 GB, M.2 2242 NVMe', 'https://www.ceneo.pl/152325243#crid=815159&pid=29997'],
+  ['M.2 Adapter', 'Pineboards HatDrive! Nano, NVMe 2230/2242'],
   [
     'Power Supply',
     'Raspberry Pi 27 W USB-C Power Supply, 5.1 V / 5 A',
@@ -199,7 +200,7 @@ const structuredData = createPageSchema({
         '@type': 'Thing',
         name: 'Raspberry Pi 5 Boards',
         description:
-          'Two Raspberry Pi 5 boards (8 GB and 4 GB RAM) with NVMe storage, cases, cooling and power supplies.',
+          'Two Raspberry Pi 5 boards (8 GB and 4 GB RAM) with NVMe storage, M.2 adapters, cases, cooling and power supplies.',
       },
       {
         '@type': 'Thing',
@@ -214,6 +215,7 @@ const structuredData = createPageSchema({
       numberOfItems:
         desktopSetup.length +
         additionalEquipment.length +
+        nasSetup.length +
         raspberryPi8.length +
         raspberryPi4.length +
         guitarSetup.length,
@@ -233,6 +235,12 @@ const sections: { id: string; heading: string; ariaLabel: string; items: SetupIt
     heading: 'Additional equipment',
     ariaLabel: 'Additional equipment specifications',
     items: additionalEquipment,
+  },
+  {
+    id: 'nas',
+    heading: 'NAS setup',
+    ariaLabel: 'NAS and storage specifications',
+    items: nasSetup,
   },
   {
     id: 'raspberry-pi-8gb',
