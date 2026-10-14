@@ -123,8 +123,12 @@ jobs:
     needs: deploy
     if: "!contains(github.event.head_commit.message, '[skip notify]')"
     steps:
+      # Depth 2 keeps HEAD^ as the fallback base when the push's `before` commit
+      # cannot be fetched (a force push); bing.sh fetches `before` itself.
       - name: Checkout
         uses: actions/checkout@v7
+        with:
+          fetch-depth: 2
 
       # Notifications run after a successful deploy; a failure here must never
       # roll back or block the already-published build, so they are non-blocking.
@@ -132,6 +136,7 @@ jobs:
         continue-on-error: true
         env:
           BING_API_KEY: ${{ secrets.BING_API_KEY }}
+          BEFORE_SHA: ${{ github.event.before }}
         working-directory: 'scripts/notify'
         shell: bash
         run: ./bing.sh
