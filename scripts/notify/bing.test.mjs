@@ -65,7 +65,7 @@ function writeFiles(root, files) {
 
 // A repo with the base commit (the previous deploy) and one commit on top that
 // applies `changes`; a null value deletes the file.
-function makeRepo(changes, { rootOnly = false } = {}) {
+function makeRepo(changes, { rootOnly = false, corruptBase = false } = {}) {
   const root = mkdtempSync(join(tmpdir(), 'bing-notify-'));
   tempDirs.push(root);
   const repo = join(root, 'repo');
@@ -82,14 +82,26 @@ function makeRepo(changes, { rootOnly = false } = {}) {
   writeFiles(repo, changes);
   git(repo, 'add', '-A');
   git(repo, 'commit', '--quiet', '--allow-empty', '-m', 'change');
+  if (corruptBase) {
+    const tree = git(repo, 'rev-parse', `${before}^{tree}`);
+    rmSync(join(repo, '.git', 'objects', tree.slice(0, 2), tree.slice(2)), { force: true });
+  }
   return { root, repo, before };
 }
 
 function run(
   changes,
-  { quota = 100, quotaStatus = 200, submitStatus = 200, submitBody = '{"d":null}', rootOnly = false, env = {} } = {},
+  {
+    quota = 100,
+    quotaStatus = 200,
+    submitStatus = 200,
+    submitBody = '{"d":null}',
+    rootOnly = false,
+    corruptBase = false,
+    env = {},
+  } = {},
 ) {
-  const { root, repo, before } = makeRepo(changes, { rootOnly });
+  const { root, repo, before } = makeRepo(changes, { rootOnly, corruptBase });
   const stubDir = join(root, 'stub');
   mkdirSync(stubDir);
   const curl = join(stubDir, 'curl');
@@ -257,6 +269,14 @@ describe('bing.sh', () => {
 
     expect(result.status).toBe(0);
     expect(result.payloads[0].urlList).toEqual([`${SITE}/setup/`]);
+  });
+
+  it('fails instead of reporting nothing changed when the diff cannot be computed', () => {
+    const result = run({ 'src/pages/setup.astro': '<Page changed />\n' }, { corruptBase: true });
+
+    expect(result.status).toBe(1);
+    expect(result.submits).toBe(0);
+    expect(result.output).toContain('Failed listing the files changed');
   });
 
   it('skips when there is no previous commit to diff against', () => {
