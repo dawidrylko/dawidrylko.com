@@ -45,6 +45,8 @@ const additionalEquipment: SetupItem[] = [
     'Data, 2 pcs',
   ],
   ['Storage', 'WD Red SN700, 500 GB, M.2 NVMe', 'https://www.ceneo.pl/119197771#crid=774139&pid=29997', 'Cache, 2 pcs'],
+  ['Single-Board Computer', 'Raspberry Pi 5, 8 GB RAM', 'https://www.ceneo.pl/162849793#crid=815155&pid=29997'],
+  ['Single-Board Computer', 'Raspberry Pi 5, 4 GB RAM', 'https://www.ceneo.pl/163902694#crid=815156&pid=29997'],
   ['Printer', 'Brother HL-L2352DW'],
 ];
 
@@ -177,7 +179,7 @@ const structuredData = createPageSchema({
     mainEntity: {
       '@type': 'ItemList',
       name: 'Equipment Collection',
-      description: 'Desktop hardware, peripherals, network storage and music equipment',
+      description: 'Desktop hardware, peripherals, network storage, single-board computers and music equipment',
       numberOfItems: desktopSetup.length + additionalEquipment.length + guitarSetup.length,
     },
   },
