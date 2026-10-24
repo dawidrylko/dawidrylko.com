@@ -203,11 +203,11 @@ Funkcja odpowiedzialna jest za:
 
 ### Cały program
 
-W celu otrzymania rozwiązań na liczbach wykraczających poza zakres `Integer`, solver został zmodyfikowany o wersję `BigInt`. Funkcje pomocnicze wykorzystywane w solverach oraz testach i benchmarkach znajdują się w folderze `helpers`. Całe programy można znaleźć poniżej lub na moim GitHubie. W celach testowych polecam pobrać [cały folder](https://github.com/dawidrylko/dawidrylko.com/tree/aa6f26688b6282b20bd8cc240e3393e7cba6cb8b/content/blog/domino-tiling/code), zamiast ręcznego tworzenia plików.
+W celu otrzymania rozwiązań na liczbach wykraczających poza zakres `Integer`, solver został zmodyfikowany o wersję `BigInt`. Funkcje pomocnicze wykorzystywane w solverach oraz testach i benchmarkach znajdują się w folderze `helpers`. Całe programy można znaleźć poniżej lub na moim GitHubie. W celach testowych polecam pobrać [cały folder](https://github.com/dawidrylko/lattice-dimers/tree/61d6620a7a23ed10eb2029c94c71d478dbda392e), zamiast ręcznego tworzenia plików.
 
 #### Cały program `Integer` - `dominoTilingSolver.js`
 
-[dominoTilingSolver.js](https://github.com/dawidrylko/dawidrylko.com/blob/aa6f26688b6282b20bd8cc240e3393e7cba6cb8b/content/blog/domino-tiling/code/dominoTilingSolver.js)
+[dominoTilingSolver.js](https://github.com/dawidrylko/lattice-dimers/blob/61d6620a7a23ed10eb2029c94c71d478dbda392e/dominoTilingSolver.js)
 
 Uruchomienie:
 
@@ -312,7 +312,7 @@ __main__();
 
 #### Cały program `BigInt` - `dominoTilingSolver-BigInt.js`
 
-[dominoTilingSolver-BigInt.js](https://github.com/dawidrylko/dawidrylko.com/blob/aa6f26688b6282b20bd8cc240e3393e7cba6cb8b/content/blog/domino-tiling/code/dominoTilingSolver-BigInt.js)
+[dominoTilingSolver-BigInt.js](https://github.com/dawidrylko/lattice-dimers/blob/61d6620a7a23ed10eb2029c94c71d478dbda392e/dominoTilingSolver-BigInt.js)
 
 Uruchomienie:
 
@@ -417,7 +417,7 @@ __main__();
 
 #### Funkcje pomocnicze - `helpers`
 
-[helpers](https://github.com/dawidrylko/dawidrylko.com/tree/aa6f26688b6282b20bd8cc240e3393e7cba6cb8b/content/blog/domino-tiling/code/helpers)
+[helpers](https://github.com/dawidrylko/lattice-dimers/tree/61d6620a7a23ed10eb2029c94c71d478dbda392e/helpers)
 
 Poniższa funkcja (`parseCommandLineArguments.js`) użyta jest w `dominoTilingSolver.js` oraz `dominoTilingSolver-BigInt.js`. Pozostałe funkcje wykorzystywane są w programie testowym oraz benchmarku.
 
@@ -449,11 +449,11 @@ module.exports = parseCommandLineArguments;
 
 ## Wynik
 
-Dane testowe wykorzystywane w `testRunner.js` oraz `benchmarkRunner.js` znajdują się w [katalogu test-data](https://github.com/dawidrylko/dawidrylko.com/tree/aa6f26688b6282b20bd8cc240e3393e7cba6cb8b/content/blog/domino-tiling/code/test-data) na GitHubie.
+Dane testowe wykorzystywane w `testRunner.js` oraz `benchmarkRunner.js` znajdują się w [katalogu test-data](https://github.com/dawidrylko/lattice-dimers/tree/61d6620a7a23ed10eb2029c94c71d478dbda392e/test-data) na GitHubie.
 
 ### Test runner
 
-Do przetestowania algorytmu utworzony został [program testRunner.js](https://github.com/dawidrylko/dawidrylko.com/blob/aa6f26688b6282b20bd8cc240e3393e7cba6cb8b/content/blog/domino-tiling/code/testRunner.js).
+Do przetestowania algorytmu utworzony został [program testRunner.js](https://github.com/dawidrylko/lattice-dimers/blob/61d6620a7a23ed10eb2029c94c71d478dbda392e/testRunner.js).
 
 Uruchamiamy program za pomocą komendy w konsoli:
 
@@ -477,7 +477,7 @@ All tests completed successfully.
 
 ### Benchmark runner
 
-Obliczanie wydajności algorytmu odbywa się za pomocą [programu benchmarkRunner.js](https://github.com/dawidrylko/dawidrylko.com/blob/aa6f26688b6282b20bd8cc240e3393e7cba6cb8b/content/blog/domino-tiling/code/benchmarkRunner.js). Głównym celem przedstawionego benchmarku nie jest pomiar wydajności na konkretnym urządzeniu, ale demonstracja różnic w wynikach w zależności od rozmiarów planszy.
+Obliczanie wydajności algorytmu odbywa się za pomocą [programu benchmarkRunner.js](https://github.com/dawidrylko/lattice-dimers/blob/61d6620a7a23ed10eb2029c94c71d478dbda392e/benchmarkRunner.js). Głównym celem przedstawionego benchmarku nie jest pomiar wydajności na konkretnym urządzeniu, ale demonstracja różnic w wynikach w zależności od rozmiarów planszy.
 
 Uruchomienie programu odbywa się w konsoli za pomocą komendy:
 
@@ -501,7 +501,7 @@ Executing benchmark 7 of 7 for dominoTilingSolver.js... File saved: benchmark/do
 All benchmarks completed successfully.
 ```
 
-Zapisane wyniki znajdują się w [folderze benchmark](https://github.com/dawidrylko/dawidrylko.com/tree/aa6f26688b6282b20bd8cc240e3393e7cba6cb8b/content/blog/domino-tiling/code/benchmark).
+Zapisane wyniki znajdują się w [folderze benchmark](https://github.com/dawidrylko/lattice-dimers/tree/61d6620a7a23ed10eb2029c94c71d478dbda392e/benchmark).
 
 #### Benchmark `Integer` - `dominoTilingSolver.js`
 

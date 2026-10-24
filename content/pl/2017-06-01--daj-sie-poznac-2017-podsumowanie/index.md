@@ -6,7 +6,7 @@ featuredImgAlt: 'Żółta tablica z napisem FINISH ustawiona przy nadmorskiej pr
 tags: ['shopping manager']
 ---
 
-Nastał ten dzień. Konkurs [Daj się poznać 2017](http://devstyle.pl/2017/06/01/konkurs-daj-sie-poznac-2017-dobiegl-konca/) został oficjalnie zakończony.
+Nastał ten dzień. Konkurs [Daj się poznać 2017](https://devstyle.pl/konkurs-daj-sie-poznac-2017-dobiegl-konca) został oficjalnie zakończony.
 
 ## O konkursie
 

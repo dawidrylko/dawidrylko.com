@@ -10,7 +10,7 @@ Podczas projektowania aplikacji internetowych ważny jest dobór narzędzi - pow
 
 ## Instalacja, uruchomienie MongoDB
 
-Zainstalowanie i uruchomienie MongoDB jest bardzo proste. Przez wszystkie kroki instalacji prowadzi nas [przejrzysty tutorial](https://docs.mongodb.com/master/tutorial/install-mongodb-on-os-x/). Po zakończonej instalacji (w zależności od OS) wpisujemy komendę do uruchomienia usługi `mongod`. Jeżeli wszystko pójdzie gładko, naszym oczom powinien ukazać się komunikat podobny do tego:
+Zainstalowanie i uruchomienie MongoDB jest bardzo proste. Przez wszystkie kroki instalacji prowadzi nas [przejrzysty tutorial](https://www.mongodb.com/docs/manual/administration/install-community-macos/). Po zakończonej instalacji (w zależności od OS) wpisujemy komendę do uruchomienia usługi `mongod`. Jeżeli wszystko pójdzie gładko, naszym oczom powinien ukazać się komunikat podobny do tego:
 
 ```bash
 2017-03-09T18:34:05.500+0100 I NETWORK [thread1] waiting for connections on port 27017

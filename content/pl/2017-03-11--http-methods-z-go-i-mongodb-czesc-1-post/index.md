@@ -49,7 +49,7 @@ oraz o odpowiedzi:
 responseWriter.WriteHeader(201)
 ```
 
-Teraz możemy zenkodować obiekt i przygotować do wyświetlenia. Przy tworzeniu obiektu wykorzystamy [blank identifier](https://golang.org/doc/effective_go.html#blank). Do wysłania danych wykorzystamy znany już pakiet `fmt`, a właściwie metodę `Fprintf`.
+Teraz możemy zenkodować obiekt i przygotować do wyświetlenia. Przy tworzeniu obiektu wykorzystamy [blank identifier](https://go.dev/doc/effective_go#blank). Do wysłania danych wykorzystamy znany już pakiet `fmt`, a właściwie metodę `Fprintf`.
 
 ### Podsumowanie
 
