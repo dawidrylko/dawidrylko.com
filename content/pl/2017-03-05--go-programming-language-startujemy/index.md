@@ -20,7 +20,7 @@ Zamysł i idea twórców przekonały również mnie. Po stworzeniu kilku pierwsz
 
 ### Hello World
 
-Sam proces instalacji jest bardzo prosty i szczegółowo opisany w [oficjalnym tutorialu](https://golang.org/doc/install). Wystartowanie zajmuje zaledwie kilkanaście minut i jesteśmy w stanie napisać sztandarowe "Hello World" w Golang.
+Sam proces instalacji jest bardzo prosty i szczegółowo opisany w [oficjalnym tutorialu](https://go.dev/doc/install). Wystartowanie zajmuje zaledwie kilkanaście minut i jesteśmy w stanie napisać sztandarowe "Hello World" w Golang.
 
 ```go
 package main

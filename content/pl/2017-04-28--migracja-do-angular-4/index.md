@@ -88,4 +88,4 @@ Na koniec jeszcze [package.json po wszystkich aktualizacjach](https://github.com
 ## Źródła:
 
 - [Angular 4.0.0 Now Available](https://web.archive.org/web/20170416222918/http://angularjs.blogspot.com/2017/03/angular-400-now-available.html) _[Wayback Machine]_
-- [Angular 4.1.0 Now Available](https://web.archive.org/web/20170508a044213/https://angularjs.blogspot.com/2017/04/angular-410-now-available.html) _[Wayback Machine]_
+- [Angular 4.1.0 Now Available](https://web.archive.org/web/20170508044213/http://angularjs.blogspot.com/2017/04/angular-410-now-available.html) _[Wayback Machine]_
