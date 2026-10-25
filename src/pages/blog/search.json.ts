@@ -3,8 +3,7 @@ import { getBlogPosts } from '../../lib/blog';
 import { excerpt } from '../../lib/excerpt';
 import { inlineMarkdown } from '../../lib/inline-markdown';
 import { formatPolishDate } from '../../lib/date';
-import { countWords, readingTimeMinutes } from '../../lib/reading-time';
-import { plPlural } from '../../lib/pl-plural';
+import { countWords, formatReadingTime, formatWordCount, readingTimeMinutes } from '../../lib/reading-time';
 
 // Static search index consumed by the client-side blog search. Covers every
 // listed post so search spans the whole archive, not just the current page.
@@ -26,10 +25,9 @@ export async function GET() {
       const plainDescription = description || excerpt(post.body ?? '');
 
       // Reading-time/word-count meta so search result cards match the static
-      // listing (PostListItem). The plural form is resolved here to keep the
-      // Polish pluralisation logic on the server.
+      // listing (PostListItem). The labels are resolved here to keep the Polish
+      // pluralisation and the non-breaking spaces on the server.
       const words = countWords(post.body);
-      const readingTime = readingTimeMinutes(words);
 
       return {
         title,
@@ -37,9 +35,8 @@ export async function GET() {
         descriptionHtml: inlineMarkdown(plainDescription),
         tags,
         dateFormatted: formatPolishDate(date),
-        readingTime,
-        words,
-        wordsLabel: plPlural(words, ['słowo', 'słowa', 'słów']),
+        readingTimeLabel: formatReadingTime(readingTimeMinutes(words)),
+        wordsLabel: formatWordCount(words),
         url: `/${post.id}/`,
         ...(img ? { img } : {}),
       };

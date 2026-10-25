@@ -169,8 +169,7 @@ const structuredData = {
     descriptionHtml: string;
     tags: string[];
     dateFormatted: string;
-    readingTime: number;
-    words: number;
+    readingTimeLabel: string;
     wordsLabel: string;
     url: string;
     img?: { src: string; alt: string };
@@ -246,7 +245,7 @@ const structuredData = {
         authorSpan.appendChild(authorLink);
 
         const metaSpan = document.createElement('span');
-        metaSpan.append(`${item.readingTime} min czytania `, separator(), ` ${item.words} ${item.wordsLabel}`);
+        metaSpan.append(`${item.readingTimeLabel} `, separator(), ` ${item.wordsLabel}`);
 
         const small = document.createElement('small');
         small.append(dateSpan, separator(), authorSpan, separator(), metaSpan);
