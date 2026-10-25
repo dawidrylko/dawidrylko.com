@@ -6,8 +6,7 @@ import { excerpt } from '../lib/excerpt';
 import { inlineMarkdown } from '../lib/inline-markdown';
 import { formatPolishDate } from '../lib/date';
 import { slugifyTag } from '../lib/tags';
-import { countWords, readingTimeMinutes } from '../lib/reading-time';
-import { plPlural } from '../lib/pl-plural';
+import { countWords, formatReadingTime, formatWordCount, readingTimeMinutes } from '../lib/reading-time';
 
 // Shared blog post card (one <li> in a .posts list). Used by the blog index, the
 // tag archives and the related-posts section so the markup stays in one place.
@@ -47,12 +46,11 @@ const readingTime = readingTimeMinutes(words);
           •
         </span>
         <span>
-          {readingTime} min czytania{' '}
+          {formatReadingTime(readingTime)}{' '}
           <span class="separator" aria-hidden="true">
             •
-          </span>
-          {words}
-          {plPlural(words, ['słowo', 'słowa', 'słów'])}
+          </span>{' '}
+          {formatWordCount(words)}
         </span>
       </small>
     </header>
