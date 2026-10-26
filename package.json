@@ -35,9 +35,9 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "@astrojs/markdown-remark": "^7.3.3",
-    "@astrojs/mdx": "^8.1.0",
-    "@astrojs/react": "^7.1.0",
+    "@astrojs/markdown-remark": "^7.3.4",
+    "@astrojs/mdx": "^8.1.1",
+    "@astrojs/react": "^7.1.1",
     "@astrojs/rss": "^4.0.19",
     "@astrojs/sitemap": "^3.7.4",
     "@fontsource-variable/montserrat": "^5.3.0",
@@ -52,7 +52,7 @@
     "web-vitals": "^6.2.3"
   },
   "devDependencies": {
-    "@astrojs/check": "^0.9.10",
+    "@astrojs/check": "^0.9.12",
     "@axe-core/playwright": "^4.14.0",
     "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.64.1",
@@ -60,8 +60,8 @@
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "@vitest/coverage-v8": "^4.1.11",
-    "astro": "^7.4.0",
-    "eslint": "^10.12.0",
+    "astro": "^7.4.2",
+    "eslint": "^10.13.0",
     "eslint-plugin-astro": "^3.2.1",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "globals": "^17.13.0",
@@ -74,7 +74,7 @@
     "stylelint": "^17.16.0",
     "stylelint-config-standard": "^40.0.0",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.71.2",
+    "typescript-eslint": "^8.72.0",
     "vitest": "^4.1.11"
   },
   "lint-staged": {
