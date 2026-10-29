@@ -8,6 +8,7 @@ import rehypeKatex from 'rehype-katex';
 import rehypeSlug from 'rehype-slug';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypeWrapTables from './src/lib/rehype-wrap-tables.ts';
+import remarkSources from './src/lib/remark-sources.ts';
 import webmanifest from './src/integrations/webmanifest';
 import sitemapImages from './src/integrations/sitemap-images';
 import { buildPostLastmodMap, buildThinTagRoutes, buildNoIndexRoutes } from './src/lib/sitemap.ts';
@@ -120,7 +121,9 @@ export default defineConfig({
     // the in-post table of contents and shared deep links resolve. autolink then
     // appends a hover "#" anchor; it is aria-hidden + tabindex -1 so it neither
     // duplicates the heading in the a11y tree nor becomes a focus trap.
-    remarkPlugins: [remarkMath],
+    // remarkSources numbers the `## Źródła` list with zrodlo-N anchors and hands
+    // its links to the post page as JSON-LD citation, see remark-sources.ts.
+    remarkPlugins: [remarkMath, remarkSources],
     rehypePlugins: [
       // Wrap content tables in <div class="table-scroll"> so short tables stretch
       // to full column width (and wide ones scroll) — see rehype-wrap-tables.ts.
