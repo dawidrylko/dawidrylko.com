@@ -71,8 +71,8 @@ importers:
         specifier: ^1.64.1
         version: 1.64.1
       '@silesiansolutions/search-quality-kit':
-        specifier: 0.14.0
-        version: 0.14.0
+        specifier: 0.14.1
+        version: 0.14.1
       '@types/react':
         specifier: ^19.3.0
         version: 19.3.0
@@ -1158,8 +1158,8 @@ packages:
   '@shikijs/vscode-textmate@10.1.0':
     resolution: {integrity: sha512-cVBuhDQjBZaNMTwBquYfPydrUP+E3hE6oYGasx8h6ZrODIM7/r+gxLDXdd66oszbrggZHEntdE6j+5gYIVyMWQ==}
 
-  '@silesiansolutions/search-quality-kit@0.14.0':
-    resolution: {integrity: sha512-jikaizpZO/naEKava/Vkkqi5R0G03Zo1903D1ZyJv9PP5RatuABhF4CDRaU7brzXEHj8oUNyuxs8ZGX0zv/dxg==}
+  '@silesiansolutions/search-quality-kit@0.14.1':
+    resolution: {integrity: sha512-p1kEQYrOpW3BvabC+pekl+8JsVtw0bafNC6Bbz3ZxXFOWyeL0AFmIJ8V3CefR8vfvhBaYC4DjcXyQ79dRRuA7A==}
     engines: {node: '>=24'}
     hasBin: true
 
@@ -5306,14 +5306,14 @@ snapshots:
 
   '@shikijs/vscode-textmate@10.1.0': {}
 
-  '@silesiansolutions/search-quality-kit@0.14.0':
+  '@silesiansolutions/search-quality-kit@0.14.1':
     dependencies:
       cheerio: 1.2.0
       commander: 15.0.0
       fast-xml-parser: 5.11.2
       jiti: 2.7.0
       picocolors: 1.1.1
-      zod: 4.6.5
+      zod: 4.6.7
 
   '@sindresorhus/merge-streams@4.0.0': {}
 
