@@ -157,7 +157,8 @@ jobs:
 
       # Astro's build cache (incremental asset/image processing via sharp and the
       # webmanifest icon generation). Keyed on the inputs that change the output;
-      # Astro re-validates entries by content hash, so a stale restore is safe.
+      # Astro re-validates assets by content hash, so a stale restore is safe for
+      # them; the content data store is dropped in the next step.
       - name: Cache Astro build cache
         uses: actions/cache@v6
         with:
@@ -167,6 +168,14 @@ jobs:
           key: astro-${{ runner.os }}-${{ hashFiles('src/**', 'content/**', 'astro.config.mjs', 'pnpm-lock.yaml') }}
           restore-keys: |
             astro-${{ runner.os }}-
+
+      # The content data store keeps rendered .md posts and is invalidated only
+      # when astro.config.mjs changes, so a restored store would keep the output
+      # of an edited remark/rehype plugin from the previous build. Rendering the
+      # posts again costs seconds; scripts/ci/astro-cache-workflow.test.mjs
+      # keeps this step in place.
+      - name: Drop cached content data store
+        run: rm -f node_modules/.astro/data-store.json
 
       # The CV PDFs (/resume-pl.pdf, /resume-en.pdf) are gitignored build output
       # compiled from resume/*.tex by `pnpm build`. Tectonic is a single static
