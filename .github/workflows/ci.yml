@@ -169,9 +169,10 @@ jobs:
           restore-keys: |
             astro-${{ runner.os }}-
 
-      # The content data store keeps rendered .md posts and is invalidated only
-      # when astro.config.mjs changes, so a restored store would keep the output
-      # of an edited remark/rehype plugin from the previous build. Rendering the
+      # The content data store keeps rendered .md posts. Astro invalidates it when
+      # the config, the content schema or its own version changes, but not when a
+      # remark/rehype plugin is edited, so a restored store would keep that
+      # plugin's output from the previous build. Rendering the
       # posts again costs seconds; scripts/ci/astro-cache-workflow.test.mjs
       # keeps this step in place.
       - name: Drop cached content data store
