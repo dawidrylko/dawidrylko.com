@@ -5,7 +5,7 @@
 //   - renders that list as an ordered list whose items carry stable anchors
 //     (`zrodlo-1`, `zrodlo-2`, ...), so a source can be deep-linked and cited
 //     by number whether the author wrote `-` or `1.`;
-//   - exposes the linked items as `sources` on the remark frontmatter, which
+//   - exposes the linked items as `citedSources` on the remark frontmatter, which
 //     `render()` returns as `remarkPluginFrontmatter`, so the post page can emit
 //     them as `citation` in its BlogPosting JSON-LD from the same parse.
 //
@@ -13,6 +13,11 @@
 // link ("[Title | Publisher](url) - note") is named by the link text alone, an
 // item that opens with prose ("Author (2003), "Title", [venue](url).") by its
 // whole text. Items without an absolute link are numbered but not cited.
+//
+// Astro keeps rendered `.md` entries in node_modules/.astro/data-store.json and
+// invalidates them when astro.config.mjs changes, not when this file does. After
+// editing this plugin alone, delete that file before building, or the `.md`
+// posts keep the output of the previous version (`.mdx` re-renders every build).
 
 interface Node {
   type: string;
@@ -36,6 +41,9 @@ export interface Source {
 
 export const SOURCES_HEADING = 'Źródła';
 export const SOURCE_ANCHOR_PREFIX = 'zrodlo-';
+// Prefixed so it cannot collide with a `sources` key an author might put in
+// the frontmatter, which shares this object.
+export const SOURCES_FRONTMATTER_KEY = 'citedSources';
 
 const textOf = (node: Node): string =>
   node.value !== undefined && (node.type === 'text' || node.type === 'inlineCode')
@@ -60,7 +68,8 @@ const sourceOf = (item: Node): Source | undefined => {
   const link = firstLink(item);
   if (!link?.url) return undefined;
   const first = item.children?.[0];
-  const lead = first?.type === 'paragraph' ? first.children?.[0] : first;
+  let lead = first?.type === 'paragraph' ? first.children?.[0] : first;
+  while (lead && (lead.type === 'strong' || lead.type === 'emphasis')) lead = lead.children?.[0];
   const name = normalize(lead === link ? textOf(link) : textOf(item)).replace(/\.$/, '');
   return name ? { name, url: link.url } : undefined;
 };
@@ -91,9 +100,11 @@ export default function remarkSources() {
     const data = (file as File).data;
     data.astro ??= {};
     data.astro.frontmatter ??= {};
-    data.astro.frontmatter.sources = sources;
+    data.astro.frontmatter[SOURCES_FRONTMATTER_KEY] = sources;
   };
 }
 
-export const toCitation = (sources: readonly Source[] | undefined) =>
-  sources?.length ? sources.map(({ name, url }) => ({ '@type': 'CreativeWork', name, url })) : undefined;
+export const toCitation = (sources: unknown) =>
+  Array.isArray(sources) && sources.length > 0
+    ? (sources as Source[]).map(({ name, url }) => ({ '@type': 'CreativeWork', name, url }))
+    : undefined;

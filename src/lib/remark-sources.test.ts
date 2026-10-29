@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { createMarkdownProcessor } from '@astrojs/markdown-remark';
-import remarkSources, { toCitation } from './remark-sources';
+import remarkSources, { SOURCES_FRONTMATTER_KEY, toCitation } from './remark-sources';
 
 const render = async (markdown: string) => {
   const processor = await createMarkdownProcessor({ remarkPlugins: [remarkSources], syntaxHighlight: false });
   const { code, metadata } = await processor.render(markdown, { frontmatter: {} });
-  return { html: code, sources: metadata.frontmatter.sources };
+  return { html: code, sources: metadata.frontmatter[SOURCES_FRONTMATTER_KEY] };
 };
 
 describe('remarkSources', () => {
@@ -35,6 +35,7 @@ describe('remarkSources', () => {
         '1. [wit-ai/microphone](https://github.com/wit-ai/microphone) - dedykowana biblioteka.',
         '1. Richard Kenyon (2003), "An introduction to the dimer model", [arXiv:math/0310326](https://arxiv.org/abs/math/0310326).',
         '1. [CSS `@media` | Can I use](https://caniuse.com/media)',
+        '1. **[Bold Title](https://bold.example)** opis',
         '1. Książka bez linku.',
       ].join('\n'),
     );
@@ -45,6 +46,7 @@ describe('remarkSources', () => {
         url: 'https://arxiv.org/abs/math/0310326',
       },
       { name: 'CSS @media | Can I use', url: 'https://caniuse.com/media' },
+      { name: 'Bold Title', url: 'https://bold.example' },
     ]);
   });
 
@@ -71,5 +73,6 @@ describe('toCitation', () => {
   it('returns undefined when there are no sources, so the key is omitted', () => {
     expect(toCitation(undefined)).toBeUndefined();
     expect(toCitation([])).toBeUndefined();
+    expect(toCitation('not a list')).toBeUndefined();
   });
 });

@@ -17,7 +17,7 @@ import { countWords, formatReadingTime, formatWordCount, readingTimeMinutes } fr
 import { relatedPosts } from '../lib/related-posts';
 import { buildTocTree } from '../lib/toc';
 import { CONTENT_LANG } from '../lib/i18n';
-import { toCitation, type Source } from '../lib/remark-sources';
+import { SOURCES_FRONTMATTER_KEY, toCitation } from '../lib/remark-sources';
 
 export async function getStaticPaths() {
   // Replicates Gatsby's createPages exactly: posts ordered by frontmatter date
@@ -47,7 +47,7 @@ export async function getStaticPaths() {
 const { post, previous, next, related } = Astro.props;
 const { Content, headings, remarkPluginFrontmatter } = await render(post);
 // Sources collected from the `## Źródła` list by remark-sources.ts.
-const citation = toCitation(remarkPluginFrontmatter.sources as Source[] | undefined);
+const citation = toCitation(remarkPluginFrontmatter[SOURCES_FRONTMATTER_KEY]);
 
 // Table of contents from the post's h2/h3 headings (ids come from rehype-slug).
 // Shown only when there is enough structure to be worth navigating.
