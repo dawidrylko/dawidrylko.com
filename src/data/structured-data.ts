@@ -12,7 +12,7 @@ export const STRUCTURED_DATA = {
     givenName: 'Dawid',
     familyName: 'Ryłko',
     description:
-      'Dawid Ryłko designs system architecture and owns its security. Over 10 years in the IT industry, working across the whole stack: frontend interfaces, backend services, infrastructure automation, AI integration and cybersecurity. He weighs technical decisions against business goals and the cost of running a system for years.',
+      'Dawid Ryłko designs system architecture and owns its security. He has worked in IT for a long time, across the whole stack: frontend interfaces, backend services, infrastructure automation, AI integration and cybersecurity. He weighs technical decisions against business goals and the cost of running a system for years.',
     url: `${SITE_METADATA.url}/`,
     jobTitle: SITE_METADATA.author.jobTitle,
     image: {
