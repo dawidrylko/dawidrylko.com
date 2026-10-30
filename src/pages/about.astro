@@ -13,7 +13,7 @@ import type { PageMetadata } from '../types';
 const PAGE_METADATA: PageMetadata = {
   title: 'About',
   description:
-    'Dawid Ryłko, Solution Architect with a long track record in IT. Career history, education, and a CV in PDF.',
+    'Career of Dawid Ryłko, Solution Architect: roles from frontend to architecture, education, and a CV to download in English and Polish.',
   keywords: [
     'Dawid Ryłko',
     'Solution Architect',
@@ -91,11 +91,13 @@ const citations = [
   {
     authorName: 'Andrzej Stasiuk',
     citation: 'Jadąc do Babadag',
+    lang: 'pl',
     text: 'Wszystko trzeba wymyślać od nowa, ponieważ dni nie mogą przepadać w przeszłości, wypełnione jedynie pejzażem, nieruchomą, niezmienną materią, która w końcu strząśnie nas ze swojego cielska, strzepnie jak te wszystkie drobne incydenty, te twarze oraz istnienia nie dłuższe niż jedno spojrzenie.',
   },
   {
     authorName: 'Andrzej Stasiuk',
     citation: 'On the Road to Babadag',
+    lang: 'en',
     text: 'Everything must be invented anew, because days cannot vanish into the past filled merely with landscape, with motionless, unchanging matter, which will finally shake us off its body, flick us away like all those minor incidents, those faces and existences lasting no longer than a single glance.',
   },
 ];
@@ -104,6 +106,10 @@ const image = {
   alt: `Graffiti on a utility box featuring a black-and-white image of Charlie Chaplin with the quote: 'A day without laughter is a day wasted'.`,
   figcaption: `Photo by Dawid Ryłko, taken on September 7, 2017, in Malia, Greece.`,
 };
+
+// The <title> carries what people search for; the H1 and breadcrumb keep the
+// short page name.
+const SEO_TITLE = 'Career, experience and CV';
 
 const { personReference } = STRUCTURED_DATA;
 
@@ -117,17 +123,7 @@ const structuredData = createPageSchema({
   description: PAGE_METADATA.description,
   keywords: PAGE_METADATA.keywords,
   extra: {
-    about: {
-      '@type': 'CreativeWork',
-      name: 'Favourite Quote',
-      description: 'Quotes that shape how Dawid Ryłko thinks about technology and craft.',
-      citation: citations.map(({ authorName, citation, text }) => ({
-        '@type': 'Quotation',
-        text,
-        author: { '@type': 'Person', name: authorName },
-        citation,
-      })),
-    },
+    dateModified: '2026-10-30',
     mainEntity: personReference,
     potentialAction: {
       '@type': 'DownloadAction',
@@ -151,10 +147,10 @@ const structuredData = createPageSchema({
 });
 ---
 
-<PageLayout breadcrumbTitle={PAGE_METADATA.title} title={PAGE_METADATA.title} description={PAGE_METADATA.description}>
+<PageLayout breadcrumbTitle={PAGE_METADATA.title} title={SEO_TITLE} description={PAGE_METADATA.description}>
   <JsonLd data={structuredData} />
   <header>
-    <h1>{PAGE_METADATA.title}</h1>
+    <h1>About Dawid Ryłko</h1>
   </header>
   <section id="summary">
     <p>
@@ -173,7 +169,8 @@ const structuredData = createPageSchema({
       <ExternalLink href="https://dawid.dev" follow>
         dawid.dev
       </ExternalLink>{' '}
-      holds my engineering notes and the longer write-ups on security.
+      holds my engineering notes and the longer write-ups on security. <a href="/blog/">My Polish-language blog</a> is
+      here on this site.
     </p>
   </section>
   <section id="experience">
@@ -210,8 +207,8 @@ const structuredData = createPageSchema({
     <p>Engineering is a craft, and craft is mostly judgement.</p>
   </section>
   <section id="quote">
-    {citations.map(({ authorName, citation, text }) => (
-      <blockquote>
+    {citations.map(({ authorName, citation, text, lang }) => (
+      <blockquote lang={lang}>
         {text}
         <br />
         <cite>

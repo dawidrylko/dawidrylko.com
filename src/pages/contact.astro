@@ -9,7 +9,7 @@ import type { PageMetadata } from '../types';
 const PAGE_METADATA: PageMetadata = {
   title: 'Contact',
   description:
-    'Get in touch with Dawid Ryłko about system architecture, security reviews, full-stack delivery, and technical leadership.',
+    'Work with Dawid Ryłko: a one-off review, ongoing advisory, embedding in your team, or project delivery. What to put in the first email.',
   keywords: [
     'contact Dawid Ryłko',
     'system architecture consulting',
@@ -21,6 +21,10 @@ const PAGE_METADATA: PageMetadata = {
     'technology collaboration',
   ],
 };
+
+// The <title> carries what people search for; the H1 and breadcrumb keep the
+// short page name.
+const SEO_TITLE = 'Working together';
 
 const author = SITE_METADATA.author;
 const { personReference } = STRUCTURED_DATA;
@@ -51,6 +55,7 @@ const ENGAGEMENTS = [
 
 const structuredData = createPageSchema({
   pathname: Astro.url.pathname,
+  type: 'ContactPage',
   title: PAGE_METADATA.title,
   description: PAGE_METADATA.description,
   keywords: PAGE_METADATA.keywords,
@@ -58,10 +63,10 @@ const structuredData = createPageSchema({
 });
 ---
 
-<PageLayout breadcrumbTitle={PAGE_METADATA.title} title={PAGE_METADATA.title} description={PAGE_METADATA.description}>
+<PageLayout breadcrumbTitle={PAGE_METADATA.title} title={SEO_TITLE} description={PAGE_METADATA.description}>
   <JsonLd data={structuredData} />
   <header>
-    <h1>{PAGE_METADATA.title}</h1>
+    <h1>Contact Dawid Ryłko</h1>
   </header>
   <section>
     <p>
