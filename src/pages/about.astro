@@ -1,7 +1,6 @@
 ---
 import PageLayout from '../layouts/PageLayout.astro';
 import JsonLd from '../components/JsonLd.astro';
-import Table from '../components/Table.astro';
 import Figure from '../components/Figure.astro';
 import ExternalLink from '../components/ExternalLink.astro';
 import motto from '../assets/motto.jpg';
@@ -74,17 +73,17 @@ const experience: { company: string; position: string; duration: string; focus: 
   },
 ];
 
-const education: string[][] = [
-  [
-    'University of Bielsko-Biala',
-    'Master of Science in Engineering (MSc Eng)',
-    'Computer Science - Information and Communication Technologies',
-  ],
-  [
-    'The Silesian University of Technology',
-    'Bachelor of Engineering (BEng)',
-    'Computer Science - Internet and Computer Systems',
-  ],
+const education: { institution: string; degree: string; field: string }[] = [
+  {
+    institution: 'University of Bielsko-Biala',
+    degree: 'Master of Science in Engineering (MSc Eng)',
+    field: 'Computer Science - Information and Communication Technologies',
+  },
+  {
+    institution: 'The Silesian University of Technology',
+    degree: 'Bachelor of Engineering (BEng)',
+    field: 'Computer Science - Internet and Computer Systems',
+  },
 ];
 
 const citations = [
@@ -173,6 +172,22 @@ const structuredData = createPageSchema({
       here on this site.
     </p>
   </section>
+  <section id="philosophy">
+    <h2>Philosophy</h2>
+    <p>Engineering is a craft, and craft is mostly judgement.</p>
+  </section>
+  <section id="quote">
+    {citations.map(({ authorName, citation, text, lang }) => (
+      <blockquote lang={lang}>
+        {text}
+        <br />
+        <cite>
+          - {authorName}, {citation}
+        </cite>
+      </blockquote>
+    ))}
+  </section>
+  <Figure src={motto} alt={image.alt} caption={image.figcaption} />
   <section id="experience">
     <h2>Experience</h2>
     <ul>
@@ -195,29 +210,18 @@ const structuredData = createPageSchema({
   </section>
   <section id="education">
     <h2>Education</h2>
-    <Table
-      data={education}
-      header={['Institution', 'Degree', 'Field of study']}
-      widthConfig={['35%', '35%', '30%']}
-      ariaLabel="Education"
-    />
+    <ul>
+      {education.map(({ institution, degree, field }) => (
+        <li>
+          <strong>
+            {degree}, {institution}
+          </strong>
+          <br />
+          {field}
+        </li>
+      ))}
+    </ul>
   </section>
-  <section id="philosophy">
-    <h2>Philosophy</h2>
-    <p>Engineering is a craft, and craft is mostly judgement.</p>
-  </section>
-  <section id="quote">
-    {citations.map(({ authorName, citation, text, lang }) => (
-      <blockquote lang={lang}>
-        {text}
-        <br />
-        <cite>
-          - {authorName}, {citation}
-        </cite>
-      </blockquote>
-    ))}
-  </section>
-  <Figure src={motto} alt={image.alt} caption={image.figcaption} />
   <section id="download">
     <h2>Download my CV</h2>
     <p>The full CV, with dates, roles, and the technology behind each of them. English and Polish, both PDF.</p>
