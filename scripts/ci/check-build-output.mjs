@@ -134,7 +134,7 @@ async function checkFontPreload() {
 /**
  * The CV PDFs are gitignored build output compiled from resume/*.tex, so unlike
  * committed assets nothing else would notice them going missing. A skipped or
- * half-finished LaTeX build would publish a /bio/ page whose download links
+ * half-finished LaTeX build would publish a /about/ page whose download links
  * 404. The size floor catches a truncated or stubbed file that still has a PDF
  * header.
  */

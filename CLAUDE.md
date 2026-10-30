@@ -77,7 +77,7 @@ Needed when touching `[...slug].astro`, `content.config.ts`, `rss.xml.ts` or the
 
 The Ahrefs audit checks metadata length and correctness. These rules cover the pages we control from this repo, and unit tests (`src/lib/seo.test.ts`) plus checks against the built `dist/` enforce them.
 
-- **Length limits** (`src/lib/seo.ts`): `<title>` up to **60** characters, `<meta name="description">` up to **160**. Stay inside them when changing the title or description of a static page (`src/pages/*`) or the fallback in `site-metadata.ts`. `scripts/ci/check-seo-lengths.mjs` is hard for our own pages (`/`, `/blog/*`, `/bio/`, `/contact/`, `/setup/`, `/metadata/`, `/files/`) and only warns for `content/pl` posts, whose title and description come from the author's frontmatter.
+- **Length limits** (`src/lib/seo.ts`): `<title>` up to **60** characters, `<meta name="description">` up to **160**. Stay inside them when changing the title or description of a static page (`src/pages/*`) or the fallback in `site-metadata.ts`. `scripts/ci/check-seo-lengths.mjs` is hard for our own pages (`/`, `/blog/*`, `/about/`, `/contact/`, `/setup/`, `/metadata/`, `/files/`) and only warns for `content/pl` posts, whose title and description come from the author's frontmatter.
 - **Homepage title** is built from `SITE_METADATA.title` plus `titleTagline`, short enough to stay under 60 with the brand. `titleTagline` currently repeats `author.jobTitle`, the positioning tagline behind Bio and JSON-LD Person and the same string used as the LinkedIn headline. Keep them as two fields and never alias one to the other: only `titleTagline` is bound by the 60-character title budget, so a longer headline must not reach `<title>` by accident.
 - **Fallback description** (`SITE_METADATA.description`) must be at most 160 characters and must not carry the `68 97 119` easter egg. That signature lives on `/metadata/` as a "Signature" row, injected client side by an `is:inline` script in `metadata.astro`, so it never reaches the raw HTML a crawler sees. `scripts/ci/check-crawl-hygiene.mjs` enforces this.
 - **Canonical:** a canonical is dropped only when the URL is not a real target. `noIndex` pages (`noindex, nofollow`, for example 404) emit neither `<link rel="canonical">` nor `hreflang`, because both would point at a non-200 URL. `noIndexFollow` pages (`noindex, follow`, for example thin tag archives) are ordinary 200 pages and keep their self-canonical and `hreflang`. `scripts/ci/check-seo-meta.mjs` and `check-lang-attributes.mjs` enforce this, and the smoke test covers the 404 part.
@@ -86,8 +86,8 @@ The Ahrefs audit checks metadata length and correctness. These rules cover the p
 
 ## Do not change
 
-- **Keep the per-page `lang` split** defined in `src/lib/i18n.ts`. The English shell (`/`, `/bio/`, `/contact/`, `/setup/`, `/metadata/`, `/files/`, 404) stays `en`; the blog, individual posts and `/tags/` opt into `CONTENT_LANG` (`pl`). Never hardcode one language in `PageLayout.astro` or `Seo.astro`. `scripts/ci/check-lang-attributes.mjs` locks the split together with `og:locale` and hreflang.
-- **Keep post URLs** (slug logic in `content.config.ts`) and the `/resume` to `/bio/` redirect (`astro.config.mjs`).
+- **Keep the per-page `lang` split** defined in `src/lib/i18n.ts`. The English shell (`/`, `/about/`, `/contact/`, `/setup/`, `/metadata/`, `/files/`, 404) stays `en`; the blog, individual posts and `/tags/` opt into `CONTENT_LANG` (`pl`). Never hardcode one language in `PageLayout.astro` or `Seo.astro`. `scripts/ci/check-lang-attributes.mjs` locks the split together with `og:locale` and hreflang.
+- **Keep post URLs** (slug logic in `content.config.ts`) and the `/resume` and `/bio` redirects to `/about/` (`astro.config.mjs`).
 - **The main branch is `master`**, not `main`. A push to `master` deploys to GitHub Pages.
 
 ## Pre-commit (Husky)

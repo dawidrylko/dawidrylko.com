@@ -193,7 +193,7 @@ describe('noindexPathnames', () => {
   });
 
   it('treats a page with no robots meta as indexable', () => {
-    expect([...noindexPathnames([{ path: 'bio/index.html', html: '<title>Bio</title>' }])]).toEqual([]);
+    expect([...noindexPathnames([{ path: 'about/index.html', html: '<title>About</title>' }])]).toEqual([]);
   });
 });
 

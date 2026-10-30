@@ -136,7 +136,7 @@ export function distPathForLoc(loc) {
 const REQUIRED_HTML = [
   'index.html',
   'blog/index.html',
-  'bio/index.html',
+  'about/index.html',
   'contact/index.html',
   'setup/index.html',
   'files/index.html',

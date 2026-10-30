@@ -36,7 +36,7 @@ const DESCRIPTION_MAX_LENGTH = 160;
 // content and only warned about.
 const OWNED_SEGMENTS = new Set([
   '',
-  'bio',
+  'about',
   'contact',
   'setup',
   'metadata',

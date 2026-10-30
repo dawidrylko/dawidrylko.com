@@ -29,7 +29,7 @@ export const SITE_METADATA = {
   ],
   menu: [
     { name: 'Home', url: '/' },
-    { name: 'About', url: '/bio/' },
+    { name: 'About', url: '/about/' },
     { name: 'Blog 🇵🇱', url: '/blog/' },
     { name: 'Contact', url: '/contact/' },
   ],

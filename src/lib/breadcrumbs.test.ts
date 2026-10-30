@@ -4,7 +4,7 @@ import type { NavLink } from '../types';
 
 const MENU: NavLink[] = [
   { name: 'Home', url: '/' },
-  { name: 'About', url: '/bio/' },
+  { name: 'About', url: '/about/' },
   { name: 'Blog 🇵🇱', url: '/blog/' },
   { name: 'Contact', url: '/contact/' },
 ];

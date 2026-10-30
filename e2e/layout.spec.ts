@@ -34,11 +34,11 @@ test('blog post separates its tag list from the following section', async ({ pag
 
 // The global ul/ol reset strips padding and uses outside markers, which the
 // wrapper's overflow-x: hidden would clip. Content sections must re-add the
-// gutter so bullets stay on screen (regression: bio/contact lists ran off the
+// gutter so bullets stay on screen (regression: about/contact lists ran off the
 // left edge while blog posts were fine). The `.capabilities` card grid is
 // excluded: it is a marker-less layout grid (list-style: none) by design, not a
 // prose list, so it has no gutter to guard.
-for (const route of ['/bio/', '/contact/']) {
+for (const route of ['/about/', '/contact/']) {
   test(`${route} content list keeps room for its bullet markers`, async ({ page }) => {
     await page.goto(route);
     const list = page.locator('main section ul:not(.capabilities)').first();
@@ -315,7 +315,7 @@ test('setup page has no aria-labelledby pointing at a missing element', async ({
   expect(dangling).toEqual([]);
 });
 
-for (const path of ['/bio/', '/cookie-policy/']) {
+for (const path of ['/about/', '/cookie-policy/']) {
   test(`outbound links on ${path} carry no whitespace around their text`, async ({ page }) => {
     await page.goto(path);
     const texts = await page.locator('a[target="_blank"]').evaluateAll(els => els.map(el => el.textContent ?? ''));

@@ -32,7 +32,7 @@ module.exports = {
       url: [
         'http://localhost:9000/',
         'http://localhost:9000/blog/',
-        'http://localhost:9000/bio/',
+        'http://localhost:9000/about/',
         'http://localhost:9000/contact/',
         'http://localhost:9000/setup/',
         'http://localhost:9000/metadata/',

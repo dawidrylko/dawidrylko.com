@@ -2,7 +2,7 @@
 
 LaTeX sources for the CV published at [`/resume-pl.pdf`](https://dawidrylko.com/resume-pl.pdf) and
 [`/resume-en.pdf`](https://dawidrylko.com/resume-en.pdf), linked from the
-[`/bio/`](https://dawidrylko.com/bio/) page.
+[`/about/`](https://dawidrylko.com/about/) page.
 
 The PDFs are **build output, not source**: they are gitignored and recompiled from these files by
 `pnpm build`, which writes them into `static/` (Astro's `publicDir`) just before `astro build` copies
@@ -64,7 +64,7 @@ stop agreeing.
 
 `scripts/ci/check-build-output.mjs` asserts both PDFs are present in `dist/` and are real PDFs of a
 plausible size. Because the files are gitignored, that contract is the only thing standing between a
-silently skipped LaTeX build and a `/bio/` page whose download links 404.
+silently skipped LaTeX build and a `/about/` page whose download links 404.
 
 ## Note on the closing block
 

@@ -132,7 +132,7 @@ describe('resolveEngine', () => {
 });
 
 describe('VARIANTS', () => {
-  it('matches the PDFs bio.astro links to', () => {
+  it('matches the PDFs about.astro links to', () => {
     expect(VARIANTS).toEqual(['pl', 'en']);
   });
 });

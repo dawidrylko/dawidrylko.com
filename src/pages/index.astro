@@ -5,6 +5,9 @@ import { SITE_METADATA } from '../data/site-metadata';
 import { STRUCTURED_DATA } from '../data/structured-data';
 import { buildCapabilities } from '../data/capabilities';
 import { createPageSchema } from '../lib/page-metadata';
+import { getBlogPosts } from '../lib/blog';
+import { formatPolishDate, toISODate } from '../lib/date';
+import { CONTENT_LANG } from '../lib/i18n';
 import type { PageMetadata } from '../types';
 
 const PAGE_METADATA: PageMetadata = {
@@ -23,9 +26,9 @@ const PAGE_METADATA: PageMetadata = {
   ],
 };
 
-// Home framing of the shared capability areas: short taglines for the "What I
-// do" block. The visible list and the JSON-LD ItemList below both read from
-// this array, so they never drift apart.
+// The home page is the only place that lists the capability areas: about tells
+// the career story and contact lists the forms of engagement. The visible list
+// and the JSON-LD ItemList below both read from this array, so they never drift.
 const CAPABILITIES = buildCapabilities({
   'System architecture':
     'Designing platform modules and setting technical direction. The hard part is what a system costs to keep running, not what it costs to build.',
@@ -37,6 +40,8 @@ const CAPABILITIES = buildCapabilities({
   'AI agents and automation': 'LLMs, MCP, and multi-agent workflows put to work on real engineering tasks.',
   'Engineering leadership': 'Leading a team, owning a product, and setting the standards other teams build against.',
 });
+
+const LATEST_POSTS = (await getBlogPosts()).slice(0, 3);
 
 const { personReference } = STRUCTURED_DATA;
 const structuredData = createPageSchema({
@@ -79,10 +84,6 @@ const structuredData = createPageSchema({
       stack: frontend interfaces, backend services, infrastructure automation, AI integration, and cybersecurity.
     </p>
     <p>I weigh technical decisions against business goals and the cost of running a system for years.</p>
-    <p>
-      My <a href="/blog/">blog</a> is in Polish, and it follows whatever I wanted to understand properly at the time.
-      Career and background are <a href="/bio/">on the about page</a>.
-    </p>
   </section>
   <section id="what-i-do">
     <h2>What I do</h2>
@@ -95,9 +96,27 @@ const structuredData = createPageSchema({
       ))}
     </ul>
   </section>
+  <section id="latest-posts">
+    <h2>Latest on the blog</h2>
+    <p>Written in Polish, about whatever I wanted to understand properly at the time.</p>
+    <ul>
+      {LATEST_POSTS.map(post => (
+        <li lang={CONTENT_LANG}>
+          <a href={`/${post.id}/`}>{post.data.title}</a>{' '}
+          <small>
+            <time datetime={toISODate(post.data.date)}>{formatPolishDate(post.data.date)}</time>
+          </small>
+        </li>
+      ))}
+    </ul>
+    <p>
+      <a href="/blog/">All posts</a>
+    </p>
+  </section>
   <section id="cta">
     <p>
-      Interested in working together? <a href="/contact/">Get in touch</a>. Email is the fastest route.
+      Career, experience, and the CV are <a href="/about/">on the about page</a>. To work together, start with{' '}
+      <a href="/contact/">the contact page</a>.
     </p>
   </section>
 </PageLayout>

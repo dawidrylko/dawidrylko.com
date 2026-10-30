@@ -31,7 +31,7 @@ triggers its own build. Rendered-page audits (Lighthouse) and link integrity
 
 Enforces the SEO length limits (mirrored in `src/lib/seo.ts`) on the rendered
 pages: `<title>` ≤ 60 chars and `<meta name="description">` ≤ 160. App-owned
-routes (`/`, `/blog/*`, `/bio/`, `/contact/`, `/setup/`, `/metadata/`, `/files/`)
+routes (`/`, `/blog/*`, `/about/`, `/contact/`, `/setup/`, `/metadata/`, `/files/`)
 fail the build; blog posts (author content from MDX frontmatter) are reported as
 warnings only. Runs in the `build-contract` job.
 
@@ -69,7 +69,7 @@ node scripts/ci/check-bundle-budget.mjs
 
 Locks the PL/EN language strategy (mirrored in `src/lib/i18n.ts`) on the rendered
 pages: every indexable page declares a supported `<html lang>` (en, pl) with an
-agreeing `og:locale`, the English shell routes (`/`, `/bio/`, `/contact/`,
+agreeing `og:locale`, the English shell routes (`/`, `/about/`, `/contact/`,
 `/setup/`, `/metadata/`, `/files/`) stay `lang=en` while the blog, post and tag
 routes stay `lang=pl`, and indexable pages self-reference their language via
 `hreflang` + `x-default` (only dead-end pages, i.e. `noindex, nofollow`, emit none). Runs in the `build-contract`

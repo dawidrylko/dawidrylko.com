@@ -2,7 +2,17 @@ import { test, expect } from '@playwright/test';
 
 // Core static routes that must always render with a title, a single visible H1
 // and a canonical link (the SEO chrome the build contract also guards).
-const ROUTES = ['/', '/blog/', '/bio/', '/contact/', '/setup/', '/metadata/', '/files/'];
+const ROUTES = ['/', '/blog/', '/about/', '/contact/', '/setup/', '/metadata/', '/files/'];
+
+test('home lists the three latest blog posts', async ({ page }) => {
+  await page.goto('/');
+  const links = page.locator('#latest-posts li a');
+  await expect(links).toHaveCount(3);
+  await page.goto('/blog/');
+  const newest = await page.locator('#blog-posts .post-list-item h2 a').first().getAttribute('href');
+  await page.goto('/');
+  await expect(links.first()).toHaveAttribute('href', newest as string);
+});
 
 for (const route of ROUTES) {
   test(`${route} renders core SEO chrome`, async ({ page }) => {
