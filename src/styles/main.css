@@ -947,6 +947,12 @@ a:focus {
   user-select: none;
 }
 
+/* The bullet and the dates of an about-page role wrap as one unit, so a narrow
+   screen never leaves the bullet behind the title or splits the date range. */
+.role-dates {
+  white-space: nowrap;
+}
+
 .gatsby-highlight {
   margin-bottom: var(--spacing-8);
 }

@@ -183,10 +183,12 @@ const structuredData = createPageSchema({
           <strong>
             {position}, {company}
           </strong>{' '}
-          <span class="separator" aria-hidden="true">
-            •
-          </span>{' '}
-          <small>{duration}</small>
+          <span class="role-dates">
+            <span class="separator" aria-hidden="true">
+              •
+            </span>
+            <small>{duration}</small>
+          </span>
           <br />
           {focus}
         </li>

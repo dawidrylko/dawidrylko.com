@@ -323,3 +323,23 @@ for (const path of ['/about/', '/cookie-policy/']) {
     expect(texts.filter(text => text !== text.trim())).toEqual([]);
   });
 }
+
+// On a narrow phone the bullet before a role's dates used to stay behind the
+// title while the dates wrapped below it, sometimes split mid-range.
+test('about experience keeps each bullet on the line of its dates', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 700 });
+  await page.goto('/about/');
+  const rows = await page.locator('#experience li').evaluateAll(items =>
+    items.map(item => {
+      const bullet = item.querySelector('.separator')?.getBoundingClientRect();
+      const dates = item.querySelector('small')?.getBoundingClientRect();
+      const lineHeight = Number.parseFloat(getComputedStyle(item.querySelector('small') as Element).lineHeight);
+      return {
+        sameLine: !!bullet && !!dates && Math.abs(bullet.bottom - dates.bottom) < 4,
+        singleLine: !!dates && dates.height < lineHeight * 1.5,
+      };
+    }),
+  );
+  expect(rows.length).toBeGreaterThan(0);
+  expect(rows.filter(row => !row.sameLine || !row.singleLine)).toEqual([]);
+});
