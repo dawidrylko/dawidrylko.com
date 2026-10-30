@@ -7,6 +7,7 @@ import { describe, expect, it } from 'vitest';
 // from @astrojs/compiler-rs, and the mismatched pair crashed `astro check` with
 // "this.bridge.setLastError is not a function". The packageExtensions entry in
 // package.json pins the runtime astro2tsx is built against; this guards it.
+// Drop both once astro2tsx lists @emnapi/runtime in its own dependencies.
 const LOCKFILE = readFileSync(new URL('../../pnpm-lock.yaml', import.meta.url), 'utf8');
 
 function satisfiesWasmRuntimePeer(version) {
@@ -26,7 +27,10 @@ describe('pnpm-lock.yaml @emnapi peers for astro2tsx', () => {
   const wasmRuntime = /'@napi-rs\/wasm-runtime': [^\n]*\(@emnapi\/runtime@([^)]+)\)/.exec(snapshot?.[1] ?? '');
 
   it('resolves astro2tsx and its @napi-rs/wasm-runtime', () => {
-    expect(wasmRuntime).not.toBeNull();
+    expect(
+      wasmRuntime,
+      'astro2tsx 0.1.3 left the lockfile: re-check or drop the packageExtensions entry in package.json',
+    ).not.toBeNull();
   });
 
   it('gives that @napi-rs/wasm-runtime an @emnapi/runtime inside its peer range', () => {
