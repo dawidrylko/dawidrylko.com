@@ -1,0 +1,242 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import JsonLd from '../components/JsonLd.astro';
+import Table from '../components/Table.astro';
+import Figure from '../components/Figure.astro';
+import ExternalLink from '../components/ExternalLink.astro';
+import motto from '../assets/motto.jpg';
+import { SITE_METADATA } from '../data/site-metadata';
+import { STRUCTURED_DATA } from '../data/structured-data';
+import { createPageSchema } from '../lib/page-metadata';
+import type { PageMetadata } from '../types';
+
+const PAGE_METADATA: PageMetadata = {
+  title: 'About',
+  description:
+    'Career of Dawid Ryłko, Solution Architect: roles from frontend to architecture, education, and a CV to download in English and Polish.',
+  keywords: [
+    'Dawid Ryłko',
+    'Solution Architect',
+    'system architecture',
+    'cybersecurity',
+    'full-stack developer',
+    'AI agents',
+    'engineering leadership',
+    'mobile development',
+    'curriculum vitae',
+  ],
+};
+
+// One line per role, condensed from the CV (resume/en/experience.tex) so the
+// page shows what each role was about, not only its dates.
+const experience: { company: string; position: string; duration: string; focus: string }[] = [
+  {
+    company: 'Silesian Solutions',
+    position: 'Self-employed',
+    duration: 'Oct 2015 - Present',
+    focus: 'Software, infrastructure, AI, and cybersecurity work, sometimes together with other specialists.',
+  },
+  {
+    company: 'Cyber Katalog',
+    position: 'Project Lead',
+    duration: 'Mar 2025 - Present',
+    focus: 'cyberkatalog.pl end to end: scope, architecture, the production environment, and a data-driven backlog.',
+  },
+  {
+    company: 'Proget',
+    position: 'Project Architect',
+    duration: 'May 2026 - Present',
+    focus: 'Architecture of platform modules, the standards around it, and reviews that keep teams on one design.',
+  },
+  {
+    company: 'Proget',
+    position: 'Team Leader, Senior Frontend Developer',
+    duration: 'Oct 2017 - Apr 2026',
+    focus: 'Led the development team and the move from Yii and plain JavaScript to Angular micro frontends.',
+  },
+  {
+    company: 'Actaware',
+    position: 'Lead Mobile Developer',
+    duration: 'Mar 2022 - May 2024',
+    focus: 'Frontend architecture and the Android and iOS apps, built in Ionic, Angular, and TypeScript.',
+  },
+  {
+    company: 'DaVinci Studio',
+    position: 'Frontend Developer',
+    duration: 'Dec 2015 - Sep 2017',
+    focus: 'Responsive frontend components, work on system modules, and close cooperation with the UI/UX team.',
+  },
+  {
+    company: 'Wholesaler (local company)',
+    position: 'IT Specialist - Programmer',
+    duration: 'Aug 2013 - Oct 2015',
+    focus: 'The company network and the custom software its business processes ran on.',
+  },
+];
+
+const education: string[][] = [
+  [
+    'University of Bielsko-Biala',
+    'Master of Science in Engineering (MSc Eng)',
+    'Computer Science - Information and Communication Technologies',
+  ],
+  [
+    'The Silesian University of Technology',
+    'Bachelor of Engineering (BEng)',
+    'Computer Science - Internet and Computer Systems',
+  ],
+];
+
+const citations = [
+  {
+    authorName: 'Andrzej Stasiuk',
+    citation: 'Jadąc do Babadag',
+    lang: 'pl',
+    text: 'Wszystko trzeba wymyślać od nowa, ponieważ dni nie mogą przepadać w przeszłości, wypełnione jedynie pejzażem, nieruchomą, niezmienną materią, która w końcu strząśnie nas ze swojego cielska, strzepnie jak te wszystkie drobne incydenty, te twarze oraz istnienia nie dłuższe niż jedno spojrzenie.',
+  },
+  {
+    authorName: 'Andrzej Stasiuk',
+    citation: 'On the Road to Babadag',
+    lang: 'en',
+    text: 'Everything must be invented anew, because days cannot vanish into the past filled merely with landscape, with motionless, unchanging matter, which will finally shake us off its body, flick us away like all those minor incidents, those faces and existences lasting no longer than a single glance.',
+  },
+];
+
+const image = {
+  alt: `Graffiti on a utility box featuring a black-and-white image of Charlie Chaplin with the quote: 'A day without laughter is a day wasted'.`,
+  figcaption: `Photo by Dawid Ryłko, taken on September 7, 2017, in Malia, Greece.`,
+};
+
+// The <title> carries what people search for; the H1 and breadcrumb keep the
+// short page name.
+const SEO_TITLE = 'Career, experience and CV';
+
+const { personReference } = STRUCTURED_DATA;
+
+const structuredData = createPageSchema({
+  pathname: Astro.url.pathname,
+  // ProfilePage is schema.org's type for an about/profile page; pairing it with
+  // mainEntity = the Person it describes is Google's recommended pattern and
+  // keeps the page node consistent with the site-wide #person node.
+  type: 'ProfilePage',
+  title: PAGE_METADATA.title,
+  description: PAGE_METADATA.description,
+  keywords: PAGE_METADATA.keywords,
+  extra: {
+    dateModified: '2026-10-30',
+    mainEntity: personReference,
+    potentialAction: {
+      '@type': 'DownloadAction',
+      name: 'Download my CV',
+      description: "Download Dawid Ryłko's full CV in PDF, in English or Polish.",
+      object: { '@type': 'DigitalDocument', name: 'Dawid Ryłko CV' },
+      target: [
+        {
+          '@type': 'EntryPoint',
+          urlTemplate: `${SITE_METADATA.url}/resume-en.pdf`,
+          actionPlatform: 'https://schema.org/DesktopWebPlatform',
+        },
+        {
+          '@type': 'EntryPoint',
+          urlTemplate: `${SITE_METADATA.url}/resume-pl.pdf`,
+          actionPlatform: 'https://schema.org/DesktopWebPlatform',
+        },
+      ],
+    },
+  },
+});
+---
+
+<PageLayout breadcrumbTitle={PAGE_METADATA.title} title={SEO_TITLE} description={PAGE_METADATA.description}>
+  <JsonLd data={structuredData} />
+  <header>
+    <h1>About Dawid Ryłko</h1>
+  </header>
+  <section id="summary">
+    <p>
+      I'm <strong>Dawid Ryłko</strong>. I started programming at school and have built software ever since: web and
+      mobile applications, backend services, infrastructure, and the teams and architecture around them. Each step
+      widened the part of a system I answer for.
+    </p>
+    <p>
+      <ExternalLink href="https://silesiansolutions.com/" follow>
+        Silesian Solutions
+      </ExternalLink>{' '}
+      is my own business. <ExternalLink href="https://cyberkatalog.pl/">Cyber Katalog</ExternalLink> is a cybersecurity
+      project under it, and I lead it. Security shapes how I review and harden what I build.
+    </p>
+    <p>
+      <ExternalLink href="https://dawid.dev" follow>
+        dawid.dev
+      </ExternalLink>{' '}
+      holds my engineering notes and the longer write-ups on security. <a href="/blog/">My Polish-language blog</a> is
+      here on this site.
+    </p>
+  </section>
+  <section id="experience">
+    <h2>Experience</h2>
+    <ul>
+      {experience.map(({ company, position, duration, focus }) => (
+        <li>
+          <strong>
+            {position}, {company}
+          </strong>{' '}
+          <span class="role-dates">
+            <span class="separator" aria-hidden="true">
+              •
+            </span>
+            <small>{duration}</small>
+          </span>
+          <br />
+          {focus}
+        </li>
+      ))}
+    </ul>
+  </section>
+  <section id="education">
+    <h2>Education</h2>
+    <Table
+      data={education}
+      header={['Institution', 'Degree', 'Field of study']}
+      widthConfig={['35%', '35%', '30%']}
+      ariaLabel="Education"
+    />
+  </section>
+  <section id="philosophy">
+    <h2>Philosophy</h2>
+    <p>Engineering is a craft, and craft is mostly judgement.</p>
+  </section>
+  <section id="quote">
+    {citations.map(({ authorName, citation, text, lang }) => (
+      <blockquote lang={lang}>
+        {text}
+        <br />
+        <cite>
+          - {authorName}, {citation}
+        </cite>
+      </blockquote>
+    ))}
+  </section>
+  <Figure src={motto} alt={image.alt} caption={image.figcaption} />
+  <section id="download">
+    <h2>Download my CV</h2>
+    <p>The full CV, with dates, roles, and the technology behind each of them. English and Polish, both PDF.</p>
+    <ul>
+      <li>
+        <a href="/resume-en.pdf" download="Dawid_Rylko_CV_EN.pdf" title="Download Full CV (English)">
+          Download CV (English PDF) 🇬🇧
+        </a>
+      </li>
+      <li>
+        <a href="/resume-pl.pdf" download="Dawid_Rylko_CV_PL.pdf" title="Download Full CV (Polish)">
+          Download CV (Polish PDF) 🇵🇱
+        </a>
+      </li>
+    </ul>
+  </section>
+  <section id="cta">
+    <p>
+      Want to work together? <a href="/contact/">The contact page</a> says how to start.
+    </p>
+  </section>
+</PageLayout>

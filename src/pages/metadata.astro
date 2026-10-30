@@ -8,7 +8,7 @@ import type { PageMetadata } from '../types';
 
 // Static (non-blog) routes provided by src/pages. The Gatsby version queried
 // allSitePage; here the set is explicit since it changes rarely.
-const staticPages = ['/', '/404.html', '/bio/', '/blog/', '/contact/', '/files/', '/metadata/', '/setup/', '/tags/'];
+const staticPages = ['/', '/404.html', '/about/', '/blog/', '/contact/', '/files/', '/metadata/', '/setup/', '/tags/'];
 
 const blogPaths = (await getCollection('posts'))
   .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
@@ -25,7 +25,7 @@ const siteDescription = SITE_METADATA.description.en;
 // /llms.txt and robots.txt so the intent is discoverable from the site itself.
 // Ordered as a crawler would walk them: crawl policy, then the sitemaps it points
 // to, then the feeds, then the LLM summary, with this page last. Human-facing
-// pages (/bio/, /blog/) are deliberately absent: they are already in the
+// pages (/about/, /blog/) are deliberately absent: they are already in the
 // sitemaps and in the Pages table below, and are not machine-readable artifacts.
 const aiResources: [string, string][] = [
   ['/robots.txt', 'Crawl policy. Every crawler, AI included, is allowed. Declares the sitemaps.'],

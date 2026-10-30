@@ -301,7 +301,7 @@ li > ul {
 
 /* Prose lists need room for outside markers; the global ul/ol reset removes
    padding for the layout lists (menu, bio, posts), so re-add it for in-page
-   content lists — blog post bodies plus the bio/contact sections — where the
+   content lists — blog post bodies plus the about/contact sections — where the
    markers would otherwise be clipped by the wrapper's overflow-x: hidden. The
    layout lists (.tags, .posts, .pagination, menu, bio) live outside any
    `main section`, so they keep their reset. */
@@ -626,8 +626,8 @@ a:focus {
   color: var(--color-text-light);
 }
 
-/* Homepage "What I do" grid: capability cards sharing the site's card idiom
-   (1px accent border, --spacing-2 radius). One column on phones, two from the
+/* Card grid for the home page's "What I do" and the contact page's engagements:
+   cards sharing the site's card idiom (1px accent border, --spacing-2 radius). One column on phones, two from the
    sm breakpoint up. Overrides the prose-list gutter/markers from `main section
    ul` since these are layout cards, not a prose list. */
 .capabilities {
@@ -662,7 +662,7 @@ a:focus {
 
 /* The CTA section has no heading, so it misses the section-to-section gap that a
    heading's top margin normally provides. Re-add it so the call to action does
-   not sit flush against the capabilities grid above. */
+   not sit flush against the section above. */
 #cta {
   margin-top: var(--spacing-12);
 }
@@ -945,6 +945,12 @@ a:focus {
   margin: 0 var(--spacing-2);
   color: var(--color-text-light);
   user-select: none;
+}
+
+/* The bullet and the dates of an about-page role wrap as one unit, so a narrow
+   screen never leaves the bullet behind the title or splits the date range. */
+.role-dates {
+  white-space: nowrap;
 }
 
 .gatsby-highlight {

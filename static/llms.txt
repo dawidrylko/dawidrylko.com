@@ -20,11 +20,11 @@ automation, cybersecurity, DevOps, IoT, smart home.
 ## Core pages
 
 - [Home](https://dawidrylko.com/): introduction and entry points.
-- [About](https://dawidrylko.com/bio/): professional background, experience, education, and philosophy.
+- [About](https://dawidrylko.com/about/): professional background, experience, education, philosophy, and the CV (PDF, English and Polish).
 - [Blog](https://dawidrylko.com/blog/): all articles (in Polish), with search and tag filtering.
 - [Contact](https://dawidrylko.com/contact/): how to get in touch.
 - [Setup](https://dawidrylko.com/setup/): hardware and workstation overview.
-- [Files](https://dawidrylko.com/files/): slides from talks and a downloadable CV (PDF).
+- [Files](https://dawidrylko.com/files/): slides from talks.
 
 ## Important projects
 

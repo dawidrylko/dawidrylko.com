@@ -1,17 +1,15 @@
 ---
 import PageLayout from '../layouts/PageLayout.astro';
 import JsonLd from '../components/JsonLd.astro';
-import ExternalLink from '../components/ExternalLink.astro';
 import { SITE_METADATA } from '../data/site-metadata';
 import { STRUCTURED_DATA } from '../data/structured-data';
-import { buildCapabilities } from '../data/capabilities';
 import { createPageSchema } from '../lib/page-metadata';
 import type { PageMetadata } from '../types';
 
 const PAGE_METADATA: PageMetadata = {
   title: 'Contact',
   description:
-    'Get in touch with Dawid Ryłko about system architecture, security reviews, full-stack delivery, and technical leadership.',
+    'Work with Dawid Ryłko: a one-off review, ongoing advisory, embedding in your team, or project delivery. What to put in the first email.',
   keywords: [
     'contact Dawid Ryłko',
     'system architecture consulting',
@@ -24,23 +22,40 @@ const PAGE_METADATA: PageMetadata = {
   ],
 };
 
+// The <title> carries what people search for; the H1 and breadcrumb keep the
+// short page name.
+const SEO_TITLE = 'Working together';
+
 const author = SITE_METADATA.author;
-const social = SITE_METADATA.social;
 const { personReference } = STRUCTURED_DATA;
 
-// Contact framing of the shared capability areas: short, engagement-oriented
-// lines describing what we can work on together, distinct from the home/about copy.
-const capabilities = buildCapabilities({
-  'System architecture': 'Designing a system, or reviewing an architecture that has stopped scaling.',
-  Cybersecurity: 'A security review, threat model, or hardening pass on something already running.',
-  'Full-stack engineering': 'Building or scaling a TypeScript product, web or mobile.',
-  'Infrastructure and delivery': 'Shaping CI/CD, containers, and cloud so releases stop being events.',
-  'AI agents and automation': 'Adding LLM or agent-driven automation to work your team does by hand today.',
-  'Engineering leadership': 'Leading an engineering team, or providing senior technical direction.',
-});
+// Forms of engagement: how a collaboration is shaped, not what it covers, so
+// the cards use none of the home page's capability vocabulary.
+const ENGAGEMENTS = [
+  {
+    term: 'One-off review',
+    description:
+      "A fixed-scope look at a system's architecture and security, ending with a list of findings ordered by risk.",
+  },
+  {
+    term: 'Ongoing advisory',
+    description:
+      'A recurring slot for design decisions, second opinions on proposals, and questions about cloud costs.',
+  },
+  {
+    term: 'Embedded in your team',
+    description:
+      'A longer engagement inside the team, owning the architecture and the review process as the product grows.',
+  },
+  {
+    term: 'Project delivery',
+    description: 'A scoped build from first design to production, with AI agents where they replace manual work.',
+  },
+];
 
 const structuredData = createPageSchema({
   pathname: Astro.url.pathname,
+  type: 'ContactPage',
   title: PAGE_METADATA.title,
   description: PAGE_METADATA.description,
   keywords: PAGE_METADATA.keywords,
@@ -48,22 +63,21 @@ const structuredData = createPageSchema({
 });
 ---
 
-<PageLayout breadcrumbTitle={PAGE_METADATA.title} title={PAGE_METADATA.title} description={PAGE_METADATA.description}>
+<PageLayout breadcrumbTitle={PAGE_METADATA.title} title={SEO_TITLE} description={PAGE_METADATA.description}>
   <JsonLd data={structuredData} />
   <header>
-    <h1>{PAGE_METADATA.title}</h1>
+    <h1>Contact Dawid Ryłko</h1>
   </header>
   <section>
     <p>
       I take on work where the architecture matters and the system has to keep running long after the launch. A
       greenfield project is fine. So is a platform that has grown past its original design.
     </p>
-    <p>Tell me what the problem is and what you have already tried. That is enough to start.</p>
   </section>
-  <section id="what-i-do">
-    <h2>What we can work on</h2>
+  <section id="engagements">
+    <h2>How I can help</h2>
     <ul class="capabilities">
-      {capabilities.map(({ term, description }) => (
+      {ENGAGEMENTS.map(({ term, description }) => (
         <li>
           <strong>{term}</strong>
           {description}
@@ -71,29 +85,23 @@ const structuredData = createPageSchema({
       ))}
     </ul>
   </section>
+  <section id="first-email">
+    <h2>What to put in the first email</h2>
+    <ul>
+      <li>The problem, in a few sentences.</li>
+      <li>What you have already tried, and what happened.</li>
+      <li>The scale and the timeline: the team, the deadline, and how much is already running.</li>
+    </ul>
+    <p>That is enough to start.</p>
+  </section>
   <section>
     <h2>How to reach me</h2>
     <p>
-      The best way to get in touch is by email:&nbsp;
+      Email is the fastest route:&nbsp;
       <a href={`mailto:${author.email}`} title="Send email">
         <strong>{author.email}</strong>
       </a>
     </p>
     <p>I usually respond within 24 hours on business days.</p>
-  </section>
-  <section>
-    <h2>Find me online</h2>
-    <p>The accounts I actually use:</p>
-    <ul>
-      {social
-        .filter(({ name }) => ['GitHub', 'Twitter', 'Linkedin'].includes(name))
-        .map(({ name, url, follow }) => (
-          <li>
-            <ExternalLink href={url} follow={follow} title={`Find Dawid Ryłko on ${name}`}>
-              {name}
-            </ExternalLink>
-          </li>
-        ))}
-    </ul>
   </section>
 </PageLayout>

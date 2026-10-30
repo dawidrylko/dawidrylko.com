@@ -1,8 +1,7 @@
-// Single source of truth for the six areas of work shown across the site.
-// Ordered so the two areas author.jobTitle positions on ("Solution Architect |
-// Cybersecurity") come first. Pages (home, about, contact) each supply their own
-// framing for these areas, so the set stays consistent everywhere without
-// duplicating descriptive copy.
+// The six areas of work listed on the home page, and only there: about and
+// contact deliberately cover other ground so the three pages do not repeat one
+// list. Ordered so the two areas author.jobTitle positions on ("Solution
+// Architect | Cybersecurity") come first.
 export const CAPABILITY_AREAS = [
   'System architecture',
   'Cybersecurity',

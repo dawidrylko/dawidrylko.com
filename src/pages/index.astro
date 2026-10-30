@@ -5,12 +5,15 @@ import { SITE_METADATA } from '../data/site-metadata';
 import { STRUCTURED_DATA } from '../data/structured-data';
 import { buildCapabilities } from '../data/capabilities';
 import { createPageSchema } from '../lib/page-metadata';
+import { getBlogPosts } from '../lib/blog';
+import { formatPolishDate, toISODate } from '../lib/date';
+import { CONTENT_LANG } from '../lib/i18n';
 import type { PageMetadata } from '../types';
 
 const PAGE_METADATA: PageMetadata = {
   title: 'Home',
   description:
-    'Dawid Ryłko designs system architecture and owns its security. Personal site, a CV, a hardware setup, and a blog written in Polish.',
+    'Dawid Ryłko, Solution Architect. System architecture, cybersecurity, and full-stack engineering, plus a Polish-language engineering blog.',
   keywords: [
     'Dawid Ryłko',
     'Solution Architect',
@@ -23,20 +26,22 @@ const PAGE_METADATA: PageMetadata = {
   ],
 };
 
-// Home framing of the shared capability areas: short taglines for the "What I
-// do" block. The visible list and the JSON-LD ItemList below both read from
-// this array, so they never drift apart.
+// The home page is the only place that lists the capability areas: about tells
+// the career story and contact lists the forms of engagement. The visible list
+// and the JSON-LD ItemList below both read from this array, so they never drift.
 const CAPABILITIES = buildCapabilities({
   'System architecture':
-    'Designing platform modules and setting technical direction. The hard part is what a system costs to keep running, not what it costs to build.',
+    'Designing whole systems and platforms, from a single service to a complete environment, and setting their technical direction. The hard part is what a system costs to keep running, not what it costs to build.',
   Cybersecurity: 'Threat modelling, security reviews, and hardening, done while the design is still on the table.',
   'Full-stack engineering':
-    'TypeScript on both ends. React and Angular frontends, Node.js services behind them, cross-platform mobile apps on both stores.',
+    'Frontend, backend, and mobile in whatever stack the problem calls for: TypeScript and JavaScript, React, Angular, Ionic, Node.js, Python, and others.',
   'Infrastructure and delivery':
     'CI/CD and cloud infrastructure, plus the production environments and monitoring that come after the release.',
   'AI agents and automation': 'LLMs, MCP, and multi-agent workflows put to work on real engineering tasks.',
   'Engineering leadership': 'Leading a team, owning a product, and setting the standards other teams build against.',
 });
+
+const LATEST_POSTS = (await getBlogPosts()).slice(0, 3);
 
 const { personReference } = STRUCTURED_DATA;
 const structuredData = createPageSchema({
@@ -75,14 +80,11 @@ const structuredData = createPageSchema({
   </header>
   <section>
     <p>
-      I design <strong>system architecture</strong> and own its security. Over ten years in IT. The work spans the whole
-      stack: frontend interfaces, backend services, infrastructure automation, AI integration, and cybersecurity.
+      I design <strong>system architecture</strong> and own its security. I have worked in IT for a long time, across
+      the whole stack: frontend interfaces, backend services, infrastructure automation, AI integration, and
+      cybersecurity.
     </p>
     <p>I weigh technical decisions against business goals and the cost of running a system for years.</p>
-    <p>
-      My <a href="/blog/">blog</a> is in Polish, and it follows whatever I wanted to understand properly at the time.
-      Career and background are <a href="/bio/">on the about page</a>.
-    </p>
   </section>
   <section id="what-i-do">
     <h2>What I do</h2>
@@ -95,9 +97,27 @@ const structuredData = createPageSchema({
       ))}
     </ul>
   </section>
+  <section id="latest-posts">
+    <h2>Latest on the blog</h2>
+    <p>Written in Polish, about whatever I wanted to understand properly at the time.</p>
+    <ul>
+      {LATEST_POSTS.map(post => (
+        <li lang={CONTENT_LANG}>
+          <a href={`/${post.id}/`}>{post.data.title}</a>{' '}
+          <small>
+            <time datetime={toISODate(post.data.date)}>{formatPolishDate(post.data.date)}</time>
+          </small>
+        </li>
+      ))}
+    </ul>
+    <p>
+      <a href="/blog/">All posts</a>
+    </p>
+  </section>
   <section id="cta">
     <p>
-      Interested in working together? <a href="/contact/">Get in touch</a>. Email is the fastest route.
+      <a href="/about/">Career, experience, and the CV</a> are on the about page.{' '}
+      <a href="/contact/">How to start working together</a> is on the contact page.
     </p>
   </section>
 </PageLayout>

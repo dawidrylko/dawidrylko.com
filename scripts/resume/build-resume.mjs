@@ -5,7 +5,7 @@
  * The PDFs are build output, not source: they are gitignored and regenerated
  * from `resume/*.tex` on every `pnpm build`. Astro's `publicDir` is `static/`,
  * so writing there before `astro build` is what publishes them at their long
- * standing URLs (`/resume-pl.pdf`, `/resume-en.pdf`) that `src/pages/bio.astro`
+ * standing URLs (`/resume-pl.pdf`, `/resume-en.pdf`) that `src/pages/about.astro`
  * links to.
  *
  * Tectonic is the only engine, delivered one of two ways (first one wins):

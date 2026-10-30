@@ -24,9 +24,12 @@ test('pagination links move between pages', async ({ page }) => {
   await expect(page.locator('.pagination .is-current')).toHaveText('2');
 });
 
-// The Gatsby-era /resume → /bio/ redirect must keep working (meta-refresh stub).
-test('/resume redirects to /bio/', async ({ page }) => {
-  await page.goto('/resume/');
-  await page.waitForURL(/\/bio\/$/);
-  await expect(page.locator('h1')).toBeVisible();
-});
+// Legacy URLs must keep landing on the about page (meta-refresh stubs): the
+// Gatsby-era /resume and /bio, the about page's address until it moved.
+for (const legacy of ['/resume/', '/bio/']) {
+  test(`${legacy} redirects to /about/`, async ({ page }) => {
+    await page.goto(legacy);
+    await page.waitForURL(/\/about\/$/);
+    await expect(page.locator('h1')).toBeVisible();
+  });
+}

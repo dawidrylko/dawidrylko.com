@@ -18,7 +18,7 @@
  *   - every page emits a WebSite JSON-LD node (site-wide search action)
  *   - every inline Person node (the canonical #person) carries a non-empty
  *     sameAs (the social profiles that anchor the author's identity)
- *   - the /bio/ profile page is typed ProfilePage with a Person mainEntity
+ *   - the /about/ profile page is typed ProfilePage with a Person mainEntity
  *   - every page-level entity (WebPage/Article/BlogPosting) keeps its url/@id
  *     aligned with the page canonical, so no ancestor (breadcrumb parent) or
  *     sibling (listed post) URL leaks in as the page's own identity
@@ -242,12 +242,12 @@ function checkPage(page, html) {
     }
   }
 
-  // The /bio/ page is the author's profile: schema.org's ProfilePage with a
+  // The /about/ page is the author's profile: schema.org's ProfilePage with a
   // Person mainEntity is the pattern Google expects, so lock it against a
   // regression back to a bare WebPage.
-  if (page === 'bio/index.html') {
+  if (page === 'about/index.html') {
     const profile = allJsonLdNodes(html).find(node => node['@type'] === 'ProfilePage');
-    if (!profile) fail(`${page}: bio page must emit a ProfilePage JSON-LD node`);
+    if (!profile) fail(`${page}: about page must emit a ProfilePage JSON-LD node`);
     else if (profile.mainEntity?.['@id'] !== `${ORIGIN}/#person`) {
       fail(`${page}: ProfilePage mainEntity must reference the canonical Person`);
     }

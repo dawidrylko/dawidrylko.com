@@ -24,12 +24,12 @@ export const SITE_METADATA = {
   social: [
     { name: 'Digital Persona', url: 'https://dawid.dev/', follow: true },
     { name: 'GitHub', url: 'https://github.com/dawidrylko', follow: false },
-    { name: 'Twitter', url: 'https://twitter.com/dawidrylko', follow: false },
+    { name: 'Twitter', url: 'https://x.com/dawidrylko', follow: false },
     { name: 'Linkedin', url: 'https://www.linkedin.com/in/dawidrylko', follow: false },
   ],
   menu: [
     { name: 'Home', url: '/' },
-    { name: 'About', url: '/bio/' },
+    { name: 'About', url: '/about/' },
     { name: 'Blog 🇵🇱', url: '/blog/' },
     { name: 'Contact', url: '/contact/' },
   ],

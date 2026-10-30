@@ -49,10 +49,11 @@ export default defineConfig({
   trailingSlash: 'always',
   // Static assets (resume PDFs, /files, robots.txt, CNAME) served from static/.
   publicDir: 'static',
-  // Ported from Gatsby's createRedirect (/resume → /bio/). In the static
-  // output Astro emits a meta-refresh redirect page.
+  // /resume is ported from Gatsby's createRedirect; /bio is the old URL of the
+  // about page. In the static output Astro emits a meta-refresh redirect page.
   redirects: {
-    '/resume': '/bio/',
+    '/resume': '/about/',
+    '/bio': '/about/',
   },
   build: {
     // Inline all CSS into <style> tags instead of emitting a render-blocking

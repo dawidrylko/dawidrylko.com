@@ -183,7 +183,7 @@ test.describe('consent gate', () => {
     const expiryOf = async () => (await page.context().cookies()).find(cookie => cookie.name === '_ga')?.expires;
     const first = await expiryOf();
 
-    await page.goto('/bio/');
+    await page.goto('/about/');
     await page.waitForTimeout(1500);
 
     // cookie_update: false anchors the lifetime to the moment of consent, so a

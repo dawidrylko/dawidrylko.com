@@ -34,11 +34,11 @@ test('blog post separates its tag list from the following section', async ({ pag
 
 // The global ul/ol reset strips padding and uses outside markers, which the
 // wrapper's overflow-x: hidden would clip. Content sections must re-add the
-// gutter so bullets stay on screen (regression: bio/contact lists ran off the
+// gutter so bullets stay on screen (regression: about/contact lists ran off the
 // left edge while blog posts were fine). The `.capabilities` card grid is
 // excluded: it is a marker-less layout grid (list-style: none) by design, not a
 // prose list, so it has no gutter to guard.
-for (const route of ['/bio/', '/contact/']) {
+for (const route of ['/about/', '/contact/']) {
   test(`${route} content list keeps room for its bullet markers`, async ({ page }) => {
     await page.goto(route);
     const list = page.locator('main section ul:not(.capabilities)').first();
@@ -315,7 +315,7 @@ test('setup page has no aria-labelledby pointing at a missing element', async ({
   expect(dangling).toEqual([]);
 });
 
-for (const path of ['/bio/', '/cookie-policy/']) {
+for (const path of ['/about/', '/cookie-policy/']) {
   test(`outbound links on ${path} carry no whitespace around their text`, async ({ page }) => {
     await page.goto(path);
     const texts = await page.locator('a[target="_blank"]').evaluateAll(els => els.map(el => el.textContent ?? ''));
@@ -323,3 +323,23 @@ for (const path of ['/bio/', '/cookie-policy/']) {
     expect(texts.filter(text => text !== text.trim())).toEqual([]);
   });
 }
+
+// On a narrow phone the bullet before a role's dates used to stay behind the
+// title while the dates wrapped below it, sometimes split mid-range.
+test('about experience keeps each bullet on the line of its dates', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 700 });
+  await page.goto('/about/');
+  const rows = await page.locator('#experience li').evaluateAll(items =>
+    items.map(item => {
+      const bullet = item.querySelector('.separator')?.getBoundingClientRect();
+      const dates = item.querySelector('small')?.getBoundingClientRect();
+      const lineHeight = Number.parseFloat(getComputedStyle(item.querySelector('small') as Element).lineHeight);
+      return {
+        sameLine: !!bullet && !!dates && Math.abs(bullet.bottom - dates.bottom) < 4,
+        singleLine: !!dates && dates.height < lineHeight * 1.5,
+      };
+    }),
+  );
+  expect(rows.length).toBeGreaterThan(0);
+  expect(rows.filter(row => !row.sameLine || !row.singleLine)).toEqual([]);
+});

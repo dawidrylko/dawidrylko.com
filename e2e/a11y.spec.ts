@@ -6,7 +6,7 @@ import AxeBuilder from '@axe-core/playwright';
 const ROUTES = [
   '/',
   '/blog/',
-  '/bio/',
+  '/about/',
   '/contact/',
   '/setup/',
   '/metadata/',

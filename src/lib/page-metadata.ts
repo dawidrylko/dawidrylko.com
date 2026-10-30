@@ -7,7 +7,7 @@ import { SITE_METADATA } from '../data/site-metadata';
 // mainEntity, potentialAction…) are passed in via `extra`.
 const { personReference, website } = STRUCTURED_DATA;
 
-type PageSchemaType = 'WebPage' | 'CollectionPage' | 'ProfilePage';
+type PageSchemaType = 'WebPage' | 'CollectionPage' | 'ProfilePage' | 'ContactPage';
 
 interface PageSchemaInput {
   type?: PageSchemaType;

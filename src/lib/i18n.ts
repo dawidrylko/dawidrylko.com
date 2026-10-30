@@ -4,7 +4,7 @@ import { SITE_METADATA } from '../data/site-metadata';
  * Single source of truth for the site's PL/EN language strategy.
  *
  * The site is bilingual at the *site* level, monolingual per URL: an English
- * "shell" (home, /bio/, /contact/, /setup/, /metadata/, /files/, 404) wraps a
+ * "shell" (home, /about/, /contact/, /setup/, /metadata/, /files/, 404) wraps a
  * Polish content zone (the blog at /blog/, individual posts, and /tags/). Each
  * page therefore declares exactly one language — `<html lang>` (set by the
  * layout from each page's `lang` prop), `og:locale`, JSON-LD `inLanguage` and

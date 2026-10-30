@@ -107,7 +107,7 @@ async function checkCodeDarkTheme(css) {
 }
 
 async function checkListMarkers(css) {
-  // Content lists (blog post bodies plus the bio/contact sections) re-add the
+  // Content lists (blog post bodies plus the about/contact sections) re-add the
   // gutter the global ul/ol reset strips and keep markers outside, so the
   // wrapper's overflow-x: hidden does not clip them onto their own line / off
   // the left edge.
