@@ -11,6 +11,7 @@ describe('isIsoDateTime', () => {
     expect(isIsoDateTime('2026-10-30')).toBe(false);
     expect(isIsoDateTime('2026-10-30T12:34:00')).toBe(false);
     expect(isIsoDateTime('2026-13-45T00:00:00Z')).toBe(false);
+    expect(isIsoDateTime('2026-02-30T00:00:00Z')).toBe(false);
     expect(isIsoDateTime(undefined)).toBe(false);
   });
 });
