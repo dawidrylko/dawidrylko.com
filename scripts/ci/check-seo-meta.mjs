@@ -22,6 +22,8 @@
  *   - every page-level entity (WebPage/Article/BlogPosting) keeps its url/@id
  *     aligned with the page canonical, so no ancestor (breadcrumb parent) or
  *     sibling (listed post) URL leaks in as the page's own identity
+ *   - every JSON-LD dateCreated/dateModified/datePublished is a full ISO 8601
+ *     datetime with a timezone (Search Console rejects a bare date)
  *
  * Redirect stubs (meta-refresh pages such as /resume/) are skipped. Zero
  * dependencies; runs against the built output, it does NOT rebuild. Exits
@@ -38,6 +40,7 @@ import {
   tagArchiveViolation,
   tagHubViolation,
 } from './robots-directives.mjs';
+import { jsonLdDateViolations } from './jsonld-dates.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DIST_DIR = process.argv[2] ? resolve(process.cwd(), process.argv[2]) : resolve(__dirname, '../../dist');
@@ -239,6 +242,12 @@ function checkPage(page, html) {
       if (!Array.isArray(node.sameAs) || node.sameAs.length === 0) {
         fail(`${page}: canonical Person node is missing a non-empty sameAs`);
       }
+    }
+  }
+
+  for (const node of allJsonLdNodes(html)) {
+    for (const violation of jsonLdDateViolations(node)) {
+      fail(`${page}: JSON-LD ${nodeTypes(node).join(',')} ${violation}`);
     }
   }
 

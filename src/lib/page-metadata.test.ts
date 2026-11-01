@@ -33,6 +33,18 @@ describe('createPageSchema', () => {
     expect(schema['@type']).toBe('ProfilePage');
   });
 
+  it('serialises dateModified as a full ISO 8601 datetime and omits it when absent', () => {
+    const schema = createPageSchema({
+      pathname,
+      type: 'ProfilePage',
+      title: 'About',
+      description: 'd',
+      dateModified: new Date('2026-10-30'),
+    }) as Record<string, unknown>;
+    expect(schema.dateModified).toBe('2026-10-30T00:00:00.000Z');
+    expect('dateModified' in createPageSchema({ pathname, title: 'T', description: 'd' })).toBe(false);
+  });
+
   it('supports the CollectionPage type and merges extra fields', () => {
     const schema = createPageSchema({
       type: 'CollectionPage',

@@ -6,7 +6,6 @@ import PostListItem from '../../components/PostListItem.astro';
 import { SITE_METADATA } from '../../data/site-metadata';
 import { createPageSchema } from '../../lib/page-metadata';
 import { getTags, postCountLabel, describeTagPage, isTagIndexable, type TagInfo } from '../../lib/tags';
-import { toISODate } from '../../lib/date';
 import { CONTENT_LANG } from '../../lib/i18n';
 
 export const getStaticPaths = (async () => {
@@ -29,6 +28,7 @@ const structuredData = createPageSchema({
   title,
   description,
   keywords: [tag.tag],
+  dateModified: tag.posts[0].data.date,
   extra: {
     mainEntity: {
       '@type': 'ItemList',
@@ -42,7 +42,6 @@ const structuredData = createPageSchema({
       })),
     },
     about: { '@type': 'Thing', name: tag.tag },
-    dateModified: toISODate(tag.posts[0].data.date),
   },
 });
 ---
