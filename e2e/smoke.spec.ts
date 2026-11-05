@@ -70,3 +70,18 @@ test('dark mode applies the dark background token', async ({ page }) => {
   // --color-background under prefers-color-scheme: dark is #1a1f27.
   expect(background).toBe('rgb(26, 31, 39)');
 });
+
+test('memoization demo hydrates without a React mismatch', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', error => errors.push(error.message));
+  await page.goto('/memoizacja-harry-potter-i-myslodsiewnia/');
+  const log = page.locator('.harry-potter-log-container');
+  await log.scrollIntoViewIfNeeded();
+  // A click that reaches the log proves React took over the server-rendered HTML.
+  await expect(async () => {
+    await page.getByRole('button', { name: "T. M. Riddle's Diary" }).click();
+    await expect(log).toContainText('Extracting memories', { timeout: 500 });
+  }).toPass();
+  await expect(page.locator('.harry-potter-log-time').first()).toHaveText(/^\[\d{2}:\d{2}:\d{2}\.\d{3}\]$/);
+  expect(errors).toEqual([]);
+});
