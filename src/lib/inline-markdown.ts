@@ -30,3 +30,13 @@ export function inlineMarkdown(input: string): string {
   const restore = new RegExp(`${MARKER}(\\d+)${MARKER}`, 'g');
   return text.replace(restore, (_, i: string) => codeSpans[Number(i)]);
 }
+
+// Removes the same inline Markdown markers for places that only take plain text,
+// such as meta descriptions. Underscores stay: they appear in names like _.random.
+export function stripInlineMarkdown(input: string): string {
+  return input
+    .replace(/`([^`]+)`/g, '$1')
+    .replace(/\[([^\]]+)\]\([^)\s]+\)/g, '$1')
+    .replace(/\*\*([^*]+)\*\*/g, '$1')
+    .replace(/(?<!\*)\*([^*]+)\*(?!\*)/g, '$1');
+}

@@ -1,7 +1,7 @@
 import rss from '@astrojs/rss';
-import { getCollection } from 'astro:content';
 import { getImage } from 'astro:assets';
 import { SITE_METADATA } from '../data/site-metadata';
+import { getBlogPosts } from '../lib/blog';
 import { excerpt } from '../lib/excerpt';
 
 // Reproduces the Gatsby gatsby-plugin-feed output (/rss.xml) 1:1: content:encoded,
@@ -10,8 +10,7 @@ const SITE_URL = SITE_METADATA.url;
 const AUTHOR = `${SITE_METADATA.author.email} (${SITE_METADATA.author.name})`;
 
 export async function GET() {
-  // All posts, newest first — parity with Gatsby's allMdx feed query.
-  const posts = (await getCollection('posts')).sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+  const posts = await getBlogPosts();
 
   const items = await Promise.all(
     posts.map(async post => {

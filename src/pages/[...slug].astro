@@ -12,6 +12,7 @@ import Share from '../components/Share.astro';
 import { SITE_METADATA } from '../data/site-metadata';
 import { STRUCTURED_DATA } from '../data/structured-data';
 import { formatPolishDate, toISODate } from '../lib/date';
+import { resolvePostDescription } from '../lib/seo';
 import { slugifyTag } from '../lib/tags';
 import { countWords, formatReadingTime, formatWordCount, readingTimeMinutes } from '../lib/reading-time';
 import { relatedPosts } from '../lib/related-posts';
@@ -56,7 +57,8 @@ const showToc = tocHeadings.length >= 3;
 // Nest h3s under their parent h2 so the list numbers hierarchically (5 → 5.1)
 // and strip the autolink "#" each heading's text carries.
 const tocTree = buildTocTree(tocHeadings);
-const { title, description, date, updatedDate, tags, featuredImg, featuredImgAlt, noIndex } = post.data;
+const { title, date, updatedDate, tags, featuredImg, featuredImgAlt, noIndex } = post.data;
+const description = resolvePostDescription(post.data.description, post.body ?? '');
 
 const dateFormatted = formatPolishDate(date);
 const { personReference } = STRUCTURED_DATA;
@@ -95,7 +97,7 @@ const structuredData = {
   '@id': `${new URL(Astro.url.pathname, SITE_METADATA.url).href}#article`,
   url: new URL(Astro.url.pathname, SITE_METADATA.url).href,
   headline: title,
-  description: description || '',
+  description,
   datePublished: publishedTime,
   dateModified: modifiedTime ?? publishedTime,
   author: personReference,
@@ -124,7 +126,7 @@ const structuredData = {
   breadcrumbTitle={title}
   breadcrumbParents={[{ name: 'Blog 🇵🇱', url: '/blog/' }]}
   title={title}
-  description={description || ''}
+  description={description}
   image={ogImage}
   imageAlt={featuredImgAlt}
   imageWidth={ogImageWidth}

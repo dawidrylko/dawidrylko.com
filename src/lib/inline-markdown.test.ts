@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { inlineMarkdown } from './inline-markdown';
+import { inlineMarkdown, stripInlineMarkdown } from './inline-markdown';
 
 describe('inlineMarkdown', () => {
   it('renders bold', () => {
@@ -28,5 +28,15 @@ describe('inlineMarkdown', () => {
 
   it('escapes HTML inside code spans', () => {
     expect(inlineMarkdown('`<div>`')).toBe('<code>&lt;div&gt;</code>');
+  });
+});
+
+describe('stripInlineMarkdown', () => {
+  it('keeps the text and drops the markers', () => {
+    expect(stripInlineMarkdown('`a`, **b**, *c*, [d](https://example.com)')).toBe('a, b, c, d');
+  });
+
+  it('leaves underscores in identifiers alone', () => {
+    expect(stripInlineMarkdown('`_.random` i snake_case')).toBe('_.random i snake_case');
   });
 });
