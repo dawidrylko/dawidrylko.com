@@ -71,7 +71,7 @@ export const STRUCTURED_DATA = {
       'Model Context Protocol',
     ],
     email: SITE_METADATA.author.email,
-    sameAs: SITE_METADATA.social.map(social => social.url),
+    sameAs: [...SITE_METADATA.social.map(social => social.url), SITE_METADATA.orcid.url],
   },
   // Site-wide WebSite node emitted on every page by the layout. SearchAction
   // describes the real, shareable `?q=` blog search URL; publisher links to the

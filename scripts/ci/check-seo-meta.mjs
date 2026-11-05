@@ -41,6 +41,7 @@ import {
   tagHubViolation,
 } from './robots-directives.mjs';
 import { jsonLdDateViolations } from './jsonld-dates.mjs';
+import { publicationsViolations } from './publications-contract.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DIST_DIR = process.argv[2] ? resolve(process.cwd(), process.argv[2]) : resolve(__dirname, '../../dist');
@@ -282,6 +283,13 @@ async function main() {
     const html = await readFile(page, 'utf8');
     const checked = checkPage(rel, html);
     if (!checked) continue;
+
+    // Reads the source records so a publication can never drop out of the JSON-LD,
+    // or appear in it, unnoticed.
+    if (rel === 'publications/index.html') {
+      const records = JSON.parse(await readFile(resolve(__dirname, '../../src/data/publications.json'), 'utf8'));
+      for (const violation of publicationsViolations(records, allJsonLdNodes(html))) fail(`${rel}: ${violation}`);
+    }
 
     indexablePages += 1;
     const blocks = ldJsonBlocks(checked);

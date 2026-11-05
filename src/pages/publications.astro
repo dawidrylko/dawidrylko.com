@@ -1,0 +1,124 @@
+---
+import { getCollection } from 'astro:content';
+import PageLayout from '../layouts/PageLayout.astro';
+import JsonLd from '../components/JsonLd.astro';
+import ExternalLink from '../components/ExternalLink.astro';
+import PublicationItem from '../components/PublicationItem.astro';
+import { SITE_METADATA } from '../data/site-metadata';
+import { STRUCTURED_DATA } from '../data/structured-data';
+import { createPageSchema } from '../lib/page-metadata';
+import { groupPublications, publicationJsonLd } from '../lib/publications';
+import type { PageMetadata } from '../types';
+
+const PAGE_METADATA: PageMetadata = {
+  title: 'Publications',
+  description: 'Research publications, academic contributions and scholarly work by Dawid Ryłko.',
+  keywords: [
+    'Dawid Ryłko publications',
+    'Dawid Ryłko ORCID',
+    'research publications',
+    'preprints',
+    'research software',
+  ],
+};
+
+const { author, orcid } = SITE_METADATA;
+const { personReference } = STRUCTURED_DATA;
+
+const entries = await getCollection('publications');
+const publications = entries.map(({ data }) => data);
+const { papers, software } = groupPublications(publications);
+const nodes = publications.map(publicationJsonLd).filter(node => node !== null);
+
+const RESEARCH_INTERESTS = [
+  {
+    area: 'Computing and security',
+    topics: ['AI agents and their verification', 'Cybersecurity', 'Software engineering', 'Automation'],
+  },
+  {
+    area: 'Combinatorics',
+    topics: ['Dimer models and perfect matchings', 'Exact counting on lattices'],
+  },
+];
+
+const structuredData = createPageSchema({
+  pathname: Astro.url.pathname,
+  type: 'CollectionPage',
+  title: PAGE_METADATA.title,
+  description: PAGE_METADATA.description,
+  keywords: PAGE_METADATA.keywords,
+  extra: {
+    about: personReference,
+    ...(nodes.length > 0 ? { hasPart: nodes.map(node => ({ '@id': node['@id'] })) } : {}),
+  },
+});
+---
+
+<PageLayout breadcrumbTitle={PAGE_METADATA.title} title={PAGE_METADATA.title} description={PAGE_METADATA.description}>
+  <JsonLd data={structuredData} />
+  {nodes.length > 0 && <JsonLd data={{ '@context': 'https://schema.org', '@graph': nodes }} />}
+  <header>
+    <h1>Publications</h1>
+  </header>
+  <section>
+    <p>{PAGE_METADATA.description}</p>
+    <p>
+      ORCID iD:{' '}
+      <ExternalLink href={orcid.url} follow>
+        {orcid.id}
+      </ExternalLink>
+    </p>
+  </section>
+  <section id="papers">
+    <h2>Papers</h2>
+    {papers.length > 0 ? (
+      papers.map(publication => <PublicationItem publication={publication} />)
+    ) : (
+      <p>This list will be updated as new work is published.</p>
+    )}
+  </section>
+  {software.length > 0 && (
+    <section id="research-software">
+      <h2>Research software</h2>
+      {software.map(publication => (
+        <PublicationItem publication={publication} />
+      ))}
+    </section>
+  )}
+  <section id="research-interests">
+    <h2>Research interests</h2>
+    {RESEARCH_INTERESTS.map(({ area, topics }) => (
+      <>
+        <h3>{area}</h3>
+        <ul>
+          {topics.map(topic => (
+            <li>{topic}</li>
+          ))}
+        </ul>
+      </>
+    ))}
+  </section>
+  <section id="author-profile">
+    <h2>Author profile</h2>
+    <p>
+      I am a solution architect working across software, security and AI.{' '}
+      <a href="/about/">Experience, education and the CV</a> are on the about page.
+    </p>
+  </section>
+  <section id="orcid-profile">
+    <h2>ORCID profile</h2>
+    <p>
+      My ORCID record lists my registered works:{' '}
+      <ExternalLink href={orcid.url} follow>
+        {orcid.url}
+      </ExternalLink>
+    </p>
+  </section>
+  <section id="scholarly-contact">
+    <h2>Scholarly contact</h2>
+    <p>
+      For questions about a paper, corrections or research collaboration, write to{' '}
+      <a href={`mailto:${author.email}`}>{author.email}</a>.
+    </p>
+  </section>
+</PageLayout>

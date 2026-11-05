@@ -3,7 +3,7 @@
  * Language-strategy contract for the Astro build (dist/).
  *
  * The site is bilingual at the site level, monolingual per URL: an English
- * "shell" (home, /about/, /contact/, /setup/, /metadata/, /files/) wraps a Polish
+ * "shell" (home, /about/, /contact/, /setup/, /metadata/, /files/, /publications/) wraps a Polish
  * content zone (/blog/, individual posts, /tags/), with the legal documents
  * published in both languages under their own URLs. This check locks that split
  * so the language signals can never silently drift apart:
@@ -47,6 +47,7 @@ const ENGLISH_ROUTES = new Set([
   '/setup/',
   '/metadata/',
   '/files/',
+  '/publications/',
   '/privacy-policy/',
   '/cookie-policy/',
 ]);
