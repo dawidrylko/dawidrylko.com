@@ -25,6 +25,7 @@ automation, cybersecurity, DevOps, IoT, smart home.
 - [Contact](https://dawidrylko.com/contact/): how to get in touch.
 - [Setup](https://dawidrylko.com/setup/): hardware and workstation overview.
 - [Files](https://dawidrylko.com/files/): slides from talks.
+- [Publications](https://dawidrylko.com/publications/): research papers and research software, linked to ORCID 0009-0008-6307-9015.
 
 ## Important projects
 

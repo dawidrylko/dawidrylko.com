@@ -140,6 +140,7 @@ const REQUIRED_HTML = [
   'contact/index.html',
   'setup/index.html',
   'files/index.html',
+  'publications/index.html',
   'metadata/index.html',
   'tags/index.html',
   '404.html',

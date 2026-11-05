@@ -21,6 +21,7 @@ export const SITE_METADATA = {
     email: 'hello@dawid.dev',
     jobTitle: 'Solution Architect | Cybersecurity',
   },
+  orcid: { id: '0009-0008-6307-9015', url: 'https://orcid.org/0009-0008-6307-9015' },
   social: [
     { name: 'Digital Persona', url: 'https://dawid.dev/', follow: true },
     { name: 'GitHub', url: 'https://github.com/dawidrylko', follow: false },

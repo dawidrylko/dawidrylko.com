@@ -1,0 +1,81 @@
+[
+  {
+    "id": "dimer-entropy-kings-graph",
+    "title": "The dimer entropy of the king's graph",
+    "authors": [
+      {
+        "name": "Dawid Ryłko",
+        "orcid": "0009-0008-6307-9015"
+      }
+    ],
+    "year": 2026,
+    "date": "2026-10-27",
+    "venue": "Zenodo",
+    "doi": "10.5281/zenodo.23686056",
+    "abstract": "We compute the entropy per site s of the perfect matchings of the king's graph, the square lattice with both diagonals; equivalently, of the domicule tilings counted in OEIS A239264. The graph is not planar, and its boards with both sides at least 3 admit no Pfaffian orientation, so Kasteleyn's method does not apply. Row transfer matrices on cylinders of circumference up to 25, split by a conserved parity of the dimers crossing a loop, converge exponentially; a Lüscher-type extrapolation with predictive backtests and an error budget gives s = 0.5655119110413253 ± 6·10<sup>−16</sup>, a non-rigorous estimate. Computer-assisted Collatz-Wielandt certificates, combined with a bound for the matchings across a cut that depends on the runs of crossing cells, prove 0.545343749727 ≤ s ≤ 0.582767477484. We also estimate the surface free energy of a free edge, σ = 0.242017935766251 ± 9·10<sup>−15</sup>, the corner free energy, which gives the asymptotics of A239273, and the decay length ξ = 1.235 ± 0.004 of the splitting between the two parity sectors. Two sign properties of the strip growth rates, convexity in the even width and a one-sided bound on the odd increments, hold numerically and would give 0.565511911035 ≤ s ≤ 0.565511911049.",
+    "keywords": ["king's graph", "domicule tilings", "perfect matchings", "dimer model", "entropy", "transfer matrix"],
+    "url": "https://zenodo.org/records/23686056",
+    "pdfUrl": "https://zenodo.org/records/23686056/files/king-entropy.pdf",
+    "license": {
+      "name": "CC BY 4.0",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "publicationType": "preprint",
+    "status": "preprint"
+  },
+  {
+    "id": "log-convexity-strip-dimer-counts",
+    "title": "Log-convexity of strip dimer counts on the king's graph",
+    "authors": [
+      {
+        "name": "Dawid Ryłko",
+        "orcid": "0009-0008-6307-9015"
+      }
+    ],
+    "year": 2026,
+    "date": "2026-10-27",
+    "venue": "Zenodo",
+    "doi": "10.5281/zenodo.23686087",
+    "abstract": "Let Z(k, m) be the number of perfect matchings of the k × m king board, the square grid with both diagonals, i.e. the number of its domicule tilings. In all 1453 cases we tested, on free strips of width m ≤ 26 and cylinders of circumference m ≤ 22, the sequence q ↦ Z(2q, m) is log-convex; the tests are exact or carry a rigorous rounding bound. The property is not structural. It fails on free strips of the triangular lattice, for every unequal pair of diagonal weights we tried (for nearly equal weights at m = 4 and 8 a Krein-signature argument for the left-right reflection predicts the onset exactly), and on wide strips for equal diagonal weights x = 3/2, 2, 3. Its limit, convexity of q ↦ log λ<sub>2q</sub> for the strip growth rates, would give a conditional lower bound on the entropy with ten correct digits. Along equal weights it is a competition between two modes of the transfer matrix whose rates cross, on our data, between x = 7/4 and x = 2. We collect the obstructions to the standard proof techniques and two exact reformulations.",
+    "keywords": [
+      "king's graph",
+      "domicule tilings",
+      "perfect matchings",
+      "log-convexity",
+      "transfer matrix",
+      "Krein signature"
+    ],
+    "url": "https://zenodo.org/records/23686087",
+    "pdfUrl": "https://zenodo.org/records/23686087/files/king-entropy-log-convexity.pdf",
+    "license": {
+      "name": "CC BY 4.0",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "publicationType": "preprint",
+    "status": "preprint"
+  },
+  {
+    "id": "dimer-entropy-kings-graph-code",
+    "title": "The dimer entropy of the king's graph: transfer-matrix scripts, data and outputs",
+    "authors": [
+      {
+        "name": "Dawid Ryłko",
+        "orcid": "0009-0008-6307-9015"
+      }
+    ],
+    "year": 2026,
+    "date": "2026-10-27",
+    "venue": "Zenodo",
+    "doi": "10.5281/zenodo.23686293",
+    "abstract": "Code, data and outputs behind the paper The dimer entropy of the king's graph and its companion note Log-convexity of strip dimer counts on the king's graph, in the directory research/king-entropy/. The king's graph is the square lattice with both diagonals; its perfect matchings are the domicule tilings counted in OEIS A239264 and A239273. The graph is not planar, and its boards with both sides at least 3 admit no Pfaffian orientation; the snapshot contains the script that checks this theorem. Row transfer matrices on cylinders of circumference up to 25, split by a conserved parity of the dimers crossing a loop, with a Lüscher-type extrapolation, predictive backtests and an error budget, give the non-rigorous estimate s = 0.5655119110413253 ± 6e-16 for the entropy per site. Computer-assisted Collatz-Wielandt certificates with a bound for the matchings across a cut that depends on the runs of crossing cells prove 0.545343749727 ≤ s ≤ 0.582767477484. The snapshot also gives the surface free energy of a free edge, σ = 0.242017935766251 ± 9e-15, the corner free energy and the asymptotics of A239273, and the log-convexity tests of the companion note. Every number of the paper is mapped to its output file and producing script in research/king-entropy/paper/NUMBERS.md. Scripts are MIT; the paper, notes, data and outputs are CC BY 4.0 (see the License section of the README). The rest of the repository holds the domino and domicule tiling solvers, released under their own tags.",
+    "keywords": ["king's graph", "dimer model", "perfect matchings", "transfer matrix", "OEIS A239264", "OEIS A239273"],
+    "url": "https://zenodo.org/records/23686293",
+    "codeUrl": "https://github.com/dawidrylko/lattice-dimers/tree/king-entropy-v1.0.0",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    },
+    "publicationType": "software",
+    "status": "published"
+  }
+]

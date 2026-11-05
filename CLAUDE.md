@@ -38,7 +38,7 @@ src/components/    # .astro components + React islands (.tsx)
 src/layouts/       # PageLayout.astro (head/Seo, header, breadcrumbs, bio, footer)
 src/pages/         # routes, including [...slug].astro, rss.xml.ts, sitemap.xml.ts, og/, tags/
 src/lib/           # framework-free logic, every module with its *.test.ts next to it
-src/data/          # site-metadata.ts, structured-data.ts, gtag.ts, capabilities.ts
+src/data/          # site-metadata.ts, structured-data.ts, gtag.ts, capabilities.ts, publications.json
 src/integrations/  # webmanifest.ts (manifest + icons via sharp on astro:build:done)
 src/scripts/       # web-vitals.ts, client side; NOT the tooling in /scripts
 src/demo/          # memoization-demo.tsx, an island imported by a single post
@@ -62,6 +62,16 @@ Needed when touching `[...slug].astro`, `content.config.ts`, `rss.xml.ts` or the
 - Frontmatter: `title`, `description`, `date`, `tags`, optionally `updatedDate` (maps to `dateModified` and `article:modified_time`), plus `featuredImg` and `featuredImgAlt`. The zod schema requires the alt text whenever the image is present. An optional `noIndex: true` keeps a page out of the search index: it renders as `noindex, follow` and drops the route from the sitemap, so both signals stay in agreement.
 - MDX rendering: Shiki for code (light and dark theme), KaTeX for math (`remark-math` + `rehype-katex`), Mermaid as a React island (`client:*`).
 
+## Publications
+
+`/publications/` renders `src/data/publications.json`. Adding a work means adding one entry, with no component change. The build validates each entry against `publicationSchema` in `src/lib/publications.ts`. A unit test checks the whole file for duplicate ids, because the collection loader only warns about them.
+
+Every fact comes from the registered record (ORCID, DataCite, the publisher). Never invent a DOI, status, affiliation or citation count. An `id` is a permanent public anchor (`/publications/#<id>`), so never rename one.
+
+A record with `status: under-review` gets no JSON-LD. Software and datasets are not `ScholarlyArticle`. `scripts/ci/check-seo-meta.mjs` holds the records and the JSON-LD together.
+
+Dublin Core or Highwire tags belong on a future per-work page, not on the list. Google Scholar expects each article and abstract in a separate file.
+
 ## Code conventions
 
 - **Components:** write static ones as `.astro`. Use React (`.tsx`) only for real interactivity, hydrated explicitly with a `client:*` directive such as `client:load` or `client:visible`. React islands use the `FC` type, PascalCase names and named hook imports.
@@ -77,7 +87,7 @@ Needed when touching `[...slug].astro`, `content.config.ts`, `rss.xml.ts` or the
 
 The Ahrefs audit checks metadata length and correctness. These rules cover the pages we control from this repo, and unit tests (`src/lib/seo.test.ts`) plus checks against the built `dist/` enforce them.
 
-- **Length limits** (`src/lib/seo.ts`): `<title>` up to **60** characters, `<meta name="description">` up to **160**. Stay inside them when changing the title or description of a static page (`src/pages/*`) or the fallback in `site-metadata.ts`. `scripts/ci/check-seo-lengths.mjs` is hard for our own pages (`/`, `/blog/*`, `/about/`, `/contact/`, `/setup/`, `/metadata/`, `/files/`) and only warns for `content/pl` posts, whose title and description come from the author's frontmatter.
+- **Length limits** (`src/lib/seo.ts`): `<title>` up to **60** characters, `<meta name="description">` up to **160**. Stay inside them when changing the title or description of a static page (`src/pages/*`) or the fallback in `site-metadata.ts`. `scripts/ci/check-seo-lengths.mjs` is hard for our own pages (`/`, `/blog/*`, `/about/`, `/contact/`, `/setup/`, `/metadata/`, `/files/`, `/publications/`) and only warns for `content/pl` posts, whose title and description come from the author's frontmatter.
 - **Homepage title** is built from `SITE_METADATA.title` plus `titleTagline`, short enough to stay under 60 with the brand. `titleTagline` currently repeats `author.jobTitle`, the positioning tagline behind Bio and the same string used as the LinkedIn headline (JSON-LD Person carries only "Solution Architect", with cybersecurity in knowsAbout). Keep them as two fields and never alias one to the other: only `titleTagline` is bound by the 60-character title budget, so a longer headline must not reach `<title>` by accident.
 - **Fallback description** (`SITE_METADATA.description`) must be at most 160 characters and must not carry the `68 97 119` easter egg. That signature lives on `/metadata/` as a "Signature" row, injected client side by an `is:inline` script in `metadata.astro`, so it never reaches the raw HTML a crawler sees. `scripts/ci/check-crawl-hygiene.mjs` enforces this.
 - **Canonical:** a canonical is dropped only when the URL is not a real target. `noIndex` pages (`noindex, nofollow`, for example 404) emit neither `<link rel="canonical">` nor `hreflang`, because both would point at a non-200 URL. `noIndexFollow` pages (`noindex, follow`, for example thin tag archives) are ordinary 200 pages and keep their self-canonical and `hreflang`. `scripts/ci/check-seo-meta.mjs` and `check-lang-attributes.mjs` enforce this, and the smoke test covers the 404 part.
@@ -86,7 +96,7 @@ The Ahrefs audit checks metadata length and correctness. These rules cover the p
 
 ## Do not change
 
-- **Keep the per-page `lang` split** defined in `src/lib/i18n.ts`. The English shell (`/`, `/about/`, `/contact/`, `/setup/`, `/metadata/`, `/files/`, 404) stays `en`; the blog, individual posts and `/tags/` opt into `CONTENT_LANG` (`pl`). Never hardcode one language in `PageLayout.astro` or `Seo.astro`. `scripts/ci/check-lang-attributes.mjs` locks the split together with `og:locale` and hreflang.
+- **Keep the per-page `lang` split** defined in `src/lib/i18n.ts`. The English shell (`/`, `/about/`, `/contact/`, `/setup/`, `/metadata/`, `/files/`, `/publications/`, 404) stays `en`; the blog, individual posts and `/tags/` opt into `CONTENT_LANG` (`pl`). Never hardcode one language in `PageLayout.astro` or `Seo.astro`. `scripts/ci/check-lang-attributes.mjs` locks the split together with `og:locale` and hreflang.
 - **Keep post URLs** (slug logic in `content.config.ts`) and the `/resume` and `/bio` redirects to `/about/` (`astro.config.mjs`).
 - **The main branch is `master`**, not `main`. A push to `master` deploys to GitHub Pages.
 

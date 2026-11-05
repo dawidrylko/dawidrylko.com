@@ -660,6 +660,75 @@ a:focus {
   }
 }
 
+/* One bibliographic record on /publications/. Metadata rows stack on phones and
+   align into two columns from the sm breakpoint. Long DOIs wrap instead of
+   pushing the page sideways. Automatic hyphenation stays off: a soft break in
+   "transfer-matrix" or a file name cannot be told from a real hyphen. */
+.publication h3,
+.publication-meta dd,
+.publication-abstract p {
+  hyphens: manual;
+}
+
+.publication {
+  margin-bottom: var(--spacing-8);
+}
+
+.publication h3 {
+  margin-top: var(--spacing-6);
+  margin-bottom: var(--spacing-2);
+}
+
+.publication-citation {
+  margin-bottom: var(--spacing-3);
+}
+
+.publication-status {
+  display: inline-block;
+  padding: 0 var(--spacing-2);
+  border: 1px solid var(--color-text-light);
+  border-radius: var(--spacing-2);
+  font-size: var(--fontSize-0);
+  white-space: nowrap;
+}
+
+.publication-meta {
+  margin: 0 0 var(--spacing-3);
+  overflow-wrap: anywhere;
+}
+
+.publication-meta > div {
+  margin-bottom: var(--spacing-2);
+}
+
+.publication-meta dt {
+  font-family: var(--font-heading);
+  font-size: var(--fontSize-1);
+  font-weight: var(--fontWeight-bold);
+}
+
+.publication-meta dd {
+  margin: 0;
+}
+
+.publication-abstract summary {
+  cursor: pointer;
+  font-family: var(--font-heading);
+  font-weight: var(--fontWeight-bold);
+}
+
+.publication-abstract p {
+  margin-top: var(--spacing-2);
+}
+
+@media (width >= 30rem) {
+  .publication-meta > div {
+    display: grid;
+    grid-template-columns: 7rem 1fr;
+    gap: var(--spacing-3);
+  }
+}
+
 /* The CTA section has no heading, so it misses the section-to-section gap that a
    heading's top margin normally provides. Re-add it so the call to action does
    not sit flush against the section above. */

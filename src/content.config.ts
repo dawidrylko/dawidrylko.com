@@ -1,6 +1,7 @@
 import { defineCollection } from 'astro:content';
 import { z } from 'astro:schema';
-import { glob } from 'astro/loaders';
+import { file, glob } from 'astro/loaders';
+import { publicationSchema } from './lib/publications';
 
 // Posts keep their Gatsby on-disk layout: content/pl/YYYY-MM-DD--slug/index.{md,mdx}.
 // A few directories also hold secondary pages (e.g. .../ng-help.md); Gatsby
@@ -42,4 +43,11 @@ const posts = defineCollection({
       }),
 });
 
-export const collections = { posts };
+// Bibliographic records, validated at build time. Adding a work means adding an
+// entry to the JSON file; no component changes.
+const publications = defineCollection({
+  loader: file('src/data/publications.json'),
+  schema: publicationSchema,
+});
+
+export const collections = { posts, publications };

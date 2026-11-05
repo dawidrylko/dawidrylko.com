@@ -41,6 +41,7 @@ const OWNED_SEGMENTS = new Set([
   'setup',
   'metadata',
   'files',
+  'publications',
   'blog',
   'tags',
   'privacy-policy',

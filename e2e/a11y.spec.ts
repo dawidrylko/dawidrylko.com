@@ -11,6 +11,7 @@ const ROUTES = [
   '/setup/',
   '/metadata/',
   '/files/',
+  '/publications/',
   '/tags/',
   '/privacy-policy/',
   '/cookie-policy/',

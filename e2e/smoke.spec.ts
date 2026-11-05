@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 // Core static routes that must always render with a title, a single visible H1
 // and a canonical link (the SEO chrome the build contract also guards).
-const ROUTES = ['/', '/blog/', '/about/', '/contact/', '/setup/', '/metadata/', '/files/'];
+const ROUTES = ['/', '/blog/', '/about/', '/contact/', '/setup/', '/metadata/', '/files/', '/publications/'];
 
 test('home lists the three latest blog posts', async ({ page }) => {
   await page.goto('/');
@@ -12,6 +12,17 @@ test('home lists the three latest blog posts', async ({ page }) => {
   const newest = await page.locator('#blog-posts .post-list-item h2 a').first().getAttribute('href');
   await page.goto('/');
   await expect(links.first()).toHaveAttribute('href', newest as string);
+});
+
+test('publication records keep tokens whole and render exponents as markup', async ({ page }) => {
+  await page.goto('/publications/');
+  for (const selector of ['.publication h3', '.publication-meta dd', '.publication-abstract p']) {
+    await expect(page.locator(selector).first()).toHaveCSS('hyphens', 'manual');
+  }
+  await expect(page.locator('#dimer-entropy-kings-graph .publication-abstract sup')).toHaveCount(2);
+  for (const value of await page.locator('.publication-meta dd').allTextContents()) {
+    expect(value.trim()).not.toBe('');
+  }
 });
 
 for (const route of ROUTES) {
