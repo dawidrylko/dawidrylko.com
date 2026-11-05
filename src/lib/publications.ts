@@ -34,14 +34,7 @@ const isCalendarDate = (value: string) => {
 const UNICODE_SCRIPTS = /[\u00B2\u00B3\u00B9\u2070-\u209F]/;
 
 // An id becomes a page anchor, so it must not collide with a section of the page.
-const RESERVED_IDS = new Set([
-  'papers',
-  'research-software',
-  'research-interests',
-  'author-profile',
-  'orcid-profile',
-  'scholarly-contact',
-]);
+const RESERVED_IDS = new Set(['papers', 'research-software', 'research-interests']);
 
 export const publicationSchema = z
   .object({
