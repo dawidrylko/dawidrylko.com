@@ -66,6 +66,8 @@ Needed when touching `[...slug].astro`, `content.config.ts`, `rss.xml.ts` or the
 
 `/publications/` renders `src/data/publications.json`. Adding a work means adding one entry, with no component change. The build validates each entry against `publicationSchema` in `src/lib/publications.ts`. A unit test checks the whole file for duplicate ids, because the collection loader only warns about them.
 
+`pdfUrl` and `archiveUrl` must be URLs the host serves as an attachment (Zenodo `/files/`), because browsers ignore the `download` attribute across origins. `pdfPreviewUrl` is the in-browser viewer (Zenodo `/preview/`).
+
 Every fact comes from the registered record (ORCID, DataCite, the publisher). Never invent a DOI, status, affiliation or citation count. An `id` is a permanent public anchor (`/publications/#<id>`), so never rename one.
 
 A record with `status: under-review` gets no JSON-LD. Software and datasets are not `ScholarlyArticle`. `scripts/ci/check-seo-meta.mjs` holds the records and the JSON-LD together.

@@ -451,7 +451,7 @@ table tr:last-child td {
   max-width: 60ch;
 }
 
-/* Text-heavy cells (title, description, keywords) wrap instead of inheriting the
+/* Text-heavy cells (title with its details) wrap instead of inheriting the
    table-wide white-space: nowrap, avoiding a wide horizontal scroll. */
 .presentations-table .presentation-cell {
   white-space: normal;
@@ -459,12 +459,6 @@ table tr:last-child td {
 
 .presentation-title {
   font-weight: 600;
-}
-
-.presentation-keywords {
-  color: var(--color-text-light);
-  font-size: var(--fontSize-0);
-  font-style: italic;
 }
 
 /* Download actions cell on the files page: keep icons in a row. */
@@ -680,16 +674,16 @@ a:focus {
   font-size: var(--fontSize-0);
 }
 
-.publication-details {
+.record-details {
   margin-top: var(--spacing-2);
   font-size: var(--fontSize-0);
 }
 
-.publication-details summary {
+.record-details summary {
   cursor: pointer;
 }
 
-.publication-details p {
+.record-details p {
   margin: var(--spacing-2) 0 0;
 }
 
