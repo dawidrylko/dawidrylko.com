@@ -14,15 +14,25 @@ test('home lists the three latest blog posts', async ({ page }) => {
   await expect(links.first()).toHaveAttribute('href', newest as string);
 });
 
-test('publication records keep tokens whole and render exponents as markup', async ({ page }) => {
+test('publication tables keep tokens whole and render exponents as markup', async ({ page }) => {
   await page.goto('/publications/');
-  for (const selector of ['.publication h3', '.publication-meta dd', '.publication-abstract p']) {
-    await expect(page.locator(selector).first()).toHaveCSS('hyphens', 'manual');
-  }
-  await expect(page.locator('#dimer-entropy-kings-graph .publication-abstract sup')).toHaveCount(2);
-  for (const value of await page.locator('.publication-meta dd').allTextContents()) {
+  await expect(page.locator('.publication-cell').first()).toHaveCSS('hyphens', 'manual');
+  await expect(page.locator('#dimer-entropy-kings-graph .publication-details sup')).toHaveCount(2);
+  await expect(page.locator('main h2')).toHaveText(['Research interests', 'Papers', 'Research software']);
+  for (const value of await page.locator('.publications-table td').allTextContents()) {
     expect(value.trim()).not.toBe('');
   }
+  const graphs = await page.locator('script[type="application/ld+json"]').allTextContents();
+  const works = graphs
+    .flatMap(text => JSON.parse(text)['@graph'] ?? [])
+    .filter(
+      (node: { '@id': string }) => node['@id'].includes('/publications/#') && !node['@id'].endsWith('#breadcrumb'),
+    );
+  expect(works.length).toBeGreaterThan(0);
+  for (const { '@id': id } of works) {
+    await expect(page.locator(`tr#${id.split('#')[1]}`)).toHaveCount(1);
+  }
+  await expect(page.getByRole('link', { name: '0009-0008-6307-9015' })).toHaveCount(1);
 });
 
 for (const route of ROUTES) {
