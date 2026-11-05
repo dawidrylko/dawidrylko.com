@@ -74,7 +74,9 @@ export const publicationSchema = z
     keywords: z.array(z.string().trim().min(1)).min(1).optional(),
     url: httpsUrl.optional(),
     pdfUrl: httpsUrl.optional(),
+    pdfPreviewUrl: httpsUrl.optional(),
     codeUrl: httpsUrl.optional(),
+    archiveUrl: httpsUrl.optional(),
     license: z
       .object({ name: z.string().trim().min(1), url: httpsUrl })
       .strict()
@@ -139,6 +141,37 @@ export function abstractHtml(abstract: string): string {
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/&lt;(\/?)(sub|sup)&gt;/g, '<$1$2>');
+}
+
+export interface PublicationLink {
+  action: 'open' | 'download';
+  icon: string;
+  href: string;
+  label: string;
+}
+
+// The same two icons as the files page: one opens in a new tab, one downloads.
+// `pdfUrl` must be a URL the host serves as an attachment; `pdfPreviewUrl` shows
+// the document in the browser.
+export function publicationLinks({
+  title,
+  pdfUrl,
+  pdfPreviewUrl,
+  codeUrl,
+  archiveUrl,
+}: Publication): PublicationLink[] {
+  return [
+    ...(pdfPreviewUrl
+      ? [{ action: 'open' as const, icon: '↗️', href: pdfPreviewUrl, label: `Open ${title} PDF in new tab` }]
+      : []),
+    ...(pdfUrl ? [{ action: 'download' as const, icon: '📄', href: pdfUrl, label: `Download ${title} as PDF` }] : []),
+    ...(codeUrl
+      ? [{ action: 'open' as const, icon: '↗️', href: codeUrl, label: `Open source code of ${title} in new tab` }]
+      : []),
+    ...(archiveUrl
+      ? [{ action: 'download' as const, icon: '📦', href: archiveUrl, label: `Download ${title} as ZIP` }]
+      : []),
+  ];
 }
 
 const SCHEMA_TYPES: Partial<Record<Publication['publicationType'], string>> = {

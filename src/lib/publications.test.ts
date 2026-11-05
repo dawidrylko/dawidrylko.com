@@ -4,6 +4,7 @@ import {
   abstractHtml,
   abstractText,
   groupPublications,
+  publicationLinks,
   publicationJsonLd,
   publicationSchema,
   publicationsSchema,
@@ -92,6 +93,33 @@ describe('ordering and grouping', () => {
     const { papers, software } = groupPublications(list);
     expect(papers.map(({ id }) => id)).toEqual(['a-paper']);
     expect(software.map(({ id }) => id)).toEqual(['code', 'set']);
+  });
+});
+
+describe('publicationLinks', () => {
+  const hrefs = { pdfUrl: 'https://x.test/a.pdf', pdfPreviewUrl: 'https://x.test/preview/a.pdf' };
+
+  it('gives a paper one link that opens and one that downloads', () => {
+    expect(publicationLinks({ ...base, ...hrefs }).map(({ action, href }) => [action, href])).toEqual([
+      ['open', hrefs.pdfPreviewUrl],
+      ['download', hrefs.pdfUrl],
+    ]);
+  });
+
+  it('gives software its repository and archive', () => {
+    const links = publicationLinks({ ...base, codeUrl: 'https://x.test/r', archiveUrl: 'https://x.test/a.zip' });
+    expect(links.map(({ action, icon }) => [action, icon])).toEqual([
+      ['open', '↗️'],
+      ['download', '📦'],
+    ]);
+  });
+
+  it('names the work in every label, because an icon alone says nothing', () => {
+    for (const { label } of publicationLinks({ ...base, ...hrefs })) expect(label).toContain(base.title);
+  });
+
+  it('returns nothing for a record with no files', () => {
+    expect(publicationLinks(base)).toEqual([]);
   });
 });
 
