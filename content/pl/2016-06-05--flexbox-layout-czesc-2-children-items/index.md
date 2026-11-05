@@ -77,4 +77,4 @@ Podstawową wielkość elementu wewnątrz **flexible container** uzyskujemy dzi�
 
 `flex` jest skrótem dla `flex-grow`, `flex-shrink` oraz `flex-basis`. Wg rekomendacji **W3C** zaleca się używanie właśnie tej właściwości, zamiast deklarowania wszystkich powyższych. Ponadto, przy niezadeklarowaniu wszystkich właściwości, skrót `flex` uzupełnia je automatycznie (kolejno `0 1 auto`).
 
-Kolejny wpis z tej serii poświęcony będzie wyrównaniu kontenera i elementów znajdujących się wewnątrz niego.
+[Kolejny wpis z tej serii](/flexbox-layout-czesc-3-alignment/) poświęcony jest wyrównaniu kontenera i elementów znajdujących się wewnątrz niego.
