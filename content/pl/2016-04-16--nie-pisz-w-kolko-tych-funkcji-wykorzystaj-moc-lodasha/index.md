@@ -60,7 +60,7 @@ var names = ['Maria', 'Antoni', 'Lucyna', 'Ryszard', 'Ewa', 'Leszek'];
 
 // Simple random function
 function getRandomName(names) {
-  return names[Math.floor(Math.random() * (names.length - 1))];
+  return names[Math.floor(Math.random() * names.length)];
 }
 
 var pureJS = getRandomName(names);
@@ -87,7 +87,7 @@ for (var i = 0; i < 10; i++) {
 }
 
 // Lodash
-_.times(5, function () {
+_.times(10, function () {
   // TODO
 });
 ```

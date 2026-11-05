@@ -32,4 +32,4 @@ Wybierając wit.ai dostajemy rozbudowane środowisko do tworzenia własnych chat
 
 ## Co dalej?
 
-Ten wpis to wstępniak i zarazem początek miniserii poświęconej chatbotom i wit.ai. W kolejnym wpisie stworzymy prostego bota i spróbujemy go wytrenować. Póki co, polecam zerknąć na możliwości wit.ai [tutaj](https://labs.wit.ai/demo/).
+Ten wpis to wstępniak i zarazem początek miniserii poświęconej chatbotom i wit.ai. W kolejnym wpisie stworzymy prostego bota i spróbujemy go wytrenować. Póki co, polecam zerknąć na możliwości wit.ai [tutaj](https://wit.ai/).

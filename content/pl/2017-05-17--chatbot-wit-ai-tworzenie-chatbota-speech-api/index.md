@@ -95,12 +95,16 @@ microphone.onresult = (intent, entities) => {
     let fullName = entities.fullName.value;
     document.getElementById('result').innerHTML =
       fullName + '? Szukam na wikipedii...';
-    window.open('https://pl.wikipedia.org/wiki/' + fullName.replace(' ', '_'));
+    window.open('https://pl.wikipedia.org/wiki/' + fullName.replace(/ /g, '_'));
   }
 };
 ```
 
-W metodzie connect przekazujemy token, który możemy wygenerować w ustawieniach aplikacji.
+W metodzie `connect` przekazujemy token, który możemy wygenerować w ustawieniach aplikacji:
+
+```javascript
+microphone.connect('TOKEN');
+```
 
 ![Speech API token](./Zrzut-ekranu-2017-05-17-o-22.28.47.png)
 

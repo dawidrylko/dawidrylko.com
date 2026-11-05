@@ -245,7 +245,7 @@ Ten krok jest kluczowy - bez nadania uprawnień wykonywania skrypt nie będzie m
 W pliku `cd.yml` GitHub Actions można dodać krok uruchamiający `bing.sh` po wdrożeniu, pod warunkiem, że w komunikacie commita nie ma `[skip notify]`.
 
 Przykładowa konfiguracja kroku dostępna jest w repozytorium:  
-[.github/workflows/cd.yml](https://github.com/dawidrylko/dawidrylko.com/blob/master/.github/workflows/cd.yml#L80-L97)
+[.github/workflows/cd.yml](https://github.com/dawidrylko/dawidrylko.com/blob/master/.github/workflows/cd.yml)
 
 ```yaml
 notify:
@@ -290,12 +290,12 @@ Po ukończeniu konfiguracji, przy każdym kolejnym wdrożeniu GitHub Actions uru
 
 Automatyzacja przesyłania adresów URL do Bing URL Submission API za pomocą GitHub Actions pozwala oszczędzić czas i szybciej uzyskać widoczność nowych treści w wynikach wyszukiwania. Wystarczy skonfigurować klucz API, dodać skrypt i kroki w GitHub Actions. Cały proces będzie działać automatycznie po każdym wdrożeniu.
 
-Moja strona jest oparta na Gatsby, a kod hostowany na GitHub Pages. Ustawienia mogą się różnić w zależności od używanych technologii.
+W chwili pisania artykułu moja strona była oparta na Gatsby i hostowana na GitHub Pages. Ustawienia mogą się różnić w zależności od używanych technologii.
 
 Aktualne informacje oraz pełną konfigurację znajdziesz w repozytorium [dawidrylko/dawidrylko.com](https://github.com/dawidrylko/dawidrylko.com).
 
 ## Źródła
 
-- [Interfejs URL i interfejs API przesyłania zawartości narzędzi dla webmasterów Microsoft Bing | Microsoft Bing](https://www.bing.com/webmasters/url-submission-api)
+- [Interfejs URL i interfejs API przesyłania zawartości narzędzi dla webmasterów Microsoft Bing | Microsoft Bing](https://www.bing.com/webmasters/help/URL-Submission-62f2860b)
 - [IWebmasterApi.SubmitUrlBatch(String, List\<String\>) Method (Microsoft.Bing.Webmaster.Api.Interfaces) | Microsoft Learn](https://learn.microsoft.com/en-us/dotnet/api/microsoft.bing.webmaster.api.interfaces.iwebmasterapi.submiturlbatch)
 - [Live Update Microsoft Bing through the Submission API in GitHub Actions | jpatrickfulton.dev](https://www.jpatrickfulton.dev/blog/2023-07-14-bing-and-submissionapi/)

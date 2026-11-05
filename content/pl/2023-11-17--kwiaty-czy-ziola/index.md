@@ -1,7 +1,7 @@
 ---
 title: Kwiaty czy zioła?
 date: 2023-11-17T00:00:00.000Z
-description: Rozwiązanie problemu programowania liniowego z maksymalizacją liniowej funkcji celu w kontekście uprawy kwiatów i ziół. Przedstawiiono kroki pozwalające na rozwiązanie zadania, wykorzystując matematyczną optymalizację. Problem został rozwiązany przy użyciu narzędzia CLP z pakietu OR-Tools od Google.
+description: Rozwiązanie problemu programowania liniowego z maksymalizacją liniowej funkcji celu w kontekście uprawy kwiatów i ziół. Przedstawiono kroki pozwalające na rozwiązanie zadania, wykorzystując matematyczną optymalizację. Problem został rozwiązany przy użyciu narzędzia CLP z pakietu OR-Tools od Google.
 featuredImg: ./kwiaty-czy-ziola.jpg
 featuredImgAlt: Fotografia przedstawiająca zioła w misce, która stoi na stole obsypanym kwiatami różnych roślin. Photo by Nia Ramirez on Unsplash.
 tags: ['math', 'python', 'datascience']
@@ -11,7 +11,7 @@ Problem programowania liniowego z maksymalizacją liniowej funkcji celu jest mat
 
 ## Problem
 
-Rolnik dysponuje obszarem o powierzchni 100 hektarów, na którym planuje uprawiać kwiaty i zioła wykorzystywane do produkcji kosmetyków. W sezonie każdy hektar ziół wymaga 4 godzin pracy i 60 zł kapitału, natomiast każdy hektar kwiatów wymaga 16 godzin pracy i 120 zł kapitału. W ciągu sezonu rolnik chce przepracować maksymalnie 800 godzin oraz dysponuje kapitałem w wysokości 74000 zł. Zysk z hektara ziół wynosi 240 zł, a z kwiatów 300 zł. Jakie ilości hektarów ziół i kwiatów powinien uprawiać, aby maksymalizować zysk?
+Rolnik dysponuje obszarem o powierzchni 100 hektarów, na którym planuje uprawiać kwiaty i zioła wykorzystywane do produkcji kosmetyków. W sezonie każdy hektar ziół wymaga 4 godzin pracy i 60 zł kapitału, natomiast każdy hektar kwiatów wymaga 16 godzin pracy i 120 zł kapitału. W ciągu sezonu rolnik chce przepracować maksymalnie 800 godzin oraz dysponuje kapitałem w wysokości 74000 zł. Zysk z hektara ziół wynosi 240 zł, a z kwiatów 300 zł. Ile hektarów ziół i kwiatów powinien uprawiać, aby maksymalizować zysk?
 
 ## Rozwiązanie
 
@@ -19,9 +19,9 @@ W celu rozwiązania zadania, można sformułować problem jako zadanie optymaliz
 
 Wpierw wypiszmy **założenia** (zmienne), które będziemy rozpatrywać:
 
-$x$ - ilość hektarów, na których uprawiane są zioła
+$x$ - liczba hektarów, na których uprawiane są zioła
 
-$y$ - ilość hektarów, na których uprawiane są kwiaty
+$y$ - liczba hektarów, na których uprawiane są kwiaty
 
 Teraz można przejść do opisu problemu.
 
@@ -33,17 +33,21 @@ $$
 
 **Dodajemy ograniczenia**:
 
-$4x + 16y \leq 800$ - ograniczenie ilości godzin pracy
+$x + y \leq 100$ - ograniczenie powierzchni
+
+$4x + 16y \leq 800$ - ograniczenie liczby godzin pracy
 
 $60x + 120y \leq 74000$ - ograniczenie kapitału
 
 **Ograniczenia dodatkowe**:
 
-$x \geq 0$ - ilość hektarów, na których uprawiane są zioła nie może być ujemna
+$x \geq 0$ - liczba hektarów, na których uprawiane są zioła, nie może być ujemna
 
-$y \geq 0$ - ilość hektarów, na których uprawiane są kwiaty nie może być ujemna
+$y \geq 0$ - liczba hektarów, na których uprawiane są kwiaty, nie może być ujemna
 
 ### Rozwiązanie matematyczne
+
+$x + y \leq 100$
 
 $4x + 16y \leq 800$
 
@@ -53,13 +57,13 @@ $x \geq 0$
 
 $y \geq 0$
 
-Rozwiązaniem jest układ nierówności. Rozwiązując ten układ nierówności, możemy znaleźć optymalne wartości $x$ i $y$.
+Układ nierówności wyznacza rozwiązania dopuszczalne. Optymalne wartości $x$ i $y$ to ten jego punkt, w którym funkcja $Z(x, y)$ osiąga maksimum.
 
 ### Rozwiązanie programistyczne
 
 Czas na konkrety. Jakie wartości kryją się pod $x$ i $y$?
 
-Do rozwiązania powyższego problemu możemy użyć darmowego roziązania **CLP**, z pakietu **OR-Tools** od **Google**.
+Do rozwiązania powyższego problemu możemy użyć darmowego rozwiązania **CLP**, z pakietu **OR-Tools** od **Google**.
 
 > Route. Schedule. Plan. Assign. Pack. Solve.
 

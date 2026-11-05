@@ -60,7 +60,7 @@ Do uruchomienia naszej aplikacji na Heroku wykorzystamy niezawodnego [Express.js
 npm install express --save
 ```
 
-Po pomyślnej instalacji, tworzymy prosty skrypt, który wypuści naszą aplikację na domyślny port Heroku, czyli 8080:
+Po pomyślnej instalacji, tworzymy prosty skrypt, który wypuści naszą aplikację na port przydzielony przez Heroku w zmiennej `PORT`, a lokalnie na 8080:
 
 ```javascript
 const express = require('express');

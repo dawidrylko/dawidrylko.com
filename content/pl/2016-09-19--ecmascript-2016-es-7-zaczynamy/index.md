@@ -49,7 +49,6 @@ Array.prototype.includes(value);
 NaN ** 2; // NaN
 
 2 ** (3 ** 2); // 512
-2 ** (3 ** 2); // 512
 (2 ** 3) ** 2; // 64
 ```
 

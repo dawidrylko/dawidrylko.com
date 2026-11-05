@@ -61,7 +61,7 @@ func getProducts(responseWriter http.ResponseWriter, request *http.Request) {
   products := Products{
     Product{ID: 1, Name: "ogórek zielony"},
     Product{ID: 2, Name: "papryka czerwona"},
-    Product{ID: 3, Name: "Sałata lodowa"},
+    Product{ID: 3, Name: "sałata lodowa"},
   }
 
   json.NewEncoder(responseWriter).Encode(products)
@@ -103,8 +103,8 @@ import (
 func main() {
   fmt.Println("shopping-manager api start")
 
-  serverRun()
   fmt.Println("server start")
+  serverRun()
 }
 
 type Product struct {
@@ -117,7 +117,7 @@ func getProducts(responseWriter http.ResponseWriter, request *http.Request) {
   products := Products{
     Product{ID: 1, Name: "ogórek zielony"},
     Product{ID: 2, Name: "papryka czerwona"},
-    Product{ID: 3, Name: "Sałata lodowa"},
+    Product{ID: 3, Name: "sałata lodowa"},
   }
 
   json.NewEncoder(responseWriter).Encode(products)

@@ -35,7 +35,7 @@ Z pomocą pakietu `net/http` tworzymy metodę `create`, która jako parametry ot
 
 Dzięki pakietowi `encoding/json` mamy możliwość stworzenia dekodera i zdekodowania naszego produktu, poprzez przekazanie adresu naszego produktu. Z kolei biblioteka `gopkg.in/mgo.v2/bson` pozwala nam stworzyć unikalny klucz ID, który dołączamy do produktu.
 
-Sesję z bazą danych otwieramy poprzez wcześniej przygotowaną metodę `GetSession` z lokalnego pakietu `service`. Wybieramy bazę i kolekcję i dodajemy produkt.
+Sesję z bazą danych otwieramy poprzez wcześniej przygotowaną metodę `GetSession` z lokalnego pakietu `server`. Wybieramy bazę i kolekcję i dodajemy produkt.
 
 Pamiętajmy o nagłówkach:
 

@@ -1,7 +1,7 @@
 ---
 title: Największy skarb na płaszczyźnie euklidesowej
 date: 2023-11-27T19:26:44.000Z
-description: Sprawdź, jak za pomocą jednego programu w języku JavaScript rozwiązać problem znajdowania najcenniejszych punktów w dwuwymiarowej przestrzeni euklidesowej. Odkryj, jak działa algorytm, który znajduje k-elementowy podzbiór punktów o maksymalnej sumie odległości między nimi.
+description: Sprawdź, jak za pomocą jednego programu w języku JavaScript rozwiązać problem znajdowania najcenniejszych punktów w dwuwymiarowej przestrzeni euklidesowej. Odkryj, jak działa algorytm zachłanny, który szuka k-elementowego podzbioru punktów o możliwie dużej sumie odległości między nimi.
 featuredImg: ./pin-on-the-map.jpg
 featuredImgAlt: Mapa kartograficzna z przypinanymi do niej czerwonymi pinezkami. Photo by GeoJango Maps on Unsplash.
 tags: ['math', 'javascript', 'datascience']
@@ -94,14 +94,14 @@ for (let i = 0; i < n; i++) {
 
 #### Wybieranie punktów do $Q$
 
-Algorytm iteracyjnie dodaje do zbioru $Q$ punkt, który maksymalizuje wzrost sumy odległości w $Q$.
+Algorytm działa zachłannie: w każdym kroku dodaje do zbioru $Q$ punkt o największej wartości `increase`. Pierwszym wybranym punktem jest zawsze punkt o indeksie 0, bo dla pustego $Q$ każdy kandydat ma `increase` równe 0.
 
 ```javascript
 while (Q.length < k) {
   let maxIncrease = -1;
   let bestPoint = null;
 
-  // Wzrost sumy odległości...
+  // Ocena kandydatów...
 
   if (bestPoint !== null) {
     Q.push(bestPoint);
@@ -113,12 +113,12 @@ while (Q.length < k) {
 
 W powyższym kodzie:
 
-- `maxIncrease` - zmienna przechowująca dotychczasowy maksymalny wzrost sumy odległości.
+- `maxIncrease` - zmienna przechowująca dotychczas największą wartość `increase`.
 - `bestPoint` - indeks punktu, który jest najlepszym kandydatem do dodania do $Q$.
 
-##### Wzrost sumy odległości
+##### Ocena kandydatów
 
-Dla każdego punktu $i$ spoza $Q$, obliczamy wzrost sumy odległości, jaki byłby uzyskany po dodaniu punktu $i$ do $Q$.
+Dla każdego punktu $i$ spoza $Q$ obliczamy wartość `increase`. Nie jest to dokładny przyrost sumy odległości w $Q$, czyli suma odległości punktu $i$ od punktów z $Q$, lecz heurystyka oparta na sumie odległości tego punktu od całego zbioru $P$.
 
 $$
 \text{increase} = \sum_{j=0}^{k-1} \left( \text{distances}[i] - d(\text{points}[i], \text{points}[Q[j]]) \right)
@@ -148,7 +148,7 @@ for (let i = 0; i < n; i++) {
 Po wybraniu $k$ punktów, obliczamy sumę odległości między każdą parą punktów w $Q$.
 
 $$
-\text{distanceSum} = \sum*{i=0}^{k-1} \sum*{j=i+1}^{k-1} d(\text{points}[Q[i]], \text{points}[Q[j]])
+\text{distanceSum} = \sum_{i=0}^{k-1} \sum_{j=i+1}^{k-1} d(\text{points}[Q[i]], \text{points}[Q[j]])
 $$
 
 ```javascript
@@ -291,6 +291,6 @@ Program wypisuje sumę odległości między punktami w wybranym podzbiorze oraz 
 0, 91, 9, 99
 ```
 
-Oznacza to, że punkty $Q$ o współrzędnych $(0, 0)$, $(9, 1)$, $(0, 9)$, i $(9, 9)$ tworzą podzbiór, dla którego suma odległości między punktami jest największa spośród wszystkich możliwych 4-elementowych podzbiorów. Wartość tej sumy wynosi $59.82$.
+Oznacza to, że algorytm wybrał punkty $Q$ o współrzędnych $(0, 0)$, $(9, 0)$, $(0, 9)$ i $(9, 8)$. Suma odległości między nimi wynosi $59.82$. Dla tych danych przegląd wszystkich 4-elementowych podzbiorów daje tę samą wartość, ale w ogólnym przypadku algorytm zachłanny nie gwarantuje optimum.
 
-Złożoność czasowa algorytmu wynosi $O(n^2 + k \cdot n)$, gdzie $n$ to liczba punktów w zbiorze $P$. Algorytm iteracyjnie dodaje punkty do zbioru, wybierając te, które maksymalizują sumę odległości.
+Złożoność czasowa algorytmu wynosi $O(n^2 + k^2 \cdot n)$, gdzie $n$ to liczba punktów w zbiorze $P$. Algorytm iteracyjnie dodaje punkty do zbioru, wybierając te o największej wartości `increase`.

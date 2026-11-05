@@ -51,7 +51,7 @@ Wynik:
 {"id":"58c19cc71c4e63572e45e3f4","name":"Szynka z 9 marca"}
 ```
 
-I jeszcze z basha dla komendy `db.products.find()`:
+I jeszcze z powłoki Mongo dla komendy `db.products.find()`:
 
 ```bash
 { "_id" : ObjectId("58c19cc71c4e63572e45e3f4"), "name" : "Szynka z 9 marca" }

@@ -96,7 +96,7 @@ Przy deklaracji zmiennych za pomocą słowa kluczowego `let`, hoisting zachowuje
 
 ```javascript
 a = 5;
-let a; // ReferenceError: a is not defined
+let a; // ReferenceError: Cannot access 'a' before initialization
 ```
 
 ### Strict mode
@@ -107,7 +107,7 @@ let a; // ReferenceError: a is not defined
 1. Pozwala wyeliminować błędy, które uniemożliwiają optymalizację JSa przez przeglądarki.
 1. Uniemożliwia stosowanie składni mogącej wystąpić w kolejnych odsłonach ECMAScript.
 
-Temat został pobieżnie wywołany, przy okazji hoistingu, nie bez przyczyny. **Strict mode** nie zezwala na skorzystanie ze zmiennej, dopóki nie zostanie zadeklarowana.
+Temat został pobieżnie wywołany, przy okazji hoistingu, nie bez przyczyny. **Strict mode** nie zezwala na przypisanie wartości do zmiennej, która nigdzie nie została zadeklarowana. Hoistingu nie wyłącza: `a = 5; var a;` działa także w trybie ścisłym.
 
 ## Źródła
 
