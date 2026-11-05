@@ -1,5 +1,5 @@
 import { SITE_METADATA } from '../data/site-metadata';
-import { excerpt } from './excerpt';
+import { metaExcerpt } from './excerpt';
 import { stripInlineMarkdown } from './inline-markdown';
 
 // Search engines truncate titles and descriptions in results; values past these
@@ -29,11 +29,11 @@ export function resolveMetaDescription(description?: string): string {
 
 /**
  * The plain-text description of a post for meta tags and JSON-LD. A post without
- * frontmatter gets an excerpt of its own body, as on the blog listing and in RSS,
+ * frontmatter gets an excerpt of its own body,
  * never the site-wide English description.
  */
 export function resolvePostDescription(description: string | undefined, body: string): string {
-  return description ? stripInlineMarkdown(description) : excerpt(body, DESCRIPTION_MAX_LENGTH - 1);
+  return description ? stripInlineMarkdown(description) : metaExcerpt(body, DESCRIPTION_MAX_LENGTH);
 }
 
 export const isWithinTitleLimit = (value: string): boolean => value.length <= TITLE_MAX_LENGTH;

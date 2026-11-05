@@ -32,11 +32,20 @@ export function inlineMarkdown(input: string): string {
 }
 
 // Removes the same inline Markdown markers for places that only take plain text,
-// such as meta descriptions. Underscores stay: they appear in names like _.random.
+// such as meta descriptions. Code spans are set aside first, so the operators and
+// identifiers inside them survive the emphasis rules.
 export function stripInlineMarkdown(input: string): string {
-  return input
-    .replace(/`([^`]+)`/g, '$1')
-    .replace(/\[([^\]]+)\]\([^)\s]+\)/g, '$1')
+  const codeSpans: string[] = [];
+  const text = input
+    .replace(/`([^`]+)`/g, (_, code: string) => {
+      codeSpans.push(code);
+      return `${MARKER}${codeSpans.length - 1}${MARKER}`;
+    })
+    .replace(/!\[([^\]]*)\]\([^)]*\)/g, '$1')
+    .replace(/\[([^\]]+)\]\((?:[^()\s]|\([^()\s]*\))+(?:\s+"[^"]*")?\)/g, '$1')
     .replace(/\*\*([^*]+)\*\*/g, '$1')
-    .replace(/(?<!\*)\*([^*]+)\*(?!\*)/g, '$1');
+    .replace(/(?<!\*)\*([^*]+)\*(?!\*)/g, '$1')
+    .replace(/(?<!\w)_([^_]+)_(?!\w)/g, '$1');
+
+  return text.replace(new RegExp(`${MARKER}(\\d+)${MARKER}`, 'g'), (_, i: string) => codeSpans[Number(i)]);
 }
