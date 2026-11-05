@@ -10,7 +10,7 @@ Rozpoznawanie głosu to temat trudny, nawet dla największych wyjadaczy. Z pomoc
 
 ## Trochę teorii
 
-Wit.ai Speech API powstało w lutym 2014 roku jako rozwinięcie projektu Wit.ai. Zasada działania jest prosta, przesyłamy na backend (w tym wypadku na zewnętrzny serwer Wit.ai) plik audio. Dźwięk jest przetwarzany i konwertowany. Dostajemy w zwrotce JSON z intencją oraz wartościami, które zostaną wychwycone.
+Wit.ai Speech API powstało w lutym 2014 roku jako rozwinięcie projektu Wit.ai. Zasada działania jest prosta: przesyłamy na backend (w tym wypadku na zewnętrzny serwer Wit.ai) plik audio. Dźwięk jest przetwarzany i konwertowany. Dostajemy w zwrotce JSON z intencją oraz wartościami, które zostaną wychwycone.
 
 ![speech2json](./speech2json.png)
 
@@ -65,7 +65,7 @@ microphone.onaudioend = () => {
 };
 ```
 
-Pamiętajmy, że w razie niepowodzenia, warto o tym poinformować użytkownika. Wykorzystujemy więc metodę `onerror`:
+Pamiętajmy, że w razie niepowodzenia warto o tym poinformować użytkownika. Wykorzystujemy więc metodę `onerror`:
 
 ```javascript
 microphone.onerror = errorMessage => {
@@ -94,7 +94,7 @@ microphone.onresult = (intent, entities) => {
   } else {
     let fullName = entities.fullName.value;
     document.getElementById('result').innerHTML =
-      fullName + '? Szukam na wikipedii...';
+      fullName + '? Szukam na Wikipedii...';
     window.open('https://pl.wikipedia.org/wiki/' + fullName.replace(' ', '_'));
   }
 };
@@ -106,7 +106,7 @@ W metodzie connect przekazujemy token, który możemy wygenerować w ustawieniac
 
 ## Podsumowanie
 
-Po implementacji i deployu na Heroku, możemy sprawdzić, jak się zachowuje aplikacja. Przykładowy screen z testu zamieszczam poniżej. Cały kod dostępny jest na [moim GitHubie](https://github.com/dawidrylko/spy-web), zachęcam też do przetestowania aplikacji samodzielnie.
+Po implementacji i deployu na Heroku możemy sprawdzić, jak się zachowuje aplikacja. Przykładowy screen z testu zamieszczam poniżej. Cały kod dostępny jest na [moim GitHubie](https://github.com/dawidrylko/spy-web), zachęcam też do przetestowania aplikacji samodzielnie.
 
 ![Spy chatbot - Speech API](./Zrzut-ekranu-2017-05-17-o-22.44.56.png)
 

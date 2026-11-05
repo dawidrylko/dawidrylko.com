@@ -13,7 +13,7 @@ Artykuł stanowi kontynuację serii. Pierwszy artykuł możesz przeczytać, klik
 
 ![Flex children - kontener nadrzędny z kontenerami w środku. Czerwony tekst 'Potomkowie', z którego wychodzą cztery czerwone strzałki skierowane na kontenery w środku.](./flex-children.png)
 
-**Flex items** to wszystkie obiekty wewnątrz kontenera z zadeklarowaną wartością `flex`. To właśnie operacje na potomkach oraz przypisanie im odpowiednich styli sprawiają, że cały układ zachowa się w możliwie najlepszy (co za tym idzie najbardziej optymalny) sposób.
+**Flex items** to wszystkie obiekty wewnątrz kontenera z zadeklarowaną wartością `flex`. To właśnie operacje na potomkach oraz przypisanie im odpowiednich stylów sprawiają, że cały układ zachowa się w możliwie najlepszy (co za tym idzie optymalny) sposób.
 
 ## Właściwości potomka (children items)
 

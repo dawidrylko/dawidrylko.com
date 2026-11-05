@@ -10,7 +10,7 @@ Nastał ten dzień. Konkurs [Daj się poznać 2017](https://devstyle.pl/konkurs-
 
 ## O konkursie
 
-W tegorocznej edycji konkursu _Daj się poznać_, wystartowało **981 uczestników**. Jednym ze śmiałków byłem także [ja](/daj-sie-poznac-2017-z-czym-to-sie-je/). Niespełna tysiąc programistów, przez 3 miesiące, mierzyło się z własnymi słabościami. Efekt - oszałamiający - prawie **8000 postów**!
+W tegorocznej edycji konkursu _Daj się poznać_ wystartowało **981 uczestników**. Jednym ze śmiałków byłem także [ja](/daj-sie-poznac-2017-z-czym-to-sie-je/). Niespełna tysiąc programistów, przez 3 miesiące, mierzyło się z własnymi słabościami. Efekt - oszałamiający - prawie **8000 postów**!
 
 > Prawie TYSIĄC programistów, prawie TYSIĄC blogów! Do polskiej dev-blogosfery wskoczyło **prawie 8000 postów**! _- Maciej Aniserowicz_
 
@@ -24,7 +24,7 @@ Podsumowanie konkursu zostało zaanonsowane na **17 czerwca**. Gala Finałowa od
 
 ## Ja w konkursie
 
-Głównym celem, który dodawał mi sił, podczas trwania konkursu, była... NAUKA **nowych technologii**. Tak, to właśnie dlatego przystąpiłem do konkursu. Tak, to właśnie dlatego, sporo razy budziłem się niewyspany. Tak, to właśnie dlatego byłem czasem zdenerwowany i ponury. Teraz, po tych niespełna trzech miesiącach, zdaję sobie sprawę z tego, że pisanie kodu i przelewanie swoich doświadczeń na bloga jest najzwyczajniej w świecie męczące. Zdobyłem jednak dzięki temu tak cenne doświadczenie, że śmiało mogę polecić start każdemu w kolejnej (daj Boże) edycji **Daj się poznać**.
+Głównym celem, który dodawał mi sił podczas trwania konkursu, była... NAUKA **nowych technologii**. Tak, to właśnie dlatego przystąpiłem do konkursu. Tak, to właśnie dlatego sporo razy budziłem się niewyspany. Tak, to właśnie dlatego byłem czasem zdenerwowany i ponury. Teraz, po tych niespełna trzech miesiącach, zdaję sobie sprawę z tego, że pisanie kodu i przelewanie swoich doświadczeń na bloga jest najzwyczajniej w świecie męczące. Zdobyłem jednak dzięki temu tak cenne doświadczenie, że śmiało mogę polecić start każdemu w kolejnej (daj Boże) edycji **Daj się poznać**.
 
 ### Angular, Go i Mongo
 

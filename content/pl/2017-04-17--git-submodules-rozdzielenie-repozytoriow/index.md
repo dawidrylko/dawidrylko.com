@@ -55,7 +55,7 @@ Jeżeli teraz spojrzymy na [główne repozytorium](https://github.com/dawidrylko
 
 ### Aktualizacja
 
-Repozytoria, które zawarte są w submodułach, wskazują na odpowiedniego commita. Aby zaaktualizować submodules, wykonujemy komendę:
+Repozytoria, które zawarte są w submodułach, wskazują na odpowiedniego commita. Aby zaktualizować submodules, wykonujemy komendę:
 
 ```bash
 git submodule update --remote --merge

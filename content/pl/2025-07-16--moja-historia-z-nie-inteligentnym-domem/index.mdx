@@ -33,17 +33,17 @@ Pierwsza karta SD padła po niespełna dwóch tygodniach. Mimo że podłączonyc
 
 Gdy przyszła druga karta, zainstalowałem ponownie HA na Hass.io. Zmniejszyłem częstotliwość odczytów i zapisów z czujników przy roślinach oraz z czujników temperatury i wilgotności. Czysta konfiguracja, powiadomienia o konieczności podlania roślin znowu działały. Miałem historię temperatury, wilgotności i nasłonecznienia. Byłem zadowolony. Przez niespełna miesiąc.
 
-Tym razem nie było tak spektakularnie. Karta przestała działać częściowo. Początkowo sądziłem, że to moja wysłużona malinka postanowiła przejść na drugą stronę. Jednak po kilku dniach coraz bardziej niestabilnego działania, to karta dopełniła żywota. Byłem znowu w punkcie wyjścia.
+Tym razem nie było tak spektakularnie. Karta przestała działać częściowo. Początkowo sądziłem, że to moja wysłużona malinka postanowiła przejść na drugą stronę. Jednak po kilku dniach coraz bardziej niestabilnego działania to karta dopełniła żywota. Byłem znowu w punkcie wyjścia.
 
 ## Homebridge
 
 Euforia opadła. Postanowiłem się doedukować. Zamówiłem polisingowy terminal (HP T620 Quad Core 1.5 GHz, 4 GB RAM, 16 GB SSD), który miał być wybawieniem i rozwiązać moje bolączki. Stety lub niestety, trafił do mnie wadliwy egzemplarz. Zwróciłem go, zanim zdążyłem zainstalować cokolwiek.
 
-W międzyczasie, czekając na wymianę terminala na sprawny, moim oczom ukazał się projekt [Homebridge](https://github.com/homebridge/homebridge). Wydał mi się bardzo ciekawy. Wziąłem kolejną kartę SD i zainstalowałem na niej Homebridge. Tym razem w Dockerze (nie wiem, co mnie podkusiło). Po szybkiej konfiguracji wszystko działało dobrze… znowu.
+W międzyczasie, czekając na wymianę terminala na sprawny, trafiłem na projekt [Homebridge](https://github.com/homebridge/homebridge). Wydał mi się bardzo ciekawy. Wziąłem kolejną kartę SD i zainstalowałem na niej Homebridge. Tym razem w Dockerze (nie wiem, co mnie podkusiło). Po szybkiej konfiguracji wszystko działało dobrze… znowu.
 
 ![Strona główna Homebridge](./5.Homebridge-strona-glowna.png)
 
-Wcześniej widziałem w dodatkach Home Assistanta charakterystyczną ikonkę Homebridge, ale nie drążyłem, do czego służy. Trafiłem na niego zupełnym przypadkiem. Idealnie się złożyło, ponieważ, o zgrozo, mój ekosystem oparty jest o Jabłko.
+Wcześniej widziałem w dodatkach Home Assistanta charakterystyczną ikonkę Homebridge, ale nie drążyłem, do czego służy. Trafiłem na niego zupełnym przypadkiem. Idealnie się złożyło, ponieważ, o zgrozo, mój ekosystem oparty jest na Jabłku.
 
 Szybko skonfigurowałem pozostałe elementy wyposażenia, kupione jeszcze w zamierzchłych czasach i spisane już na straty. Zrezygnowałem całkowicie z zapisywania historii. Miałem moje powiadomienia, ale dodatkowo, z poziomu aplikacji Dom (o której istnieniu do tej pory nie miałem fioletowego pojęcia), mogłem zmieniać temperaturę w lodówce LG, a także włączać i wyłączać oczyszczacz powietrza z Xiaomi.
 
@@ -51,7 +51,7 @@ To dało mi zupełnie inny obraz sytuacji. Nie potrzebowałem już Home Assistan
 
 Sklep miał problemy z wysyłką innego terminala w takiej samej konfiguracji, więc zrezygnowałem z zakupu. Spodziewałem się wprawdzie, że może powtórzyć się sytuacja z kartą SD, ale nic takiego się (o dziwo) nie wydarzyło.
 
-Nie ma róży bez kolców. Głównym problemem było wymuszone działanie w obrębie sieci lokalnej. Było to o tyle problematyczne, że często, będąc w domu, wyłączałem WiFi. Robiłem to ponieważ nie miałem jeszcze światłowodu, tylko internet radiowy. Po wyłączeniu traciłem dostęp do Homebridge, a co za tym idzie, do wszystkich urządzeń.
+Nie ma róży bez kolców. Głównym problemem było wymuszone działanie w obrębie sieci lokalnej. Było to o tyle problematyczne, że często, będąc w domu, wyłączałem WiFi. Robiłem to, ponieważ nie miałem jeszcze światłowodu, tylko internet radiowy. Po wyłączeniu traciłem dostęp do Homebridge, a co za tym idzie, do wszystkich urządzeń.
 
 Na ratunek przyszedł mi Apple HomePod Mini, który nie był tylko fajnie grającym głośniczkiem, ale także pełnoprawnym hubem. Rozwiązanie problemu niezbyt tanie, ale głośnik służy mi po dziś dzień, więc chyba się spłacił.
 
@@ -116,7 +116,7 @@ services:
 
 ## Raspberry Pi 5
 
-Wszystko działało. Bardzo długo działo. Po wcześniejszych perturbacjach z kartami SD nie spodziewałem się, że aż tak długo. Pewnego lipcowego dnia 2024 roku niespodziewana burza zakończyła żywot mojej malinki. Spisywała się świetnie, ale czas było zrobić krok naprzód. Kupiłem na Botlandzie następujący zestaw:
+Wszystko działało. Bardzo długo działało. Po wcześniejszych perturbacjach z kartami SD nie spodziewałem się, że aż tak długo. Pewnego lipcowego dnia 2024 roku niespodziewana burza zakończyła żywot mojej malinki. Spisywała się świetnie, ale czas było zrobić krok naprzód. Kupiłem na Botlandzie następujący zestaw:
 
 - Raspberry Pi 5 8GB
 - Raspberry Pi Active Cooler - aktywne chłodzenie (radiator + wentylator)
@@ -163,11 +163,11 @@ Z perspektywy czasu mogę śmiało powiedzieć: _było warto_. Choć po drodze n
 2. Zanim coś kupisz - sprawdź, czy naprawdę tego potrzebujesz.
 3. Zanim przeniesiesz wszystko na inny sprzęt - zadaj sobie pytanie: _czy warto?_
 
-Czasem mniej znaczy więcej, a kilka watów poboru energii może w skali miesiąca zaskakująco zaważyć na rachunku. W świecie smart home granica między zabawą, a przesadą jest bardzo cienka.
+Czasem mniej znaczy więcej, a kilka watów poboru energii może w skali miesiąca zaskakująco zaważyć na rachunku. W świecie smart home granica między zabawą a przesadą jest bardzo cienka.
 
 ### Co dalej?
 
-W kolejnych wpisach (które pojawią się, kiedy czas pozwoli, czyli niewiadomo kiedy) planuję opisać różne scenariusze i automatyzacje, które zbudowałem. Będą między innymi:
+W kolejnych wpisach (które pojawią się, kiedy czas pozwoli, czyli nie wiadomo kiedy) planuję opisać różne scenariusze i automatyzacje, które zbudowałem. Będą między innymi:
 
 - historia ściemniaczy z Ikei, które niespodziewanie zyskały nowe życie dzięki Zigbee,
 - moje podejście do bezpieczeństwa: kontaktrony, czujniki zalania i kamery,

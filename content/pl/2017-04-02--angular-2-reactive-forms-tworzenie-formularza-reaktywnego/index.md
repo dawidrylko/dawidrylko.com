@@ -140,7 +140,7 @@ Informujemy widok, że interesuje nas `FormGroup` o nazwie `product`. Wysłanie 
 
 #### FormControl
 
-Interesujące nas pola formularza, deklarujemy, tak jak w zwykłym formularzu:
+Interesujące nas pola formularza deklarujemy tak, jak w zwykłym formularzu:
 
 ```html
 <label class="center-block">

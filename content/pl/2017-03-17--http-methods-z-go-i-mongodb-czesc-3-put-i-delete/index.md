@@ -6,7 +6,7 @@ featuredImgAlt: 'Sterta kolorowych ścinków papieru po niszczarce.'
 tags: ['shopping manager', 'go', 'mongo']
 ---
 
-W poprzednich dwóch częściach cyklu nauczyliśmy się [tworzyć](/http-methods-z-go-i-mongodb-czesc-1-post/) produkty, [pobierać](/http-methods-z-go-i-mongodb-czesc-2-get/) listę produktów oraz pojedynczy produkt za pomocą `ID`. Poniższy wpis zademonstruje, w jaki sposób możemy zaaktualizować produkt oraz jak go usunąć, czyli poznamy metody **PUT** i **DELETE**.
+W poprzednich dwóch częściach cyklu nauczyliśmy się [tworzyć](/http-methods-z-go-i-mongodb-czesc-1-post/) produkty, [pobierać](/http-methods-z-go-i-mongodb-czesc-2-get/) listę produktów oraz pojedynczy produkt za pomocą `ID`. Poniższy wpis zademonstruje, w jaki sposób możemy zaktualizować produkt oraz jak go usunąć, czyli poznamy metody **PUT** i **DELETE**.
 
 ## HTTP methods - `PUT`
 
@@ -92,16 +92,16 @@ func remove(responseWriter http.ResponseWriter, request *http.Request) {
 }
 ```
 
-Metoda `remove()`, nie różni się niczym znaczącym od wcześniej wspomnianych metod. Całą magię wykonuje `RemoveId()`, gdzie jako parametr przekazujemy `ObjectIdHex`. Efekt naszej pracy na screenie poniżej:
+Metoda `remove()` nie różni się niczym znaczącym od wcześniej wspomnianych metod. Całą magię wykonuje `RemoveId()`, gdzie jako parametr przekazujemy `ObjectIdHex`. Efekt naszej pracy na screenie poniżej:
 
 ![Postman - DELETE method - HTTP](./Zrzut-ekranu-2017-03-17-o-14.55.34.png)
 
 ## Podsumowanie
 
-Powyższy wpis, to trzecia i ostatnia część cyklu **HTTP methods**. Praca nad tymi kilkoma endpointami dała mi wiele satysfakcji. Zdaję sobie sprawę, że wymagają one poprawy. Poszedłem na duże uproszczenia, ale ucząc się języka **Go** oraz **MongoDB**, postawiłem sobie na razie za cel: minimalną, działającą funkcjonalność. To będzie dobry wstęp do czegoś większego.
+Powyższy wpis to trzecia i ostatnia część cyklu **HTTP methods**. Praca nad tymi kilkoma endpointami dała mi wiele satysfakcji. Zdaję sobie sprawę, że wymagają one poprawy. Poszedłem na duże uproszczenia, ale ucząc się języka **Go** oraz **MongoDB**, postawiłem sobie na razie za cel: minimalną, działającą funkcjonalność. To będzie dobry wstęp do czegoś większego.
 
 ---
 
-#### Aktualizacja 21 grudnia 2023
+### Aktualizacja 21 grudnia 2023
 
 Od czasu powstania tego artykułu, w Go oraz MongoDB wiele się zmieniło. Używana przeze mnie paczka `gopkg.in/mgo.v2` jest przestarzała. Obecnie zaleca się stosowanie nowszej i bardziej rozbudowanej paczki `go.mongodb.org/mongo-driver/mongo`.

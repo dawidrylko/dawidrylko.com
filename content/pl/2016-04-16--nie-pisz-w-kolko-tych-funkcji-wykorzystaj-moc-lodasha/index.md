@@ -145,7 +145,7 @@ console.log(lodash); // [1, 3]
 
 🚀 [Uruchom](https://jsfiddle.net/dawidrylko/5ee7mfwL) 🚀
 
-Wyraźną różnicę przyjdzie nam zaobserwować, gdy przyjdzie nam użyć metody `_.difference`. Funkcja zwraca wartości z pierwszej tablicy, które nie zostały umieszczone w drugiej tablicy (unikalne względem porównywanej tablicy). Nawet `Array.prototype`, który wykorzystywałem najczęściej wypada blado w porównaniu z dedykowaną metodą Lodasha.
+Wyraźną różnicę zaobserwujemy, gdy przyjdzie nam użyć metody `_.difference`. Funkcja zwraca wartości z pierwszej tablicy, które nie zostały umieszczone w drugiej tablicy (unikalne względem porównywanej tablicy). Nawet `Array.prototype`, który wykorzystywałem najczęściej, wypada blado w porównaniu z dedykowaną metodą Lodasha.
 
 ## Łączenie obiektów
 
@@ -215,6 +215,6 @@ console.log(lodash); // Object {data: Array[3]}
 
 Lodash jest przydatną biblioteką, która pomaga zaoszczędzić sporo czasu programiście. Zmniejsza ilość napisanych linijek, co przekłada się bezpośrednio na klarowność tego, co napiszemy.
 
-Używam go od niedawna, ale już zauważam różnicę, gdy stosuję go w projektach. Lodash wymusza na mnie programowanie funkcyjne. Pisanie obszernych modułów czy długich metod traci sens. Wzrasta świadomość tego co piszę, jak działają poszczególne metody, a w rezultacie cała aplikacja.
+Używam go od niedawna, ale już zauważam różnicę, gdy stosuję go w projektach. Lodash wymusza na mnie programowanie funkcyjne. Pisanie obszernych modułów czy długich metod traci sens. Wzrasta świadomość tego, co piszę, jak działają poszczególne metody, a w rezultacie cała aplikacja.
 
 P.S. Na chwilę pisania artykułu JSFiddle ma dostępną tylko jedną wersję biblioteki Lodash (Lo-Dash 2.2.1).

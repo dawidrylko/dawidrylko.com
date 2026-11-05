@@ -45,7 +45,7 @@ To tylko kluczowe zmiany. Zainteresowanych zachęcam do zerknięcia w [CHANGELOG
 
 ## Migracja
 
-Wpierw rzućmy okiem na [nasz package.json](https://github.com/dawidrylko/shopping-manager-web/blob/960baeac6932341f609559ea1b24df0202b02b44/package.json). Interesują nas zależności **@angular,** **zone.js** oraz **typescript**.
+Wpierw rzućmy okiem na [nasz package.json](https://github.com/dawidrylko/shopping-manager-web/blob/960baeac6932341f609559ea1b24df0202b02b44/package.json). Interesują nas zależności **@angular**, **zone.js** oraz **typescript**.
 
 ![Angular 4 - before migration](./Zrzut-ekranu-2017-04-28-o-19.50.15.png)
 
@@ -85,7 +85,7 @@ Na koniec jeszcze [package.json po wszystkich aktualizacjach](https://github.com
 
 ![Angular 4 - after migration](./Zrzut-ekranu-2017-04-28-o-21.20.54.png)
 
-## Źródła:
+## Źródła
 
 - [Angular 4.0.0 Now Available](https://web.archive.org/web/20170416222918/http://angularjs.blogspot.com/2017/03/angular-400-now-available.html) _[Wayback Machine]_
 - [Angular 4.1.0 Now Available](https://web.archive.org/web/20170508044213/http://angularjs.blogspot.com/2017/04/angular-410-now-available.html) _[Wayback Machine]_

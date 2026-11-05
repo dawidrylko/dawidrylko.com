@@ -11,7 +11,7 @@ Koniec wakacji, czas brać się do roboty 🙂 W tym wpisie postaram się krótk
 
 ## Zakres zmiennych
 
-**Zakres zmiennych** w JavaScript, to temat nieco skomplikowany. Programista, który dopiero zaczyna swoją przygodę z JSem, może być w niemałym szoku próbując okiełznać tajniki sztuki.
+**Zakres zmiennych** w JavaScript to temat nieco skomplikowany. Programista, który dopiero zaczyna swoją przygodę z JSem, może być w niemałym szoku, próbując okiełznać tajniki sztuki.
 
 ```javascript
 for (var a = 0; a < 5; a++) {}
@@ -90,7 +90,7 @@ function simpleFunction() {
 }
 ```
 
-W przykładzie pierwszym do zmiennej `a` przypisujemy `5`, następnie ją deklarujemy. Log w konsoli daje rezultat `5`. Drugi przykład, to wywołanie metody przed deklaracją. Rezultat taki sam jak wcześniej. Hoisting zadziałał.
+W przykładzie pierwszym do zmiennej `a` przypisujemy `5`, następnie ją deklarujemy. Log w konsoli daje rezultat `5`. Drugi przykład to wywołanie metody przed deklaracją. Rezultat taki sam jak wcześniej. Hoisting zadziałał.
 
 Przy deklaracji zmiennych za pomocą słowa kluczowego `let`, hoisting zachowuje się bardziej przewidywalnie.
 

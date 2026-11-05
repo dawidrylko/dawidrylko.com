@@ -7,7 +7,7 @@ featuredImgAlt: Płytki domino rozłożone płasko na planszy.
 tags: ["math", "javascript", "datascience"]
 ---
 
-Układanie płytek domino na kwadratowej planszy 2n x 2n nie wydaje się zbyt skomplikowane. Wyliczenie ilości możliwych układów w zależności od wymiaru planszy także nie powinno sprawić kłopotu. Problem pojawia się, gdy potrzebujemy to zrobić w rozsądnym limicie czasu.
+Układanie płytek domino na kwadratowej planszy 2n x 2n nie wydaje się zbyt skomplikowane. Wyliczenie liczby możliwych układów w zależności od wymiaru planszy także nie powinno sprawić kłopotu. Problem pojawia się, gdy potrzebujemy to zrobić w rozsądnym limicie czasu.
 
 > 1, 2, 36, 6728, 12988816, 258584046368, 53060477521960000, 112202208776036178000000, 2444888770250892795802079170816, 548943583215388338077567813208427340288, 1269984011256235834242602753102293934298576249856
 
@@ -107,7 +107,7 @@ function canSkipTwoBits(colIndex, colCount, currentMask, currentBit, nextBit) {
 }
 ```
 
-### Obliczanie ilości uładów
+### Obliczanie liczby układów
 
 Wyodrębnienie funkcji `calculateTotalTilingCombinations` to kwestia gustu.
 
@@ -485,9 +485,9 @@ Uruchomienie programu odbywa się w konsoli za pomocą komendy:
 node benchmarkRunner.js -n <numberOfExecutions>
 ```
 
-Gdzie `n` to liczba egzekucji programu.
+Gdzie `n` to liczba uruchomień programu.
 
-Wynik w konsoli dla wersji podstawowej, dla 10 egzekucji:
+Wynik w konsoli dla wersji podstawowej, dla 10 uruchomień:
 
 ```bash
 Starting benchmark execution with 10 executions each...
@@ -510,7 +510,7 @@ Zapisane wyniki znajdują się w [folderze benchmark](https://github.com/dawidry
     <tr>
       <th>Rozmiar</th>
       <th>Średni wynik [ms]</th>
-      <th>Ilość egzekucji</th>
+      <th>Liczba uruchomień</th>
     </tr>
   </thead>
   <tbody>
@@ -559,7 +559,7 @@ Zapisane wyniki znajdują się w [folderze benchmark](https://github.com/dawidry
     <tr>
       <th>Rozmiar</th>
       <th>Średni wynik [ms]</th>
-      <th>Ilość egzekucji</th>
+      <th>Liczba uruchomień</th>
     </tr>
   </thead>
   <tbody>
@@ -600,22 +600,22 @@ Zapisane wyniki znajdują się w [folderze benchmark](https://github.com/dawidry
     </tr>
     <tr>
       <td>14x14</td>
-      <td>5,615.200</td>
+      <td>5615.200</td>
       <td>10</td>
     </tr>
     <tr>
       <td>16x16</td>
-      <td>37,765.400</td>
+      <td>37765.400</td>
       <td>10</td>
     </tr>
     <tr>
       <td>18x18</td>
-      <td>248,372.000</td>
+      <td>248372.000</td>
       <td>1</td>
     </tr>
     <tr>
       <td>20x20</td>
-      <td>1,640,246.000</td>
+      <td>1640246.000</td>
       <td>1</td>
     </tr>
   </tbody>
