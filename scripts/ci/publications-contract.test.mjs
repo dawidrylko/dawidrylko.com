@@ -43,6 +43,13 @@ describe('publicationsViolations', () => {
     expect(problems).toEqual(['paper: DOI is missing']);
   });
 
+  it('does not accept the ORCID as a substring of another value', () => {
+    const sameAs = 'https://evil.example/https://orcid.org/0009-0008-6307-9015';
+    expect(publicationsViolations([], [{ ...person, sameAs }])).toEqual([
+      'canonical Person is missing the ORCID sameAs',
+    ]);
+  });
+
   it('reports a Person without the ORCID', () => {
     const problems = publicationsViolations([], [{ ...person, sameAs: ['https://github.com/x'] }]);
     expect(problems).toEqual(['canonical Person is missing the ORCID sameAs']);

@@ -26,7 +26,8 @@ export function publicationsViolations(records, nodes) {
   }
 
   const person = nodes.find(node => node['@type'] === 'Person' && node.name && node['@id']?.endsWith('/#person'));
-  if (!person?.sameAs?.includes(ORCID_URL)) problems.push('canonical Person is missing the ORCID sameAs');
+  const sameAs = Array.isArray(person?.sameAs) ? person.sameAs : [];
+  if (!sameAs.some(url => url === ORCID_URL)) problems.push('canonical Person is missing the ORCID sameAs');
 
   return problems;
 }
