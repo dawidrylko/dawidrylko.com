@@ -200,6 +200,8 @@ console.log(harry !== draco); // true, różne obiekty
 console.log(draco === dracoTwin); // true, ten sam obiekt współdzielony!
 ```
 
+Klucz z `JSON.stringify` jest prosty, ale jego koszt rośnie z rozmiarem poddrzewa. Przy dużych drzewach lepiej nadać współdzielonym węzłom identyfikatory i budować klucz z nich.
+
 ## Z góry na dół (_top-down_) vs. z dołu do góry (_bottom-up_)
 
 Problem obliczeniowy można rozwiązywać na dwa sposoby, niczym naukę skomplikowanego zaklęcia.

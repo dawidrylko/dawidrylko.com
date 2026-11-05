@@ -98,7 +98,7 @@ type Products []Product
 
 type Price struct {
   Date  time.Time `json:"date"`
-  Value float32
+  Value float32   `json:"value"`
 }
 
 type Prices []Price

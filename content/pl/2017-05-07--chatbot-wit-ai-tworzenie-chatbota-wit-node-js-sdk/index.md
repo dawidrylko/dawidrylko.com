@@ -65,7 +65,7 @@ Nasz **chatbot** do poprawnego działania potrzebuje jeszcze akcji. Do zapewnien
 - `send` - wbudowana akcja Wit.ai, przyjmuje dwa parametry: request i response,
 - `findPerson` - zdefiniowana przez nas akcja.
 
-Zadeklarujmy więc akcje w naszym programie:
+Zadeklarujmy więc akcje w naszym programie, powyżej tworzenia instancji Wit:
 
 ```javascript
 const actions = {

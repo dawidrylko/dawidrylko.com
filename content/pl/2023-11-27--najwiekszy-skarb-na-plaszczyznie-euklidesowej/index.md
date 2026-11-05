@@ -23,7 +23,7 @@ gdzie $d(u, v)$ to odległość między punktami $u$ i $v$.
 
 ## Rozwiązanie
 
-Opisany powyżej problem zostanie rozwiązany za pomocą programu napisanego w języku **JavaScript**.
+Opisany powyżej problem zostanie rozwiązany w przybliżeniu za pomocą programu napisanego w języku **JavaScript**.
 
 ### Odległość między dwoma punktami
 
@@ -118,10 +118,10 @@ W powyższym kodzie:
 
 ##### Ocena kandydatów
 
-Dla każdego punktu $i$ spoza $Q$ obliczamy wartość `increase`. Nie jest to dokładny przyrost sumy odległości w $Q$, czyli suma odległości punktu $i$ od punktów z $Q$, lecz heurystyka oparta na sumie odległości tego punktu od całego zbioru $P$.
+Dla każdego punktu $i$ spoza $Q$ obliczamy wartość `increase`. Nie jest to dokładny przyrost sumy odległości w $Q$, czyli suma odległości punktu $i$ od punktów z $Q$, lecz heurystyka: premiuje punkty daleko od całego zbioru $P$, a blisko punktów już wybranych. Dlatego na niektórych danych wynik może być dużo gorszy od optimum.
 
 $$
-\text{increase} = \sum_{j=0}^{k-1} \left( \text{distances}[i] - d(\text{points}[i], \text{points}[Q[j]]) \right)
+\text{increase} = \sum_{j=0}^{|Q|-1} \left( \text{distances}[i] - d(\text{points}[i], \text{points}[Q[j]]) \right)
 $$
 
 Jeśli `increase` jest większe od `maxIncrease`, wtedy aktualizujemy `maxIncrease` i `bestPoint`.
