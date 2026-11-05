@@ -213,7 +213,7 @@ console.log(lodash); // Object {data: Array[3]}
 
 ## Lodash - podsumowanie
 
-Lodash jest przydatną biblioteką, która pomaga zaoszczędzić sporo czasu programiście. Zmniejsza ilość napisanych linijek, co przekłada się bezpośrednio na klarowność tego, co napiszemy.
+Lodash jest przydatną biblioteką, która pomaga zaoszczędzić sporo czasu programiście. Zmniejsza liczbę napisanych linijek, co przekłada się bezpośrednio na klarowność tego, co napiszemy.
 
 Używam go od niedawna, ale już zauważam różnicę, gdy stosuję go w projektach. Lodash wymusza na mnie programowanie funkcyjne. Pisanie obszernych modułów czy długich metod traci sens. Wzrasta świadomość tego, co piszę, jak działają poszczególne metody, a w rezultacie cała aplikacja.
 
