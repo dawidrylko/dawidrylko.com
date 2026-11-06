@@ -2,6 +2,8 @@
 title: Flexbox Layout - część 3 - alignment
 date: 2016-06-26T17:30:00.000Z
 description: Odkryj Flexbox. Ostatni wpis z serii Flexbox Layout o wyrównaniu kontenera i elementów, czyli justify-content, align-items, align-content i align-self.
+featuredImg: ./louis-hansel-_qpY2jqedwU-unsplash.jpg
+featuredImgAlt: Dłoń przykładająca aluminiową poziomicę do krawędzi drewnianego stołu. Photo by Louis Hansel on Unsplash.
 tags: ['css']
 ---
 
@@ -10,6 +12,8 @@ Wyśrodkowanie elementu w pionie przez lata było w **CSS** tematem rzeką. Czas
 Poprzednie artykuły możesz przeczytać, klikając w: [Flexbox Layout - część 1 - parent container](/flexbox-layout-czesc-1-parent-container/) oraz [Flexbox Layout - część 2 - children items](/flexbox-layout-czesc-2-children-items/).
 
 Przyda się jedno nowe pojęcie. Kierunek **main-axis** (głównej osi) wyznacza `flex-direction`, a prostopadle do niej biegnie **cross-axis** (oś poprzeczna). Przy `flex-direction: row` główna oś jest pozioma, a poprzeczna pionowa. Przy `column` jest odwrotnie.
+
+![Flex axes - dwa kontenery z trzema elementami. Przy flex-direction: row główna oś biegnie poziomo w prawo, a poprzeczna pionowo w dół. Przy flex-direction: column główna oś biegnie pionowo w dół, a poprzeczna poziomo w prawo.](./flex-axes.png)
 
 ## Wyrównanie w kontenerze (parent container)
 
@@ -29,6 +33,8 @@ Właściwość `justify-content` ustawia elementy wzdłuż głównej osi i rozdz
 - `space-between` - pierwszy element przy początku linii, ostatni przy końcu, a między sąsiednimi równe odstępy
 - `space-around` - równe odstępy między elementami, a przy krawędziach linii połowa tego odstępu
 
+![Justify content - pięć kontenerów z trzema elementami: flex-start przy lewej krawędzi, flex-end przy prawej, center na środku, space-between z pierwszym i ostatnim elementem przy krawędziach, space-around z mniejszymi odstępami przy krawędziach.](./flex-justify-content.png)
+
 ### Flexbox Layout - Align items
 
 ```css
@@ -44,6 +50,8 @@ Właściwość `align-items` działa podobnie, ale na osi poprzecznej: ustawia e
 - `center` - elementy na środku linii
 - `baseline` - elementy wyrównane do linii bazowych tekstu (przy `flex-direction: column` działa jak `flex-start`)
 - `stretch` - (wartość domyślna) - elementy rozciągnięte na rozmiar linii, w granicach `min-*` i `max-*`
+
+![Align items - pięć kontenerów z trzema elementami różnej wysokości: flex-start przy górnej krawędzi, flex-end przy dolnej, center na środku, baseline z tekstem o różnej wielkości na wspólnej linii bazowej, stretch z elementami rozciągniętymi na całą wysokość.](./flex-align-items.png)
 
 Rozciąganie działa tylko wtedy, gdy rozmiar elementu w osi poprzecznej ma wartość `auto`, a żaden z jego marginesów na tej osi nie ma wartości `auto`. To dlatego kolumny w jednym rzędzie mają domyślnie równą wysokość, co przy `float` wymagało sztuczek.
 
@@ -64,6 +72,8 @@ Gdy elementy zawijają się na kilka linii, w osi poprzecznej może zostać woln
 - `space-around` - równe odstępy między liniami, a przy krawędziach kontenera połowa tego odstępu
 - `stretch` - (wartość domyślna) - linie dzielą między siebie wolne miejsce
 
+![Align content - sześć kontenerów z dwiema liniami elementów: flex-start przy górnej krawędzi, flex-end przy dolnej, center na środku, space-between z liniami przy obu krawędziach, space-around z odstępami wokół linii, stretch z liniami rozciągniętymi na całą wysokość.](./flex-align-content.png)
+
 **W kontenerze jednoliniowym (`flex-wrap: nowrap`) właściwość `align-content` nie działa.**
 
 Decyduje o tym deklaracja `flex-wrap`, a nie faktyczna liczba linii, więc kontener z `flex-wrap: wrap` jest wieloliniowy także wtedy, gdy wszystkie elementy zmieściły się w jednej linii. Domyślną wartością jest `nowrap`, dlatego samo `align-content` bez zawijania niczego nie zmieni.
@@ -79,6 +89,8 @@ Decyduje o tym deklaracja `flex-wrap`, a nie faktyczna liczba linii, więc konte
 ```
 
 Właściwość `align-self` nadpisuje dla pojedynczego elementu wartość `align-items` z kontenera. Domyślne `auto` przejmuje tę wartość od rodzica, a pozostałe działają tak samo jak w `align-items`.
+
+![Align self - kontener z align-items: flex-start i pięcioma elementami: auto i flex-start przy górnej krawędzi, flex-end przy dolnej, center na środku, stretch na całą wysokość.](./flex-align-self.png)
 
 Jeśli któryś z marginesów elementu w osi poprzecznej ma wartość `auto`, właściwość `align-self` nie ma żadnego efektu.
 
@@ -96,6 +108,8 @@ Na koniec temat rzeka z początku wpisu. Wystarczy kontener o określonej wysoko
 ```
 
 Potomek stanie na środku w obu osiach, bez względu na swój rozmiar.
+
+![Wyśrodkowanie - kontener z jednym elementem na środku i czterema czerwonymi strzałkami skierowanymi do niego z każdej strony.](./flex-center.png)
 
 Dokładny algorytm rozmieszczania elementów opisuje [specyfikacja W3C z 1 marca 2016 roku](https://www.w3.org/TR/2016/CR-css-flexbox-1-20160301/).
 
