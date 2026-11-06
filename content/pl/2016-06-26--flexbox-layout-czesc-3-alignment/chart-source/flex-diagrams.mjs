@@ -1,6 +1,7 @@
 // Generates the diagrams of the three Flexbox Layout posts. Every layout is real
 // CSS flexbox rendered in Chromium, so a picture cannot disagree with the property
-// it shows. Run from the repository root:
+// it shows. Run on macOS, whose Bradley Hand and Menlo fonts the set is drawn with,
+// from the repository root:
 //   node content/pl/2016-06-26--flexbox-layout-czesc-3-alignment/chart-source/flex-diagrams.mjs
 import { chromium } from '@playwright/test';
 import { resolve } from 'node:path';
@@ -121,7 +122,7 @@ const BODY = {
              line({ x: r.x + 22, y: r.y + 16 }, { x: r.x + 22, y: r.y + r.h - 44 }, 3);
              text('cross-axis', r.x + 110, r.y + 40);
              line({ x: k.x + 22, y: k.y + 16 }, { x: k.x + 22, y: k.y + k.h - 16 }, 5);
-             text('main-axis', k.x + 96, k.y + 40);
+             text('main-axis', k.x + 110, k.y + 40);
              line({ x: k.x + 44, y: k.y + k.h - 22 }, { x: k.x + k.w - 16, y: k.y + k.h - 22 }, 3);
              text('cross-axis', k.x + k.w - 100, k.y + k.h - 34);`,
   },
