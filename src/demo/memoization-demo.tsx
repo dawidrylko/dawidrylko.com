@@ -19,7 +19,7 @@
  * And to the well-organised code, performance is but a cached memory.
  */
 import type { FC } from 'react';
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 
 enum LogType {
   Processing,
@@ -33,7 +33,7 @@ type LogEntry = {
   id: number;
   message: string;
   type: LogType;
-  timestamp: number;
+  timestamp: number | null;
   isFinished: boolean;
 };
 
@@ -66,11 +66,20 @@ const WELCOME_MESSAGE = `🔮 Welcome to the Pensieve. Select a Horcrux to view 
 
 const MemoizationDemo: FC = () => {
   const [logEntries, setLogEntries] = useState<LogEntry[]>([
-    { id: 0, message: WELCOME_MESSAGE, type: LogType.Result, timestamp: Date.now(), isFinished: true },
+    { id: 0, message: WELCOME_MESSAGE, type: LogType.Result, timestamp: null, isFinished: true },
   ]);
   const [loadingHorcruxes, setLoadingHorcruxes] = useState<Set<string>>(new Set());
   const [memoryCache] = useState<Map<string, string>>(new Map());
   const logContainerRef = useRef<HTMLDivElement>(null);
+  const nextLogIdRef = useRef(1);
+
+  // The build and the browser run at different times, so the first timestamp is
+  // set after hydration. Rendering it earlier makes React report a text mismatch.
+  useEffect(() => {
+    setLogEntries(currentLogs =>
+      currentLogs.map(entry => (entry.timestamp === null ? { ...entry, timestamp: Date.now() } : entry)),
+    );
+  }, []);
 
   const sleep = (milliseconds: number): Promise<void> => new Promise(resolve => setTimeout(resolve, milliseconds));
 
@@ -84,17 +93,17 @@ const MemoizationDemo: FC = () => {
   };
 
   const addLogEntry = useCallback((message: string, type: LogType = LogType.Result, isFinished: boolean = true) => {
+    const id = nextLogIdRef.current++;
     console.log(`[${formatTimestamp(Date.now())}]: ${message}`);
-    setLogEntries(currentLogs => [
-      ...currentLogs,
-      { id: currentLogs.length, message, type, timestamp: Date.now(), isFinished },
-    ]);
+    setLogEntries(currentLogs => [...currentLogs, { id, message, type, timestamp: Date.now(), isFinished }]);
 
     setTimeout(() => {
       if (logContainerRef.current) {
         logContainerRef.current.scrollTop = logContainerRef.current.scrollHeight;
       }
     }, 10);
+
+    return id;
   }, []);
 
   const markLogAsFinished = useCallback((logId: number) => {
@@ -103,9 +112,7 @@ const MemoizationDemo: FC = () => {
 
   const extractHorcruxMemory = async (horcruxName: string): Promise<string> => {
     const processingDuration = 2000 + Math.random() * 3000;
-    const currentLogId = logEntries.length;
-
-    addLogEntry(
+    const currentLogId = addLogEntry(
       `🔍 Extracting memories from ${horcruxName}... (${Math.round(processingDuration)}ms)`,
       LogType.Processing,
       false,
@@ -195,7 +202,9 @@ const MemoizationDemo: FC = () => {
             <div className="harry-potter-log-container" ref={logContainerRef}>
               {logEntries.map(entry => (
                 <div key={entry.id} className={`harry-potter-log-entry harry-potter-log-${entry.type}`}>
-                  <span className="harry-potter-log-time">[{formatTimestamp(entry.timestamp)}]</span>
+                  <span className="harry-potter-log-time">
+                    {entry.timestamp === null ? '' : `[${formatTimestamp(entry.timestamp)}]`}
+                  </span>
                   <div className="harry-potter-log-content">
                     <span className="harry-potter-log-message">{entry.message}</span>
                     {!entry.isFinished && <div className="harry-potter-loading-spinner" />}
@@ -207,7 +216,7 @@ const MemoizationDemo: FC = () => {
 
           <footer className="harry-potter-footer">
             <p>
-              Copyright © {new Date().getFullYear()}{' '}
+              Copyright © <span suppressHydrationWarning>{new Date().getFullYear()}</span>{' '}
               <a href="https://dawidrylko.com" target="_blank" rel="dofollow noopener noreferrer">
                 Dawid Ryłko
               </a>
