@@ -94,7 +94,7 @@ microphone.onresult = (intent, entities) => {
   } else {
     let fullName = entities.fullName.value;
     document.getElementById('result').innerHTML =
-      fullName + '? Szukam na Wikipedii...';
+      fullName + '? Szukam na wikipedii...';
     window.open('https://pl.wikipedia.org/wiki/' + fullName.replace(' ', '_'));
   }
 };
