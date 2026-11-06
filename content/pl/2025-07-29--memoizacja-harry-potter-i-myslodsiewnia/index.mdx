@@ -64,12 +64,14 @@ const memoize = <F extends (...args: any[]) => any>(fn: F): F => {
 };
 ```
 
-W ramach testów użyjemy tej funkcji do memoizacji klasycznego, rekurencyjnego algorytmu na ciąg Fibonacciego. Jest on znany z tego, że bez optymalizacji jego złożoność czasowa rośnie wykładniczo, niczym liczba diabełków kornwalijskich wypuszczonych w klasie.
+W ramach testów użyjemy tej funkcji do memoizacji klasycznego, rekurencyjnego algorytmu na ciąg Fibonacciego. Jest on znany z tego, że bez optymalizacji jego złożoność czasowa rośnie wykładniczo, niczym liczba chochlików kornwalijskich wypuszczonych w klasie. Rekurencja musi przy tym wołać wersję z pamięcią. Gdyby `memoize` opakowało tylko zewnętrzne wywołanie, każdy nowy argument byłby liczony od zera.
 
 ```typescript
 const test = () => {
   const fib = (n: number): number => (n < 2 ? n : fib(n - 1) + fib(n - 2));
-  const fibMemoized = memoize(fib);
+  const fibMemoized: (n: number) => number = memoize((n: number): number =>
+    n < 2 ? n : fibMemoized(n - 1) + fibMemoized(n - 2),
+  );
 
   const results: any[] = [];
 
@@ -94,9 +96,62 @@ const test = () => {
 test();
 ```
 
-Wyniki działania tego kodu pokazują, jak potężna jest memoizacja. Pierwsze wywołanie `fibMemoized` jest wolne, ponieważ musi wykonać wszystkie obliczenia. Każde kolejne dla tego samego argumentu jest już błyskawiczne. Wynik jest pobierany prosto z Myślodsiewni.
+Wyniki działania tego kodu pokazują, jak potężna jest memoizacja. Pierwsze wywołanie `fibMemoized` liczy każdą wartość tylko raz, więc złożoność spada z wykładniczej do liniowej. Każde kolejne dla tej samej lub mniejszej wartości jest już błyskawiczne. Wynik jest pobierany prosto z Myślodsiewni. Poniższe czasy pochodzą z jednego uruchomienia w Chrome.
 
-![Memoizacja funkcyjna - wyniki](./1.Memoizacja-funkcyjna-wyniki.png)
+<table>
+  <thead>
+    <tr>
+      <th>Wywołanie</th>
+      <th>Wynik</th>
+      <th>Czas [ms]</th>
+      <th>Cache</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>fib(35) normal</td>
+      <td>9227465</td>
+      <td>80.40</td>
+      <td>Nie</td>
+    </tr>
+    <tr>
+      <td>fib(35) memoized 1st</td>
+      <td>9227465</td>
+      <td>0.20</td>
+      <td>Nie</td>
+    </tr>
+    <tr>
+      <td>fib(35) memoized 2nd</td>
+      <td>9227465</td>
+      <td>0.00</td>
+      <td>Tak</td>
+    </tr>
+    <tr>
+      <td>fib(30) memoized</td>
+      <td>832040</td>
+      <td>0.00</td>
+      <td>Tak</td>
+    </tr>
+    <tr>
+      <td>fib(40) normal</td>
+      <td>102334155</td>
+      <td>754.00</td>
+      <td>Nie</td>
+    </tr>
+    <tr>
+      <td>fib(40) memoized 1st</td>
+      <td>102334155</td>
+      <td>0.20</td>
+      <td>Nie</td>
+    </tr>
+    <tr>
+      <td>fib(40) memoized 2nd</td>
+      <td>102334155</td>
+      <td>0.00</td>
+      <td>Tak</td>
+    </tr>
+  </tbody>
+</table>
 
 ## Memoizacja strukturalna (_structural memoization_)
 
@@ -121,8 +176,8 @@ class Character {
 const characterCache = new Map<string, Character>();
 
 const createSharedCharacter = (value: string, children: Character[] = []): Character => {
-  // Tworzymy unikalny klucz na podstawie wartości i dzieci
-  const key = `${value}:${children.map(c => c.value).join(`,`)}`;
+  // Tworzymy unikalny klucz na podstawie wartości i całego poddrzewa dzieci
+  const key = JSON.stringify([value, children]);
 
   if (characterCache.has(key)) {
     console.log(`♻️ Sharing character: ${value}`);
@@ -145,6 +200,8 @@ const dracoTwin = createSharedCharacter(`Draco`, [pureBlood]); // To samo co Dra
 console.log(harry !== draco); // true, różne obiekty
 console.log(draco === dracoTwin); // true, ten sam obiekt współdzielony!
 ```
+
+Klucz z `JSON.stringify` jest prosty, ale jego koszt rośnie z rozmiarem poddrzewa. Przy dużych drzewach lepiej nadać współdzielonym węzłom identyfikatory i budować klucz z nich.
 
 ## Z góry na dół (_top-down_) vs. z dołu do góry (_bottom-up_)
 

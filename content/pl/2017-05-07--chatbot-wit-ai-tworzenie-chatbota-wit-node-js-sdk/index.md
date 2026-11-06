@@ -14,7 +14,7 @@ Dzisiaj już trzeci wpis z serii Wit.ai. Tym razem zajmiemy się tworzeniem chat
 
 Instalacja [Wit Node.js SDK](https://github.com/wit-ai/node-wit) przebiega w standardowy sposób. Do instalacji używamy **npm**:
 
-```javascript
+```bash
 npm install --save node-wit
 ```
 
@@ -65,7 +65,7 @@ Nasz **chatbot** do poprawnego działania potrzebuje jeszcze akcji. Do zapewnien
 - `send` - wbudowana akcja Wit.ai, przyjmuje dwa parametry: request i response,
 - `findPerson` - zdefiniowana przez nas akcja.
 
-Zadeklarujmy więc akcje w naszym programie:
+Zadeklarujmy więc akcje w naszym programie, powyżej tworzenia instancji Wit:
 
 ```javascript
 const actions = {
@@ -102,10 +102,11 @@ Na koniec pozostało jeszcze zmodyfikowanie metody `findPerson`:
 
 ```javascript
 findPerson({ context, entities }) {
-  const fullName = entities.fullName[0].value;
-  const url = 'https://pl.wikipedia.org/wiki/' + fullName.replace(' ', '_');
+  const fullName = entities.fullName && entities.fullName[0].value;
 
   if (fullName) {
+    const url = 'https://pl.wikipedia.org/wiki/' + fullName.replace(/ /g, '_');
+
     context.fullName = fullName;
     opn(url, { wait: false });
   } else {

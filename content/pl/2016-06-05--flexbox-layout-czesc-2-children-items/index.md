@@ -41,7 +41,7 @@ Właściwość `flex-grow` umożliwia elementom powiększenie się, jeśli tego 
 
 ![Flex grow - przedstawiona została szerokość kontenerów flexbox. W pierwszym rzędzie kontenery mają taką samą szerokość (1). W drugim rzędzie jeden kontener jest dwa razy szerszy (2) niż pozostałe (1).](./flex-grow.png)
 
-Jeśli wszystkim elementom wewnątrz kontenera zostanie przyporządkowana właściwość `flex-grow: 1`, to kontener rozdysponuje miejsce w taki sposób, aby wszystkie elementy dostały tyle samo miejsca. Jeśli zadeklarujemy wybranemu elementowi `flex-grow: 2`, a pozostałym `flex-grow: 1`, to wybrany element dostanie dwie wartości przypadające z podziału.
+Jeśli wszystkim elementom wewnątrz kontenera zostanie przyporządkowana właściwość `flex-grow: 1`, to kontener rozdysponuje miejsce w taki sposób, aby wszystkie elementy dostały tyle samo wolnego miejsca. Jeśli zadeklarujemy wybranemu elementowi `flex-grow: 2`, a pozostałym `flex-grow: 1`, to wybrany element dostanie dwa razy więcej wolnego miejsca niż pozostałe.
 
 **Ujemne wartości zostają oznaczone jako błędne.**
 
@@ -75,6 +75,6 @@ Podstawową wielkość elementu wewnątrz **flexible container** uzyskujemy dzi�
 }
 ```
 
-`flex` jest skrótem dla `flex-grow`, `flex-shrink` oraz `flex-basis`. Wg rekomendacji **W3C** zaleca się używanie właśnie tej właściwości, zamiast deklarowania wszystkich powyższych. Ponadto, przy niezadeklarowaniu wszystkich właściwości, skrót `flex` uzupełnia je automatycznie (kolejno `0 1 auto`).
+`flex` jest skrótem dla `flex-grow`, `flex-shrink` oraz `flex-basis`. Wg rekomendacji **W3C** zaleca się używanie właśnie tej właściwości, zamiast deklarowania wszystkich powyższych. Wartością początkową jest `0 1 auto`. Właściwości pominięte w samym skrócie przyjmują jednak inne wartości: `flex-grow` i `flex-shrink` wartość `1`, a `flex-basis` wartość `0`.
 
 Kolejny wpis z tej serii poświęcony będzie wyrównaniu kontenera i elementów znajdujących się wewnątrz niego.

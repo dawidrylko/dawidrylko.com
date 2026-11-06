@@ -49,7 +49,7 @@ func update(responseWriter http.ResponseWriter, request *http.Request) {
 }
 ```
 
-Na początek wykorzystamy pakiet `gorilla/mux`, aby dostać się do parametrów zapytania. Następnie sprawdzamy, czy wśród parametrów znajduje się `ID`. Jeżeli wszystko przebiegło poprawnie, to konwertujemy `ID` na `ObjectIdHex`.
+Na początek wykorzystamy pakiet `gorilla/mux`, aby dostać się do parametrów zapytania. Następnie sprawdzamy, czy parametr `id` jest poprawnym identyfikatorem w postaci hex. Jeżeli wszystko przebiegło poprawnie, to konwertujemy `ID` na `ObjectIdHex`.
 
 W kolejnym kroku, podobnie jak przy metodzie `POST`, tworzymy nasz lokalny produkt, parsujemy i dekodujemy. Otwieramy połączenie z bazą danych i dzięki metodzie `UpdateId`, aktualizujemy nasz produkt przesyłając kolejno `oid` i `product`.
 
