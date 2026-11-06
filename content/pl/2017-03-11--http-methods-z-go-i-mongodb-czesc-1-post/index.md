@@ -10,7 +10,7 @@ W poprzednich dwóch częściach było małe co nieco o [języku GO](/go-program
 
 ## HTTP methods - `POST`
 
-Stworzenie endpointu w **Go**, dzięki któremu będziemy mogli zapisać nasze produkty do bazy danych **MongoDB**, można podzielić na cztery etapy: tworzenie obiektu, przygotowanie obiektu, otworzenie połączenia z bazą danych oraz zapis do bazy. Poniżej przedstawiam całą metodę `create()`. Na razie nie skupiam się nad optymalizacją czy walidacją. Chcę po prostu, aby metoda robiła dokładnie to, co sobie założyłem, czyli żeby działała.
+Stworzenie endpointu w **Go**, dzięki któremu będziemy mogli zapisać nasze produkty do bazy danych **MongoDB**, można podzielić na cztery etapy: tworzenie obiektu, przygotowanie obiektu, otworzenie połączenia z bazą danych oraz zapis do bazy. Poniżej przedstawiam całą metodę `create()`. Na razie nie skupiam się na optymalizacji czy walidacji. Chcę po prostu, aby metoda robiła dokładnie to, co sobie założyłem, czyli żeby działała.
 
 ```go
 func create(responseWriter http.ResponseWriter, request *http.Request) {

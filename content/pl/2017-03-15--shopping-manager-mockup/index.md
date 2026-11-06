@@ -6,7 +6,7 @@ featuredImgAlt: 'Odręczne szkice układu stron narysowane tuszem i akwarelą na
 tags: ['shopping manager']
 ---
 
-Pracuję efektywnie, jeśli mam jasno sprecyzowane cele i wymagania. Najwyższy czas skupić się nad logiką aplikacji. Poniższy wpis to pseudo makieta [konkursowego](/daj-sie-poznac-2017-z-czym-to-sie-je/) projektu **Shopping Manager**.
+Pracuję efektywnie, jeśli mam jasno sprecyzowane cele i wymagania. Najwyższy czas skupić się na logice aplikacji. Poniższy wpis to pseudomakieta [konkursowego](/daj-sie-poznac-2017-z-czym-to-sie-je/) projektu **Shopping Manager**.
 
 ## Shopping Manager - Funkcjonalność
 

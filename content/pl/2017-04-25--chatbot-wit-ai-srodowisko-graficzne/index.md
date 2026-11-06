@@ -24,13 +24,13 @@ Jeżeli wszystko przebiegnie pomyślnie, stworzona dla nas zostanie nowa instanc
 
 ## Entity
 
-Cała magia w tworzeniu aplikacji za pomocą Wit.ai polega na właściwym wytrenowaniu sieci. W input `User says...` wpisujemy zatem sentencję, jaką mógłby wypowiedzieć użytkownik aplikacji. Następnie oznaczamy poszczególne elementy składowe.
+Cała magia w tworzeniu aplikacji za pomocą Wit.ai polega na właściwym wytrenowaniu sieci. W input `User says...` wpisujemy zatem zdanie, jakie mógłby wypowiedzieć użytkownik aplikacji. Następnie oznaczamy poszczególne elementy składowe.
 
 ![Wit.ai - test sentence](./Zrzut-ekranu-2017-04-25-o-19.16.42.png)
 
-Jak widać na obrazku załączonym powyżej, sentencja brzmi `Kim jest Johnny Depp?`. Zidentyfikowałem sobie intencję jako `find-person` oraz stworzyłem encję `fullName`, do której zostało przyporządkowane imię i nazwisko znanego aktora.
+Jak widać na obrazku załączonym powyżej, zdanie brzmi `Kim jest Johnny Depp?`. Zidentyfikowałem sobie intencję jako `find-person` oraz stworzyłem encję `fullName`, do której zostało przyporządkowane imię i nazwisko znanego aktora.
 
-Po kliknięciu `validate` mamy możliwość wpisania kolejnej sentencji testowej. Spójrzmy jednak poniżej. Lista używanych encji zmieniła się. Nasza aplikacja wykorzystuje teraz dwie encje: `fullName` oraz `intent`. Obie zostały utworzone przez nas, a na skrajnie prawej kolumnie widać, jakie wartości kryją się za daną encją.
+Po kliknięciu `validate` mamy możliwość wpisania kolejnego zdania testowego. Spójrzmy jednak poniżej. Lista używanych encji zmieniła się. Nasza aplikacja wykorzystuje teraz dwie encje: `fullName` oraz `intent`. Obie zostały utworzone przez nas, a w skrajnie prawej kolumnie widać, jakie wartości kryją się za daną encją.
 
 ![Wit.ai - entity](./Zrzut-ekranu-2017-04-25-o-19.24.30.png)
 
@@ -44,15 +44,15 @@ Warto przy tej okazji nadmienić, że Wit.ai posiada szereg wbudowanych encji, k
 
 Jeżeli nie używamy wbudowanych encji, musimy określić **Search Strategy**. Wit.ai rozróżnia następujące strategie wyszukiwania:
 
-- **trait** - należy wybrać tę strategię, gdy wartość encji nie wywodzi się ze słowa kluczowego lub nie jest bezpośrednią częścią składową w danej sentencji. Wykorzystujemy ten sposób wyszukiwania do określania ogólnego kontekstu lub wyczuwania intencji użytkownika.
-- **free-text** - należy wybrać tę strategię, gdy chcemy wyodrębnić tekst z danej sentencji.
+- **trait** - należy wybrać tę strategię, gdy wartość encji nie wywodzi się ze słowa kluczowego lub nie jest bezpośrednią częścią składową w danym zdaniu. Wykorzystujemy ten sposób wyszukiwania do określania ogólnego kontekstu lub wyczuwania intencji użytkownika.
+- **free-text** - należy wybrać tę strategię, gdy chcemy wyodrębnić tekst z danego zdania.
 - **keywords** - słowa kluczowe. Wykorzystujemy dla zdefiniowanych wartości, np. kraje, waluty itp.
 
 ## Trenowanie
 
 Nasza aplikacja zaczyna lepiej rozumieć nasze wypowiedzi, jeśli ją dobrze wytrenujemy. Zadbajmy o to, żeby wpisywane dane były różnorodne. Zmieniajmy szyk zdania oraz popełniajmy częste literówki. Pomoże to w przypadku chatbota, z którym chcemy się komunikować za pomocą tekstu.
 
-Trenowanie w Wit.ai to żmudny proces, który niestety wymaga naszej atencji. W minimalnym stopniu, ale jednak. Gdy wprowadzimy odpowiednią ilość sentencji treningowych, możemy przejść dalej.
+Trenowanie w Wit.ai to żmudny proces, który niestety wymaga naszej atencji. W minimalnym stopniu, ale jednak. Gdy wprowadzimy odpowiednią liczbę zdań treningowych, możemy przejść dalej.
 
 ## Stories
 
@@ -62,7 +62,7 @@ Stwórzmy zatem przykładową historię, klikając `Create a story`.
 
 ![Wit.ai - story](./Zrzut-ekranu-2017-04-25-o-20.26.53.png)
 
-Zaczynamy od wpisania sentencji użytkownika: `Kim jest Adam Małysz?` Sprawdzamy jednocześnie, czy tekst został poprawnie zinterpretowany. Następnie klikamy `Bot executes`, gdzie wpisujemy nazwę metody. W naszym przypadku ma się uruchomić metoda `findPerson()`. Jak widzimy na screenie, w metodzie są przekazywane parametry: `context` i `entities`. Następnie możemy uzupełnić `context-key`, który nie jest wymagany. Na koniec dodajemy standardową odpowiedź naszego bota do zaistniałej sytuacji.
+Zaczynamy od wpisania zdania użytkownika: `Kim jest Adam Małysz?` Sprawdzamy jednocześnie, czy tekst został poprawnie zinterpretowany. Następnie klikamy `Bot executes`, gdzie wpisujemy nazwę metody. W naszym przypadku ma się uruchomić metoda `findPerson()`. Jak widzimy na screenie, w metodzie są przekazywane parametry: `context` i `entities`. Następnie możemy uzupełnić `context-key`, który nie jest wymagany. Na koniec dodajemy standardową odpowiedź naszego bota do zaistniałej sytuacji.
 
 ## Test
 
@@ -70,10 +70,10 @@ Zaczynamy od wpisania sentencji użytkownika: `Kim jest Adam Małysz?` Sprawdzam
 
 Środowisko graficzne pozwala nam także szybko przetestować naszą aplikację. W prawym dolnym rogu jest przycisk rozpoczynający dialog z chatbotem.
 
-W okienku, które wyskoczyło, możemy teraz wpisać dowolną sentencję i zaobserwować, jak do tego ustosunkuje się stworzony chatbot.
+W okienku, które wyskoczyło, możemy teraz wpisać dowolne zdanie i zaobserwować, jak do tego ustosunkuje się stworzony chatbot.
 
 ## Co dalej?
 
 ![Wit.ai - response](./Zrzut-ekranu-2017-04-25-o-20.36.51.png)
 
-To pierwszy krok do stworzenia własnego chatbota. W tym wpisie było dużo klikania, a mało kodowania. Poprawimy to w kolejnej części serii, gdzie stworzymy od podstaw aplikację w **node.js**. Skomunikujemy się z naszą instancją Wit.ai, wyślemy sentencję użytkownika do API, zobaczymy, co nam chatbot odpowie i spróbujemy coś zrobić z danymi, które zostały wydobyte z zadanej sentencji.
+To pierwszy krok do stworzenia własnego chatbota. W tym wpisie było dużo klikania, a mało kodowania. Poprawimy to w kolejnej części serii, gdzie stworzymy od podstaw aplikację w **node.js**. Skomunikujemy się z naszą instancją Wit.ai, wyślemy zdanie użytkownika do API, zobaczymy, co nam chatbot odpowie i spróbujemy coś zrobić z danymi, które zostały wydobyte z zadanego zdania.

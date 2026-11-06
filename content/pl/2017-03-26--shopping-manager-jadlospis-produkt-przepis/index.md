@@ -6,7 +6,7 @@ featuredImgAlt: 'Skrzynki ze świeżymi warzywami na straganie: kalafior, broku�
 tags: ['shopping manager', 'go']
 ---
 
-Do usystematyzowania pracy nad projektem **Shopping Manager**, należy w tym momencie sprecyzować, jak będą wyglądać kluczowe elementy naszego systemu. W tym krótkim wpisie zastanowię się, jakie pola powinien mieć jadłospis, produkt oraz przepis.
+Do usystematyzowania pracy nad projektem **Shopping Manager** należy w tym momencie sprecyzować, jak będą wyglądać kluczowe elementy naszego systemu. W tym krótkim wpisie zastanowię się, jakie pola powinien mieć jadłospis, produkt oraz przepis.
 
 ## Planowanie
 

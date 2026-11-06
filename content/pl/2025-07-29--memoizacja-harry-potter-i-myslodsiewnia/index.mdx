@@ -1,6 +1,6 @@
 ---
 title: Memoizacja ⚡️ Harry Potter i Myślodsiewnia
-description: Zanurz się w fascynujący świat memoizacji. Techniki programistycznej, która zmienia sposób, w jaki Twój kod przetwarza informacje! Wyobraź sobie, że Twój program potrafi "zapamiętywać" i błyskawicznie przywoływać wyniki skomplikowanych obliczeń, niczym Myślodsiewnia Dumbledore'a przechowująca wspomnienia.
+description: Zanurz się w fascynujący świat memoizacji, techniki programistycznej, która zmienia sposób, w jaki Twój kod przetwarza informacje! Wyobraź sobie, że Twój program potrafi "zapamiętywać" i błyskawicznie przywoływać wyniki skomplikowanych obliczeń, niczym Myślodsiewnia Dumbledore'a przechowująca wspomnienia.
 date: 2025-07-29T12:00:00.000Z
 featuredImg: ./Dumbledore_przy_komputerze.png
 featuredImgAlt: "Obraz przedstawia Dumbledore'a, z długą siwą brodą i okularami, siedzącego przy biurku i używającego komputera jako Myślodsiewni. Z jego głowy wydobywa się świetlista nić myśli, która trafia do ekranu komputera. Całość utrzymana jest w mrocznym klimacie fantasy, w stylu komiksów Stana Lee. Wygenerowana przez AI."
@@ -30,6 +30,7 @@ Zamiast więc liczyć wszystko od początku, możemy sięgnąć po technikę, kt
 **Memoizacja funkcyjna** to technika optymalizacyjna, która polega na zapamiętywaniu wyników wywołań funkcji dla określonych argumentów. Działa jak osobista Myślodsiewnia dla funkcji. Gdy funkcja jest wywoływana ponownie z tymi samymi argumentami, jej wynik jest natychmiast zwracany z pamięci podręcznej (_cache_), zamiast być ponownie obliczany. Unikamy w ten sposób wielokrotnego wykonywania tych samych, często kosztownych operacji, co ma bezpośredni wpływ na przyspieszenie działania programu.
 
 ![Obraz w stylu komiksowym, przypominającym prace Stana Lee, przedstawia Hermionę Granger siedzącą przy drewnianym biurku. Ma na sobie szatę Hogwartu i intensywny wyraz twarzy, skupiony na otwartej księdze, do której pisze świecącym piórem. Biurko jest zastawione idealnie poukładanymi stosami grubych ksiąg i podręczników po obu stronach. Na pierwszym planie, na tacy, stoją symetrycznie ułożone fiolki i zlewki z kolorowymi eliksirami. Całość utrzymana jest w mrocznym, akademickim klimacie, z dramatycznym oświetleniem. Wygenerowana przez AI.](./Hermiona_przy_biurku.png)
+
 Podobnie jak potężne zaklęcie, funkcja poddana memoizacji musi spełniać dwa kluczowe warunki:
 
 1. **Musi być czysta i deterministyczna**: dla tych samych argumentów zawsze musi zwracać ten sam wynik.

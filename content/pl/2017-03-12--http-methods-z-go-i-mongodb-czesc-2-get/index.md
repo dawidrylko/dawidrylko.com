@@ -6,7 +6,7 @@ featuredImgAlt: 'Rząd zielonych skrzynek na listy przymocowanych do jasnej ści
 tags: ['shopping manager', 'go', 'mongo']
 ---
 
-Dobrze zaplanowana praca to podstawa. W [poprzedniej części HTTP methods](/http-methods-z-go-i-mongodb-czesc-1-post/), nauczyliśmy się tworzyć produkty za pomocą metody `POST`. W tym wpisie czas na pobieranie listy produktów oraz pojedynczego produktu po ID.
+Dobrze zaplanowana praca to podstawa. W [poprzedniej części HTTP methods](/http-methods-z-go-i-mongodb-czesc-1-post/) nauczyliśmy się tworzyć produkty za pomocą metody `POST`. W tym wpisie czas na pobieranie listy produktów oraz pojedynczego produktu po ID.
 
 Dzięki tym trzem endpointom będziemy mogli skutecznie i efektywnie rozpocząć pracę nad front-endem naszej aplikacji.
 
@@ -98,6 +98,6 @@ Po pierwszych dwóch tygodniach pracy z językiem **Go** jestem bardzo zadowolon
 
 ---
 
-#### Aktualizacja 21 grudnia 2023
+### Aktualizacja 21 grudnia 2023
 
 Od czasu powstania tego artykułu, w Go oraz MongoDB wiele się zmieniło. Używana przeze mnie paczka `gopkg.in/mgo.v2` jest przestarzała. Obecnie zaleca się stosowanie nowszej i bardziej rozbudowanej paczki `go.mongodb.org/mongo-driver/mongo`.

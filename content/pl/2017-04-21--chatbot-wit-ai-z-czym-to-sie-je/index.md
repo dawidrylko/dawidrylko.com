@@ -16,7 +16,7 @@ Zdecydowany prym wiodą boty tworzone na Facebookowego **Messengera**. Kolejni w
 
 ![Chatbot - Multikino Polska](./Zrzut-ekranu-2017-04-21-o-20.07.06-e1492798979758.png)
 
-Jednym ze systemów wspomagających tworzenie chatbotów, w tym także do messengera, jest **wit.ai**. Środowisko to jest w miarę nowe, ale już teraz zebrała się wokół niego pokaźna społeczność. Za pomocą wit.ai można tworzyć boty tekstowe i głosowe, które możemy wykorzystać do różnorakich celów, np. autoresponder, wirtualny sprzedawca czy systemy wspomagające IoT czy roboty.
+Jednym z systemów wspomagających tworzenie chatbotów, w tym także do messengera, jest **wit.ai**. Środowisko to jest w miarę nowe, ale już teraz zebrała się wokół niego pokaźna społeczność. Za pomocą wit.ai można tworzyć boty tekstowe i głosowe, które możemy wykorzystać do różnorakich celów, np. autoresponder, wirtualny sprzedawca czy systemy wspomagające IoT czy roboty.
 
 > Wit.ai makes it easy for developers to build applications and devices that you can talk or text to. Our vision is to empower developers with an open and extensible natural language platform. Wit.ai learns human language from every interaction, and leverages the community: what's learned is shared across developers.
 
@@ -28,7 +28,7 @@ Dużym plusem jest liczba wspieranych języków. W momencie pisania artykułu je
 
 Wit.ai jest zupełnie darmowy. Możemy go wykorzystywać zarówno dla celów prywatnych, hobbistycznych, jak i do komercyjnego użytku.
 
-Wybierając wit.ai dostajemy rozbudowane środowisko do tworzenia własnych chatbotów. Dostajemy także narzędzia do trenowania, tworzenia **HTTP API** czy **SDK** (np. node.js, python, ruby).
+Wybierając wit.ai, dostajemy rozbudowane środowisko do tworzenia własnych chatbotów. Dostajemy także narzędzia do trenowania, tworzenia **HTTP API** czy **SDK** (np. node.js, python, ruby).
 
 ## Co dalej?
 
