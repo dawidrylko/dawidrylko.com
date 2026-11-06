@@ -10,7 +10,7 @@ W poprzednich dwóch częściach było małe co nieco o [języku GO](/go-program
 
 ## HTTP methods - `POST`
 
-Stworzenie endpointu w **Go**, dzięki któremu będziemy mogli zapisać nasze produkty do bazy danych **MongoDB**, można podzielić na cztery etapy: tworzenie obiektu, przygotowanie obiektu, otworzenie połączenia z bazą danych oraz zapis do bazy. Poniżej przedstawiam całą metodę `create()`. Na razie nie skupiam się nad optymalizacją czy walidacją. Chcę po prostu, aby metoda robiła dokładnie to, co sobie założyłem, czyli żeby działała.
+Stworzenie endpointu w **Go**, dzięki któremu będziemy mogli zapisać nasze produkty do bazy danych **MongoDB**, można podzielić na cztery etapy: tworzenie obiektu, przygotowanie obiektu, otworzenie połączenia z bazą danych oraz zapis do bazy. Poniżej przedstawiam całą metodę `create()`. Na razie nie skupiam się na optymalizacji czy walidacji. Chcę po prostu, aby metoda robiła dokładnie to, co sobie założyłem, czyli żeby działała.
 
 ```go
 func create(responseWriter http.ResponseWriter, request *http.Request) {
@@ -35,7 +35,7 @@ Z pomocą pakietu `net/http` tworzymy metodę `create`, która jako parametry ot
 
 Dzięki pakietowi `encoding/json` mamy możliwość stworzenia dekodera i zdekodowania naszego produktu, poprzez przekazanie adresu naszego produktu. Z kolei biblioteka `gopkg.in/mgo.v2/bson` pozwala nam stworzyć unikalny klucz ID, który dołączamy do produktu.
 
-Sesję z bazą danych otwieramy poprzez wcześniej przygotowaną metodę `GetSession` z lokalnego pakietu `service`. Wybieramy bazę i kolekcję i dodajemy produkt.
+Sesję z bazą danych otwieramy poprzez wcześniej przygotowaną metodę `GetSession` z lokalnego pakietu `server`. Wybieramy bazę i kolekcję i dodajemy produkt.
 
 Pamiętajmy o nagłówkach:
 

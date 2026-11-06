@@ -119,6 +119,14 @@ async function checkListMarkers(css) {
   }
 }
 
+// `body` hyphenates prose, and inline code inherits it unless told otherwise: a
+// browser then breaks identifiers with a hyphen that is not part of the code.
+function checkCodeHyphens(css) {
+  if (!/(^|[},])code\{[^}]*hyphens:\s*none/.test(css)) {
+    fail('inline code must set hyphens: none');
+  }
+}
+
 async function checkBreadcrumbs(css) {
   const m = css.match(/\.breadcrumbs ol\{([^}]*)\}/);
   if (!m) {
@@ -257,6 +265,7 @@ async function main() {
 
   const css = await readAllCss();
   await checkCodeDarkTheme(css);
+  checkCodeHyphens(css);
   await checkListMarkers(css);
   await checkBreadcrumbs(css);
   await checkSetupMermaid();

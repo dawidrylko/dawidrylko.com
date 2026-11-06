@@ -50,7 +50,7 @@ Funkcja `@media (scripting)` jest wspierana przez większość nowoczesnych prze
 - **[Graceful degradation](https://developer.mozilla.org/en-US/docs/Glossary/Graceful_degradation):** Zapewnienie pełnej funkcjonalności dla użytkowników z najnowszymi przeglądarkami, jednocześnie oferując podstawową funkcjonalność dla użytkowników ze starszymi wersjami przeglądarek.
 - **[Progressive Enhancement](https://developer.mozilla.org/en-US/docs/Glossary/Progressive_Enhancement):** Dostarczanie podstawowej zawartości jak najszerszemu gronu odbiorców, z jednoczesnym dodawaniem bardziej zaawansowanych funkcji dla użytkowników z najnowszymi przeglądarkami.
 - **Bezpieczeństwo:** Niektórzy użytkownicy lub oprogramowanie zarządzające mogą wyłączyć skrypty w celu zwiększenia bezpieczeństwa.
-- **Blokowanie reklam:** Użytkownicy mogą korzystać z blokerów reklam, które blokują skrypty.
+- **Wyłączone skrypty:** Narzędzia wyłączające JavaScript w całym dokumencie zmieniają wartość na `none`. Bloker reklam, który odcina tylko wybrane skrypty, tej wartości nie zmienia.
 
 ### Przykład
 
@@ -80,7 +80,7 @@ p {
 }
 ```
 
-W powyższym przykładzie, kolor tekstu w paragrafie (`<p>`) zmienia się w zależności od dostępności skryptów w przeglądarce.
+W powyższym przykładzie kolor tekstu w paragrafie (`<p>`) zmienia się w zależności od dostępności skryptów w przeglądarce.
 
 ## Podsumowanie
 

@@ -21,7 +21,8 @@
       "url": "https://creativecommons.org/licenses/by/4.0/"
     },
     "publicationType": "preprint",
-    "status": "preprint"
+    "status": "preprint",
+    "pdfPreviewUrl": "https://zenodo.org/records/23686056/preview/king-entropy.pdf"
   },
   {
     "id": "log-convexity-strip-dimer-counts",
@@ -52,7 +53,8 @@
       "url": "https://creativecommons.org/licenses/by/4.0/"
     },
     "publicationType": "preprint",
-    "status": "preprint"
+    "status": "preprint",
+    "pdfPreviewUrl": "https://zenodo.org/records/23686087/preview/king-entropy-log-convexity.pdf"
   },
   {
     "id": "dimer-entropy-kings-graph-code",
@@ -76,6 +78,7 @@
       "url": "https://opensource.org/licenses/MIT"
     },
     "publicationType": "software",
-    "status": "published"
+    "status": "published",
+    "archiveUrl": "https://zenodo.org/records/23686293/files/dawidrylko/lattice-dimers-king-entropy-v1.0.0.zip"
   }
 ]

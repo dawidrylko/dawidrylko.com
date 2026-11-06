@@ -75,7 +75,7 @@ Importujemy serwis w odpowiednim module oraz dodajemy go do `providers`.
 
 Do pobierania listy produktów wykorzystamy metodę `list()`. Tworzymy zatem publiczną metodę o tej nazwie, która zwracać będzie nam **Observable**: `public list(): Observable<Product[]>`.
 
-Następnie wykorzystujemy `@angular/http` i metodę `get()` w parametrze, której podajemy URL do naszego endpointa:
+Następnie wykorzystujemy `@angular/http` i metodę `get()`, w parametrze której podajemy URL do naszego endpointa:
 
 ```typescript
 this.http.get(this.listUrl);

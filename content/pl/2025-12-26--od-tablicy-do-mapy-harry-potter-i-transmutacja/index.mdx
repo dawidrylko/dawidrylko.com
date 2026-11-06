@@ -84,7 +84,7 @@ const findStudentById = (id: string): Student | undefined => {
 
 ### Przykład: Transformacja tablicy na mapę
 
-Transformacja polega na jednorazowym przejściu przez tablicę i zapisaniu elementów w strukturze umożliwiającej bezpośredni dostęp po kluczu. Jest to klasyczny przykład kompromisu. Ponosiamy jednorazowy koszt początkowy, aby zyskać znacznie szybszy dostęp w przyszłości.
+Transformacja polega na jednorazowym przejściu przez tablicę i zapisaniu elementów w strukturze umożliwiającej bezpośredni dostęp po kluczu. Jest to klasyczny przykład kompromisu. Ponosimy jednorazowy koszt początkowy, aby zyskać znacznie szybszy dostęp w przyszłości.
 
 ```typescript
 /**
@@ -114,7 +114,7 @@ const findStudentById = (id: string): Student | undefined => {
 
 - **Czasowa $O(1)$**: dostęp do elementu na podstawie klucza jest natychmiastowy.
 - **Pamięciowa $O(n)$**: wymaga dodatkowej pamięci na przechowywanie mapy.
-- **Koszt transformacji $O(n)$\***: jednorazowy koszt przebudowy struktury, który należy uwzględnić w analizie wydajności całego systemu. Koszt ten zwykle amortyzuje się szybko, jeśli wyszukiwanie wykonywane jest wielokrotnie.
+- **Koszt transformacji $O(n)$**: jednorazowy koszt przebudowy struktury, który należy uwzględnić w analizie wydajności całego systemu. Koszt ten zwykle amortyzuje się szybko, jeśli wyszukiwanie wykonywane jest wielokrotnie.
 
 ### Porównanie tablicy i mapy
 
@@ -194,7 +194,7 @@ W takich przypadkach tablica bywa rozwiązaniem prostszym i tańszym.
 Złożoność cyklomatyczna mierzy liczbę niezależnych ścieżek wykonania kodu. Im jest niższa, tym kod jest prostszy w testowaniu i utrzymaniu. W kontekście transformacji struktur danych jest to aspekt często pomijany, mimo że ma realny wpływ na jakość kodu.
 
 ```typescript
-// CC = 2
+// CC = 3
 for (const s of students) {
   if (s.id === id) return s;
 }
@@ -329,7 +329,7 @@ const testCases = [
 ];
 
 // Definicja wyników benchmarków
-const results: Array<Record<string, string>> = [];
+const results: Array<Record<string, string | number>> = [];
 
 // Uruchomienie benchmarków
 testCases.forEach(({ studentCount, searchCount }) => {
@@ -359,7 +359,7 @@ console.table(results);
 ### Uwagi do benchmarku
 
 - Benchmark został uruchomiony w **przeglądarce Google Chrome (V8)**.
-- Czasy są uśrednione; pomiary uwzględniają koszt transformacji dla `Map`.
+- Czasy pochodzą z jednego przebiegu; pomiary uwzględniają koszt transformacji dla `Map`.
 - `Math.random()` wprowadza niewielki szum pomiarowy.
 - Brak warm-upu JIT (celowo, dla prostoty).
 - Benchmark porównuje **strategie**, nie mikrooptymalizacje.
@@ -385,7 +385,7 @@ Wady:
 
 - **Zużycie pamięci**: Mapa wymaga więcej pamięci niż tablica.
 - **Koszt transformacji**: Przekształcenie tablicy w mapę wiąże się z jednorazowym kosztem czasowym $O(n)$.
-- **Utrata kolejności**: W JavaScript `Map` **zachowuje kolejność wstawiania**, w przeciwieństwie do klasycznych, abstrakcyjnych hash map znanych z teorii.
+- **Brak dostępu po pozycji**: W JavaScript `Map` **zachowuje kolejność wstawiania**, w przeciwieństwie do klasycznych, abstrakcyjnych hash map znanych z teorii, ale nie odczytamy elementu po jego numerze.
 
 Profesor McGonagall ujęłaby to krótko:
 **świadoma forma jest ważniejsza niż efektowna zmiana.**

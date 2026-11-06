@@ -26,7 +26,7 @@ export const SITE_METADATA = {
     { name: 'Digital Persona', url: 'https://dawid.dev/', follow: true },
     { name: 'GitHub', url: 'https://github.com/dawidrylko', follow: false },
     { name: 'Twitter', url: 'https://x.com/dawidrylko', follow: false },
-    { name: 'Linkedin', url: 'https://www.linkedin.com/in/dawidrylko', follow: false },
+    { name: 'LinkedIn', url: 'https://www.linkedin.com/in/dawidrylko', follow: false },
   ],
   menu: [
     { name: 'Home', url: '/' },

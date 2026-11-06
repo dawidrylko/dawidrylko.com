@@ -15,7 +15,7 @@ export function isDeadEndPage(html) {
   return /<meta[^>]*name="robots"[^>]*content="[^"]*noindex[^"]*nofollow/i.test(html);
 }
 
-// Kept in sync with TAG_INDEX_MIN_POSTS in src/lib/tags.ts. This gate has zero
+// Kept in sync with TAG_INDEX_MIN_POSTS in src/lib/tag-index.ts. This gate has zero
 // dependencies and cannot import the TypeScript source, so the threshold is
 // duplicated, the same way check-lang-attributes.mjs duplicates OG_LOCALES.
 export const TAG_INDEX_MIN_POSTS = 5;

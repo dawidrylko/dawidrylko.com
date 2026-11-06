@@ -11,7 +11,7 @@ Koniec wakacji, czas brać się do roboty 🙂 W tym wpisie postaram się krótk
 
 ## Zakres zmiennych
 
-**Zakres zmiennych** w JavaScript, to temat nieco skomplikowany. Programista, który dopiero zaczyna swoją przygodę z JSem, może być w niemałym szoku próbując okiełznać tajniki sztuki.
+**Zakres zmiennych** w JavaScript to temat nieco skomplikowany. Programista, który dopiero zaczyna swoją przygodę z JSem, może być w niemałym szoku, próbując okiełznać tajniki sztuki.
 
 ```javascript
 for (var a = 0; a < 5; a++) {}
@@ -90,13 +90,13 @@ function simpleFunction() {
 }
 ```
 
-W przykładzie pierwszym do zmiennej `a` przypisujemy `5`, następnie ją deklarujemy. Log w konsoli daje rezultat `5`. Drugi przykład, to wywołanie metody przed deklaracją. Rezultat taki sam jak wcześniej. Hoisting zadziałał.
+W przykładzie pierwszym do zmiennej `a` przypisujemy `5`, następnie ją deklarujemy. Log w konsoli daje rezultat `5`. Drugi przykład to wywołanie metody przed deklaracją. Rezultat taki sam jak wcześniej. Hoisting zadziałał.
 
 Przy deklaracji zmiennych za pomocą słowa kluczowego `let`, hoisting zachowuje się bardziej przewidywalnie.
 
 ```javascript
 a = 5;
-let a; // ReferenceError: a is not defined
+let a; // ReferenceError: Cannot access 'a' before initialization
 ```
 
 ### Strict mode
@@ -107,7 +107,7 @@ let a; // ReferenceError: a is not defined
 1. Pozwala wyeliminować błędy, które uniemożliwiają optymalizację JSa przez przeglądarki.
 1. Uniemożliwia stosowanie składni mogącej wystąpić w kolejnych odsłonach ECMAScript.
 
-Temat został pobieżnie wywołany, przy okazji hoistingu, nie bez przyczyny. **Strict mode** nie zezwala na skorzystanie ze zmiennej, dopóki nie zostanie zadeklarowana.
+Temat został pobieżnie wywołany, przy okazji hoistingu, nie bez przyczyny. **Strict mode** nie zezwala na przypisanie wartości do zmiennej, która nigdzie nie została zadeklarowana. Hoistingu nie wyłącza: `a = 5; var a;` działa także w trybie ścisłym.
 
 ## Źródła
 

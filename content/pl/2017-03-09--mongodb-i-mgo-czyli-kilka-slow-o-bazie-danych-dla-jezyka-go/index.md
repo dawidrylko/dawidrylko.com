@@ -16,7 +16,7 @@ Zainstalowanie i uruchomienie MongoDB jest bardzo proste. Przez wszystkie kroki 
 2017-03-09T18:34:05.500+0100 I NETWORK [thread1] waiting for connections on port 27017
 ```
 
-Nasza baza jest uruchomiona i czeka na połączenie z nią. Do testu wykorzystamy drugą konsolę. Komenda `mongo` otworzy na shella bazy danych, natomiast sama baza zakomunikuje o połączeniu do niej:
+Nasza baza jest uruchomiona i czeka na połączenie z nią. Do testu wykorzystamy drugą konsolę. Komenda `mongo` otworzy nam shella bazy danych, natomiast sama baza zakomunikuje o połączeniu do niej:
 
 ```bash
 2017-03-09T18:37:42.001+0100 I NETWORK [thread1] connection accepted from 127.0.0.1:52151 #1 (1 connection now open)
@@ -51,7 +51,7 @@ Wynik:
 {"id":"58c19cc71c4e63572e45e3f4","name":"Szynka z 9 marca"}
 ```
 
-I jeszcze z basha dla komendy `db.products.find()`:
+I jeszcze z powłoki Mongo dla komendy `db.products.find()`:
 
 ```bash
 { "_id" : ObjectId("58c19cc71c4e63572e45e3f4"), "name" : "Szynka z 9 marca" }
@@ -59,6 +59,6 @@ I jeszcze z basha dla komendy `db.products.find()`:
 
 ---
 
-#### Aktualizacja 21 grudnia 2023
+### Aktualizacja 21 grudnia 2023
 
 Od czasu powstania tego artykułu, w Go oraz MongoDB wiele się zmieniło. Używana przeze mnie paczka `gopkg.in/mgo.v2` jest przestarzała. Obecnie zaleca się stosowanie nowszej i bardziej rozbudowanej paczki `go.mongodb.org/mongo-driver/mongo`.

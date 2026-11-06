@@ -9,7 +9,7 @@ tags: ['css']
 
 **Witryny i strony internetowe** oparte na statycznych elementach blokowych powoli przechodzą do lamusa. Czy to koniec deklarowania kontenerów z właściwością `float` oraz `clear`? Częściowo tak, **CSS3** wprowadza **Flexbox Layout**, który wspomaga lepsze zarządzanie elementami i łatwiejsze konstruowanie stron.
 
-**Flexbox Layout** (Flexible Box wg [W3C recommendation](https://www.w3.org/TR/css-flexbox-1/), z 1 marca 2016 roku) to moduł, który zapewnia efektywniejszy, a co za tym idzie skuteczniejszy sposób na zarządzanie wyrównaniem, rozkładem elementów wewnątrz kontenerów, przestrzenią wokół nich oraz samymi kontenerami. Przydatne jest to zwłaszcza wtedy, gdy wielkość elementu jest nieznana lub generowana jest w sposób dynamiczny.
+**Flexbox Layout** (Flexible Box wg [W3C Candidate Recommendation](https://www.w3.org/TR/css-flexbox-1/), z 1 marca 2016 roku) to moduł, który zapewnia efektywniejszy, a co za tym idzie skuteczniejszy sposób na zarządzanie wyrównaniem, rozkładem elementów wewnątrz kontenerów, przestrzenią wokół nich oraz samymi kontenerami. Przydatne jest to zwłaszcza wtedy, gdy wielkość elementu jest nieznana lub generowana jest w sposób dynamiczny.
 
 Głównym założeniem układu **flex** jest nadanie elementom możliwości zmiany szerokości, wysokości oraz rozmieszczenia w różnych konfiguracjach. Wszystkie te operacje wykonywane są w celu najlepszego zagospodarowania dostępnej przestrzeni, co ma poprawić widoczność oraz dostępność potrzebnych części na różnych rozdzielczościach ekranu.
 
@@ -25,7 +25,7 @@ Głównym założeniem układu **flex** jest nadanie elementom możliwości zmia
 }
 ```
 
-W ten sposób definiujemy elastyczny kontener (inline lub block) w zależności od podanej wartości. Wszystkie dzieci mogą odziedziczyć zadeklarowaną wartość `flex`.
+W ten sposób definiujemy elastyczny kontener (inline lub block) w zależności od podanej wartości. Wszystkie bezpośrednie dzieci kontenera stają się elementami flex.
 
 ### Flexbox Layout - Flex direction
 

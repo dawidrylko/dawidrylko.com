@@ -136,11 +136,11 @@ Na początku tworzymy formularz:
 </form>
 ```
 
-Informujemy widok, że interesuje nas `FormGroup` o nazwie `product`. Wysłanie formularza odbędzie się za pomocą metody `ngSubmit`, w której przekazujemy nasz `product`. Dodatkowo dodajemy pole `novalidate`, ponieważ walidacją zajmie się reaktywny formularz.
+Informujemy widok, że interesuje nas `FormGroup` o nazwie `product`. Wysłanie formularza odbędzie się za pomocą zdarzenia `ngSubmit`, do którego przekazujemy nasz `product`. Dodatkowo dodajemy atrybut `novalidate`, ponieważ walidacją zajmie się reaktywny formularz.
 
 #### FormControl
 
-Interesujące nas pola formularza, deklarujemy, tak jak w zwykłym formularzu:
+Interesujące nas pola formularza deklarujemy tak, jak w zwykłym formularzu:
 
 ```html
 <label class="center-block">

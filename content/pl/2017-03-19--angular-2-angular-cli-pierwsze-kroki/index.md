@@ -6,7 +6,7 @@ featuredImgAlt: 'Budynek w trakcie remontu otoczony kratownicą rusztowań.'
 tags: ['shopping manager', 'angular']
 ---
 
-Szybki i przyjemny frontend aplikacji internetowej, to marzenie wielu deweloperów. Naprzeciw oczekiwaniom programistów wyszedł Google z produktem **Angular CLI**. Dedykowany command-line interface ma jedno zasadnicze zadanie, przyspieszyć i maksymalnie uprościć pracę w standardowych czynnościach związanych z tworzeniem i zarządzaniem projektem.
+Szybki i przyjemny frontend aplikacji internetowej to marzenie wielu deweloperów. Naprzeciw oczekiwaniom programistów wyszedł Google z produktem **Angular CLI**. Dedykowany command-line interface ma jedno zasadnicze zadanie: przyspieszyć i maksymalnie uprościć pracę w standardowych czynnościach związanych z tworzeniem i zarządzaniem projektem.
 
 ## Instalacja Angular CLI
 
@@ -32,7 +32,7 @@ Nazwa projektu musi zaczynać się od litery, może się składać tylko ze znak
 
 ![Angular CLI - new project](./ng-new.png)
 
-Jeżeli wszystko przebiegło w porządku nasz projekt powinien wyglądać mniej więcej tak:
+Jeżeli wszystko przebiegło w porządku, nasz projekt powinien wyglądać mniej więcej tak:
 
 ```bash
 -rw-r--r--    1 dawid  staff   1093 19 mar 18:35 README.md
@@ -60,7 +60,7 @@ Aby uruchomić stworzone przez nas środowisko, należy wpisać w konsoli komend
 
 Aplikacja będzie działać do momentu wyłączenia jej przez nas.
 
-## Tworzenie komponentu / modułu / dyrektywy / etc
+## Tworzenie komponentu / modułu / dyrektywy / itd.
 
 Sercem stworzonego przez nas projektu jest folder `src/app`. Początkowo znajduje się tam `app.component.ts`, `app.module.ts` oraz plik z widokiem, style oraz testy.
 
@@ -80,6 +80,6 @@ Angular CLI rozróżnia następujące funkcjonalności:
 
 ## Podsumowanie
 
-Angular CLI to przyjazne narzędzie, które wspomaga pracę nad frontendem aplikacji tworzonych w Angularze. Jest bardzo intuicyjny i wygodny w użytkowaniu. Największego boosta dostajemy na samym początku, kiedy wszystko dostajemy podane na tacy.
+Angular CLI to przyjazne narzędzie, które wspomaga pracę nad frontendem aplikacji tworzonych w Angularze. Jest bardzo intuicyjne i wygodne w użytkowaniu. Największego boosta dostajemy na samym początku, kiedy wszystko dostajemy podane na tacy.
 
 ![Angular CLI - working app](./working-app.png)

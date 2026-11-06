@@ -17,7 +17,7 @@ W chwili pisania tego artykułu moja strona internetowa jest hostowana na platfo
 
 ## Wymagania wstępne
 
-Przed przystąpieniem do konfiguracji, upewnij się, że posiadasz:
+Przed przystąpieniem do konfiguracji upewnij się, że posiadasz:
 
 - Konto w Google Cloud Console.
 - Dostęp do Google Search Console dla odpowiedniej witryny.
@@ -124,7 +124,7 @@ Indexing API oferuje kilka metod, które pozwalają na zarządzanie indeksowanie
    ![Szczegóły konta usługi - Utworzenie konta usługi – Administracja – My Project – Google Cloud Console](./4.Utworzenie_konta_usługi–Administracja–My_Project–Google_Cloud_Console-Szczegóły_konta_usługi.png)
 6. Pomijamy następny krok, klikając `Dalej`.
    ![Przyznaj temu kontu usługi dostęp do projektu - Utworzenie konta usługi – Administracja – My Project – Google Cloud Console](./5.Utworzenie_konta_usługi–Administracja–My_Project–Google_Cloud_Console-Przyznaj_temu_kontu_usługi_dostęp_do_projektu.png)
-7. Potwierdź klikając `Gotowe`.
+7. Potwierdź, klikając `Gotowe`.
    ![Przyznaj użytkownikom dostęp do tego konta usługi - Utworzenie konta usługi – Administracja – My Project – Google Cloud Console](./6.Utworzenie_konta_usługi–Administracja–My_Project–Google_Cloud_Console-Przyznaj_użytkownikom_dostęp_do_tego_konta_usługi.png)
 8. Zanotuj adres e-mail konta usługi, gdyż będzie on potrzebny w dalszych krokach. Z listy opcji wybierz `Zarządzanie kluczami`.
    ![Konta usługi – Administracja – My Project – Google Cloud Console](./7.Konta_usługi–Administracja–My_Project–Google_Cloud_Console.png)
@@ -264,13 +264,13 @@ echo "---------------------------------"
 echo "Script completed in $duration milliseconds."
 ```
 
-Po utworzeniu pliku `google.sh`, należy nadać mu uprawnienia do wykonywania. W przeciwnym razie skrypt nie będzie mógł być uruchomiony:
+Po utworzeniu pliku `google.sh` należy nadać mu uprawnienia do wykonywania. W przeciwnym razie skrypt nie będzie mógł być uruchomiony:
 
 ```bash
 chmod +x scripts/notify/google.sh
 ```
 
-Ten krok jest kluczowy, ponieważ bez nadania uprawnień wykonywania, GitHub Actions nie będzie mógł uruchomić skryptu, co spowoduje błąd podczas działania workflow.
+Ten krok jest kluczowy, ponieważ bez nadania uprawnień wykonywania GitHub Actions nie będzie mógł uruchomić skryptu, co spowoduje błąd podczas działania workflow.
 
 ### `cd.yml`
 
@@ -298,7 +298,7 @@ notify:
 
 ## Bezpieczeństwo
 
-Podczas korzystania z Google Cloud Console, Search Console oraz GitHub Actions, bezpieczeństwo powinno być priorytetem:
+Podczas korzystania z Google Cloud Console, Search Console oraz GitHub Actions bezpieczeństwo powinno być priorytetem:
 
 1. **Przechowywanie kluczy API**:
 
@@ -314,18 +314,18 @@ Podczas korzystania z Google Cloud Console, Search Console oraz GitHub Actions, 
 
 ## Uruchomienie
 
-Po zakończeniu konfiguracji, wystarczy dodać nowy commit z komunikatem zawierającym `[notify]`. Spowoduje to, że GitHub Actions uruchomi skrypt `google.sh`, który przekaże adresy URL do Google za pomocą Indexing API.
+Po zakończeniu konfiguracji wystarczy dodać nowy commit z komunikatem zawierającym `[notify]`. Spowoduje to, że GitHub Actions uruchomi skrypt `google.sh`, który przekaże adresy URL do Google za pomocą Indexing API.
 
 ![Notify Google via Indexing API - GitHub Actions](./notify-google-via-indexing-api-1.png)
 ![Notify Google via Indexing API - GitHub Actions](./notify-google-via-indexing-api-2.png)
 
 ## Podsumowanie
 
-Automatyzacja dodawania adresów URL do Google Indexing API za pomocą GitHub Actions to doskonały sposób na oszczędność czasu i zwiększenie wydajności. Poprzez zintegrowanie tego procesu z istniejącymi narzędziami, możesz mieć pewność, że strony będą szybciej indeksowane przez Google. Pamiętaj jednak o zachowaniu najwyższych standardów bezpieczeństwa, aby chronić swoje zasoby i dane.
+Automatyzacja dodawania adresów URL do Google Indexing API za pomocą GitHub Actions oszczędzała mi czas, ale zgodnie z aktualizacją na początku artykułu to API nie służy do zwykłych stron i dziś tej integracji nie stosuję. Jeżeli używasz go do ofert pracy lub transmisji na żywo, pamiętaj o zachowaniu najwyższych standardów bezpieczeństwa, aby chronić swoje zasoby i dane.
 
-Moja strona internetowa oparta jest na Gatsby, a kod źródłowy jest hostowany na platformie GitHub. Należy pamiętać, że ustawienia mogą się różnić w zależności od wykorzystywanych technologii.
+W chwili pisania artykułu moja strona internetowa była oparta na Gatsby, a kod źródłowy był hostowany na platformie GitHub. Należy pamiętać, że ustawienia mogą się różnić w zależności od wykorzystywanych technologii.
 
-Pełne i aktualne informacje znajdują się w moim repozytorium [dawidrylko/dawidrylko.com](https://github.com/dawidrylko/dawidrylko.com) na GitHubie.
+Kod strony znajduje się w moim repozytorium [dawidrylko/dawidrylko.com](https://github.com/dawidrylko/dawidrylko.com) na GitHubie.
 
 ## Źródła
 

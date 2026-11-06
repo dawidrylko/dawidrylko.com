@@ -6,7 +6,7 @@ featuredImgAlt: 'Rząd zielonych skrzynek na listy przymocowanych do jasnej ści
 tags: ['shopping manager', 'go', 'mongo']
 ---
 
-Dobrze zaplanowana praca to podstawa. W [poprzedniej części HTTP methods](/http-methods-z-go-i-mongodb-czesc-1-post/), nauczyliśmy się tworzyć produkty za pomocą metody `POST`. W tym wpisie czas na pobieranie listy produktów oraz pojedynczego produktu po ID.
+Dobrze zaplanowana praca to podstawa. W [poprzedniej części HTTP methods](/http-methods-z-go-i-mongodb-czesc-1-post/) nauczyliśmy się tworzyć produkty za pomocą metody `POST`. W tym wpisie czas na pobieranie listy produktów oraz pojedynczego produktu po ID.
 
 Dzięki tym trzem endpointom będziemy mogli skutecznie i efektywnie rozpocząć pracę nad front-endem naszej aplikacji.
 
@@ -46,7 +46,7 @@ server.GetSession().DB("shopping-manager").C("products").Find(nil).All(&products
 
 Korzystamy ze [stworzonego wcześniej](/mongodb-i-mgo-czyli-kilka-slow-o-bazie-danych-dla-jezyka-go/) lokalnego pakietu `server` i metody `GetSession`. Całość bazuje na pakiecie `mgo.v2`. Po otwarciu sesji, wybraniu bazy danych oraz kolekcji, używamy metod `Find` i `All`, by wylistować wszystkie elementy z kolekcji.
 
-Dodajemy jeszcze warunek, że jeżeli niczego nie znajdziemy, to endpoint odpowie nam statusem `404 - NOT FOUND`. W przeciwnym wypadku standardowa odpowiedź, czyli `200 - OK` wraz z nagłówkiem `"Content-Type", "application/json"`.
+Dodajemy jeszcze warunek, że jeżeli zapytanie do bazy zwróci błąd, to endpoint odpowie nam statusem `404 - NOT FOUND`. Pusta kolekcja nie jest błędem, więc dostaniemy wtedy pustą listę. W przeciwnym wypadku standardowa odpowiedź, czyli `200 - OK` wraz z nagłówkiem `"Content-Type", "application/json"`.
 
 Na koniec zaprezentujmy wynik naszej pracy w formacie JSON, w czym pomoże nam metoda `Marshal` z pakietu `encoding/json`. Pamiętajmy o użyciu blank identifier.
 
@@ -78,7 +78,7 @@ func get(responseWriter http.ResponseWriter, request *http.Request) {
 }
 ```
 
-Potrzebujemy dodatkowo pobrać odpowiedni ID. Z pomocą przychodzi nam, znana już paczka, `gorilla/mux`. Za pomocą metody `Vars` jesteśmy w stanie stworzyć obiekt `params`. Następnie zwracamy `ObjectId` w postaci hexa.
+Potrzebujemy dodatkowo pobrać odpowiedni ID. Z pomocą przychodzi nam, znana już paczka, `gorilla/mux`. Za pomocą metody `Vars` jesteśmy w stanie stworzyć obiekt `params`. Następnie zamieniamy identyfikator zapisany jako hex na `ObjectId`.
 
 Przygotowana przez nas zmienna `oid` pozwoli nam na przeszukanie kolekcji za jej pomocą. Zakładając, że ID w bazie są unikalne, używamy metody `FindId`, gdzie jako parametr przekazujemy `oid`, a następnie wyciągamy znaleziony produkt.
 
@@ -98,6 +98,6 @@ Po pierwszych dwóch tygodniach pracy z językiem **Go** jestem bardzo zadowolon
 
 ---
 
-#### Aktualizacja 21 grudnia 2023
+### Aktualizacja 21 grudnia 2023
 
 Od czasu powstania tego artykułu, w Go oraz MongoDB wiele się zmieniło. Używana przeze mnie paczka `gopkg.in/mgo.v2` jest przestarzała. Obecnie zaleca się stosowanie nowszej i bardziej rozbudowanej paczki `go.mongodb.org/mongo-driver/mongo`.

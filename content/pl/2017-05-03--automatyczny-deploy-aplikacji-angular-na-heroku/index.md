@@ -16,7 +16,7 @@ Na początku musimy trochę zmodyfikować `package.json`, który został wygener
 - `@angular/compiler-cli: ^4.1.0`
 - `typescript: ^2.3.1`
 
-Dodatkowo, zadeklarujmy jaką wersję **node** i **npm** Heroku powinien wykorzystać do budowania aplikacji. Określamy to w następujący sposób:
+Dodatkowo, zadeklarujmy, jaką wersję **node** i **npm** Heroku powinien wykorzystać do budowania aplikacji. Określamy to w następujący sposób:
 
 ```json
 "engines": {
@@ -25,11 +25,11 @@ Dodatkowo, zadeklarujmy jaką wersję **node** i **npm** Heroku powinien wykorzy
 },
 ```
 
-W przypadku nie zadeklarowania wersji node i npm, Heroku użyje domyślnych. W chwili obecnej są to: `node 6.10.3` i `npm 3.10.10`. Lokalnie korzystałem z `node 7.5.0` i `npm 4.1.2`, więc aby wystrzec się błędów i różnic przy instalacji oraz kompilowaniu, zdecydowałem się na zadeklarowanie wersji, z których korzystam.
+W przypadku niezadeklarowania wersji node i npm, Heroku użyje domyślnych. W chwili obecnej są to: `node 6.10.3` i `npm 3.10.10`. Lokalnie korzystałem z `node 7.5.0` i `npm 4.1.2`, więc aby wystrzec się błędów i różnic przy instalacji oraz kompilowaniu, zdecydowałem się na zadeklarowanie wersji, z których korzystam.
 
 ## Budowanie aplikacji
 
-Jeżeli przygotowaliśmy aplikację, przetestujmy czy uda się nam ją zbudować lokalnie. Do tego celu wykorzystamy komendę:
+Jeżeli przygotowaliśmy aplikację, przetestujmy, czy uda się nam ją zbudować lokalnie. Do tego celu wykorzystamy komendę:
 
 ```bash
 ng build --prod --aot
@@ -39,7 +39,7 @@ Parametr `--prod` oznacza wersję produkcyjną, natomiast `--aot` [Ahead-of-time
 
 Polecam zerknąć na [dokumentację Angular CLI](https://web.archive.org/web/20180503095208/https://github.com/angular/angular-cli/wiki/build), gdzie znajdziemy wszystkie atrybuty możliwe do wykorzystania podczas budowania aplikacji.
 
-Jeżeli wszystko przebiegnie pomyślnie, zostanie utworzony folder `dist/`, a w nim znajdować się będzie kod wynikowy. Dodatkowo możemy przetestować poprawność budowania używając serwera http.
+Jeżeli wszystko przebiegnie pomyślnie, zostanie utworzony folder `dist/`, a w nim znajdować się będzie kod wynikowy. Dodatkowo możemy przetestować poprawność budowania, używając serwera http.
 
 ![Angular app build](./Zrzut-ekranu-2017-05-03-o-12.54.33.png)
 
@@ -60,7 +60,7 @@ Do uruchomienia naszej aplikacji na Heroku wykorzystamy niezawodnego [Express.js
 npm install express --save
 ```
 
-Po pomyślnej instalacji, tworzymy prosty skrypt, który wypuści naszą aplikację na domyślny port Heroku, czyli 8080:
+Po pomyślnej instalacji, tworzymy prosty skrypt, który wypuści naszą aplikację na port przydzielony przez Heroku w zmiennej `PORT`, a lokalnie na 8080:
 
 ```javascript
 const express = require('express');
@@ -70,9 +70,7 @@ app.use(express.static(__dirname + '/dist'));
 app.listen(process.env.PORT || 8080);
 ```
 
-Ostatnią czynność, jaką musimy wykonać w tym et
-
-apie, to podmiana w `package.json` skryptu `start`:
+Ostatnią czynność, jaką musimy wykonać na tym etapie, to podmiana w `package.json` skryptu `start`:
 
 ```json
 "scripts": {
@@ -87,7 +85,7 @@ Utworzenie aplikacji na Heroku zajmuje chwilę. Na początku wybieramy nazwę ap
 
 ![Heroku create app](./heroku-1.png)
 
-Następnie w zakładce **Deploy**, mamy możliwość wybrania sposobu, w jaki nasza aplikacja ma być dystrybuowana. Mając repozytorium aplikacji w serwisie GitHub, zdecydowałem się na wybranie właśnie tego sposobu.
+Następnie w zakładce **Deploy** mamy możliwość wybrania sposobu, w jaki nasza aplikacja ma być dystrybuowana. Mając repozytorium aplikacji w serwisie GitHub, zdecydowałem się na wybranie właśnie tego sposobu.
 
 ![Heroku deploy app](./Zrzut-ekranu-2017-05-03-o-13.20.34.png)
 

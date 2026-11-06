@@ -340,6 +340,9 @@ async function main() {
 
       const canonical = checked.match(/<link[^>]*rel="canonical"[^>]*href="([^"]+)"/)?.[1];
       const post = roots.find(node => node?.['@type'] === 'BlogPosting');
+      if (!post?.description?.trim()) fail(`${rel}: BlogPosting has an empty description`);
+      const metaDescription = checked.match(/<meta[^>]*name="description"[^>]*content="([^"]*)"/)?.[1] ?? '';
+      if (/`|\]\(/.test(metaDescription)) fail(`${rel}: meta description contains raw Markdown`);
       if (post?.author?.['@id'] !== `${ORIGIN}/#person`) fail(`${rel}: BlogPosting author is inconsistent`);
       if (post?.publisher?.['@id'] !== `${ORIGIN}/#person`) fail(`${rel}: BlogPosting publisher is inconsistent`);
       if (canonical && post?.url !== canonical) fail(`${rel}: BlogPosting URL differs from canonical URL`);

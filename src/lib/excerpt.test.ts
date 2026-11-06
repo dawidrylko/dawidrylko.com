@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { excerpt } from './excerpt';
+import { excerpt, metaExcerpt } from './excerpt';
 
 describe('excerpt', () => {
   it('returns short plain text unchanged', () => {
@@ -31,5 +31,25 @@ describe('excerpt', () => {
 
   it('does not truncate text exactly at the limit', () => {
     expect(excerpt('eleven chars', 12)).toBe('eleven chars');
+  });
+});
+
+describe('metaExcerpt', () => {
+  it('keeps code span words and hyphens', () => {
+    expect(metaExcerpt('Metoda `post()` z pakietu `http` w model-driven forms.', 160)).toBe(
+      'Metoda post() z pakietu http w model-driven forms.',
+    );
+  });
+
+  it('drops code blocks, images, headings, MDX imports and JSX', () => {
+    const body =
+      "import X from './x';\n\n## Nagłówek\n\n![alt](a.png)\n\n```js\nkod\n```\n\n<X client:load />\n\nTekst.";
+    expect(metaExcerpt(body, 160)).toBe('Nagłówek Tekst.');
+  });
+
+  it('ends a cut text with three dots within the limit', () => {
+    const result = metaExcerpt('słowo '.repeat(50), 160);
+    expect(result.length).toBeLessThanOrEqual(160);
+    expect(result.endsWith('słowo...')).toBe(true);
   });
 });

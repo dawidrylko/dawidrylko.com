@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 import PageLayout from '../layouts/PageLayout.astro';
 import JsonLd from '../components/JsonLd.astro';
 import ExternalLink from '../components/ExternalLink.astro';
-import PublicationItem from '../components/PublicationItem.astro';
+import PublicationTable from '../components/PublicationTable.astro';
 import { SITE_METADATA } from '../data/site-metadata';
 import { STRUCTURED_DATA } from '../data/structured-data';
 import { createPageSchema } from '../lib/page-metadata';
@@ -22,7 +22,7 @@ const PAGE_METADATA: PageMetadata = {
   ],
 };
 
-const { author, orcid } = SITE_METADATA;
+const { orcid } = SITE_METADATA;
 const { personReference } = STRUCTURED_DATA;
 
 const entries = await getCollection('publications');
@@ -69,22 +69,6 @@ const structuredData = createPageSchema({
       </ExternalLink>
     </p>
   </section>
-  <section id="papers">
-    <h2>Papers</h2>
-    {papers.length > 0 ? (
-      papers.map(publication => <PublicationItem publication={publication} />)
-    ) : (
-      <p>This list will be updated as new work is published.</p>
-    )}
-  </section>
-  {software.length > 0 && (
-    <section id="research-software">
-      <h2>Research software</h2>
-      {software.map(publication => (
-        <PublicationItem publication={publication} />
-      ))}
-    </section>
-  )}
   <section id="research-interests">
     <h2>Research interests</h2>
     {RESEARCH_INTERESTS.map(({ area, topics }) => (
@@ -98,27 +82,18 @@ const structuredData = createPageSchema({
       </>
     ))}
   </section>
-  <section id="author-profile">
-    <h2>Author profile</h2>
-    <p>
-      I am a solution architect working across software, security and AI.{' '}
-      <a href="/about/">Experience, education and the CV</a> are on the about page.
-    </p>
+  <section id="papers">
+    <h2>Papers</h2>
+    {papers.length > 0 ? (
+      <PublicationTable caption="Papers" publications={papers} />
+    ) : (
+      <p>This list will be updated as new work is published.</p>
+    )}
   </section>
-  <section id="orcid-profile">
-    <h2>ORCID profile</h2>
-    <p>
-      My ORCID record lists my registered works:{' '}
-      <ExternalLink href={orcid.url} follow>
-        {orcid.url}
-      </ExternalLink>
-    </p>
-  </section>
-  <section id="scholarly-contact">
-    <h2>Scholarly contact</h2>
-    <p>
-      For questions about a paper, corrections or research collaboration, write to{' '}
-      <a href={`mailto:${author.email}`}>{author.email}</a>.
-    </p>
-  </section>
+  {software.length > 0 && (
+    <section id="research-software">
+      <h2>Research software</h2>
+      <PublicationTable caption="Research software" publications={software} />
+    </section>
+  )}
 </PageLayout>

@@ -6,7 +6,7 @@ featuredImgAlt: 'Skrzynki ze świeżymi warzywami na straganie: kalafior, broku�
 tags: ['shopping manager', 'go']
 ---
 
-Do usystematyzowania pracy nad projektem **Shopping Manager**, należy w tym momencie sprecyzować, jak będą wyglądać kluczowe elementy naszego systemu. W tym krótkim wpisie zastanowię się, jakie pola powinien mieć jadłospis, produkt oraz przepis.
+Do usystematyzowania pracy nad projektem **Shopping Manager** należy w tym momencie sprecyzować, jak będą wyglądać kluczowe elementy naszego systemu. W tym krótkim wpisie zastanowię się, jakie pola powinien mieć jadłospis, produkt oraz przepis.
 
 ## Planowanie
 
@@ -84,13 +84,13 @@ import (
 // Product represents information about a product
 type Product struct {
   ID            bson.ObjectId `json:"id" bson:"_id"`
-  Name          string
-  Manufacturer  string
-  Ean           string
-  Energy        string
-  NetWeight     string
-  UnitOfMeasure string
-  Price         Prices
+  Name          string        `json:"name"`
+  Manufacturer  string        `json:"manufacturer"`
+  Ean           string        `json:"ean"`
+  Energy        string        `json:"energy"`
+  NetWeight     string        `json:"net_weight"`
+  UnitOfMeasure string        `json:"unit_of_measure"`
+  Price         Prices        `json:"price"`
 }
 
 // Products represent information about a product list
@@ -98,7 +98,7 @@ type Products []Product
 
 type Price struct {
   Date  time.Time `json:"date"`
-  Value float32
+  Value float32   `json:"value"`
 }
 
 type Prices []Price
