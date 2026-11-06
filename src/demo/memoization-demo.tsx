@@ -71,6 +71,7 @@ const MemoizationDemo: FC = () => {
   const [loadingHorcruxes, setLoadingHorcruxes] = useState<Set<string>>(new Set());
   const [memoryCache] = useState<Map<string, string>>(new Map());
   const logContainerRef = useRef<HTMLDivElement>(null);
+  const nextLogIdRef = useRef(1);
 
   // The build and the browser run at different times, so the first timestamp is
   // set after hydration. Rendering it earlier makes React report a text mismatch.
@@ -92,17 +93,17 @@ const MemoizationDemo: FC = () => {
   };
 
   const addLogEntry = useCallback((message: string, type: LogType = LogType.Result, isFinished: boolean = true) => {
+    const id = nextLogIdRef.current++;
     console.log(`[${formatTimestamp(Date.now())}]: ${message}`);
-    setLogEntries(currentLogs => [
-      ...currentLogs,
-      { id: currentLogs.length, message, type, timestamp: Date.now(), isFinished },
-    ]);
+    setLogEntries(currentLogs => [...currentLogs, { id, message, type, timestamp: Date.now(), isFinished }]);
 
     setTimeout(() => {
       if (logContainerRef.current) {
         logContainerRef.current.scrollTop = logContainerRef.current.scrollHeight;
       }
     }, 10);
+
+    return id;
   }, []);
 
   const markLogAsFinished = useCallback((logId: number) => {
@@ -111,9 +112,7 @@ const MemoizationDemo: FC = () => {
 
   const extractHorcruxMemory = async (horcruxName: string): Promise<string> => {
     const processingDuration = 2000 + Math.random() * 3000;
-    const currentLogId = logEntries.length;
-
-    addLogEntry(
+    const currentLogId = addLogEntry(
       `🔍 Extracting memories from ${horcruxName}... (${Math.round(processingDuration)}ms)`,
       LogType.Processing,
       false,
