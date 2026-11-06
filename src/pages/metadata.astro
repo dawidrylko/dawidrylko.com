@@ -1,8 +1,8 @@
 ---
-import { getCollection } from 'astro:content';
 import PageLayout from '../layouts/PageLayout.astro';
 import JsonLd from '../components/JsonLd.astro';
 import { SITE_METADATA } from '../data/site-metadata';
+import { getBlogPosts } from '../lib/blog';
 import { createPageSchema } from '../lib/page-metadata';
 import type { PageMetadata } from '../types';
 
@@ -14,16 +14,18 @@ const staticPages = [
   '/about/',
   '/blog/',
   '/contact/',
+  '/cookie-policy/',
   '/files/',
   '/metadata/',
+  '/polityka-cookies/',
+  '/polityka-prywatnosci/',
+  '/privacy-policy/',
   '/publications/',
   '/setup/',
   '/tags/',
 ];
 
-const blogPaths = (await getCollection('posts'))
-  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
-  .map(post => `/${post.id}/`);
+const blogPaths = (await getBlogPosts()).map(post => `/${post.id}/`);
 
 const pad = (n: number) => String(n).padStart(2, '0');
 const now = new Date();

@@ -5,6 +5,7 @@ import {
   DESCRIPTION_MAX_LENGTH,
   resolveMetaTitle,
   resolveMetaDescription,
+  resolvePostDescription,
   isWithinTitleLimit,
   isWithinDescriptionLimit,
 } from './seo';
@@ -48,5 +49,20 @@ describe('length guards', () => {
     expect(isWithinTitleLimit('a'.repeat(TITLE_MAX_LENGTH + 1))).toBe(false);
     expect(isWithinDescriptionLimit('a'.repeat(DESCRIPTION_MAX_LENGTH))).toBe(true);
     expect(isWithinDescriptionLimit('a'.repeat(DESCRIPTION_MAX_LENGTH + 1))).toBe(false);
+  });
+});
+
+describe('resolvePostDescription', () => {
+  it('strips inline Markdown from a frontmatter description', () => {
+    expect(resolvePostDescription('Metody `_.random` i **`_.merge`** z [Lodash](https://lodash.com/).', 'body')).toBe(
+      'Metody _.random i _.merge z Lodash.',
+    );
+  });
+
+  it('falls back to an excerpt of the body within the description limit', () => {
+    const description = resolvePostDescription(undefined, 'Polski tekst wpisu. '.repeat(30));
+    expect(description.startsWith('Polski tekst wpisu.')).toBe(true);
+    expect(isWithinDescriptionLimit(description)).toBe(true);
+    expect(description).not.toBe(SITE_METADATA.description.en);
   });
 });
