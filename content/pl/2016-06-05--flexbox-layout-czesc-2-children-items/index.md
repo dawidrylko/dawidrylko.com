@@ -11,7 +11,7 @@ Rozdysponowanie elementów wewnątrz kontenera wcale nie jest takie proste. Czas
 
 Artykuł stanowi kontynuację serii. Pierwszy artykuł możesz przeczytać, klikając w: [Flexbox Layout - część 1 - parent container](/flexbox-layout-czesc-1-parent-container/).
 
-![Flex children - kontener nadrzędny z kontenerami w środku. Czerwony tekst 'Potomkowie', z którego wychodzą cztery czerwone strzałki skierowane na kontenery w środku.](./flex-children.png)
+![Flex children - kontener nadrzędny z elementami w środku. Czerwony tekst 'Potomkowie', z którego wychodzą cztery czerwone strzałki skierowane na elementy w środku.](./flex-children.png)
 
 **Flex items** to wszystkie obiekty wewnątrz kontenera z zadeklarowaną wartością `flex`. To właśnie operacje na potomkach oraz przypisanie im odpowiednich stylów sprawiają, że cały układ zachowa się w możliwie najlepszy (co za tym idzie, optymalny) sposób.
 
@@ -25,7 +25,7 @@ Artykuł stanowi kontynuację serii. Pierwszy artykuł możesz przeczytać, klik
 }
 ```
 
-![Flex order - przedstawiona została kolejność kontenerów flexbox: (1, 2, 3, 4), (1, 1, 1, 2), (-2, -1, 0, 6), (1, 2, 3, 4).](./flex-order.png)
+![Flex order - przedstawiona została kolejność elementów flexbox: (1, 2, 3, 4), (1, 1, 1, 2), (-2, -1, 0, 6), (1, 2, 3, 4).](./flex-order.png)
 
 Standardowo elementy w kontenerze są ułożone w kolejności występowania w pliku **HTML**. Kolejnością można jednak bez problemu sterować poprzez zastosowanie właściwości `order`.
 
@@ -39,7 +39,7 @@ Standardowo elementy w kontenerze są ułożone w kolejności występowania w pl
 
 Właściwość `flex-grow` umożliwia elementom powiększenie się, jeśli tego potrzebują. Przedstawiona właściwość przyjmuje wartość numeryczną. Wartość ta jest **proporcją**, zadeklarowanego dla elementu miejsca, względem całego wykorzystanego miejsca wewnątrz **kontenera flex**.
 
-![Flex grow - przedstawiona została szerokość kontenerów flexbox. W pierwszym rzędzie kontenery mają taką samą szerokość (1). W drugim rzędzie jeden kontener jest dwa razy szerszy (2) niż pozostałe (1).](./flex-grow.png)
+![Flex grow - przedstawiona została szerokość elementów flexbox. W pierwszym rzędzie elementy mają taką samą szerokość (1). W drugim rzędzie jeden element jest dwa razy szerszy (2) niż pozostałe (1).](./flex-grow.png)
 
 Jeśli wszystkim elementom wewnątrz kontenera zostanie przyporządkowana właściwość `flex-grow: 1`, to kontener rozdysponuje miejsce w taki sposób, aby wszystkie elementy dostały tyle samo wolnego miejsca. Jeśli zadeklarujemy wybranemu elementowi `flex-grow: 2`, a pozostałym `flex-grow: 1`, to wybrany element dostanie dwa razy więcej wolnego miejsca niż pozostałe.
 
@@ -77,4 +77,4 @@ Podstawową wielkość elementu wewnątrz **flexible container** uzyskujemy dzi�
 
 `flex` jest skrótem dla `flex-grow`, `flex-shrink` oraz `flex-basis`. Wg rekomendacji **W3C** zaleca się używanie właśnie tej właściwości, zamiast deklarowania wszystkich powyższych. Wartością początkową jest `0 1 auto`. Właściwości pominięte w samym skrócie przyjmują jednak inne wartości: `flex-grow` i `flex-shrink` wartość `1`, a `flex-basis` wartość `0`.
 
-Kolejny wpis z tej serii poświęcony będzie wyrównaniu kontenera i elementów znajdujących się wewnątrz niego.
+[Kolejny wpis z tej serii](/flexbox-layout-czesc-3-alignment/) poświęcony jest wyrównaniu kontenera i elementów znajdujących się wewnątrz niego.

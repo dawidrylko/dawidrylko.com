@@ -15,7 +15,7 @@ Głównym założeniem układu **flex** jest nadanie elementom możliwości zmia
 
 ## Właściwości rodzica (kontener)
 
-![Flex container - kontener nadrzędny z kontenerami w środku. Czerwony tekst 'Kontener', z którego wychodzi czerwona strzałka skierowana na kontener nadrzędny.](./flex-container.png)
+![Flex container - kontener nadrzędny z elementami w środku. Czerwony tekst 'Kontener', z którego wychodzi czerwona strzałka skierowana na kontener nadrzędny.](./flex-container.png)
 
 ### Flexbox Layout - Display
 
@@ -56,7 +56,7 @@ Właściwość może przyjąć następujące wartości (przy `direction: ltr`):
 
 Domyślnie **Flex** próbuje zmieścić wszystkie elementy zależne w jednej linii. W zależności od potrzeby można sterować tą właściwością za pomocą deklaracji `flex-wrap`.
 
-![Flex wrap - rząd kontenerów zaczyna zawijać się w drugi rząd, przez co otrzymujemy dwa rzędy kontenerów.](./flex-wrap.png)
+![Flex wrap - rząd elementów zawija się w drugi rząd, przez co otrzymujemy dwa rzędy elementów.](./flex-wrap.png)
 
 Niezadeklarowanie właściwości `flex-wrap` jest równoznaczne z przybraniem domyślnej wartości `nowrap`. Jeżeli chcemy rozbić elementy na kolejne linie należy zadeklarować wartość `wrap` lub `wrap-reverse`, w zależności od potrzeby.
 
