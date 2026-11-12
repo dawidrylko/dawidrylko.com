@@ -15,18 +15,21 @@
     "id": "A004003",
     "name": "Number of domino tilings (or dimer coverings) of a 2n X 2n square.",
     "role": "contributor",
-    "contribution": ["Formula as a resultant of Chebyshev polynomials", "PARI program"]
+    "contribution": [
+      "Formula as the resultant of P(x) and P(-x), with P built from a Chebyshev polynomial",
+      "PARI program"
+    ]
   },
   {
     "id": "A239264",
     "name": "Number A(n,k) of domicule tilings of a k X n grid; square array A(n,k), n>=0, k>=0, read by antidiagonals.",
     "role": "contributor",
-    "contribution": ["Table of antidiagonals n = 0..46", "PARI program"]
+    "contribution": ["Table of antidiagonals n = 0..46 (0..36 from Alois P. Heinz)", "PARI program"]
   },
   {
     "id": "A239273",
     "name": "Number of domicule tilings of a 2n X 2n square grid.",
     "role": "contributor",
-    "contribution": ["Table of n, a(n) for n = 0..12"]
+    "contribution": ["Table of n, a(n) for n = 0..12", "PARI program"]
   }
 ]

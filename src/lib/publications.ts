@@ -41,7 +41,8 @@ export const publicationSchema = z
     id: z
       .string()
       .regex(/^[a-z0-9]+(-[a-z0-9]+)*$/, { message: 'must be a kebab-case slug' })
-      .refine(value => !RESERVED_IDS.has(value), { message: 'collides with a section anchor of the page' }),
+      .refine(value => !RESERVED_IDS.has(value), { message: 'collides with a section anchor of the page' })
+      .refine(value => !value.startsWith('oeis-'), { message: 'oeis- anchors belong to the OEIS table' }),
     title: z.string().trim().min(1),
     authors: z
       .array(

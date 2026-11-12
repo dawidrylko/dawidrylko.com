@@ -18,7 +18,12 @@ test('publication tables keep tokens whole and render exponents as markup', asyn
   await page.goto('/publications/');
   await expect(page.locator('.publication-cell').first()).toHaveCSS('hyphens', 'manual');
   await expect(page.locator('#dimer-entropy-kings-graph .record-details sup')).toHaveCount(2);
-  await expect(page.locator('main h2')).toHaveText(['Research interests', 'Papers', 'Research software']);
+  await expect(page.locator('main h2')).toHaveText([
+    'Research interests',
+    'Papers',
+    'Research software',
+    'OEIS sequences',
+  ]);
   for (const value of await page.locator('.publications-table td').allTextContents()) {
     expect(value.trim()).not.toBe('');
   }
