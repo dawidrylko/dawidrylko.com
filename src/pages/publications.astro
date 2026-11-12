@@ -4,10 +4,12 @@ import PageLayout from '../layouts/PageLayout.astro';
 import JsonLd from '../components/JsonLd.astro';
 import ExternalLink from '../components/ExternalLink.astro';
 import PublicationTable from '../components/PublicationTable.astro';
+import OeisTable from '../components/OeisTable.astro';
 import { SITE_METADATA } from '../data/site-metadata';
 import { STRUCTURED_DATA } from '../data/structured-data';
 import { createPageSchema } from '../lib/page-metadata';
 import { groupPublications, publicationJsonLd } from '../lib/publications';
+import { sortOeisEntries } from '../lib/oeis';
 import type { PageMetadata } from '../types';
 
 const PAGE_METADATA: PageMetadata = {
@@ -28,6 +30,7 @@ const { personReference } = STRUCTURED_DATA;
 const entries = await getCollection('publications');
 const publications = entries.map(({ data }) => data);
 const { papers, software } = groupPublications(publications);
+const oeisEntries = sortOeisEntries((await getCollection('oeis')).map(({ data }) => data));
 const nodes = publications.map(publicationJsonLd).filter(node => node !== null);
 
 const RESEARCH_INTERESTS = [
@@ -94,6 +97,19 @@ const structuredData = createPageSchema({
     <section id="research-software">
       <h2>Research software</h2>
       <PublicationTable caption="Research software" publications={software} />
+    </section>
+  )}
+  {oeisEntries.length > 0 && (
+    <section id="oeis">
+      <h2>OEIS sequences</h2>
+      <p>
+        Integer sequences authored or extended by Dawid Ryłko in the{' '}
+        <ExternalLink href="https://oeis.org/" follow>
+          On-Line Encyclopedia of Integer Sequences
+        </ExternalLink>
+        .
+      </p>
+      <OeisTable caption="OEIS sequences" entries={oeisEntries} />
     </section>
   )}
 </PageLayout>

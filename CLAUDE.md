@@ -72,6 +72,8 @@ Every fact comes from the registered record (ORCID, DataCite, the publisher). Ne
 
 A record with `status: under-review` gets no JSON-LD. Software and datasets are not `ScholarlyArticle`. `scripts/ci/check-seo-meta.mjs` holds the records and the JSON-LD together.
 
+The `#oeis` section renders `src/data/oeis.json` (`oeisEntrySchema` in `src/lib/oeis.ts`): sequences Dawid authored (`role: author`, date from the OEIS author line) and those he extended (`role: contributor`, `contribution` copied from the credited lines). Names are copied verbatim from oeis.org. A sequence still `allocated` or in draft stays out until the editors approve it. OEIS entries get no JSON-LD.
+
 Dublin Core or Highwire tags belong on a future per-work page, not on the list. Google Scholar expects each article and abstract in a separate file.
 
 ## Code conventions

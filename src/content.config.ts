@@ -1,6 +1,7 @@
 import { defineCollection } from 'astro:content';
 import { z } from 'astro:schema';
 import { file, glob } from 'astro/loaders';
+import { oeisEntrySchema } from './lib/oeis';
 import { publicationSchema } from './lib/publications';
 
 // Posts keep their Gatsby on-disk layout: content/pl/YYYY-MM-DD--slug/index.{md,mdx}.
@@ -50,4 +51,10 @@ const publications = defineCollection({
   schema: publicationSchema,
 });
 
-export const collections = { posts, publications };
+// OEIS sequences authored or extended, listed in their own section of /publications/.
+const oeis = defineCollection({
+  loader: file('src/data/oeis.json'),
+  schema: oeisEntrySchema,
+});
+
+export const collections = { posts, publications, oeis };
