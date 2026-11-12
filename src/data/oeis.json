@@ -1,0 +1,35 @@
+[
+  {
+    "id": "A401670",
+    "name": "Number of domicule tilings of a 2n X 2n toroidal grid.",
+    "role": "author",
+    "date": "2026-11-01"
+  },
+  {
+    "id": "A401673",
+    "name": "Triangle read by rows: T(n,k) is the number of domicule tilings of the 2n X 2n square with exactly 2k diagonal domicules, 0 <= k <= n^2.",
+    "role": "author",
+    "date": "2026-11-01"
+  },
+  {
+    "id": "A004003",
+    "name": "Number of domino tilings (or dimer coverings) of a 2n X 2n square.",
+    "role": "contributor",
+    "contribution": [
+      "Formula as the resultant of P(x) and P(-x), with P built from a Chebyshev polynomial",
+      "PARI program"
+    ]
+  },
+  {
+    "id": "A239264",
+    "name": "Number A(n,k) of domicule tilings of a k X n grid; square array A(n,k), n>=0, k>=0, read by antidiagonals.",
+    "role": "contributor",
+    "contribution": ["Table of antidiagonals n = 0..46 (0..36 from Alois P. Heinz)", "PARI program"]
+  },
+  {
+    "id": "A239273",
+    "name": "Number of domicule tilings of a 2n X 2n square grid.",
+    "role": "contributor",
+    "contribution": ["Table of n, a(n) for n = 0..12", "PARI program"]
+  }
+]

@@ -54,6 +54,8 @@ describe('publicationSchema', () => {
     ['an unknown status', { status: 'submitted' }],
     ['an unknown field', { citations: 10 }],
     ['an id taken by a page section', { id: 'papers' }],
+    ['the OEIS section id', { id: 'oeis' }],
+    ['an id in the OEIS anchor namespace', { id: 'oeis-a401670' }],
     ['a preprint marked published', { status: 'published' }],
     ['a journal article marked preprint', { publicationType: 'journal-article' }],
     ['an empty keyword list', { keywords: [] }],

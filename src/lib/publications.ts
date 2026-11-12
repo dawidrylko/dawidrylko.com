@@ -34,14 +34,15 @@ const isCalendarDate = (value: string) => {
 const UNICODE_SCRIPTS = /[\u00B2\u00B3\u00B9\u2070-\u209F]/;
 
 // An id becomes a page anchor, so it must not collide with a section of the page.
-const RESERVED_IDS = new Set(['papers', 'research-software', 'research-interests']);
+const RESERVED_IDS = new Set(['papers', 'research-software', 'research-interests', 'oeis']);
 
 export const publicationSchema = z
   .object({
     id: z
       .string()
       .regex(/^[a-z0-9]+(-[a-z0-9]+)*$/, { message: 'must be a kebab-case slug' })
-      .refine(value => !RESERVED_IDS.has(value), { message: 'collides with a section anchor of the page' }),
+      .refine(value => !RESERVED_IDS.has(value), { message: 'collides with a section anchor of the page' })
+      .refine(value => !value.startsWith('oeis-'), { message: 'oeis- anchors belong to the OEIS table' }),
     title: z.string().trim().min(1),
     authors: z
       .array(
