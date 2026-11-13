@@ -1,13 +1,7 @@
 ---
-import ExternalLink from './ExternalLink.astro';
-import {
-  abstractHtml,
-  doiUrl,
-  publicationLandingUrl,
-  publicationLinks,
-  STATUS_LABELS,
-  type Publication,
-} from '../lib/publications';
+import RecordTable from './RecordTable.astro';
+import { abstractHtml, publicationLinks, STATUS_LABELS, type Publication } from '../lib/publications';
+import type { RecordDetail, RecordRow } from '../lib/record-table';
 
 interface Props {
   caption: string;
@@ -15,91 +9,36 @@ interface Props {
 }
 
 const { caption, publications } = Astro.props;
+
+const citation = ({ authors, venue, doi }: Publication): string =>
+  [authors.map(({ name }) => name).join(', ') + '.', venue && `${venue}.`, doi && `DOI: ${doi}`]
+    .filter(Boolean)
+    .join(' ');
+
+const details = ({ abstract, keywords, license }: Publication): RecordDetail[] => [
+  ...(abstract ? [{ html: abstractHtml(abstract) }] : []),
+  ...(keywords ? [{ label: 'Keywords', text: keywords.join(', ') }] : []),
+  ...(license ? [{ label: 'License', text: license.name }] : []),
+];
+
+const rows: RecordRow[] = publications.map(publication => ({
+  id: publication.id,
+  cells: [
+    { text: publication.title, secondary: citation(publication) },
+    { text: String(publication.year), datetime: publication.date ?? String(publication.year) },
+    STATUS_LABELS[publication.status],
+  ],
+  links: publicationLinks(publication),
+  details: details(publication),
+}));
 ---
 
-<div class="table-scroll" tabindex="0" role="region" aria-label={caption}>
-  <table class="publications-table">
-    <caption class="visually-hidden">{caption}</caption>
-    <colgroup>
-      <col />
-      <col class="col-w-10" />
-      <col class="col-w-15" />
-      <col class="col-w-15" />
-    </colgroup>
-    <thead>
-      <tr>
-        <th scope="col">Title</th>
-        <th scope="col">Year</th>
-        <th scope="col">Status</th>
-        <th scope="col">Download</th>
-      </tr>
-    </thead>
-    <tbody>
-      {publications.map(publication => {
-        const { id, title, authors, year, date, venue, doi, abstract, keywords, license, status } = publication;
-        const links = publicationLinks(publication);
-        const landingUrl = publicationLandingUrl(publication);
-        return (
-          <tr id={id}>
-            <td class="publication-cell">
-              {landingUrl ? (
-                <ExternalLink class="publication-title" href={landingUrl} follow>
-                  {title}
-                </ExternalLink>
-              ) : (
-                <span class="publication-title">{title}</span>
-              )}
-              <p class="publication-citation">
-                {authors.map(({ name }) => name).join(', ')}.{venue && ` ${venue}.`}
-                {doi && (
-                  <>
-                    {' '}
-                    DOI:{' '}
-                    <ExternalLink href={doiUrl(doi)} follow>
-                      {doi}
-                    </ExternalLink>
-                  </>
-                )}
-              </p>
-              {(abstract || keywords || license) && (
-                <details class="record-details">
-                  <summary>Abstract and details</summary>
-                  {abstract && <p set:html={abstractHtml(abstract)} />}
-                  {keywords && <p>Keywords: {keywords.join(', ')}</p>}
-                  {license && (
-                    <p>
-                      License: <ExternalLink href={license.url}>{license.name}</ExternalLink>
-                    </p>
-                  )}
-                </details>
-              )}
-            </td>
-            <td>
-              <time datetime={date ?? String(year)}>{year}</time>
-            </td>
-            <td>{STATUS_LABELS[status]}</td>
-            <td>
-              {links.length > 0 ? (
-                <div class="file-actions">
-                  {links.map(({ action, icon, href, label }) => (
-                    <a
-                      class="file-link"
-                      href={href}
-                      {...(action === 'open' ? { target: '_blank', rel: 'noopener noreferrer' } : { download: '' })}
-                      aria-label={label}
-                      title={label}
-                    >
-                      {icon}
-                    </a>
-                  ))}
-                </div>
-              ) : (
-                'Not available'
-              )}
-            </td>
-          </tr>
-        );
-      })}
-    </tbody>
-  </table>
-</div>
+<RecordTable
+  caption={caption}
+  columns={[
+    { label: 'Title', wrap: true, primary: true },
+    { label: 'Year', width: 'w-10' },
+    { label: 'Status', width: 'w-15' },
+  ]}
+  rows={rows}
+/>

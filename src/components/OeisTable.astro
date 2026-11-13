@@ -1,6 +1,7 @@
 ---
-import ExternalLink from './ExternalLink.astro';
+import RecordTable from './RecordTable.astro';
 import { OEIS_ROLE_LABELS, oeisAnchor, oeisUrl, type OeisEntry } from '../lib/oeis';
+import { LINK_ICONS, type RecordRow } from '../lib/record-table';
 
 interface Props {
   caption: string;
@@ -8,46 +9,30 @@ interface Props {
 }
 
 const { caption, entries } = Astro.props;
+
+const rows: RecordRow[] = entries.map(({ id, name, role, contribution, date }) => ({
+  id: oeisAnchor(id),
+  cells: [id, name, OEIS_ROLE_LABELS[role], date ? { text: date, datetime: date } : '—'],
+  links: [
+    {
+      kind: 'external',
+      icon: LINK_ICONS.external,
+      href: oeisUrl(id),
+      label: `Open ${id} on oeis.org`,
+      follow: true,
+    },
+  ],
+  details: contribution ? [{ label: 'Contributed', text: `${contribution.join('; ')}.` }] : undefined,
+}));
 ---
 
-<div class="table-scroll" tabindex="0" role="region" aria-label={caption}>
-  <table class="publications-table">
-    <caption class="visually-hidden">{caption}</caption>
-    <colgroup>
-      <col class="col-w-15" />
-      <col />
-      <col class="col-w-15" />
-    </colgroup>
-    <thead>
-      <tr>
-        <th scope="col">Sequence</th>
-        <th scope="col">Name</th>
-        <th scope="col">Role</th>
-      </tr>
-    </thead>
-    <tbody>
-      {entries.map(({ id, name, role, contribution, date }) => (
-        <tr id={oeisAnchor(id)}>
-          <td>
-            <ExternalLink href={oeisUrl(id)} follow>
-              {id}
-            </ExternalLink>
-          </td>
-          <td class="publication-cell">
-            {name}
-            {contribution && <p class="publication-citation">Contributed: {contribution.join('; ')}.</p>}
-          </td>
-          <td>
-            {OEIS_ROLE_LABELS[role]}
-            {date && (
-              <>
-                <br />
-                Submitted <time datetime={date}>{date}</time>
-              </>
-            )}
-          </td>
-        </tr>
-      ))}
-    </tbody>
-  </table>
-</div>
+<RecordTable
+  caption={caption}
+  columns={[
+    { label: 'Sequence', width: 'w-10', primary: true },
+    { label: 'Name', wrap: true },
+    { label: 'Role', width: 'w-10' },
+    { label: 'Submitted', width: 'w-15' },
+  ]}
+  rows={rows}
+/>

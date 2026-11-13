@@ -100,28 +100,35 @@ describe('ordering and grouping', () => {
 
 describe('publicationLinks', () => {
   const hrefs = { pdfUrl: 'https://x.test/a.pdf', pdfPreviewUrl: 'https://x.test/preview/a.pdf' };
+  const record = 'https://doi.org/10.5281/zenodo.1';
 
-  it('gives a paper one link that opens and one that downloads', () => {
-    expect(publicationLinks({ ...base, ...hrefs }).map(({ action, href }) => [action, href])).toEqual([
+  it('gives a paper its record, one link that opens and one that downloads', () => {
+    expect(publicationLinks({ ...base, ...hrefs }).map(({ kind, href }) => [kind, href])).toEqual([
+      ['external', record],
       ['open', hrefs.pdfPreviewUrl],
       ['download', hrefs.pdfUrl],
     ]);
   });
 
-  it('gives software its repository and archive', () => {
+  it('gives software its record, repository and archive', () => {
     const links = publicationLinks({ ...base, codeUrl: 'https://x.test/r', archiveUrl: 'https://x.test/a.zip' });
-    expect(links.map(({ action, icon }) => [action, icon])).toEqual([
+    expect(links.map(({ kind, icon }) => [kind, icon])).toEqual([
+      ['external', '🔗'],
       ['open', '↗️'],
       ['download', '📦'],
     ]);
+  });
+
+  it('prefers the landing URL over the DOI for the record link', () => {
+    expect(publicationLinks({ ...base, url: 'https://x.test/paper' })[0].href).toBe('https://x.test/paper');
   });
 
   it('names the work in every label, because an icon alone says nothing', () => {
     for (const { label } of publicationLinks({ ...base, ...hrefs })) expect(label).toContain(base.title);
   });
 
-  it('returns nothing for a record with no files', () => {
-    expect(publicationLinks(base)).toEqual([]);
+  it('returns nothing for a record with no DOI, URL or files', () => {
+    expect(publicationLinks({ ...base, doi: undefined })).toEqual([]);
   });
 });
 
