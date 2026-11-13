@@ -16,7 +16,7 @@ test('home lists the three latest blog posts', async ({ page }) => {
 
 test('publication tables keep tokens whole and render exponents as markup', async ({ page }) => {
   await page.goto('/publications/');
-  await expect(page.locator('.publication-cell').first()).toHaveCSS('hyphens', 'manual');
+  await expect(page.locator('.record-cell-wrap').first()).toHaveCSS('hyphens', 'manual');
   await expect(page.locator('#dimer-entropy-kings-graph .record-details sup')).toHaveCount(2);
   await expect(page.locator('main h2')).toHaveText([
     'Research interests',
@@ -24,7 +24,7 @@ test('publication tables keep tokens whole and render exponents as markup', asyn
     'Research software',
     'OEIS sequences',
   ]);
-  for (const value of await page.locator('.publications-table td').allTextContents()) {
+  for (const value of await page.locator('.record-table td').allTextContents()) {
     expect(value.trim()).not.toBe('');
   }
   const graphs = await page.locator('script[type="application/ld+json"]').allTextContents();
@@ -35,29 +35,23 @@ test('publication tables keep tokens whole and render exponents as markup', asyn
     );
   expect(works.length).toBeGreaterThan(0);
   for (const { '@id': id } of works) {
-    await expect(page.locator(`tr#${id.split('#')[1]}`)).toHaveCount(1);
+    await expect(page.locator(`tbody#${id.split('#')[1]}`)).toHaveCount(1);
   }
   await expect(page.getByRole('link', { name: '0009-0008-6307-9015' })).toHaveCount(1);
-  const opens = page.locator('#dimer-entropy-kings-graph .file-link[target="_blank"]');
-  const downloads = page.locator('#dimer-entropy-kings-graph .file-link[download]');
-  await expect(opens).toHaveCount(1);
+  const record = page.locator('#dimer-entropy-kings-graph .record-link[rel="noopener noreferrer"][target="_blank"]');
+  const downloads = page.locator('#dimer-entropy-kings-graph .record-link[download]');
+  await expect(record).toHaveCount(2);
   await expect(downloads).toHaveCount(1);
-  await expect(opens).toHaveAttribute('href', /\/preview\//);
+  await expect(record.first()).toHaveAttribute('href', /doi\.org|zenodo\.org\/records/);
+  await expect(record.nth(1)).toHaveAttribute('href', /\/preview\//);
   await expect(downloads).toHaveAttribute('href', /\/files\//);
 });
 
 test('files table keeps description, topic and keywords under details', async ({ page }) => {
   await page.goto('/files/');
-  await expect(page.locator('.presentations-table th')).toHaveText([
-    '#',
-    'Title',
-    'Lang',
-    'Size',
-    'Download',
-    'Article',
-  ]);
-  const details = page.locator('.presentations-table .record-details').first();
-  await expect(details.locator('summary')).toHaveText('Details');
+  await expect(page.locator('#presentations-table th')).toHaveText(['Title', 'Language', 'Size', 'Links']);
+  const details = page.locator('#presentations-table .record-details').first();
+  await expect(details.locator('summary')).toHaveText(/^Details of .+/);
   await expect(details).toContainText('Topic:');
   await expect(details).toContainText('Keywords:');
 });

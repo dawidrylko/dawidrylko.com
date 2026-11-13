@@ -1,9 +1,11 @@
 ---
 import PageLayout from '../layouts/PageLayout.astro';
 import JsonLd from '../components/JsonLd.astro';
+import RecordTable from '../components/RecordTable.astro';
 import { SITE_METADATA } from '../data/site-metadata';
 import { getBlogPosts } from '../lib/blog';
 import { createPageSchema } from '../lib/page-metadata';
+import { LINK_ICONS, type RecordLink } from '../lib/record-table';
 import type { PageMetadata } from '../types';
 
 // Static (non-blog) routes provided by src/pages. The Gatsby version queried
@@ -50,6 +52,13 @@ const aiResources: [string, string][] = [
   ['/llms.txt', 'Structured, machine-readable summary of the site for AI/LLM crawlers.'],
   ['/metadata/', 'This page. Full inventory of pages and blog posts, with build info.'],
 ];
+
+const pageLink = (path: string): RecordLink => ({
+  kind: 'page',
+  icon: LINK_ICONS.page,
+  href: path,
+  label: `Open ${path}`,
+});
 
 const siteInfo: [string, string][] = [
   ['Title', siteTitle],
@@ -164,87 +173,42 @@ const sourceCode = {
         </table>
       </div>
     </section>
-    <section id="ai-resources" aria-label="AI resources">
+    <section id="ai-resources">
       <h2>AI resources</h2>
       <p>Machine-readable resources for AI and LLM crawlers, in the order a crawler would walk them.</p>
-      <div class="table-scroll" tabindex="0">
-        <table aria-label="AI resources">
-          <colgroup>
-            <col class="col-w-30" />
-            <col class="col-w-70" />
-          </colgroup>
-          <thead>
-            <tr>
-              <th scope="col">Resource</th>
-              <th scope="col">Description</th>
-            </tr>
-          </thead>
-          <tbody>
-            {aiResources.map(([path, description]) => (
-              <tr>
-                <td>
-                  <a href={path}>{path}</a>
-                </td>
-                <td>{description}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <RecordTable
+        caption="AI resources"
+        columns={[
+          { label: 'Resource', width: 'w-30', primary: true },
+          { label: 'Description', wrap: true },
+        ]}
+        rows={aiResources.map(([path, description]) => ({
+          cells: [path, description],
+          links: [pageLink(path)],
+        }))}
+      />
     </section>
-    <section id="pages" aria-label="Pages">
+    <section id="pages">
       <h2>Pages</h2>
-      <div class="table-scroll" tabindex="0">
-        <table aria-label="Pages">
-          <colgroup>
-            <col class="col-w-10" />
-            <col class="col-w-90" />
-          </colgroup>
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Path</th>
-            </tr>
-          </thead>
-          <tbody>
-            {staticPages.map((p, i) => (
-              <tr>
-                <td>{i + 1}</td>
-                <td>
-                  <a href={p}>{p}</a>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <RecordTable
+        caption="Pages"
+        columns={[
+          { label: '#', width: 'w-5' },
+          { label: 'Path', primary: true },
+        ]}
+        rows={staticPages.map((path, index) => ({ cells: [String(index + 1), path], links: [pageLink(path)] }))}
+      />
     </section>
-    <section id="blog-posts" aria-label="Blog posts">
+    <section id="blog-posts">
       <h2>Blog posts</h2>
-      <div class="table-scroll" tabindex="0">
-        <table aria-label="Blog posts">
-          <colgroup>
-            <col class="col-w-10" />
-            <col class="col-w-90" />
-          </colgroup>
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Path</th>
-            </tr>
-          </thead>
-          <tbody>
-            {blogPaths.map((p, i) => (
-              <tr>
-                <td>{i + 1}</td>
-                <td>
-                  <a href={p}>{p}</a>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <RecordTable
+        caption="Blog posts"
+        columns={[
+          { label: '#', width: 'w-5' },
+          { label: 'Path', primary: true },
+        ]}
+        rows={blogPaths.map((path, index) => ({ cells: [String(index + 1), path], links: [pageLink(path)] }))}
+      />
     </section>
   </main>
   <script is:inline>

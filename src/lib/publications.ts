@@ -1,5 +1,6 @@
 import { z } from 'astro/zod';
 import { SITE_METADATA } from '../data/site-metadata';
+import { LINK_ICONS, type RecordLink } from './record-table';
 
 export const PUBLICATIONS_PATH = '/publications/';
 
@@ -144,33 +145,41 @@ export function abstractHtml(abstract: string): string {
     .replace(/&lt;(\/?)(sub|sup)&gt;/g, '<$1$2>');
 }
 
-export interface PublicationLink {
-  action: 'open' | 'download';
-  icon: string;
-  href: string;
-  label: string;
-}
-
-// The same two icons as the files page: one opens in a new tab, one downloads.
-// `pdfUrl` must be a URL the host serves as an attachment; `pdfPreviewUrl` shows
-// the document in the browser.
-export function publicationLinks({
-  title,
-  pdfUrl,
-  pdfPreviewUrl,
-  codeUrl,
-  archiveUrl,
-}: Publication): PublicationLink[] {
+// The record page (landing URL or DOI) comes first, then the files: the same
+// icons and order as every other table on the site.
+export function publicationLinks(publication: Publication): RecordLink[] {
+  const { title, pdfUrl, pdfPreviewUrl, codeUrl, archiveUrl } = publication;
+  const landingUrl = publicationLandingUrl(publication);
   return [
-    ...(pdfPreviewUrl
-      ? [{ action: 'open' as const, icon: '↗️', href: pdfPreviewUrl, label: `Open ${title} PDF in new tab` }]
+    ...(landingUrl
+      ? [
+          {
+            kind: 'external' as const,
+            icon: LINK_ICONS.external,
+            href: landingUrl,
+            label: `Open the record of ${title}`,
+            follow: true,
+          },
+        ]
       : []),
-    ...(pdfUrl ? [{ action: 'download' as const, icon: '📄', href: pdfUrl, label: `Download ${title} as PDF` }] : []),
+    ...(pdfPreviewUrl
+      ? [{ kind: 'open' as const, icon: LINK_ICONS.open, href: pdfPreviewUrl, label: `Open ${title} PDF in new tab` }]
+      : []),
+    ...(pdfUrl
+      ? [{ kind: 'download' as const, icon: LINK_ICONS.pdf, href: pdfUrl, label: `Download ${title} as PDF` }]
+      : []),
     ...(codeUrl
-      ? [{ action: 'open' as const, icon: '↗️', href: codeUrl, label: `Open source code of ${title} in new tab` }]
+      ? [
+          {
+            kind: 'open' as const,
+            icon: LINK_ICONS.open,
+            href: codeUrl,
+            label: `Open source code of ${title} in new tab`,
+          },
+        ]
       : []),
     ...(archiveUrl
-      ? [{ action: 'download' as const, icon: '📦', href: archiveUrl, label: `Download ${title} as ZIP` }]
+      ? [{ kind: 'download' as const, icon: LINK_ICONS.archive, href: archiveUrl, label: `Download ${title} as ZIP` }]
       : []),
   ];
 }

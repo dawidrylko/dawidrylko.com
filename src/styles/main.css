@@ -452,41 +452,6 @@ table tr:last-child td {
   max-width: 60ch;
 }
 
-/* Text-heavy cells (title with its details) wrap instead of inheriting the
-   table-wide white-space: nowrap, avoiding a wide horizontal scroll. */
-.presentations-table .presentation-cell {
-  white-space: normal;
-}
-
-.presentation-title {
-  font-weight: 600;
-}
-
-/* Download actions cell on the files page: keep icons in a row. */
-.file-actions {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-2);
-}
-
-.presentation-article-link {
-  font-weight: var(--fontWeight-bold);
-}
-
-.presentation-no-article {
-  color: var(--color-text-light);
-}
-
-/* Files page: Keynote/PowerPoint download variants are hidden until the
-   cmd/ctrl+shift+. shortcut adds .show-hidden-variants to the table. */
-.presentations-table .file-link.is-hidden-variant {
-  display: none;
-}
-
-.presentations-table.show-hidden-variants .file-link.is-hidden-variant {
-  display: inline;
-}
-
 /* Figure */
 
 .figure {
@@ -655,28 +620,95 @@ a:focus {
   }
 }
 
-/* Publications tables: the title cell carries the citation and the expandable
-   abstract, so it wraps like the text cells on the files page. Automatic
-   hyphenation stays off: a soft break in "transfer-matrix" or a file name cannot
-   be told from a real hyphen. */
-.publications-table .publication-cell {
-  min-width: 16rem;
+/* Record tables (RecordTable.astro): one shape for every listing of things on
+   the site. Each record is its own <tbody> holding the data row and, when it has
+   any, a full-width details row, so the zebra counts records rather than rows and
+   the details never get split from their record. Links sit only in the last
+   column. */
+.record-table tr:nth-child(even) {
+  background-color: transparent;
+}
+
+.record-table tbody:nth-of-type(even) tr {
+  background-color: var(--color-accent);
+}
+
+.record-table tbody tr:last-child td {
+  border-bottom: 1px solid var(--color-accent);
+}
+
+.record-table tbody:last-of-type tr:last-child td {
+  border-bottom: 0;
+}
+
+.record-table .record-row:has(+ .record-details-row) td {
+  border-bottom: 0;
+}
+
+/* Text-heavy cells wrap instead of inheriting the table-wide white-space: nowrap.
+   Automatic hyphenation stays off: a soft break in "transfer-matrix" or a file
+   name cannot be told from a real hyphen. */
+.record-table .record-cell-wrap {
+  min-width: 8rem;
   white-space: normal;
   overflow-wrap: anywhere;
   hyphens: manual;
 }
 
-.publication-title {
+.record-table .record-cell-wrap.record-primary {
+  min-width: 16rem;
+}
+
+.record-table .record-primary {
   font-weight: 600;
 }
 
-.publication-citation {
+.record-secondary {
   margin: var(--spacing-1) 0 0;
   font-size: var(--fontSize-0);
+  font-weight: normal;
+}
+
+.record-link-list {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+.record-link {
+  text-decoration: none;
+}
+
+.record-no-links {
+  color: var(--color-text-light);
+}
+
+/* Files page: Keynote/PowerPoint download variants are hidden until the
+   cmd/ctrl+shift+. shortcut adds .show-hidden-variants to the table. */
+.record-table .record-link.is-hidden-variant {
+  display: none;
+}
+
+.record-table.show-hidden-variants .record-link.is-hidden-variant {
+  display: inline;
+}
+
+.record-details-row td {
+  padding-top: 0;
+  white-space: normal;
+}
+
+/* The details row spans the whole table, which on a phone is wider than the
+   screen. Pin its content to the visible part of the scroll box so the text
+   wraps at the viewport instead of scrolling sideways with the columns. */
+.record-table-scroll {
+  container-type: inline-size;
 }
 
 .record-details {
-  margin-top: var(--spacing-2);
+  position: sticky;
+  left: var(--spacing-2);
+  max-width: calc(100cqi - 2 * var(--spacing-2));
   font-size: var(--fontSize-0);
 }
 
@@ -686,6 +718,7 @@ a:focus {
 
 .record-details p {
   margin: var(--spacing-2) 0 0;
+  overflow-wrap: anywhere;
 }
 
 /* The CTA section has no heading, so it misses the section-to-section gap that a

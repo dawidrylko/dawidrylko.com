@@ -3,9 +3,11 @@ import fs from 'node:fs';
 import path from 'node:path';
 import PageLayout from '../layouts/PageLayout.astro';
 import JsonLd from '../components/JsonLd.astro';
+import RecordTable from '../components/RecordTable.astro';
 import { createPageSchema } from '../lib/page-metadata';
 import { parseFileName, formatFileSize, parsePresentationMetadata } from '../lib/presentations';
 import { SITE_METADATA } from '../data/site-metadata';
+import { LINK_ICONS, type RecordLink, type RecordRow } from '../lib/record-table';
 import type { PageMetadata } from '../types';
 
 // Replaces Gatsby's custom `StaticFile` sourceNodes: read the same static/files
@@ -54,12 +56,12 @@ type FileConfig = { icon: string; type: string; action: FileAction; hidden: bool
 
 const FILE_CONFIG: Record<string, FileConfig[]> = {
   pdf: [
-    { icon: '↗️', type: 'PDF', action: 'open', hidden: false },
-    { icon: '📄', type: 'PDF', action: 'download', hidden: false },
+    { icon: LINK_ICONS.open, type: 'PDF', action: 'open', hidden: false },
+    { icon: LINK_ICONS.pdf, type: 'PDF', action: 'download', hidden: false },
   ],
-  key: [{ icon: '🎨', type: 'Keynote', action: 'download', hidden: true }],
-  ppt: [{ icon: '📊', type: 'PowerPoint', action: 'download', hidden: true }],
-  pptx: [{ icon: '📊', type: 'PowerPoint', action: 'download', hidden: true }],
+  key: [{ icon: LINK_ICONS.keynote, type: 'Keynote', action: 'download', hidden: true }],
+  ppt: [{ icon: LINK_ICONS.slides, type: 'PowerPoint', action: 'download', hidden: true }],
+  pptx: [{ icon: LINK_ICONS.slides, type: 'PowerPoint', action: 'download', hidden: true }],
 };
 
 const groupFilesByIdentity = (files: FileNode[]): Map<string, FileNode[]> =>
@@ -75,7 +77,7 @@ const groupFilesByIdentity = (files: FileNode[]): Map<string, FileNode[]> =>
 
 const getFileMetadata = (extension: string): FileConfig[] =>
   FILE_CONFIG[extension.toLowerCase()] || [
-    { icon: '📎', type: extension.toUpperCase(), action: 'download', hidden: false },
+    { icon: LINK_ICONS.file, type: extension.toUpperCase(), action: 'download', hidden: false },
   ];
 
 const grouped = groupFilesByIdentity(nodes);
@@ -110,17 +112,24 @@ const rows = sortedEntries
         return (ia === -1 ? Infinity : ia) - (ib === -1 ? Infinity : ib);
       })
       .flatMap(file =>
-        getFileMetadata(file.extension).map(config => ({
+        getFileMetadata(file.extension).map((config): RecordLink => ({
+          kind: config.action,
           href: file.publicURL,
           icon: config.icon,
-          action: config.action,
-          type: config.type,
+          label:
+            config.action === 'open'
+              ? `Open ${displayTitle} ${config.type} in new tab`
+              : `Download ${displayTitle} as ${config.type}`,
+          title:
+            config.action === 'open'
+              ? `Open ${config.type} in new tab (${formatFileSize(file.size)})`
+              : `Download ${config.type} (${formatFileSize(file.size)})`,
           // Keynote/PowerPoint variants are rendered but CSS-hidden by default;
           // the cmd/ctrl+shift+. shortcut reveals them (see the inline script).
           hidden: config.hidden,
-          size: formatFileSize(file.size),
-          title: displayTitle,
-          download: `${downloadLabel} - Dawid Ryłko - dawidrylko.com.${file.extension}`,
+          ...(config.action === 'download'
+            ? { download: `${downloadLabel} - Dawid Ryłko - dawidrylko.com.${file.extension}` }
+            : {}),
         })),
       );
     return {
@@ -137,6 +146,28 @@ const rows = sortedEntries
     };
   })
   .filter((row): row is NonNullable<typeof row> => row !== null);
+
+const tableRows: RecordRow[] = rows.map(row => ({
+  cells: [row.title, row.language, row.size],
+  links: [
+    ...(row.relatedArticle
+      ? [
+          {
+            kind: 'page' as const,
+            icon: LINK_ICONS.page,
+            href: row.relatedArticle,
+            label: `Read the article about ${row.title}`,
+          },
+        ]
+      : []),
+    ...row.links,
+  ],
+  details: [
+    ...(row.description ? [{ text: row.description }] : []),
+    { label: 'Topic', text: row.topic },
+    ...(row.keywords ? [{ label: 'Keywords', text: row.keywords }] : []),
+  ],
+}));
 
 const PAGE_METADATA: PageMetadata = {
   title: 'Files',
@@ -212,88 +243,18 @@ const structuredData = createPageSchema({
       <h2 id="presentations-heading">Presentations</h2>
       <p class="presentations-intro">
         Slides from my talks and workshops on Node.js, JavaScript, and web development. Each one opens or downloads as a
-        PDF, and the title links straight to the document.
+        PDF from the Links column.
       </p>
-      <div class="table-scroll" tabindex="0">
-        <table class="presentations-table" data-presentations>
-          <caption class="visually-hidden">
-            Technical presentations by Dawid Ryłko, each available to view or download as a PDF.
-          </caption>
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Title</th>
-              <th scope="col">Lang</th>
-              <th scope="col">Size</th>
-              <th scope="col">Download</th>
-              <th scope="col">Article</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map(row => (
-              <tr>
-                <td>{row.index}</td>
-                <td class="presentation-cell">
-                  <a
-                    class="presentation-title"
-                    href={row.openHref}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={`Open ${row.title} (PDF) in a new tab`}
-                  >
-                    {row.title}
-                  </a>
-                  <details class="record-details">
-                    <summary>Details</summary>
-                    {row.description && <p>{row.description}</p>}
-                    <p>Topic: {row.topic}</p>
-                    {row.keywords && <p>Keywords: {row.keywords}</p>}
-                  </details>
-                </td>
-                <td>{row.language}</td>
-                <td>{row.size}</td>
-                <td>
-                  <div class="file-actions">
-                    {row.links.map(link =>
-                      link.action === 'open' ? (
-                        <a
-                          class:list={['file-link', { 'is-hidden-variant': link.hidden }]}
-                          href={link.href}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          aria-label={`Open ${link.title} ${link.type} in new tab`}
-                          title={`Open ${link.type} in new tab (${link.size})`}
-                        >
-                          {link.icon}
-                        </a>
-                      ) : (
-                        <a
-                          class:list={['file-link', { 'is-hidden-variant': link.hidden }]}
-                          href={link.href}
-                          download={link.download}
-                          aria-label={`Download ${link.title} as ${link.type}`}
-                          title={`Download ${link.type} (${link.size})`}
-                        >
-                          {link.icon}
-                        </a>
-                      ),
-                    )}
-                  </div>
-                </td>
-                <td>
-                  {row.relatedArticle ? (
-                    <a href={row.relatedArticle} class="presentation-article-link">
-                      →
-                    </a>
-                  ) : (
-                    <span class="presentation-no-article">—</span>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <RecordTable
+        id="presentations-table"
+        caption="Technical presentations by Dawid Ryłko, each available to view or download as a PDF."
+        columns={[
+          { label: 'Title', wrap: true, primary: true },
+          { label: 'Language', width: 'w-10' },
+          { label: 'Size', width: 'w-10' },
+        ]}
+        rows={tableRows}
+      />
     </section>
   </main>
 
@@ -303,7 +264,7 @@ const structuredData = createPageSchema({
        by the build-output regression contract. -->
   <script is:inline>
     (function () {
-      const table = document.querySelector('[data-presentations]');
+      const table = document.getElementById('presentations-table');
       if (!table) return;
       document.addEventListener('keydown', function (event) {
         if ((event.metaKey || event.ctrlKey) && event.shiftKey && event.key === '.') {

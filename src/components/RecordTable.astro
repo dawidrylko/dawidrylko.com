@@ -1,0 +1,92 @@
+---
+import {
+  linkAttributes,
+  recordColumnCount,
+  RECORD_DETAILS_LABEL,
+  RECORD_LINKS_LABEL,
+  RECORD_NO_LINKS,
+  toCell,
+  type RecordColumn,
+  type RecordRow,
+} from '../lib/record-table';
+
+interface Props {
+  caption: string;
+  columns: RecordColumn[];
+  rows: RecordRow[];
+  id?: string;
+}
+
+const { caption, columns, rows, id } = Astro.props;
+const span = recordColumnCount(columns);
+const primaryIndex = Math.max(
+  columns.findIndex(({ primary }) => primary),
+  0,
+);
+---
+
+<div class="table-scroll record-table-scroll" tabindex="0" role="region" aria-label={caption}>
+  <table class="record-table" id={id}>
+    <caption class="visually-hidden">{caption}</caption>
+    <colgroup>
+      {columns.map(({ width }) => (
+        <col class={width ? `col-${width}` : undefined} />
+      ))}
+      <col class="col-w-10" />
+    </colgroup>
+    <thead>
+      <tr>
+        {columns.map(({ label }) => (
+          <th scope="col">{label}</th>
+        ))}
+        <th scope="col">{RECORD_LINKS_LABEL}</th>
+      </tr>
+    </thead>
+    {rows.map(({ id: rowId, cells, links, details }) => (
+      <tbody id={rowId}>
+        <tr class="record-row">
+          {cells.map((raw, index) => {
+            const { text, secondary, datetime } = toCell(raw);
+            return (
+              <td class:list={{ 'record-cell-wrap': columns[index]?.wrap, 'record-primary': columns[index]?.primary }}>
+                {datetime ? <time datetime={datetime}>{text}</time> : text}
+                {secondary && <p class="record-secondary">{secondary}</p>}
+              </td>
+            );
+          })}
+          <td class="record-links">
+            {links.length > 0 ? (
+              <div class="record-link-list">
+                {links.map(link => (
+                  <a class:list={['record-link', { 'is-hidden-variant': link.hidden }]} {...linkAttributes(link)}>
+                    {link.icon}
+                  </a>
+                ))}
+              </div>
+            ) : (
+              <span class="record-no-links">{RECORD_NO_LINKS}</span>
+            )}
+          </td>
+        </tr>
+        {details && details.length > 0 && (
+          <tr class="record-details-row">
+            <td colspan={span}>
+              <details class="record-details">
+                <summary>
+                  {RECORD_DETAILS_LABEL}
+                  <span class="visually-hidden"> of {toCell(cells[primaryIndex] ?? '').text}</span>
+                </summary>
+                {details.map(({ label, text, html }) => (
+                  <p>
+                    {label && `${label}: `}
+                    {html ? <Fragment set:html={html} /> : text}
+                  </p>
+                ))}
+              </details>
+            </td>
+          </tr>
+        )}
+      </tbody>
+    ))}
+  </table>
+</div>

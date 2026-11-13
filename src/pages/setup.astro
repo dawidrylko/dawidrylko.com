@@ -2,7 +2,8 @@
 import PageLayout from '../layouts/PageLayout.astro';
 import JsonLd from '../components/JsonLd.astro';
 import Figure from '../components/Figure.astro';
-import ExternalLink from '../components/ExternalLink.astro';
+import RecordTable from '../components/RecordTable.astro';
+import { LINK_ICONS, type RecordColumn, type RecordRow } from '../lib/record-table';
 import Mermaid from '../components/Mermaid.tsx';
 import hardwareSetup from '../assets/hardware-setup.jpg';
 import { createPageSchema } from '../lib/page-metadata';
@@ -256,6 +257,30 @@ const sections: { id: string; heading: string; ariaLabel: string; items: SetupIt
   },
   { id: 'guitar', heading: 'Guitar setup', ariaLabel: 'Guitar and music equipment specifications', items: guitarSetup },
 ];
+
+const setupColumns = (items: SetupItem[]): RecordColumn[] => [
+  { label: 'Type', width: 'w-30' },
+  { label: 'Full name', wrap: true, primary: true },
+  ...(items.some(([, , , details]) => details) ? [{ label: 'Notes', wrap: true }] : []),
+];
+
+const setupRows = (items: SetupItem[]): RecordRow[] => {
+  const withNotes = items.some(([, , , details]) => details);
+  return items.map(([type, name, link, details]) => ({
+    cells: [type, name, ...(withNotes ? [details ?? '—'] : [])],
+    links: link
+      ? [
+          {
+            kind: 'external',
+            icon: LINK_ICONS.external,
+            href: link,
+            label: `View ${name} on external site`,
+            follow: true,
+          },
+        ]
+      : [],
+  }));
+};
 ---
 
 <PageLayout breadcrumbTitle={PAGE_METADATA.title} title={PAGE_METADATA.title} description={PAGE_METADATA.description}>
@@ -266,37 +291,11 @@ const sections: { id: string; heading: string; ariaLabel: string; items: SetupIt
   <main>
     <section id="desktop" aria-labelledby="desktop-heading">
       <h2 id="desktop-heading">Desktop setup</h2>
-      <div class="table-scroll" tabindex="0">
-        <table aria-label="Desktop hardware and equipment specifications">
-          <colgroup>
-            <col class="col-w-30" />
-            <col class="col-w-70" />
-          </colgroup>
-          <thead>
-            <tr>
-              <th scope="col">Type</th>
-              <th scope="col">Full name</th>
-            </tr>
-          </thead>
-          <tbody>
-            {desktopSetup.map(([type, name, link, details]) => (
-              <tr>
-                <td>{type}</td>
-                <td>
-                  {link ? (
-                    <ExternalLink href={link} follow aria-label={`View ${name} on external site`}>
-                      {name}
-                    </ExternalLink>
-                  ) : (
-                    name
-                  )}
-                  {details && ` (${details})`}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <RecordTable
+        caption="Desktop hardware and equipment specifications"
+        columns={setupColumns(desktopSetup)}
+        rows={setupRows(desktopSetup)}
+      />
     </section>
 
     <section id="diagram" class="setup-diagram" aria-label="Connection diagram">
@@ -319,41 +318,7 @@ const sections: { id: string; heading: string; ariaLabel: string; items: SetupIt
       .map(({ id, heading, ariaLabel, items }) => (
         <section id={id} aria-labelledby={`${id}-heading`}>
           <h2 id={`${id}-heading`}>{heading}</h2>
-          <div class="table-scroll" tabindex="0">
-            <table aria-label={ariaLabel}>
-              <colgroup>
-                <>
-                  <col class="col-w-30" />
-                  <col class="col-w-70" />
-                </>
-              </colgroup>
-              <thead>
-                <tr>
-                  <>
-                    <th scope="col">Type</th>
-                    <th scope="col">Full name</th>
-                  </>
-                </tr>
-              </thead>
-              <tbody>
-                {items.map(([type, name, link, details]) => (
-                  <tr>
-                    <td>{type}</td>
-                    <td>
-                      {link ? (
-                        <ExternalLink href={link} follow aria-label={`View ${name} on external site`}>
-                          {name}
-                        </ExternalLink>
-                      ) : (
-                        name
-                      )}
-                      {details && ` (${details})`}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <RecordTable caption={ariaLabel} columns={setupColumns(items)} rows={setupRows(items)} />
         </section>
       ))}
   </main>
