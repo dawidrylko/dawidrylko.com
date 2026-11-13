@@ -194,7 +194,7 @@ const sourceCode = {
         caption="Pages"
         columns={[
           { label: '#', width: 'w-5' },
-          { label: 'Path', primary: true },
+          { label: 'Path', wrap: true, primary: true },
         ]}
         rows={staticPages.map((path, index) => ({ cells: [String(index + 1), path], links: [pageLink(path)] }))}
       />
@@ -205,7 +205,7 @@ const sourceCode = {
         caption="Blog posts"
         columns={[
           { label: '#', width: 'w-5' },
-          { label: 'Path', primary: true },
+          { label: 'Path', wrap: true, primary: true },
         ]}
         rows={blogPaths.map((path, index) => ({ cells: [String(index + 1), path], links: [pageLink(path)] }))}
       />

@@ -30,6 +30,12 @@ for (const route of ROUTES) {
         await expect(cell.locator('summary .visually-hidden')).toHaveCount(1);
       }
 
+      const overflow = await table.evaluate(element => {
+        const scroll = element.parentElement as HTMLElement;
+        return scroll.scrollWidth - scroll.clientWidth;
+      });
+      expect(overflow).toBeLessThanOrEqual(1);
+
       const caption = await table.locator('caption').textContent();
       const numbered = route === '/metadata/' && ['Pages', 'Blog posts'].includes(caption?.trim() ?? '');
       expect(headers[0] === '#').toBe(numbered);
