@@ -1708,7 +1708,7 @@ a:focus {
 }
 
 .footer-metadata a {
-  /* Secondary footer nav (Setup • Files • … • Cookie settings) stays
+  /* Secondary footer nav (Metadata • policies • Cookie settings) stays
      understated, but uses the muted text token (WCAG AA in both themes) rather
      than --color-accent (~1.4:1) so it is not an accessibility failure. */
   color: var(--color-text-light);
