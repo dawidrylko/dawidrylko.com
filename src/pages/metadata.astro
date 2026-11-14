@@ -5,7 +5,7 @@ import RecordTable from '../components/RecordTable.astro';
 import { SITE_METADATA } from '../data/site-metadata';
 import { getBlogPosts } from '../lib/blog';
 import { createPageSchema } from '../lib/page-metadata';
-import { LINK_ICONS, type RecordLink } from '../lib/record-table';
+import type { RecordLink } from '../lib/record-table';
 import type { PageMetadata } from '../types';
 
 // Static (non-blog) routes provided by src/pages. The Gatsby version queried
@@ -55,7 +55,6 @@ const aiResources: [string, string][] = [
 
 const pageLink = (path: string): RecordLink => ({
   kind: 'page',
-  icon: LINK_ICONS.page,
   href: path,
   label: `Open ${path}`,
 });

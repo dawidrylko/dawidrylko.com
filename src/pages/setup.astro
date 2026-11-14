@@ -3,7 +3,7 @@ import PageLayout from '../layouts/PageLayout.astro';
 import JsonLd from '../components/JsonLd.astro';
 import Figure from '../components/Figure.astro';
 import RecordTable from '../components/RecordTable.astro';
-import { LINK_ICONS, type RecordColumn, type RecordRow } from '../lib/record-table';
+import type { RecordColumn, RecordRow } from '../lib/record-table';
 import Mermaid from '../components/Mermaid.tsx';
 import hardwareSetup from '../assets/hardware-setup.jpg';
 import { createPageSchema } from '../lib/page-metadata';
@@ -272,7 +272,6 @@ const setupRows = (items: SetupItem[]): RecordRow[] => {
       ? [
           {
             kind: 'external',
-            icon: LINK_ICONS.external,
             href: link,
             label: `View ${name} on external site`,
             follow: true,

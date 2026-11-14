@@ -7,7 +7,7 @@ import RecordTable from '../components/RecordTable.astro';
 import { createPageSchema } from '../lib/page-metadata';
 import { parseFileName, formatFileSize, parsePresentationMetadata } from '../lib/presentations';
 import { SITE_METADATA } from '../data/site-metadata';
-import { LINK_ICONS, type RecordLink, type RecordRow } from '../lib/record-table';
+import type { RecordLink, RecordRow } from '../lib/record-table';
 import type { PageMetadata } from '../types';
 
 // Replaces Gatsby's custom `StaticFile` sourceNodes: read the same static/files
@@ -52,16 +52,16 @@ const presentationMeta = fs.existsSync(metadataCsvPath)
   : new Map();
 
 type FileAction = 'download' | 'open';
-type FileConfig = { icon: string; type: string; action: FileAction; hidden: boolean };
+type FileConfig = { type: string; action: FileAction; hidden: boolean };
 
 const FILE_CONFIG: Record<string, FileConfig[]> = {
   pdf: [
-    { icon: LINK_ICONS.open, type: 'PDF', action: 'open', hidden: false },
-    { icon: LINK_ICONS.pdf, type: 'PDF', action: 'download', hidden: false },
+    { type: 'PDF', action: 'open', hidden: false },
+    { type: 'PDF', action: 'download', hidden: false },
   ],
-  key: [{ icon: LINK_ICONS.keynote, type: 'Keynote', action: 'download', hidden: true }],
-  ppt: [{ icon: LINK_ICONS.slides, type: 'PowerPoint', action: 'download', hidden: true }],
-  pptx: [{ icon: LINK_ICONS.slides, type: 'PowerPoint', action: 'download', hidden: true }],
+  key: [{ type: 'Keynote', action: 'download', hidden: true }],
+  ppt: [{ type: 'PowerPoint', action: 'download', hidden: true }],
+  pptx: [{ type: 'PowerPoint', action: 'download', hidden: true }],
 };
 
 const groupFilesByIdentity = (files: FileNode[]): Map<string, FileNode[]> =>
@@ -76,9 +76,7 @@ const groupFilesByIdentity = (files: FileNode[]): Map<string, FileNode[]> =>
   }, new Map<string, FileNode[]>());
 
 const getFileMetadata = (extension: string): FileConfig[] =>
-  FILE_CONFIG[extension.toLowerCase()] || [
-    { icon: LINK_ICONS.file, type: extension.toUpperCase(), action: 'download', hidden: false },
-  ];
+  FILE_CONFIG[extension.toLowerCase()] || [{ type: extension.toUpperCase(), action: 'download', hidden: false }];
 
 const grouped = groupFilesByIdentity(nodes);
 const sortedEntries = Array.from(grouped.entries()).sort(([keyA], [keyB]) => {
@@ -115,7 +113,6 @@ const rows = sortedEntries
         getFileMetadata(file.extension).map((config): RecordLink => ({
           kind: config.action,
           href: file.publicURL,
-          icon: config.icon,
           label:
             config.action === 'open'
               ? `Open ${displayTitle} ${config.type} in new tab`
@@ -154,7 +151,6 @@ const tableRows: RecordRow[] = rows.map(row => ({
       ? [
           {
             kind: 'page' as const,
-            icon: LINK_ICONS.page,
             href: row.relatedArticle,
             label: `Read the article about ${row.title}`,
           },

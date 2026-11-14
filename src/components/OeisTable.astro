@@ -1,7 +1,7 @@
 ---
 import RecordTable from './RecordTable.astro';
 import { OEIS_ROLE_LABELS, oeisAnchor, oeisUrl, type OeisEntry } from '../lib/oeis';
-import { LINK_ICONS, type RecordRow } from '../lib/record-table';
+import type { RecordRow } from '../lib/record-table';
 
 interface Props {
   caption: string;
@@ -16,7 +16,6 @@ const rows: RecordRow[] = entries.map(({ id, name, role, contribution, date }) =
   links: [
     {
       kind: 'external',
-      icon: LINK_ICONS.external,
       href: oeisUrl(id),
       label: `Open ${id} on oeis.org`,
       follow: true,
