@@ -1,6 +1,6 @@
 import { z } from 'astro/zod';
 import { SITE_METADATA } from '../data/site-metadata';
-import { LINK_ICONS, type RecordLink } from './record-table';
+import type { RecordLink } from './record-table';
 
 export const PUBLICATIONS_PATH = '/publications/';
 
@@ -146,7 +146,7 @@ export function abstractHtml(abstract: string): string {
 }
 
 // The record page (landing URL or DOI) comes first, then the files: the same
-// icons and order as every other table on the site.
+// order as every other table on the site.
 export function publicationLinks(publication: Publication): RecordLink[] {
   const { title, pdfUrl, pdfPreviewUrl, codeUrl, archiveUrl } = publication;
   const landingUrl = publicationLandingUrl(publication);
@@ -155,32 +155,24 @@ export function publicationLinks(publication: Publication): RecordLink[] {
       ? [
           {
             kind: 'external' as const,
-            icon: LINK_ICONS.external,
             href: landingUrl,
             label: `Open the record of ${title}`,
             follow: true,
           },
         ]
       : []),
-    ...(pdfPreviewUrl
-      ? [{ kind: 'open' as const, icon: LINK_ICONS.open, href: pdfPreviewUrl, label: `Open ${title} PDF in new tab` }]
-      : []),
-    ...(pdfUrl
-      ? [{ kind: 'download' as const, icon: LINK_ICONS.pdf, href: pdfUrl, label: `Download ${title} as PDF` }]
-      : []),
+    ...(pdfPreviewUrl ? [{ kind: 'open' as const, href: pdfPreviewUrl, label: `Open ${title} PDF in new tab` }] : []),
+    ...(pdfUrl ? [{ kind: 'download' as const, href: pdfUrl, label: `Download ${title} as PDF` }] : []),
     ...(codeUrl
       ? [
           {
             kind: 'open' as const,
-            icon: LINK_ICONS.open,
             href: codeUrl,
             label: `Open source code of ${title} in new tab`,
           },
         ]
       : []),
-    ...(archiveUrl
-      ? [{ kind: 'download' as const, icon: LINK_ICONS.archive, href: archiveUrl, label: `Download ${title} as ZIP` }]
-      : []),
+    ...(archiveUrl ? [{ kind: 'download' as const, href: archiveUrl, label: `Download ${title} as ZIP` }] : []),
   ];
 }
 

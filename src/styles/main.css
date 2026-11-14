@@ -676,7 +676,18 @@ a:focus {
 }
 
 .record-link {
+  display: inline-flex;
   text-decoration: none;
+}
+
+.record-link-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  fill: none;
+  stroke: currentcolor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .record-no-links {
@@ -690,7 +701,7 @@ a:focus {
 }
 
 .record-table.show-hidden-variants .record-link.is-hidden-variant {
-  display: inline;
+  display: inline-flex;
 }
 
 .record-details-row td {

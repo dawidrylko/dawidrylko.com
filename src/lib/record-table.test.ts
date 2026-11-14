@@ -1,9 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { linkAttributes, recordColumnCount, toCell, type RecordLink } from './record-table';
+import { LINK_ICONS, linkAttributes, linkIcon, recordColumnCount, toCell, type RecordLink } from './record-table';
 
 const link = (overrides: Partial<RecordLink>): RecordLink => ({
   kind: 'page',
-  icon: '→',
   href: '/a/',
   label: 'Read A',
   ...overrides,
@@ -42,5 +41,21 @@ describe('table shape', () => {
   it('wraps a plain string into a cell', () => {
     expect(toCell('PL')).toEqual({ text: 'PL' });
     expect(toCell({ text: 'A', secondary: 'B' })).toEqual({ text: 'A', secondary: 'B' });
+  });
+});
+
+describe('linkIcon', () => {
+  it('uses one icon for every kind that opens and one for downloads', () => {
+    expect(['page', 'external', 'open'].map(kind => linkIcon(kind as RecordLink['kind']))).toEqual([
+      'open',
+      'open',
+      'open',
+    ]);
+    expect(linkIcon('download')).toBe('download');
+  });
+
+  it('keeps the set at two icons, each a drawable path', () => {
+    expect(Object.keys(LINK_ICONS)).toEqual(['open', 'download']);
+    for (const path of Object.values(LINK_ICONS)) expect(path).toMatch(/^M[\d .,A-Za-z-]+$/);
   });
 });

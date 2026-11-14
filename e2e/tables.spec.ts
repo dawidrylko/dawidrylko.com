@@ -19,6 +19,12 @@ for (const route of ROUTES) {
       for (const value of await table.locator('.record-row td').allTextContents()) {
         expect(value.trim()).not.toBe('');
       }
+      for (const link of await table.locator('a.record-link').all()) {
+        await expect(link.locator('svg')).toHaveCount(1);
+        const expected = (await link.getAttribute('download')) === null ? 'open' : 'download';
+        await expect(link.locator('svg')).toHaveAttribute('data-icon', expected);
+        expect(((await link.textContent()) ?? '').trim()).toBe('');
+      }
       for (const cell of await table.locator('.record-row td.record-links').all()) {
         const links = await cell.locator('a.record-link').count();
         if (links === 0) await expect(cell).toHaveText('—');

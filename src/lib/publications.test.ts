@@ -112,10 +112,10 @@ describe('publicationLinks', () => {
 
   it('gives software its record, repository and archive', () => {
     const links = publicationLinks({ ...base, codeUrl: 'https://x.test/r', archiveUrl: 'https://x.test/a.zip' });
-    expect(links.map(({ kind, icon }) => [kind, icon])).toEqual([
-      ['external', '🔗'],
-      ['open', '↗️'],
-      ['download', '📦'],
+    expect(links.map(({ kind, href }) => [kind, href])).toEqual([
+      ['external', 'https://doi.org/10.5281/zenodo.1'],
+      ['open', 'https://x.test/r'],
+      ['download', 'https://x.test/a.zip'],
     ]);
   });
 

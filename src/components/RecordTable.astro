@@ -1,6 +1,8 @@
 ---
 import {
+  LINK_ICONS,
   linkAttributes,
+  linkIcon,
   recordColumnCount,
   RECORD_DETAILS_LABEL,
   RECORD_LINKS_LABEL,
@@ -59,7 +61,15 @@ const primaryIndex = Math.max(
               <div class="record-link-list">
                 {links.map(link => (
                   <a class:list={['record-link', { 'is-hidden-variant': link.hidden }]} {...linkAttributes(link)}>
-                    {link.icon}
+                    <svg
+                      class="record-link-icon"
+                      data-icon={linkIcon(link.kind)}
+                      viewBox="0 0 24 24"
+                      aria-hidden="true"
+                      focusable="false"
+                    >
+                      <path d={LINK_ICONS[linkIcon(link.kind)]} />
+                    </svg>
                   </a>
                 ))}
               </div>
