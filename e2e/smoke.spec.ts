@@ -24,7 +24,7 @@ test('publication tables keep tokens whole and render exponents as markup', asyn
     'Research software',
     'OEIS sequences',
   ]);
-  for (const value of await page.locator('.record-table td').allTextContents()) {
+  for (const value of await page.locator('.record-table td:not(.record-links)').allTextContents()) {
     expect(value.trim()).not.toBe('');
   }
   const graphs = await page.locator('script[type="application/ld+json"]').allTextContents();

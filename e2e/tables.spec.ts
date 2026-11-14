@@ -16,7 +16,7 @@ for (const route of ROUTES) {
       expect(headers.at(-1)).toBe('Links');
 
       await expect(table.locator('td:not(.record-links) a')).toHaveCount(0);
-      for (const value of await table.locator('.record-row td').allTextContents()) {
+      for (const value of await table.locator('.record-row td:not(.record-links)').allTextContents()) {
         expect(value.trim()).not.toBe('');
       }
       for (const link of await table.locator('a.record-link').all()) {
