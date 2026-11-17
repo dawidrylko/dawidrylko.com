@@ -1,5 +1,11 @@
 [
   {
+    "id": "A401669",
+    "name": "Decimal expansion of the entropy per site of the dimer coverings (perfect matchings) of the king's graph (square lattice with both diagonals), i.e., of domicule tilings.",
+    "role": "author",
+    "date": "2026-11-01"
+  },
+  {
     "id": "A401670",
     "name": "Number of domicule tilings of a 2n X 2n toroidal grid.",
     "role": "author",
@@ -24,12 +30,18 @@
     "id": "A239264",
     "name": "Number A(n,k) of domicule tilings of a k X n grid; square array A(n,k), n>=0, k>=0, read by antidiagonals.",
     "role": "contributor",
-    "contribution": ["Table of antidiagonals n = 0..46 (0..36 from Alois P. Heinz)", "PARI program"]
+    "contribution": ["Antidiagonals n = 0..46, flattened (antidiagonals 0..36 from Alois P. Heinz)", "PARI program"]
   },
   {
     "id": "A239273",
     "name": "Number of domicule tilings of a 2n X 2n square grid.",
     "role": "contributor",
     "contribution": ["Table of n, a(n) for n = 0..12", "PARI program"]
+  },
+  {
+    "id": "A309117",
+    "name": "Number of perfect matchings on a triangular lattice of width 4 and length n.",
+    "role": "contributor",
+    "contribution": ["Table of n, a(n) for n = 0..1000"]
   }
 ]
