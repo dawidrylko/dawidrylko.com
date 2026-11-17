@@ -18,6 +18,12 @@
     "date": "2026-11-01"
   },
   {
+    "id": "A402345",
+    "name": "Number of domino tilings of a 2n X 2n cylindrical grid.",
+    "role": "author",
+    "date": "2026-11-17"
+  },
+  {
     "id": "A004003",
     "name": "Number of domino tilings (or dimer coverings) of a 2n X 2n square.",
     "role": "contributor",
