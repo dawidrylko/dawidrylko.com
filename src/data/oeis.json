@@ -30,6 +30,12 @@
     "date": "2026-11-14"
   },
   {
+    "id": "A401988",
+    "name": "Number of perfect matchings in the 2n X 2n grid graph with the diagonal edges from (i,j) to (i+1,j+1) added, i.e., in a 2n X 2n rhombus of the triangular lattice.",
+    "role": "author",
+    "date": "2026-11-11"
+  },
+  {
     "id": "A004003",
     "name": "Number of domino tilings (or dimer coverings) of a 2n X 2n square.",
     "role": "contributor",
