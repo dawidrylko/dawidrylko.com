@@ -54,7 +54,12 @@
     "id": "A239273",
     "name": "Number of domicule tilings of a 2n X 2n square grid.",
     "role": "contributor",
-    "contribution": ["Table of n, a(n) for n = 0..12", "PARI program"]
+    "contribution": [
+      "Table of n, a(n) for n = 0..12",
+      "Formula for the limit of log(a(n))/(4n^2), equal to A401669",
+      "Conjectured asymptotic formula",
+      "PARI program"
+    ]
   },
   {
     "id": "A309117",
